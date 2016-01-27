@@ -1,0 +1,16 @@
+<div>
+
+    <h1>Countries</h1>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+        </tr>
+        <tr ng-repeat="country in countries">
+            <td><a href="/countries/{{country.code}}">{{country.code}}</a></td>
+            <td>{{country.name.en}}</td>
+        </tr>
+    </table>
+
+</div>

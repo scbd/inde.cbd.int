@@ -1,0 +1,25 @@
+{
+  "name": "seed",
+  "version": "0.0.2",
+  "description": "This project is an application skeleton for typical SCBD AngularJS/RequireJS/Bootstrap web apps.",
+  "main": "server.js",
+  "dependencies": {
+    "bower": "1.7.0",
+    "ejs": "2.3.4",
+    "express": "4.13.3",
+    "morgan": "1.6.1",
+    "serve-static": "1.10.0"
+  },
+  "engine": "node >= 0.10.36",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node server.js",
+    "postinstall": "./node_modules/.bin/bower install --allow-root"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scbd/seed.git"
+  },
+  "author": "Secretariat of the Convention on Biological Diversity (SCBD)",
+  "license": "MIT"
+}

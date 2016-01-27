@@ -1,0 +1,19 @@
+<div>
+
+	<h1>{{document.title.en}}</h1>
+
+	<div>
+		<b>Description</b><br>
+		{{document.source.en}}
+	</div>
+
+	<img ng-repeat="x in document.images" src="{{x.url}}" title="{{x.name}}" style="width:200px">
+
+	<br><br>
+	<div ng-repeat="link in document.relevantDocuments">
+		<a ng-href="{{link.url}}">{{link.name}}</a>
+	</div>
+
+	<!-- <button ng-click="save()">Save</button> -->
+
+</div>

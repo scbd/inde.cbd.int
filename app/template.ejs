@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-controller="TemplateController">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SEED</title>
+    <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
+    <style>[ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }</style>
+</head>
+<body>
+
+    <!--<iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>-->
+     
+    <div style="border:solid 4px #C11;background-color:#ddd;padding:40px">
+        
+        <p><span class="label label-info">HEADER</span></p>
+        
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">SEED</a>
+                </div>
+                <ul class="nav navbar-nav">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/countries">Countries</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div style="border:solid 4px #181;padding:40px">
+
+        <p><span class="label label-info">VIEW</span></p>
+
+        <ng-view></ng-view>
+        
+    </div>
+
+    <div style="border:solid 4px #22B;background-color:#ddd;padding:40px">
+
+        <p><span class="label label-info">FOOTER</span></p>
+        
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/app/libs/requirejs/require.js" data-main="/app/js/boot.js"></script>
+
+</body>
+</html>
+<!-- -->
