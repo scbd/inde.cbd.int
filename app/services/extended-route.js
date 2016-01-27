@@ -59,7 +59,7 @@ define(['require', 'app', 'angular', 'angular-route'], function(require, app, an
 
             var locals = angular.extend($route.current.locals, { $scope: $scope });
 
-            return $injector.invoke(controller, undefined, locals);
+            return $injector.instantiate(controller, locals);
         }
         proxy.$inject = ['$injector', '$scope', '$route', 'controller'];
 
