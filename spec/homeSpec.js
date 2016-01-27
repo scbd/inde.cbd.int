@@ -4,7 +4,7 @@ describe('Sign-In Page', function() { //jshint ignore:line
   var EC = protractor.ExpectedConditions;
 
   beforeEach(function() {
-    browser.get('/signin');
+    browser.get('/');
     browser.driver.sleep(1);
     browser.waitForAngular();
     //       spyOn(console, 'error');

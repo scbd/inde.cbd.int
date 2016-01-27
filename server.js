@@ -11,7 +11,7 @@ app.use(require('morgan')('dev'));
 
 // LOAD CONFIGURATION
 
-app.set('port', process.env.PORT || 2020);
+app.set('port', process.env.PORT || 2050);
 
 // CONFIGURE /APP/* ROUTES
 

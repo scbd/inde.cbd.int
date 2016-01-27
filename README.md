@@ -1,2 +1,2 @@
-# eunomia
-Grand Reserva- (eunomia: god of good order)
+# plevrá - Side Events Portal
+(plevrá : greek for side)
