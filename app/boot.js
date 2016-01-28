@@ -2,19 +2,22 @@ require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
     paths: {
-        'authentication'   : 'factories/authentication',
-        'angular'          : 'libs/angular-flex/angular-flex',
-        'angular-route'    : 'libs/angular-route/angular-route',
-        'text'             : 'libs/requirejs-text/text',
-        'bootstrap'        : 'libs/bootstrap/dist/js/bootstrap',
-        'lodash'           : 'libs/lodash/lodash',
-        'jquery'           : 'libs/jquery/dist/jquery',
-        'URIjs'               : 'libs/uri.js/src',
-        'linqjs'              : 'libs/linqjs/linq.min',
-        'guid'                : 'libs/ui-guid-generator/dist/ui-guid-generator.min',
-        'moment'              : 'libs/moment/moment',
-        'css'                 : 'libs/require-css/css.min',
-        'shim'                : 'libs/require-shim/src/shim'
+        //'authentication'      : 'services/authentication',
+        'angular'                  : 'libs/angular-flex/angular-flex',
+        'angular-route'            : 'libs/angular-route/angular-route',
+        'text'                     : 'libs/requirejs-text/text',
+        'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap',
+        'lodash'                   : 'libs/lodash/lodash',
+        'jquery'                   : 'libs/jquery/dist/jquery',
+        'URIjs'                    : 'libs/uri.js/src',
+        'linqjs'                   : 'libs/linqjs/linq.min',
+        'moment'                   : 'libs/moment/moment',
+        'css'                      : 'libs/require-css/css.min',
+        'shim'                     : 'libs/require-shim/src/shim',
+        'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs.min',
+        'scbd-ng-services'         : 'libs/scbd-angularjs-services/scbd-services',
+        'scbd-ng-filters'          : 'libs/scbd-angularjs-services/scbd-filters',
+        'scbd-ng-controls'         : 'libs/scbd-angularjs-controls/scbd-controls',
     },
     shim: {
         'libs/angular/angular'     : { deps: ['jquery'] },
@@ -23,12 +26,11 @@ require.config({
         'bootstrap'                : { deps: ['jquery'] },
         'guid'                     : { exports: 'ui_guid_generator' },
     },
-
 });
 
 // BOOT
 
-require(['angular', 'app', 'bootstrap', 'authentication', 'routes', 'template'], function(ng, app) {
+require(['angular', 'app', 'bootstrap', 'routes', 'template'], function(ng, app) {
 
     ng.element(document).ready(function () {
          ng.bootstrap(document, [app.name]);

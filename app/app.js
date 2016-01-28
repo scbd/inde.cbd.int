@@ -6,7 +6,7 @@ define(['angular'], function(angular) { 'use strict';
 
     var app = angular.module('app', deps);
 //change me
-    app.value('realm', 'APPREALM');
+    app.value('realm', '');
 
     app.config(['$httpProvider', function($httpProvider){
 

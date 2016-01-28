@@ -1,5 +1,5 @@
 {
-  "name": "plevrá",
+  "name": "plevra",
   "version": "0.0.1",
   "description": "Plevrá  - side event portal",
   "main": "server.js",
@@ -18,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/scbd/plevrá.git"
+    "url": "https://github.com/scbd/plevra.git"
   },
   "author": "Secretariat of the Convention on Biological Diversity (SCBD)",
   "license": "MIT"
