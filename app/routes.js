@@ -1,5 +1,5 @@
 
-define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/extended-route', 'scbd-ng-services'], function(app, _, rootTemplate) { 'use strict';
+define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/extended-route'], function(app, _, rootTemplate) { 'use strict';
 
     app.config(['extendedRouteProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 

@@ -1,13 +1,13 @@
-define(['app', 'jquery', 'scbd-ng-services', 'scbd-ng-filters', 'scbd-ng-controls', 'ng-breadcrumbs','directives/xuser-notifications'], function(app, $) {
+define(['app', 'jquery', 'ng-breadcrumbs','scbd-services/authentication'], function(app, $) {
     'use strict';
 
-    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', 'breadcrumbs', '$mdToast', 'realm', function($scope, $rootScope, $window, $location, authentication, breadcrumbs, $mdToast, realm) {
+    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm', function($scope, $rootScope, $window, $location, authentication,  realm) {
 
         if ($location.protocol() == "http" && $location.host() == "chm.cbd.int")
             $window.location = "https://chm.cbd.int/";
 
-        $scope.test_env        = realm != 'CHM';
-        $scope.breadcrumbs     = breadcrumbs;
+        $scope.test_env        = realm != 'SEP';
+
         $scope.$root.pageTitle = { text: "" };
         $rootScope.placeholderRecords=[];
 
@@ -40,13 +40,13 @@ define(['app', 'jquery', 'scbd-ng-services', 'scbd-ng-filters', 'scbd-ng-control
             authentication.signOut();
         };
 
-        //========================================
-        //
-        //========================================
-        $scope.doSearch = function () {
-            $location.url('/database/').search('q', $scope.searchQuery);
-            $scope.searchQuery = '';
-        };
+        // //========================================
+        // //
+        // //========================================
+        // $scope.doSearch = function () {
+        //     $location.url('/database/').search('q', $scope.searchQuery);
+        //     $scope.searchQuery = '';
+        // };
 
 
         $scope.goHome               = function() { $location.path('/'); };
@@ -87,41 +87,41 @@ define(['app', 'jquery', 'scbd-ng-services', 'scbd-ng-filters', 'scbd-ng-control
 
 
 
-        $scope.showSimpleToast = function(msg)
-        {
-            $mdToast.show(
-              $mdToast.simple()
-                .content(msg)
-                .position('top right')
-                .hideDelay(3000)
-            );
-
-
-        }
-
-        $scope.showToastConfirmReload = function(msg)
-        {
-            var toast = $mdToast.simple()
-                  .content(msg)
-                  .action('Refresh List')
-                  .highlightAction(false)
-                  .position('top right')
-                  .hideDelay(20000);
-
-            $mdToast.show(toast).then(function() {
-                $scope.$broadcast("RefreshList");
-            });
-
-        }
-
-
-        //======================================================
+        // $scope.showSimpleToast = function(msg)
+        // {
+        //     $mdToast.show(
+        //       $mdToast.simple()
+        //         .content(msg)
+        //         .position('top right')
+        //         .hideDelay(3000)
+        //     );
         //
         //
-        //======================================================
-        $rootScope.$on("ProcessingRecord", function(evt, recID, schema) {
-            $rootScope.placeholderRecords.push({'recID':recID,'schema':schema});
-        });
+        // }
+
+        // $scope.showToastConfirmReload = function(msg)
+        // {
+        //     var toast = $mdToast.simple()
+        //           .content(msg)
+        //           .action('Refresh List')
+        //           .highlightAction(false)
+        //           .position('top right')
+        //           .hideDelay(20000);
+        //
+        //     $mdToast.show(toast).then(function() {
+        //         $scope.$broadcast("RefreshList");
+        //     });
+        //
+        // }
+
+
+        // //======================================================
+        // //
+        // //
+        // //======================================================
+        // $rootScope.$on("ProcessingRecord", function(evt, recID, schema) {
+        //     $rootScope.placeholderRecords.push({'recID':recID,'schema':schema});
+        // });
 
      }]);
 });

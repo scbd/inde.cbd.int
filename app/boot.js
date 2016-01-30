@@ -15,9 +15,7 @@ require.config({
         'css'                      : 'libs/require-css/css.min',
         'shim'                     : 'libs/require-shim/src/shim',
         'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs.min',
-        'scbd-ng-services'         : 'libs/scbd-angularjs-services/scbd-services',
-        'scbd-ng-filters'          : 'libs/scbd-angularjs-services/scbd-filters',
-        'scbd-ng-controls'         : 'libs/scbd-angularjs-controls/scbd-controls',
+        //'scbd-ajs-components'       : 'libs/scbd-ajs-services/scbd-services',
     },
     shim: {
         'libs/angular/angular'     : { deps: ['jquery'] },
@@ -25,12 +23,18 @@ require.config({
         'angular-route'            : { deps: ['angular'] },
         'bootstrap'                : { deps: ['jquery'] },
         'guid'                     : { exports: 'ui_guid_generator' },
+        'ng-breadcrumbs'              : { deps: ['angular'] },
     },
+    packages: [
+      { name: 'scbd-services', main: 'main', location : 'libs/scbd-ajs-components/services' },
+      { name: 'scbd-directives', main: 'main', location : 'libs/scbd-ajs-components/directives' },
+      { name: 'scbd-form-controls', main: 'main', location : 'libs/scbd-ajs-components/formControlDirectives' },
+    ]
 });
 
 // BOOT
 
-require(['angular', 'app', 'bootstrap', 'routes', 'template'], function(ng, app) {
+require(['angular', 'app', 'bootstrap', 'routes', 'template','scbd-services/authentication'], function(ng, app) {
 
     ng.element(document).ready(function () {
          ng.bootstrap(document, [app.name]);
