@@ -1,4 +1,6 @@
-define(['app', 'jquery', 'ng-breadcrumbs','scbd-services/authentication'], function(app, $) {
+define(['app', 'jquery','css!outdated-browser-css','css!font-awsome-css','css!scbd-css/colors','css!app-css',  'ng-breadcrumbs',
+'scbd-services/authentication',
+'scbd-header-dir'], function(app, $) {
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm', function($scope, $rootScope, $window, $location, authentication,  realm) {

@@ -9,17 +9,14 @@
   <meta name="description" content="Clearing-House Mechanism of the Convention on Biological Diversity">
   <link rel="shortcut icon" href="/app/images/favicon.ico">
 
+   <link href="app/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="app/libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+ <!-- <link rel="stylesheet" type="text/css" href="/app/css/main.css"> -->
 
+ <!-- <link href="app/libs/font-awesome/css/font-awesome.css" rel="stylesheet"> -->
+ <!--<link href="app/libs/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">-->
+ <!-- <link href="app/libs/outdated-browser/outdatedbrowser/outdatedbrowser.min.css" rel="stylesheet"> -->
 
-  <link href="app/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="app/libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/app/css/main.css">
-
-  <link href="app/libs/font-awesome/css/font-awesome.css" rel="stylesheet">
-  <link href="app/libs/flag-icon-css/css/flag-icon.min.css" rel="stylesheet">
-  <link href="app/libs/outdated-browser/outdatedbrowser/outdatedbrowser.min.css" rel="stylesheet">
-
-  <link rel="icon" href="app/images/favicon.ico" type="image/x-icon" />
   <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
   <style>
     [ng\:cloak],
@@ -34,159 +31,7 @@
 
   <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
-  <nav class="navbar navbar-cbd navbar-default bg-cbdgreen navbar-static-top" id="anchorTop" ng-class="{'bg-cbdgreen': !test_env, 'bg-orange': test_env}">
-    <div class="container container-cbd">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <a href="http://www.cbd.int">
-          <img src="/app/images/cbd-leaf-white.svg" style="height:24px;position:relative;top:-2px;padding:0;margin:0 5px;">
-        </a>
-        <a class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-1"><i class="fa fa-bars"></i></a>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li><a href="http://www.cbd.int/convention/">The Convention</a></li>
-          <li><a href="http://bch.cbd.int/protocol">Cartagena Protocol</a></li>
-          <li><a href="http://www.cbd.int/abs/">Nagoya Protocol</a></li>
-          <!-- <li><a href="http://www.cbd.int/programmes/">Programmes</a></li> -->
-          <li><a href="http://www.cbd.int/information/">Information</a></li>
-          <li><a href="http://www.cbd.int/secretariat/">Secretariat</a></li>
-
-          <!--       languages-->
-          <li class="navbar-right">
-            <a class="pull-right set-languages" data-toggle="dropdown" href="#">
-              <span class="badge badge-default bg-white">en</span>
-            </a>
-            <ul class="dropdown-menu bg-darkgrey" role="menu">
-              <li class="disabled" style="font-weight:bold;color:#BBB;">LANGUAGES</li>
-              <hr style="padding;0;margin:0;">
-              <li class="disabled"><a>لعربية</a></li>
-              <li class="disabled"><a>中文</a></li>
-              <li>
-                <a href="#">
-                  <strong>English</strong>
-                </a>
-              </li>
-              <li class="disabled"><a>Español</a></li>
-              <li class="disabled"><a>Français</a></li>
-              <li class="disabled"><a>Русский</a></li>
-            </ul>
-          </li>
-
-          <!--        notifications-->
-          <li class="navbar-right">
-            <div user-notifications></div>
-          </li>
-
-          <!--        signin-->
-          <li ng-cloak ng-show="user" class="navbar-right">
-
-            <a ng-hide="user.isAuthenticated" href="/signin" style="color: black"><i  class="fa fa-power-off"></i> sign in </a>
-
-
-            <a ng-show="user.isAuthenticated" href="#" data-toggle="dropdown">
-              <i class="fa fa-chevron-down"></i>
-              <span> {{user.name}}</span>
-            </a>
-            <ul class="dropdown-menu bg-darkgrey" role="menu">
-              <li>
-                <a href="#" ng-click="actionProfile()">
-                  <i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a>
-              </li>
-              <li class="dropdown-submenu">
-                <a tabindex="-1" href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; My Roles</a>
-                <ul class="dropdown-menu bg-darkgrey" role="menu" style="min-width:200px">
-                  <li ng-repeat="role in user.roles|orderBy:'toString()'"><a tabindex="-1" href="#">{{role}}</a></li>
-                </ul>
-              </li>
-              <li>
-                <a href="#" ng-click="actionPassword()">
-                  <i class="fa fa-user" style="font-size:15px"></i>&nbsp; Password</a>
-              </li>
-              <li>
-                <a href="#" ng-click="signOut()">
-                  <i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a>
-              </li>
-            </ul>
-
-          </li>
-          <!--  end sign in-->
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container-fluid -->
-  </nav>
-
-
-  <!-- PORTAL BRANDING -->
-  <nav class="navbar navbar-portal navbar-default navbar-static-top bg-white">
-    <div class="container container-portal ">
-      <div class="row">
-        <div class="col-xs-9">
-          <a href="/" class="color-cbdgreen">
-            <h1 style="font-size:60px;padding:0;margin:0;position:relative;">
-              <span ng-hide="test_env" class="color-cbdgreen">CHM</span>
-              <span ng-show="test_env" class="color-orange" ng-cloak>TEST</span>
-            </h1>
-
-            <!-- <form class="navbar-form" ng-submit="doSearch()" style="display:inline;" >
-                                    <div class="input-group" >
-                                        <input type="text" class="form-control" ng-model="searchQuery" placeholder="search">
-                                        <div class="input-group-btn">
-                                            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
-                                        </div>
-                                    </div>
-                            </form> -->
-            <div class="color-grey hidden-xs hidden-sm" style="text-transform:uppercase;font-size:20px;margin-left:100px;position:absolute;top:10px;line-height:22px;">
-              The Clearing-House Mechanism of the Convention on Biological Diversity
-              <br>Information Submission Service</div>
-          </a>
-        </div>
-        <div class="col-xs-3" style="vertical-align:middle;">
-          <img src="/app/images/cbd-leaf-green.svg" class="pull-right" style="padding: 0; margin:0;height:60px;" />
-          <br>
-
-        </div>
-      </div>
-
-    </div>
-  </nav>
-
-
-  <!-- PORTAL LINKS-->
-  <nav class="navbar navbar-links navbar-default navbar-static-top" ng-class="{'bg-blue': !test_env, 'bg-orange': test_env}">
-    <div class="container container-links color-grey">
-      <div style="display:inline">
-        <a href="/"><i class="fa fa-home" ></i> Home</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="/search"><i class="fa fa-search"></i> Search</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <a href="/submit"><i class="fa fa-pencil-square-o"></i> Submit Information</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      </div>
-    </div>
-  </nav>
-
-
-  <!-- PORTAL BREAD CRUMBS-->
-  <nav class="navbar navbar-breadcrumbs navbar-default navbar-static-top">
-    <div class="container container-breadcrumbs">
-
-      <a href="http://www.cbd.int" class="margin-right-xs">CBD</a>
-      <span ng-repeat="breadcrumb in breadcrumbs.get() track by breadcrumb.path" ng-class="{ active: $last }">
-
-        <span ng-show="!breadcrumb.param">
-          &nbsp;&nbsp;<i class="fa fa-chevron-right color-litegrey"></i>&nbsp;&nbsp;
-          <a ng-if="!$last" ng-href="{{ breadcrumb.path }}" ng-bind="breadcrumb.label" class="margin-right-xs"></a>
-          <span ng-if="$last" ng-bind="breadcrumb.label"></span>
-        </span>
-
-        <span ng-cloak ng-show="breadcrumb.param && breadcrumbParam">
-          &nbsp;&nbsp;<i class="fa fa-chevron-right color-litegrey"></i>&nbsp;&nbsp; {{breadcrumbParam}}
-        </span>
-
-      </span>
-    </div>
-  </nav>
+  <scbd-header></scbd-header>
 
 
   <div class="page-content">
@@ -286,8 +131,8 @@
     }
   </script>
   <!-- <script src="../node_modules/app/libs/requirejs/require.js" data-main="/app/boot.js"></script> -->
+  <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
-    <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
   <script>
     (function(i, s, o, g, r, a, m) {
       i['GoogleAnalyticsObject'] = r;
