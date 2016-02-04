@@ -1,6 +1,15 @@
-define(['app', 'jquery','css!outdated-browser-css','css!font-awsome-css','css!scbd-css/colors','css!app-css',  'ng-breadcrumbs',
+define(['app', 'jquery',
+'css!outdated-browser-css',
+'css!font-awsome-css',
+'css!app-css',
+'css!/app/libs/angular-material/angular-material.min',
+//'css!libs/angular-loading-bar/src/loading-bar',
+'ng-breadcrumbs',
 'scbd-services/authentication',
-'scbd-header-dir'], function(app, $) {
+'directives/portal-branding',
+'directives/portal-nav',
+'scbd-branding/header/header',
+'scbd-branding/footer'], function(app, $) {
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm', function($scope, $rootScope, $window, $location, authentication,  realm) {
@@ -15,32 +24,9 @@ define(['app', 'jquery','css!outdated-browser-css','css!font-awsome-css','css!sc
 
         $scope.$on("$routeChangeSuccess", function(evt, current){
             $scope.routeLoaded = true;
-            $("head > title").text(current.$$route.label || "Clearing-House Mechanism");
+            $("head > title").text(current.$$route.label || "Plevra (Side event Registration)");
         });
 
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.$on('signOut', function(){
-            $location.url('/');
-        });
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.signIn = function () {
-            $location.url('/signin');
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.signOut = function () {
-            authentication.signOut();
-        };
 
         // //========================================
         // //
@@ -59,32 +45,7 @@ define(['app', 'jquery','css!outdated-browser-css','css!font-awsome-css','css!sc
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////
 
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.actionSignup = function () {
-            var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
-            $window.location.href = 'https://accounts.cbd.int/signup?redirect_uri='+redirect_uri;
-        };
 
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.actionPassword = function () {
-            var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
-            $window.location.href = 'https://accounts.cbd.int/password?redirect_uri='+redirect_uri;
-        };
-
-        //============================================================
-        //
-        //
-        //============================================================
-        $scope.actionProfile = function () {
-            var redirect_uri = $window.encodeURIComponent($location.protocol()+'://'+$location.host()+':'+$location.port()+'/');
-            $window.location.href = 'https://accounts.cbd.int/profile?redirect_uri='+redirect_uri;
-        };
 
 
 

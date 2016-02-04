@@ -2,45 +2,50 @@ require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
     paths: {
-
         'angular'                  : 'libs/angular-flex/angular-flex',
+        'angular-animate'          : 'libs/angular-animate/angular-animate.min',
+        'angular-loading-bar'      : 'libs/angular-loading-bar/src/loading-bar',
         'angular-route'            : 'libs/angular-route/angular-route',
-        'text'                     : 'libs/requirejs-text/text',
-        'css'                      : 'libs/require-css/css.min',
-        'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap',
-        'lodash'                   : 'libs/lodash/lodash',
-        'jquery'                   : 'libs/jquery/dist/jquery',
-        'URIjs'                    : 'libs/uri.js/src',
-        'linqjs'                   : 'libs/linqjs/linq.min',
-        'moment'                   : 'libs/moment/moment',
-        'shim'                     : 'libs/require-shim/src/shim',
-        'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs.min',
-        'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',
-        'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
-        'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
         'app-css'                  : 'css/main',
-        //'scbd-ajs-components'       : 'libs/scbd-ajs-services/scbd-services',
+        'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap',
+        'css'                      : 'libs/require-css/css.min',
+        'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
+        'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',
+        'ionsound'                 : 'libs/ionsound/js/ion.sound.min',
+        'jquery'                   : 'libs/jquery/dist/jquery',
+        'linqjs'                   : 'libs/linqjs/linq.min',
+        'lodash'                   : 'libs/lodash/lodash',
+        'moment'                   : 'libs/moment/moment',
+        'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
+        'ngAria'                   : 'libs/angular-aria/angular-aria.min',
+        'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs',
+        'ngMaterial'               : 'libs/angular-material/angular-material.min',
+        'shim'                     : 'libs/require-shim/src/shim',
+        'text'                     : 'libs/requirejs-text/text',
+//        'URIjs'                    : 'libs/uri.js/src',
     },
     shim: {
-        'libs/angular/angular'     : { deps: ['jquery'] },
-        'angular'                  : { deps: ['libs/angular/angular'] },
-        'angular-route'            : { deps: ['angular'] },
-        'bootstrap'                : { deps: ['jquery'] },
-        'guid'                     : { exports: 'ui_guid_generator' },
-        'ng-breadcrumbs'              : { deps: ['angular'] },
+        'libs/angular/angular'    : { deps: ['jquery'] },
+        'angular'                 : { deps: ['libs/angular/angular'] },
+        'angular-route'           : { deps: ['angular'] },
+        'bootstrap'               : { deps: ['jquery'] },
+        'guid'                    : { exports: 'ui_guid_generator' },
+        'ng-breadcrumbs'          : { deps: ['angular'] },
+        'ngAria'                  : { 'deps': ['angular']},
+        'angular-animate'         : { 'deps': ['angular']},
+        'ngMaterial'              : { 'deps': ['angular', 'angular-animate', 'ngAria'] },
+        'angular-loading-bar'         : { deps: ['angular'] },
     },
     packages: [
-      { name: 'scbd-services', main: 'main', location : 'libs/scbd-ajs-components/services' },
-      { name: 'scbd-directives', main: 'main', location : 'libs/scbd-ajs-components/directives' },
-      { name: 'scbd-header-dir', main: 'header', location : 'libs/scbd-ajs-components/directives/header' },
-      { name: 'scbd-css', main: 'main', location : 'libs/scbd-ajs-components/css' },
-      { name: 'scbd-form-controls-dir', main: 'main', location : 'libs/scbd-ajs-components/formControlDirectives' },
+      { name: 'scbd-services', main: 'main', location : 'libs/scbd-angularjs-services/services' },
+      { name: 'scbd-branding', main: 'main', location : 'libs/scbd-angularjs-branding/directives' },
+
     ]
 });
 
 // BOOT
 
-require(['angular', 'app', 'bootstrap','text','css', 'routes', 'template','scbd-services/authentication'], function(ng, app) {
+require(['angular', 'app', 'bootstrap','text', 'routes', 'template'], function(ng, app) {
 
     ng.element(document).ready(function () {
          ng.bootstrap(document, [app.name]);

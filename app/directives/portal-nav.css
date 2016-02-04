@@ -1,0 +1,22 @@
+.navbar-default .navbar-nav li a {
+    color: #8499B1;
+    cursor: pointer;
+    padding: 0 0 0 0px;
+    line-height: 10px;
+    text-shadow: 0 0 0;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+    font-size: 15px;
+    margin-top:9px;
+}
+.navbar-default .navbar-nav li a:hover {
+    color: #A5C4D4;
+}
+.navbar-links{
+    min-height:30px;
+    background-color:#009b48;
+    margin-bottom:0;
+    border:0;
+    z-index:80;
+}
+.navbar{height:20px;}

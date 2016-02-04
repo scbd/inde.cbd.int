@@ -1,6 +1,6 @@
-define(['angular'], function(angular) { 'use strict';
+define(['angular','angular-animate','ngMaterial','ngAria','angular-loading-bar'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute'];
+    var deps = ['ngRoute','ng-breadcrumbs','ngAnimate','ngMaterial','ngAria','chieffancypants.loadingBar'];
 
     angular.defineModules(deps);
 

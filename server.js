@@ -4,6 +4,8 @@
 // CREATE HTTP SERVER AND PROXY
 
 var app = require('express')();
+var proxy   = require('http-proxy').createProxyServer({});
+
 app.set('views', __dirname + '/app');
 app.set('view engine', 'ejs');
 
@@ -17,6 +19,7 @@ app.set('port', process.env.PORT || 2050);
 
 app.use('/app',   require('serve-static')(__dirname + '/app_build'));
 app.use('/app',   require('serve-static')(__dirname + '/app'));
+app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'https://api.cbd.int:443', secure: false } ); } );
 app.all('/app/*', function(req, res) { res.status(404).send(); } );
 
 // CONFIGURE TEMPLATE

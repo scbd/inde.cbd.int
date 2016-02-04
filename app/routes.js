@@ -1,5 +1,5 @@
 
-define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/extended-route'], function(app, _, rootTemplate) { 'use strict';
+define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-services/extended-route'], function(app, _, rootTemplate) { 'use strict';
 
     app.config(['extendedRouteProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -7,28 +7,17 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/exten
         $locationProvider.hashPrefix('!');
 
         $routeProvider.
-            when('/',                             { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
+            when('/',                   { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home', { redirectTo: '/' }).
             when('/',                   { templateUrl: 'views/index.html',                 resolveController: true, resolveUser: true }).
             when('/about',              { templateUrl: 'views/about.html',                 resolveUser: true }).
             when('/countries',          { templateUrl: 'views/samples/country-index.html', resolveController: true, resolveUser: true }).
             when('/countries/:country', { templateUrl: 'views/samples/country.html',       resolveController: true, resolveUser: true }).
-            when('/case-studies/:id',   { templateUrl: 'views/samples/case-study.html',    resolveController: true, resolveUser: true }).
+            when('/case-studies',   { templateUrl: 'views/samples/case-study.html',    resolveController: true, resolveUser: true }).
             when('/404',                { templateUrl: 'views/404.html',                   resolveUser: true }).
             otherwise({ redirectTo: '/404' });
     }]);
 
-    //============================================================
-    //
-    //
-    //============================================================
-    function currentUser() {
-
-        return ['authentication', function (authentication) {
-
-            return authentication.getUser();
-        }];
-    }
 
     //============================================================
     //
@@ -36,7 +25,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/exten
     //============================================================
     function securize(roles) {
 
-        return ['$location', '$window', '$q', 'authentication', function ($location, $window, $q, authentication) {
+        return ['$location', '$window', '$q', function ($location, $window, $q, authentication) {
 
             return authentication.getUser().then(function (user) {
 

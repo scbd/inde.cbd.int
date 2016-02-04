@@ -1,24 +1,26 @@
 {
   "name": "plevra",
   "dependencies": {
-    "angular": "1.3.17",
-    "angular-route": "1.3.17",
+    "angular": "1.4.8",
     "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
+    "angular-loading-bar": "https://github.com/chieffancypants/angular-loading-bar.git",
+    "angular-route": "1.4.8",
     "bootstrap": "3.3.5",
     "bootstrap-datepicker": "1.4.0",
-    "font-awesome": "4.5.0",
-    "jquery": "2.1.4",
+    "flag-icon-css": "https://github.com/lipis/flag-icon-css.git#1.1.0",
+    "jquery": "2.2.0",
+    "linqjs": "https://github.com/madington/linq.git#2.2.0",
     "lodash": "3.9.3",
     "moment": "2.11.1",
-    "linqjs": "https://github.com/madington/linq.git#2.2.0",
-    "flag-icon-css": "https://github.com/lipis/flag-icon-css.git#1.1.0",
-    "outdated-browser": "1.1.0",
+    "ng-breadcrumbs": "es-breadcrumbs#~0.4.1",
+    "outdated-browser": "1.1.2",
     "requirejs": "2.1.18",
-    "requirejs-text": "2.0.14",
-    "requirejs-plugins": "1.0.3",
     "require-css": "0.1.8",
-    "require-shim":  "https://github.com/zetlen/require-shim.git",
-    "ng-breadcrumbs": "es-breadcrumbs#~0.4.1"
-
+    "requirejs-plugins": "1.0.3",
+    "requirejs-text": "2.0.14",
+    "require-shim": "https://github.com/zetlen/require-shim.git"
+  },
+  "resolutions": {
+    "angular": "1.4.9"
   }
 }
