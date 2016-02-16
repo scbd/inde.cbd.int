@@ -23,22 +23,31 @@
 </head>
 
 <body ng-controller="TemplateController" ng-class="{'home-page':homePage}">
+
   <!-- used by authentication service as work around for cross domain storage of token -->
   <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
-  <scbd-header></scbd-header>
+
+
+  <scbd-header protal-name="Plevrá - Side Events"></scbd-header>
+
   <portal-branding></portal-branding>
+
+
+
+
   <portal-nav></portal-nav>
-  
-  <div class="page-content">
-    <div>
-      <div ng-view></div>
-      <!-- <div ng-hide="routeLoaded" class="booting"></div> -->
-    </div>
-  </div>
+
+
+  <div ng-view></div>
+
 
   <!-- FOOTER -->
-  <scbd-footer> </scbd-footer>
+
+  <scbd-footer > </scbd-footer>
+  <!-- FOOTER -->
+
+
 
   <!-- Bootstrap core JavaScript
     ================================================== -->

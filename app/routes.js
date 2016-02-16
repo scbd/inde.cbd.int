@@ -1,5 +1,5 @@
 
-define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-services/extended-route'], function(app, _, rootTemplate) { 'use strict';
+define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs-services/extended-route'], function(app, _, rootTemplate) { 'use strict';
 
     app.config(['extendedRouteProvider', '$locationProvider', function($routeProvider, $locationProvider) {
 
@@ -11,9 +11,11 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-services/
             when('/home', { redirectTo: '/' }).
             when('/',                   { templateUrl: 'views/index.html',                 resolveController: true, resolveUser: true }).
             when('/about',              { templateUrl: 'views/about.html',                 resolveUser: true }).
-            when('/countries',          { templateUrl: 'views/samples/country-index.html', resolveController: true, resolveUser: true }).
-            when('/countries/:country', { templateUrl: 'views/samples/country.html',       resolveController: true, resolveUser: true }).
-            when('/case-studies',   { templateUrl: 'views/samples/case-study.html',    resolveController: true, resolveUser: true }).
+            when('/help',               { templateUrl: 'views/help.html',                  resolveUser: true }).
+            when('/events',             { templateUrl: 'views/events.html',                resolveController: true, resolveUser: true }).
+            when('/event/:id',          { templateUrl: 'views/event.html',                 resolveController: true, resolveUser: true }).
+            when('/management/events',  { templateUrl:'views/management/events.html',            resolveController: true, resolveUser: true }).
+            when('/manage',             { templateUrl: 'views/manage/dash-board.html',        resolveController: true, resolveUser: true }).
             when('/404',                { templateUrl: 'views/404.html',                   resolveUser: true }).
             otherwise({ redirectTo: '/404' });
     }]);

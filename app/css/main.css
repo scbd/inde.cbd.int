@@ -1,14 +1,21 @@
-
-.color-dark-purple{
-  color:#2C0E37;
-}
-.bg-lite-purple{
-  background-color:#965E8D;
+.bg-lite-chrome{
+  background-color:#A5C4D4;
   color:#fff;
 }
-.color-lite-grey{
-    color:#bdbdbd;
+.bg-dark-chrome{
+  background-color:#8499B1;
+  color:#fff;
 }
+.color-white{
+    color:#fff;
+}
+
+
+
+
+
+
+
 
 /* Make clicks pass-through */
 #loading-bar,
@@ -112,4 +119,17 @@
 @keyframes loading-bar-spinner {
   0%   { transform: rotate(0deg);   transform: rotate(0deg); }
   100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+
+/*double check is used*/
+.color-dark-purple{
+  color:#2C0E37;
+}
+.bg-lite-purple{
+  background-color:#965E8D;
+  color:#fff;
+}
+.color-lite-grey{
+    color:#bdbdbd;
 }

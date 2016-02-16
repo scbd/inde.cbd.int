@@ -37,9 +37,10 @@ require.config({
         'angular-loading-bar'         : { deps: ['angular'] },
     },
     packages: [
-      { name: 'scbd-services', main: 'main', location : 'libs/scbd-angularjs-services/services' },
-      { name: 'scbd-branding', main: 'main', location : 'libs/scbd-angularjs-branding/directives' },
-
+      { name: 'scbd-angularjs-services', location : 'libs/scbd-angularjs-services/services' },
+      { name: 'scbd-branding', location : 'libs/scbd-branding/directives' },
+      { name: 'scbd-angularjs-filters',  location : 'libs/scbd-angularjs-services/filters' },
+      { name: 'scbd-angularjs-controls', location : 'libs/scbd-angularjs-controls/form-control-directives' },
     ]
 });
 

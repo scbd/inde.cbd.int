@@ -5,17 +5,24 @@ define(['app', 'jquery',
 'css!/app/libs/angular-material/angular-material.min',
 //'css!libs/angular-loading-bar/src/loading-bar',
 'ng-breadcrumbs',
-'scbd-services/authentication',
-'directives/portal-branding',
-'directives/portal-nav',
+'scbd-angularjs-services/authentication',
+'directives/portal/portal-branding',
+'directives/portal/portal-nav',
 'scbd-branding/header/header',
 'scbd-branding/footer'], function(app, $) {
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm', function($scope, $rootScope, $window, $location, authentication,  realm) {
 
-        if ($location.protocol() == "http" && $location.host() == "chm.cbd.int")
-            $window.location = "https://chm.cbd.int/";
+
+
+        // if ($location.protocol() == "http" && $location.host() == "chm.cbd.int")
+        //     $window.location = "https://chm.cbd.int/";
+
+
+
+
+
 
         $scope.test_env        = realm != 'SEP';
 
@@ -39,7 +46,7 @@ define(['app', 'jquery',
 
         $scope.goHome               = function() { $location.path('/'); };
         $scope.currentPath          = function() { return $location.path(); };
-        $scope.hideSubmitInfoButton = function() { return $location.path()=="/management/register"; };
+        // $scope.hideSubmitInfoButton = function() { return $location.path()=="/management/register"; };
 
         //////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////

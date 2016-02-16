@@ -1,0 +1,92 @@
+<div  ng-controller="dashBoard" class="portal-view-container" flex>
+
+
+
+  <section layout="row"  flex>
+
+    <!-- <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="$mdMedia('gt-xs')" style="border-radius: 8px 8px 0 0;" flex-33>
+      <md-toolbar class="md-theme-indigo" style="border-radius: 8px 8px 0 0 ; background-color: #8499B1;">
+        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+      </md-toolbar>
+      <md-content layout-padding >
+        <md-button ng-click="close()" class="md-primary" hide-gt-md>
+          Close Sidenav Left
+        </md-button>
+        <p show-gt-md >
+          This sidenav is locked open on your device. To go back to the default behavior,
+          narrow your display.
+        </p>
+        <div style="width:400px;">ddd
+        </div>
+      </md-content>
+    </md-sidenav> -->
+    <scbd-side-menu id="dashboard" sections="dashboard" class="bg-dark-chrome">
+      <md-toolbar  class="bg-dark-chrome">
+          Manegment Center
+      </md-toolbar>
+    </scbd-side-menu>
+
+  <div md-whiteframe="15" class="portal-dashboard-container round-corners-top" >
+
+    <md-toolbar id="portal-toolbar" class="round-corners-top bg-dark-chrome">
+      <div class="md-toolbar-tools">
+        <h1>Side Events</h1>
+      </div>
+    </md-toolbar>
+    <md-content  layout-padding layout="row">
+      <p>Lorem ipsum dolor sit amet, ne quod novum mei. Sea omnium invenire mediocrem at, in lobortis conclusionemque nam. Ne deleniti appetere reprimique pro, inani labitur disputationi te sed. At vix sale omnesque, id pro labitur reformidans accommodare,
+        cum labores honestatis eu. Nec quem lucilius in, eam praesent reformidans no. Sed laudem aliquam ne.
+        Lorem ipsum dolor sit amet, ne quod novum mei. Sea omnium invenire mediocrem at, in lobortis conclusionemque nam. Ne deleniti appetere reprimique pro, inani labitur disputationi te sed. At vix sale omnesque, id pro labitur reformidans accommodare,
+
+                      </p>
+    </md-content>
+  </div>
+
+
+      <!-- <md-content flex layout-padding>
+        <div layout="column" layout-fill layout-align="top center">
+          <p>
+          The left sidenav will 'lock open' on a medium (>=960px wide) device.
+          </p>
+          <p>
+          The right sidenav will focus on a specific child element.
+          </p>
+          <div>
+            <md-button ng-click="toggleLeft()"
+              class="md-primary" hide-gt-md>
+              Toggle left
+            </md-button>
+          </div>
+          <div>
+            <md-button ng-click="toggleRight()"
+              ng-hide="isOpenRight()"
+              class="md-primary">
+              Toggle right
+            </md-button>
+          </div>
+        </div>
+        <div flex></div>
+      </md-content> -->
+
+
+
+      <md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="right">
+        <md-toolbar class="md-theme-light">
+          <h1 class="md-toolbar-tools">Sidenav Right</h1>
+        </md-toolbar>
+        <md-content  layout-padding>
+          <form>
+            <md-input-container>
+              <label for="testInput">Test input</label>
+              <input type="text" id="testInput"
+                     ng-model="data" md-autofocus>
+            </md-input-container>
+          </form>
+          <md-button ng-click="close()" class="md-primary">
+            Close Sidenav Right
+          </md-button>
+        </md-content>
+      </md-sidenav>
+    </section>
+
+</div>
