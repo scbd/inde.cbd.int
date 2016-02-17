@@ -16,7 +16,8 @@ define(['app', 'lodash',
       //          console.log.debug("close LEFT is done");
       //      });};
 
-
+      $scope.isLocked=$mdMedia('gt-sm');
+    //  console.log("$mdMedia('gt-md')",$mdMedia('gt-sm'));
       $scope.dashboard=scbdMenuService.dashboard;
 
 

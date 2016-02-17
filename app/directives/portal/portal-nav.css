@@ -110,7 +110,8 @@ text-align:center;
 text-shadow:none;
 text-transform:uppercase;
 	padding: 10px;
-	color: #8499B1;
+  margin-bottom:3px;
+	color: #bbbbbb;
 	font-weight: 700;
 	text-shadow: none;
 	-webkit-transition: color 0.3s;
@@ -120,7 +121,7 @@ text-transform:uppercase;
 
 /* Effect 14: border switch */
 .cl-effect-14 a {
-	padding: 0 5px;
+	padding: 0 5px 0 5px;
 	height: 30px;
 	line-height: 30px;
   cursor:pointer;
@@ -128,7 +129,7 @@ text-transform:uppercase;
 
 .cl-effect-14 a:hover{
 
-  color: #000000;
+  color: #fff;
 }
 
 
@@ -137,7 +138,7 @@ text-transform:uppercase;
 	position: absolute;
 	width: 28px;
 	height: 2px;
-	background: #000;
+	background: #bbb;
 	content: '';
 	opacity: 0.2;
 	-webkit-transition: all 0.3s;

@@ -1,5 +1,5 @@
 <div ng-cloak>
-  <div   class="portal-nav-mobi" layout="row" layout-align="center center" ng-class="portalMobiNavClass" ng-if="!isGtSm"  ng-cloak>
+  <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass" ng-if="!isGtSm"  ng-cloak>
 
 
     <md-button aria-label="Meeting" class="md-fab md-raised md-mini" ng-click="goTo('/#meeting');">
@@ -23,14 +23,14 @@
 
 
 
-<div class="navbar-default "  layout="column"  ng-cloak>
+<div class="" style="background:#444444;" layout="column"  ng-cloak>
 <section ng-if="isGtSm" >
   <span class="cl-effect-14" >
-    <a ng-click="goTo('/#meeting');"> Meeting </a>
-    <a ng-click="goTo('/#search');"> Side Events</a>
-    <a ng-click="goTo('/#about');">  About </a>
-    <a ng-click="goTo('/#request');"> Request Side Event</a>
-    <a ng-click="goTo('/manage');" > Manage</a>
+    <a ng-click="goTo('/#meeting');">Meeting </a>
+    <a ng-click="goTo('/#search');">Side Events</a>
+    <a ng-click="goTo('/#about');">About</a>
+    <a ng-click="goTo('/#request');">Submit Request</a>
+    <a ng-click="goTo('/manage');" >Dashboard</a>
     <a ng-click="goTo('/help');" class="pull-right"> Help</a>
   </span>
 </section>

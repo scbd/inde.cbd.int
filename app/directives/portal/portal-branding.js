@@ -4,7 +4,7 @@ define(['app',
     ], function(app, template) {
     app.directive('portalBranding', function() {
         return {
-            restrict: 'EAC',
+            restrict: 'E',
             replace: true,
             // transclude: true,
             template: template,
