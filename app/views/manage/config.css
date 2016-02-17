@@ -4,6 +4,11 @@
   padding: 15px 0 0 0;
 }
 
+
+.input-container{
+  margin: 1px 1px 1px 1px;
+}
+
 .dash-container {
   border-radius: 4px;
   margin: 0 20px 15px 20px;
