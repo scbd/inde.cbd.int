@@ -1,7 +1,7 @@
 {
-  "name": "plevra",
+  "name": "inde",
   "version": "0.0.1",
-  "description": "Plevrá  - side event portal",
+  "description": "Indē  - side event portal",
   "main": "server.js",
   "dependencies": {
     "bower": "1.7.0",

@@ -1,2 +1,2 @@
-# plevrá - Side Events Portal
-(plevrá : greek for side)
+# Indē​ - Side Events
+(Indē​ - Side Events)
