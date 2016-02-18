@@ -1,5 +1,5 @@
 define(['app', 'lodash',
-'css!./dash-board',
+'css!./organizations',
 'scbd-branding/side-menu/scbd-side-menu',
 'scbd-branding/side-menu/scbd-menu-service',
 'scbd-angularjs-controls'], function(app, _) { //'scbd-services/utilities',
@@ -7,18 +7,22 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-    app.controller("config", ['$scope','$mdMedia','scbdMenuService','$q','$http', //"$http", "$filter", "Thesaurus",
+    app.controller("organizations", ['$scope','$mdMedia','scbdMenuService','$q','$http', //"$http", "$filter", "Thesaurus",
      function($scope, $mdMedia,scbdMenuService,$q,$http) { //, $http, $filter, Thesaurus
 
       $scope.isLocked=$mdMedia('gt-sm');
       $scope.dashboard=scbdMenuService.dashboard;
       $scope.toggleDashboard=scbdMenuService.toggle('dashboard',$scope);
 
-      $q.when( $http.get('/api/v2015/inde-config'))
-     .then(function(response){
-          $scope.faqSearch = response.data;
-console.log(response.data);
-        });
+//       $q.when( $http.get('/api/v2015/inde-orgs'))
+//      .then(function(response){
+//           $scope.faqSearch = response.data;
+// console.log(response.data);
+//         });
+$scope.organization={};
+$scope.organization.facebook="ddd";
+$scope.organization.title="ddd";
+$scope.$watch('organization',function(){console.log($scope.organizationForm.title.$error);},true);
 
     }]);
 });

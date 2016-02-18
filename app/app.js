@@ -1,6 +1,6 @@
 define(['angular','angular-animate','ngMaterial','ngAria','angular-loading-bar'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute','ng-breadcrumbs','ngAnimate','ngMaterial','ngAria','chieffancypants.loadingBar'];
+    var deps = ['ngRoute','ng-breadcrumbs','ngAnimate','ngMaterial','ngAria','chieffancypants.loadingBar','LocalStorageModule','angular-messages'];
 
     angular.defineModules(deps);
 

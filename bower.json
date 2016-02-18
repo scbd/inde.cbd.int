@@ -5,6 +5,7 @@
     "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
     "angular-loading-bar": "https://github.com/chieffancypants/angular-loading-bar.git",
     "angular-route": "1.4.8",
+    "angular-local-storage": "0.1.5",
     "bootstrap": "3.3.5",
     "bootstrap-datepicker": "1.4.0",
     "flag-icon-css": "https://github.com/lipis/flag-icon-css.git#1.1.0",

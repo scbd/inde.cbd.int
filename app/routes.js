@@ -9,15 +9,16 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
         $routeProvider.
             when('/',                   { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home', { redirectTo: '/' }).
-            when('/',                   { templateUrl: 'views/index.html',                 resolveController: true, resolveUser: true }).
-            when('/about',              { templateUrl: 'views/about.html',                 resolveUser: true }).
-            when('/help',               { templateUrl: 'views/help.html',                  resolveUser: true }).
-            when('/events',             { templateUrl: 'views/events.html',                resolveController: true, resolveUser: true }).
-            when('/event/:id',          { templateUrl: 'views/event.html',                 resolveController: true, resolveUser: true }).
-            when('/management/events',  { templateUrl:'views/management/events.html',            resolveController: true, resolveUser: true , reloadOnSearch : false }).
-            when('/manage',             { templateUrl: 'views/manage/dash-board.html',        resolveController: true, resolveUser: true }).
-            when('/manage/config',      { templateUrl: 'views/manage/config.html',        resolveController: true, resolveUser: true, reloadOnSearch : false  }).
-            when('/404',                { templateUrl: 'views/404.html',                   resolveUser: true }).
+            when('/',                     { templateUrl: 'views/index.html',                 resolveController: true, resolveUser: true }).
+            when('/about',                { templateUrl: 'views/about.html',                 resolveUser: true }).
+            when('/help',                 { templateUrl: 'views/help.html',                  resolveUser: true }).
+            when('/events',               { templateUrl: 'views/events.html',                resolveController: true, resolveUser: true }).
+            when('/event/:id',            { templateUrl: 'views/event.html',                 resolveController: true, resolveUser: true }).
+            when('/management/events',    { templateUrl: 'views/management/events.html',            resolveController: true, resolveUser: true , reloadOnSearch : false }).
+            when('/manage/organizations', { templateUrl: 'views/manage/organizations.html',        resolveController: true, resolveUser: true }).
+            when('/manage',               { templateUrl: 'views/manage/dash-board.html',        resolveController: true, resolveUser: true }).
+            when('/manage/config',        { templateUrl: 'views/manage/config.html',        resolveController: true, resolveUser: true, reloadOnSearch : false  }).
+            when('/404',                  { templateUrl: 'views/404.html',                   resolveUser: true }).
             otherwise({ redirectTo: '/404' });
     }]);
 

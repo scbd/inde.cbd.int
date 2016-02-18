@@ -1,0 +1,75 @@
+<div ng-controller="organizations" class="view-container">
+
+  <section layout="row" flex>
+
+    <scbd-side-menu sections="dashboard" back-ground="#444444" children-back-ground="#444444" children-color="#bbbbbb" toggle-back-ground="#444444" toggle-color="#bbbbbb" link-color="#000000" id="dashboard" ng-if="isLocked" is-open="isLocked">
+      <md-toolbar class="portal-branding" style="" layout-align="center center">
+        <span hide-sm hide-xs>Management Center</span>
+      </md-toolbar>
+    </scbd-side-menu>
+
+    <div md-whiteframe="15" class=" dash-container" style="width:100%;">
+
+
+        <div >
+          <h1>Organizations</h1>
+        </div>
+
+
+
+        <div layout="column" ng-cloak class="md-inline-form" >
+          <md-content layout-padding>
+              <div>
+                <form name="organizationForm">
+                  <div layout-gt-xs="row" >
+
+                    <md-input-container class="md-block" style="margin: 1px 1px 1px 1px;" flex-gt-xs>
+                      <label>Name</label>
+                      <md-icon >business</md-icon>
+                      <input ng-model="organization.title" name="title" required>
+                      <div ng-messages="organizationForm.title.$error" role="alert">
+                              <div ng-message="required" ng-if="organizationForm.title.$error.required">
+                               The organization's name is required.
+                             </div>
+                     </div>
+                    </md-input-container>
+
+                  </div>
+
+                  <div layout-gt-sm="row">
+                    <md-input-container class="md-block" style="margin: 3px 1px 1px 1px;" flex-gt-sm>
+                      <label>Facebook Page</label>
+                      <md-icon>face</md-icon>
+                      <input ng-model="organization.facebook" name="organization.facebook"type="text"  ng-pattern="/(?:http:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-]*)/">
+                      <div ng-messages="organizationForm.organization.facebook.$error" role="alert" md-auto-hide="true">
+                              <div ng-message-exp="['pattern']" ng-if="organizationForm.organization.facebook.$error.patter">
+                               Your entry does not appear to be a falid facebook page address.
+                             </div>
+                     </div>
+                    </md-input-container>
+
+                  </div>
+                  <!-- <div layout-gt-sm="row">
+                    <md-input-container class="md-block" style="margin: 3px 1px 1px 1px;" flex-gt-sm>
+                      <label>Youtube</label>
+                      <md-icon  >youtube</md-icon>
+                      <input ng-model="maxEventsPerUser" type="number" step="any"  min="0" max="15">
+                       <div ng-messages="config.maxEventsPerUser.$error" role="alert">
+                               <div ng-message="max">
+                                The maximum amount of events per user is 15.
+                              </div>
+                      </div>
+                    </md-input-container>
+                  </div> -->
+
+                </form>
+              </div>
+            </md-content>
+      </div>
+
+    </div>
+
+  </section>
+</div>
+
+

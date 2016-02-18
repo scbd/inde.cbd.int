@@ -6,6 +6,8 @@ require.config({
         'angular-animate'          : 'libs/angular-animate/angular-animate.min',
         'angular-loading-bar'      : 'libs/angular-loading-bar/src/loading-bar',
         'angular-route'            : 'libs/angular-route/angular-route',
+        'angular-storage'          : 'libs/angular-local-storage/dist/angular-local-storage.min',
+        'angular-messages'         : 'libs/angular-messages/angular-messages.min',
         'app-css'                  : 'css/main',
         'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap',
         'css'                      : 'libs/require-css/css.min',
