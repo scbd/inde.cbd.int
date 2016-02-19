@@ -2,13 +2,15 @@
   "name": "inde",
   "dependencies": {
     "angular": "1.4.8",
+    "angular-animate": "1.4.8",
     "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
     "angular-loading-bar": "https://github.com/chieffancypants/angular-loading-bar.git",
     "angular-route": "1.4.8",
     "angular-local-storage": "0.1.5",
-    "bootstrap": "3.3.5",
-    "bootstrap-datepicker": "1.4.0",
+    "bootstrap": "3.3.6",
+    "font-awesome": "4.5.0",
     "flag-icon-css": "https://github.com/lipis/flag-icon-css.git#1.1.0",
+    "ionsound": "3.0.0",
     "jquery": "2.2.0",
     "linqjs": "https://github.com/madington/linq.git#2.2.0",
     "lodash": "3.9.3",
@@ -18,11 +20,13 @@
     "requirejs": "2.1.18",
     "require-css": "0.1.8",
     "requirejs-plugins": "1.0.3",
-    "requirejs-text": "2.0.14"
+    "requirejs-text": "2.0.14",
+    "scbd-angularjs-controls": "~1.*",
+    "scbd-angularjs-services": "~1.*"
   },
   "resolutions": {
-    "angular": "1.4.9",
+    "angular": "1.5.0",
     "bootstrap": "3.3.6",
-    "angular-material": "~1.0.5"
+    "bootstrap-datepicker": "1.4.0"
   }
 }
