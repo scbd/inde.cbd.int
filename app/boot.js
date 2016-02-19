@@ -1,6 +1,7 @@
 require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
+    IESelectorLimit: true,
     paths: {
         'angular'                  : 'libs/angular-flex/angular-flex',
         'angular-animate'          : 'libs/angular-animate/angular-animate.min',
@@ -9,6 +10,7 @@ require.config({
         'angular-storage'          : 'libs/angular-local-storage/dist/angular-local-storage.min',
         'angular-messages'         : 'libs/angular-messages/angular-messages.min',
         'app-css'                  : 'css/main',
+        'bootstrap-css'            : 'libs/bootstrap/dist/css/bootstrap.min',
         'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap',
         'css'                      : 'libs/require-css/css.min',
         'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
@@ -17,11 +19,10 @@ require.config({
         'jquery'                   : 'libs/jquery/dist/jquery',
         'linqjs'                   : 'libs/linqjs/linq.min',
         'lodash'                   : 'libs/lodash/lodash',
+        'material-design-icons'    : 'libs/material-design-icons/iconfont/material-icons',
         'moment'                   : 'libs/moment/moment',
         'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
-        'ngAria'                   : 'libs/angular-aria/angular-aria.min',
         'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs',
-        'ngMaterial'               : 'libs/angular-material/angular-material.min',
         'shim'                     : 'libs/require-shim/src/shim',
         'text'                     : 'libs/requirejs-text/text',
 //        'URIjs'                    : 'libs/uri.js/src',
