@@ -24,6 +24,6 @@
     "scbd-branding": "~1.*"
   },
   "resolutions": {
-    "angular": "1.5.0",
+    "angular": "1.5.0"
   }
 }
