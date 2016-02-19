@@ -7,7 +7,6 @@
     "angular-loading-bar": "https://github.com/chieffancypants/angular-loading-bar.git",
     "angular-route": "1.4.8",
     "angular-local-storage": "0.1.5",
-    "bootstrap": "3.3.6",
     "font-awesome": "4.5.0",
     "flag-icon-css": "https://github.com/lipis/flag-icon-css.git#1.1.0",
     "ionsound": "3.0.0",
@@ -15,18 +14,16 @@
     "linqjs": "https://github.com/madington/linq.git#2.2.0",
     "lodash": "3.9.3",
     "moment": "2.11.1",
-    "ng-breadcrumbs": "es-breadcrumbs#~0.4.1",
     "outdated-browser": "1.1.2",
     "requirejs": "2.1.18",
     "require-css": "0.1.8",
     "requirejs-plugins": "1.0.3",
     "requirejs-text": "2.0.14",
     "scbd-angularjs-controls": "~1.*",
-    "scbd-angularjs-services": "~1.*"
+    "scbd-angularjs-services": "~1.*",
+    "scbd-branding": "~1.*"
   },
   "resolutions": {
     "angular": "1.5.0",
-    "bootstrap": "3.3.6",
-    "bootstrap-datepicker": "1.4.0"
   }
 }

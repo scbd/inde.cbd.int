@@ -1,8 +1,11 @@
 define(['app', 'lodash',
 'css!./dash-board',
+
 'scbd-branding/side-menu/scbd-side-menu',
 'scbd-branding/side-menu/scbd-menu-service',
-'scbd-angularjs-controls'], function(app, _) { //'scbd-services/utilities',
+'scbd-branding/scbd-button',
+'scbd-angularjs-controls'
+], function(app, _) { //'scbd-services/utilities',
 
   // If you specify less than all of the keys, it will inherit from the
   // default shades
@@ -13,7 +16,7 @@ define(['app', 'lodash',
 
     //  $scope.isLocked=$mdMedia('gt-sm');
       $scope.toggle=scbdMenuService.toggle;
-      //$scope.dashboard=scbdMenuService.dashboard;
+      $scope.dashboard=scbdMenuService.dashboard;
 
 
     //  $scope.toggleDashboard=scbdMenuService.toggle('dashboard',$scope);

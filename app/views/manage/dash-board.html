@@ -1,26 +1,20 @@
 <div ng-controller="dashBoard" class="view-container">
-  <section layout="row" flex>
+
+  <section class="row relative" >
 <!-- ng-if="isLocked" -->
-    <scbd-side-menu id="dashboard" sections="dashboard" full-screen="false" back-ground="#444444" children-back-ground="#444444" children-color="#bbbbbb" toggle-back-ground="#444444" toggle-color="#bbbbbb" link-color="#000000"   is-open="isLocked">
-      <!-- <md-toolbar class="portal-branding" style="" layout-align="center center">
-        <span hide-sm hide-xs>Management Center</span>
-      </md-toolbar> -->
-      <!-- <div>
-      <ul>
-    <li><a href="#">Item 1</a></li>
-    <li><a href="#">Item 2</a></li>
-</ul>
-</div> -->
-    </scbd-side-menu>
+<scbd-side-menu id="dashboard" sections="dashboard" full-screen="false" color="#bbbbbb" back-ground="#444444" children-back-ground="#444444" children-color="#bbbbbb" toggle-back-ground="#444444" toggle-color="#bbbbbb" link-color="#000000"   is-open="isLocked">
+  <div class="portal-branding"  layout-align="center center">
+          <span hide-sm hide-xs>Management Center</span>
+  </div>
+</scbd-side-menu>
 
 
-    <div md-whiteframe="15" class=" dash-container" >
+    <div class="z-depth-3 dash-container " id="getBumped">
 
 
         <div >
           <h1>Dashboard</h1><div class="menu-btn" ng-click="toggle('dashboard')">&#9776; Menu</div>
-        </div>
-
+        </div><i class="material-icons">transfer_within_a_station</i>
 
 
         <p>      Lorem ipsum dolor sit amet, ne quod novum mei. Sea omnium invenire mediocrem at, in lobortis conclusionemque nam. Ne deleniti appetere reprimique pro, inani labitur disputationi te sed. At vix sale omnesque, id pro labitur reformidans accommodare, cum

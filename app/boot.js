@@ -19,7 +19,6 @@ require.config({
         'jquery'                   : 'libs/jquery/dist/jquery',
         'linqjs'                   : 'libs/linqjs/linq.min',
         'lodash'                   : 'libs/lodash/lodash',
-        'material-design-icons'    : 'libs/material-design-icons/iconfont/material-icons',
         'moment'                   : 'libs/moment/moment',
         'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
         'ng-breadcrumbs'           : 'libs/ng-breadcrumbs/dist/ng-breadcrumbs',
