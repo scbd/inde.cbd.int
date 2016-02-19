@@ -1,6 +1,8 @@
 /* jshint node: true, browser: false */
 'use strict';
 
+process.on('SIGTERM', ()=>process.exit());
+
 // CREATE HTTP SERVER AND PROXY
 
 var app = require('express')();
