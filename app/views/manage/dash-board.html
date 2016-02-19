@@ -1,17 +1,24 @@
 <div ng-controller="dashBoard" class="view-container">
   <section layout="row" flex>
-
-    <scbd-side-menu sections="dashboard" back-ground="#444444" children-back-ground="#444444" children-color="#bbbbbb" toggle-back-ground="#444444" toggle-color="#bbbbbb" link-color="#000000" id="dashboard" ng-if="isLocked" is-open="isLocked">
-      <md-toolbar class="portal-branding" style="" layout-align="center center">
+<!-- ng-if="isLocked" -->
+    <scbd-side-menu id="dashboard" sections="dashboard" full-screen="false" back-ground="#444444" children-back-ground="#444444" children-color="#bbbbbb" toggle-back-ground="#444444" toggle-color="#bbbbbb" link-color="#000000"   is-open="isLocked">
+      <!-- <md-toolbar class="portal-branding" style="" layout-align="center center">
         <span hide-sm hide-xs>Management Center</span>
-      </md-toolbar>
+      </md-toolbar> -->
+      <!-- <div>
+      <ul>
+    <li><a href="#">Item 1</a></li>
+    <li><a href="#">Item 2</a></li>
+</ul>
+</div> -->
     </scbd-side-menu>
+
 
     <div md-whiteframe="15" class=" dash-container" >
 
 
         <div >
-          <h1>Dashboard</h1>
+          <h1>Dashboard</h1><div class="menu-btn" ng-click="toggle('dashboard')">&#9776; Menu</div>
         </div>
 
 

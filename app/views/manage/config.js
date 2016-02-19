@@ -7,10 +7,10 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-    app.controller("config", ['$scope','$mdMedia','scbdMenuService','$q','$http', //"$http", "$filter", "Thesaurus",
-     function($scope, $mdMedia,scbdMenuService,$q,$http) { //, $http, $filter, Thesaurus
+    app.controller("config", ['$scope','scbdMenuService','$q','$http', //"$http", "$filter", "Thesaurus",
+     function($scope, scbdMenuService,$q,$http) { //, $http, $filter, Thesaurus
 
-      $scope.isLocked=$mdMedia('gt-sm');
+    //  $scope.isLocked=$mdMedia('gt-sm');
       $scope.dashboard=scbdMenuService.dashboard;
       $scope.toggleDashboard=scbdMenuService.toggle('dashboard',$scope);
 
