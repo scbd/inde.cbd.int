@@ -1,64 +1,143 @@
 define(['app'], function(app) {
-  app.directive('scbdMedia', ['$animate', function($animate) {
+
+  app.factory('scbdMedia',['$window','$timeout', function($window,$timeout) {
+
+      var isXs;
+      var isGtXs ;
+      var isSm ;
+      var isGtSm ;
+      var isMd ;
+      var isGtMd;
+      var isLg;
+      var isGtLg;
+
+      angular.element($window).on('resize',setMedia);
+
+      function setMedia(){
+
+          if(!screen.width){
+            isXs = ($window.innerWidth < 600);
+            isGtXs = ($window.innerWidth >= 600);
+            isSm = (600 <= Number($window.innerWidth) &&  Number($window.innerWidth) < 960);
+            isGtSm = ($window.innerWidth >= 960);
+            isMd = (960 <= Number($window.innerWidth) &&  Number($window.innerWidth)< 1280);
+            isGtMd = ($window.innerWidth >= 1280);
+            isLg = (1280 <= Number($window.innerWidth) &&  Number($window.innerWidth) < 1920 );
+            isGtLg = ($window.innerWidth >= 1920);
+          }else{
+            isXs = (screen.width < 600);
+            isGtXs = (screen.width >= 600);
+            isSm = (600 <= Number(screen.width) && Number(screen.width) < 960);
+            isGtSm = (screen.width >= 960);
+            isMd = (960 <= Number(screen.width) && Number(screen.width)< 1280);
+            isGtMd = (screen.width >= 1280);
+            isLg = (1280 <= Number(screen.width) && Number(screen.width) < 1920 );
+            isGtLg = (screen.width >= 1920);
+          }
+
+      }
+      setMedia();
+
+      return {
+        isXs:isXs,
+        isGtXs:isGtXs,
+        isSm:isSm,
+        isGtSm:isGtSm,
+        isMd:isMd,
+        isGtMd:isGtMd,
+        isLg:isLg,
+        isGtLg:isGtLg
+      };
+  }]);
+
+  app.directive('hideXs', ['scbdMedia','$compile', function(scbdMedia,$compile) {
     return {
-      multiElement: true,
-      transclude: 'element',
       priority: 600,
       terminal: true,
       restrict: 'A',
-
-      link: function($scope, $element, $attr, ctrl, $transclude) {
-
-        var block, childScope, previousElements;
-
-                  $scope.isXs = (window.innerWidth < 600);
-                  $scope.isGtXs = (window.innerWidth >= 600);
-                  $scope.isSm = (600 <= window.innerWidth < 960);
-                  $scope.isGtSm = (window.innerWidth >= 960);
-                  $scope.isMd = (960 <= window.innerWidth < 1280);
-                  $scope.isGtMd = (window.innerWidth >= 1280);
-                  $scope.isLg = (1280 <= window.innerWidth < 1920 );
-                  $scope.isGtLg = (window.innerWidth >= 1920);
-
-                  if (value) {
-                    if (!childScope) {
-                      $transclude(function(clone, newScope) {
-                        childScope = newScope;
-                        clone[clone.length++] = document.createComment(' end ScbdMedia:  ');
-                        // Note: We only need the first/last node of the cloned nodes.
-                        // However, we need to keep the reference to the jqlite wrapper as it might be changed later
-                        // by a directive with templateUrl when its template arrives.
-                        block = {
-                          clone: clone
-                        };
-                        $animate.enter(clone, $element.parent(), $element);
-                      });
-                    }
-                  } else {
-                    if (previousElements) {
-                      previousElements.remove();
-                      previousElements = null;
-                    }
-                    if (childScope) {
-                      childScope.$destroy();
-                      childScope = null;
-                    }
-                    if (block) {
-                      previousElements = getBlockNodes(block.clone);
-                      $animate.leave(previousElements).then(function() {
-                        previousElements = null;
-                      });
-                      block = null;
-                    }
-                  }
-
-
-
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isXs);
+            console.log($element);
+            $compile($element)($scope);
       } //end controller
     }; // return
-
-
-
   }]);
+  app.directive('hideSm', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isSm);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+
+  app.directive('hideMd', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isMd);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+
+  app.directive('hideLg', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isLg);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+  app.directive('hideGtSm', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isGtSm);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+
+  app.directive('hideGtMd', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isGtMd);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+
+  app.directive('hideGtLg', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', !scbdMedia.isGtLg);
+            console.log($element);
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+
 
 });

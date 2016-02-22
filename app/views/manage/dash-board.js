@@ -1,9 +1,9 @@
 define(['app', 'lodash',
 'css!./dash-board',
-
 'scbd-branding/side-menu/scbd-side-menu',
 'scbd-branding/side-menu/scbd-menu-service',
 'scbd-branding/scbd-button',
+'scbd-branding/scbd-icon-button',
 'scbd-angularjs-controls'
 ], function(app, _) { //'scbd-services/utilities',
 

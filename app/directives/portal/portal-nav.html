@@ -1,30 +1,30 @@
-<div ng-cloak>
-  <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass" ng-if="!isGtSm"  ng-cloak>
+<div ng-cloak >
+  <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass"  ng-cloak hide-gt-sm>
 
 
-    <md-button aria-label="Meeting" class="md-fab md-raised md-mini" ng-click="goTo('/#meeting');">
-      <md-icon  aria-label="Meeting">nature_people</md-icon>
-    </md-button>
-  <md-button aria-label="Event" class="md-fab md-raised md-mini" ng-click="goTo('/#search');">
-    <md-icon  aria-label="Event">event</md-icon>
-  </md-button>
+    <scbd-fab-button aria-label="Meeting" class="md-fab md-raised md-mini" ng-click="goTo('/#meeting');">
+      <scbd-icon-button  type="md" icon-name="nature_people"></scbd-icon-button>
+    </scbd-fab-button>
+  <scbd-fab-button aria-label="Event" class="md-fab md-raised md-mini" ng-click="goTo('/#search');">
+    <scbd-icon-button  type="md" icon-name="nature_people">event</scbd-icon-button>
+  </scbd-fab-button>
 
-  <md-button aria-label="About" class="md-fab md-raised md-mini" ng-click="goTo('/#about');">
-    <md-icon  aria-label="About">info_outline</md-icon>
-  </md-button>
-  <md-button aria-label="Request" class="md-fab md-raised md-mini" ng-click="goTo('/#request');">
-    <md-icon aria-label="Request">add_location</md-icon>
-  </md-button>
-  <md-button aria-label="Manage" class="md-fab md-raised md-mini" ng-click="goTo('/manage');" >
-    <md-icon  aria-label="Manage">dashboard</md-icon>
-  </md-button>
+  <scbd-fab-button aria-label="About" class="md-fab md-raised md-mini" ng-click="goTo('/#about');">
+    <scbd-icon-button  type="md" icon-name='info_outline'>info_outline</scbd-icon-button>
+  </scbd-fab-button>
+  <scbd-fab-button aria-label="Request" class="md-fab md-raised md-mini" ng-click="goTo('/#request');">
+    <scbd-icon-button type="md" icon-name='add_location'>add_location</scbd-icon-button>
+  </scbd-fab-button>
+  <scbd-fab-button aria-label="Manage" class="md-fab md-raised md-mini" ng-click="goTo('/manage');" >
+    <scbd-icon-button  type="md" icon-name="dashboard">dashboard</scbd-icon-button>
+  </scbd-fab-button>
 
   </div>
 
 
 
-<div md-whiteframe="5" style="background:#444444;" layout="column"  ng-cloak>
-<section ng-if="isGtSm" >
+<div class="z-depth-2" style="background:#444444;"  ng-cloak>
+<section  hide-lt-sm>
   <span class="cl-effect-14" >
     <a ng-click="goTo('/#meeting');">Meeting </a>
     <a ng-click="goTo('/#search');">Side Events</a>
@@ -35,7 +35,7 @@
   </span>
 </section>
 </div>
-<div class="space-filler" ng-class="spaceFillClass" ng-if="!isGtSm">
+<div class="space-filler" ng-class="spaceFillClass" hide-gt-sm>
 </div>
 
 

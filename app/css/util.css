@@ -47,6 +47,19 @@
   text-overflow: ellipsis;
 }
 
-.no-padding {
+.no-pad {
   padding: 0 !important;
 }
+
+sup {
+  top: -.5em;
+}
+sub {
+  bottom: -.25em;
+}
+
+.clearfix {
+  content: "";
+  display: table;
+  clear: both;
+     }

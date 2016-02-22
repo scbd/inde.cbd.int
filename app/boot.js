@@ -10,9 +10,12 @@ require.config({
         'angular-storage'          : 'libs/angular-local-storage/dist/angular-local-storage.min',
         'angular-messages'         : 'libs/angular-messages/angular-messages.min',
         'app-css'                  : 'css/main',
+        'bootstrap'                : 'libs/bootstrap/dist/js/bootstrap.min',
         'css'                      : 'libs/require-css/css.min',
         'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
         'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',
+        'iconate'                  : 'libs/iconate/dist/iconate',
+        'iconateCSS'               : 'libs/iconate/dist/iconate.min',
         'ionsound'                 : 'libs/ionsound/js/ion.sound.min',
         'jquery'                   : 'libs/jquery/dist/jquery',
         'linqjs'                   : 'libs/linqjs/linq.min',
@@ -27,22 +30,23 @@ require.config({
         'libs/angular/angular'    : { deps: ['jquery'] },
         'angular'                 : { deps: ['libs/angular/angular'] },
         'angular-route'           : { deps: ['angular'] },
-        'bootstrap'               : { deps: ['jquery'] },
         'guid'                    : { exports: 'ui_guid_generator' },
-        'angular-animate'         : { 'deps': ['angular']},
-        'angular-loading-bar'         : { deps: ['angular'] },
+        'angular-animate'         : { deps: ['angular']},
+        'angular-loading-bar'     : { deps: ['angular'] },
+        'bootstrap'               : { deps:[ 'jquery']},
     },
     packages: [
       { name: 'scbd-angularjs-services', location : 'libs/scbd-angularjs-services/services' },
       { name: 'scbd-branding', location : 'libs/scbd-branding/directives' },
       { name: 'scbd-angularjs-filters',  location : 'libs/scbd-angularjs-services/filters' },
       { name: 'scbd-angularjs-controls', location : 'libs/scbd-angularjs-controls/form-control-directives' },
+
     ]
 });
 
 // BOOT
 
-require(['angular', 'app', 'bootstrap','text', 'routes', 'template'], function(ng, app) {
+require(['angular', 'app', 'text', 'routes', 'template','bootstrap'], function(ng, app) {
 
     ng.element(document).ready(function () {
          ng.bootstrap(document, [app.name]);

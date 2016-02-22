@@ -5,7 +5,7 @@ define(['app', 'jquery',
 // 'css!materialize',
 // 'css!bootstrap-css',
 //'css!libs/angular-loading-bar/src/loading-bar',
-'ng-breadcrumbs',
+
 'scbd-angularjs-services/authentication',
 'directives/portal/portal-branding',
 'directives/portal/portal-nav',

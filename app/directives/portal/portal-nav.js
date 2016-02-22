@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./portal-nav.html','css!./portal-nav','ng-breadcrumbs' ], function (app, _,template) {
+define(['app', 'lodash', 'text!./portal-nav.html','css!./portal-nav' ], function (app, _,template) {
 app.directive('portalNav', function () {
     return {
     restrict: 'E',
@@ -40,7 +40,6 @@ app.directive('portalNav', function () {
           return $location.url(path);
       };
 
-
       angular.element($window).on('resize',setMedia);
 
       function setMedia(){
@@ -59,6 +58,7 @@ app.directive('portalNav', function () {
 
       }
       setMedia();
+
       }]};//end controller
   });
 });

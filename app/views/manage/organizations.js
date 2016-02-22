@@ -11,8 +11,9 @@ define(['app', 'lodash',
      function($scope,scbdMenuService,$q,$http) { //, $http, $filter, Thesaurus
 
     //  $scope.isLocked=$mdMedia('gt-sm');
-      $scope.dashboard=scbdMenuService.dashboard;
-      $scope.toggleDashboard=scbdMenuService.toggle('dashboard',$scope);
+    $scope.toggle=scbdMenuService.toggle;
+    $scope.dashboard=scbdMenuService.dashboard;
+    console.log('scbdMenuService',scbdMenuService);
 
 //       $q.when( $http.get('/api/v2015/inde-orgs'))
 //      .then(function(response){
@@ -22,7 +23,7 @@ define(['app', 'lodash',
 $scope.organization={};
 $scope.organization.facebook="ddd";
 $scope.organization.title="ddd";
-$scope.$watch('organization',function(){console.log($scope.organizationForm.title.$error);},true);
+// $scope.$watch('organization',function(){console.log($scope.organizationForm.title.$error);},true);
 
     }]);
 });
