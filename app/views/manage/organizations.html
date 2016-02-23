@@ -1,25 +1,139 @@
 <div ng-controller="organizations" class="view-container">
 
-  <section class="row relative" >
+  <section class="row relative">
     <!-- ng-if="isLocked" -->
-    <scbd-side-menu right-side open id="dashboard" bump-id="getBumped" sections="dashboard"  is-open="isLocked" hide-lt-sm>
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="dashboard" is-open="isLocked" hide-lt-sm>
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>Management Center</h1>
       </div>
     </scbd-side-menu>
 
 
-    <div class="z-depth-3 dash-container" id="getBumped" style="height:400px;">
+    <div class="z-depth-3 dash-container" id="getBumped">
 
 
-        <div >
-          <h1 ng-click="toggle('dashboard')">Organizations</h1>
+      <div>
+        <h1 ng-click="toggle('dashboard')">Organizations</h1>
+      </div>
+
+
+
+
+      <div class="registerpage-content">
+
+        <div ng-show="msg" class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+          <strong>{{msg}}</strong>
         </div>
 
-    </div>
+        <div class="alert alert-error" ng-show="hasError()">
+          <strong>Error as occured...</strong>
+          <div>{{error}}</div>
+        </div>
+
+        <div ng-show="isLoading()">
+          <i class="fa fa-spinner fa-spin"></i> Loading...
+        </div>
+
+
+
+        <form name="editForm" class="editForm" style="margin-top:10px">
+          <div class="col-xs-6">
+            <span km-form-languages ng-model="locales"></span>{{document.header.languages}}
+          </div>
+          <legend name="formInfo" style="display:none"></legend>
+
+          <div>
+            <legend>Organization Information</legend>
+            <div class="row">
+              <div class="col-md-7 col-xs-12">
+                <div class="km-control-group" name="contact_organization" ng-required="!form.organization.$valid" caption="Organization">
+                  <div class="help-block">Fullname without abbreviation</div>
+                  <div km-textbox-ml name="contact_organization" ng-model="document.name" required locales="locales"></div>
+                </div>
+              </div>
+
+              <div class="col-md-5 col-xs-12">
+                <div class="km-control-group" name="contact_organizationAcronym" caption="Acronym" ng-required="!form.organization.$valid && document.type!='person'">
+                  <div class="help-block">Abbreviation for long name</div>
+                  <div km-textbox-ml name="contact_organizationAcronym" ng-model="document.acronym" placeholder="example: SCBD" locales="locales"></div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="km-control-group" name="contact_organizationType" caption="Type of organization">
+                  <div km-select name="contact_organizationType" ng-model="document.organizationType" items="options.organizationTypes()"></div>
+                  {{document.organizationType}}
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="km-control-group" name="contact_country" ng-required="!form.contact_country.$valid" caption="Country address">
+                  <div km-select name="contact_country" ng-model="document.country" items="options.countries()" required></div>{{document.country}}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+
+            <legend>Social Media</legend>
+
+            <div class="row">
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="website" caption="Website addresse">
+                  <div class="help-block">Please enter the organization's website address</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="facebook" required caption="Facebook Page">
+                  <div class="help-block">Please enter the organization's Facebook page</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="contact_emails" caption="Youtube" required>
+                  <div class="help-block">Please enter the organization's Youtube Channel</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="website" caption="Website addresse">
+                  <div class="help-block">Please enter the organization's website address</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="facebook" required caption="Facebook Page">
+                  <div class="help-block">Please enter the organization's Facebook page</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="contact_emails" caption="Youtube" required>
+                  <div class="help-block">Please enter the organization's Youtube Channel</div>
+                  <input class="form-control" type="url" ng-model="doc._urls" placeholder="example: http://www.cbd.int">
+                </div>
+              </div>
+
+            </div>
+
+        </form>
+
+        </div>
 
   </section>
 
-</div>
-
-
+  </div>
