@@ -45,11 +45,11 @@
 	100% { opacity: 1; }
 }
 /*setting global button colors*/
-.btn,  .btn-floating,  .btn-large {
+.scbd-btn,  .scbd-btn-floating,  .scbd-btn-large {
   background-color:#428bca;
   color:#fff;
 }
-.btn:hover,  .btn-floating:hover,  .btn-large:hover, .btn:active,  .btn-floating:active,  .btn-large:hover  {
+.scbd-btn:hover,  .scbd-btn-floating:hover,  .scbd-btn-large:hover, .scbd-btn:active,  .scbd-btn-floating:active,  .scbd-btn-large:hover  {
   background-color:#069554;
 }
 

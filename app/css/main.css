@@ -95,7 +95,11 @@ textarea {
 
 body {
     margin: 0px;
+		color: rgba(0, 0, 0, 0.87);
 }
+h1{font-size: 20px;
+line-height: 30px;
+vertical-align: middle;}
 
 
 

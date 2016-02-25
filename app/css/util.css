@@ -63,3 +63,9 @@ sub {
   display: table;
   clear: both;
      }
+
+.debug-border{    border-style: solid;
+    border-width: 3px;
+  border-color: red;}
+
+  .nowarp{ white-space: nowrap;}
