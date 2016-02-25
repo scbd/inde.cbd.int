@@ -15,7 +15,8 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
             when('/events',               { templateUrl: 'views/events.html',                resolveController: true, resolveUser: true }).
             when('/event/:id',            { templateUrl: 'views/event.html',                 resolveController: true, resolveUser: true }).
             when('/management/events',    { templateUrl: 'views/management/events.html',            resolveController: true, resolveUser: true , reloadOnSearch : false }).
-            when('/manage/organizations', { templateUrl: 'views/manage/organizations.html',        resolveController: true, resolveUser: true }).
+            when('/manage/organizations', { templateUrl: 'views/manage/organizations.html',        resolveController: true, resolveUser: true,reloadOnSearch : false  }).
+            when('/manage/organizations/:id', { templateUrl: 'views/manage/organizations.html',        resolveController: true, resolveUser: true,reloadOnSearch : false  }).
             when('/manage',               { templateUrl: 'views/manage/dash-board.html',        resolveController: true, resolveUser: true }).
             when('/manage/config',        { templateUrl: 'views/manage/config.html',        resolveController: true, resolveUser: true, reloadOnSearch : false  }).
             when('/404',                  { templateUrl: 'views/404.html',                   resolveUser: true }).
