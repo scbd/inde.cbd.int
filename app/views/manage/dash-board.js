@@ -4,7 +4,9 @@ define(['app', 'lodash',
 'scbd-branding/side-menu/scbd-menu-service',
 'scbd-branding/scbd-button',
 'scbd-branding/scbd-icon-button',
-'scbd-angularjs-controls'
+'scbd-angularjs-controls',
+'../../directives/forms/controls/scbd-select-list'
+
 ], function(app, _) { //'scbd-services/utilities',
 
   // If you specify less than all of the keys, it will inherit from the
@@ -12,14 +14,11 @@ define(['app', 'lodash',
 
     app.controller("dashBoard", ['$scope','scbdMenuService', //"$http", "$filter", "Thesaurus",
      function($scope,scbdMenuService) { //, $http, $filter, Thesaurus
-
-
-    //  $scope.isLocked=$mdMedia('gt-sm');
+      $scope.test=[];
+      $scope.$watch('test',function(){console.log('watch in dash',$scope.test);},true);
       $scope.toggle=scbdMenuService.toggle;
       $scope.dashboard=scbdMenuService.dashboard;
 
-
-    //  $scope.toggleDashboard=scbdMenuService.toggle('dashboard',$scope);
 
     }]);
 });
