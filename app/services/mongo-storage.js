@@ -37,7 +37,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                       data.$set  = {"document":currentDoc};
                       data.$push = {"history":prevDoc};
                       return $http.patch(url,data,params).then(function(res){
-                        deleteTempRecords(schema);
+                        //deleteTempRecords(schema);
                         res.data._id=_id;
                         return res;
                       });
