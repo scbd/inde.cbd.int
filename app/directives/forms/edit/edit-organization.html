@@ -1,0 +1,128 @@
+<div  class="view-container " >
+
+    <div class="container-header center">
+      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="goTo('/manage/organizations')" ng-if="!shortForm"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
+      <h1 ng-click="toggle('dashboard')"><scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;" ></scbd-icon-button> Add Organization</h1>
+      <div class="btn-group right " ng-if="!shortForm"><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="container-header-filler"></div>
+
+        <div ng-show="msg" class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+          <strong>{{msg}}</strong>
+        </div>
+
+        <div class="alert alert-error" ng-show="hasError()">
+          <strong>Error as occured...</strong>
+          <div>{{error}}</div>
+        </div>
+
+        <div ng-show="isLoading()">
+          <i class="fa fa-spinner fa-spin"></i> Loading...
+        </div>
+
+
+
+        <form name="editForm" class="editForm" style="margin-top:10px">
+
+          <div>
+            <legend class="container-subheader"><h2>Identity</h2>{{doc._id}}</legend>
+            <div class="row">
+              <div class="col-md-6 col-xs-12">
+                <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title" >
+                  <scbd-tooltip style="display:inline-block;top:2px;"  ng-if="0"><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span></scbd-tooltip>
+                  <div km-textbox-ml name="title" ng-model="doc.title" required locales="doc.meta.locales" ></div>
+                </div>
+
+              </div>
+              <div class="col-md-6 col-xs-12">
+                <div class="km-control-group nowrap" name="organization_logo" ng-required="!form.logo.$valid" caption="Logo" >
+
+                  <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
+    
+
+                </div>
+
+              </div>
+
+
+              <div class="col-md-3 col-xs-12">
+                <div class="km-control-group" name="acronym" caption="Acronym" ng-required="!form.organization.$valid">
+                  <div class="help-block" ng-if="0">Abbreviation for long name</div>
+                  <div km-textbox-ml name="acronym" ng-model="doc.acronym" placeholder=" " locales="doc.meta.locales"></div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3">
+                <div class="km-control-group" name="type" caption="Type">
+                  <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Home Country" ng-if="doc.type.identifier!=='64432E86-23C9-4D9A-B835-962D8221E6CA'">
+                  <div km-select name="country" ng-model="doc.country" items="options.countries()" required></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+            <legend class="container-subheader" ng-if="!shortForm"><h2>Social Media</h2></legend>
+
+            <div class="row" ng-if="!shortForm">
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="website" caption="Website">
+                  <div class="help-block" ng-if="0">Please enter the organization's Website address</div>
+                  <input class="form-control" type="url" ng-model="doc.website" placeholder=" ">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="facebook" required caption="Facebook Page">
+                  <div class="help-block" ng-if="0">Please enter the organization's Facebook page</div>
+                  <input class="form-control" type="url" ng-model="doc.facebook" placeholder=" ">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="youtube" caption="Youtube Channel" required>
+                  <div class="help-block" ng-if="0">Please enter the organization's Youtube Channel</div>
+                  <input class="form-control" type="url" ng-model="doc.youtube" placeholder=" ">
+                </div>
+              </div>
+
+            </div>
+            <div class="row" ng-if="!shortForm">
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="twitter" caption="Twitter Feed">
+                  <div class="help-block" ng-if="0">Please enter the organization's Twitter feed</div>
+                  <input class="form-control" type="url" ng-model="doc.twitter" placeholder=" ">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="facebook" required caption="Instagram Feed">
+                  <div class="help-block" ng-if="0">Please enter the organization's Instagram feed</div>
+                  <input class="form-control" type="url" ng-model="doc.instagram" placeholder=" ">
+                </div>
+              </div>
+
+              <div class="col-md-4 col-xs-12">
+                <div class="km-control-group" name="contact_emails" caption="Google+ Page or Google Local Page" required>
+                  <div class="help-block" ng-if="0">Please enter the organization's Google+ page or local page.</div>
+                  <input class="form-control" type="url" ng-model="doc.google" placeholder=" ">
+                </div>
+              </div>
+
+            </div>
+            <scbd-button ng-click="saveDoc();" style="width:100%">Save Organization</button>
+        </form>
+
+</div>
