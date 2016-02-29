@@ -6,6 +6,7 @@
   color: rgba(0, 0, 0, 0.6);
   line-height: 32px;
   padding: 0 12px;
+  margin: 0 1px 0 2px;
   border-radius: 16px;
   background-color: #e4e4e4;
 }
@@ -16,6 +17,7 @@
   height: 32px;
   width: 32px;
   border-radius: 50%;
+  z-index:200;
 }
 
 .chip i.material-icons {

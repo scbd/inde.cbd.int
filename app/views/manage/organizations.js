@@ -13,8 +13,8 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-  app.controller("organizations", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location', //"$http", "$filter", "Thesaurus",
-    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location) { //, $http, $filter, Thesaurus
+  app.controller("organizations", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','$element', //"$http", "$filter", "Thesaurus",
+    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,$element) { //, $http, $filter, Thesaurus
 
 
 
@@ -68,7 +68,14 @@ define(['app', 'lodash',
           $scope.orgs=response.data;
         });
       };// archiveOrg
-
+      $scope.searchToggle= function (){
+        var serEl =$element.find('.search');
+console.log(serEl );
+        serEl.toggleClass('search-expanded');
+        serEl.focus();
+        $scope.sOpen=!$scope.sOpen;
+        $scope.search='';
+      };// archiveOrg
       //=======================================================================
       //
       //=======================================================================
@@ -94,7 +101,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.toggleArchived = function (docObj){
-console.log($scope.showArchived);
+
         if(!$scope.showArchived)
             $scope.archiveList();
         else
@@ -116,7 +123,7 @@ console.log($scope.showArchived);
       //
       //=======================================================================
       $scope.unArchiveOrg = function (docObj){
-        console.log();
+
         docObj.document.meta.status="draft";
           mongoStorage.unArchiveDoc('inde-orgs',docObj,docObj._id).then(function(){
                 _.remove($scope.orgs,function(obj){return obj._id===docObj._id;});

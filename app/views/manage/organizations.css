@@ -11,13 +11,13 @@
     border-radius: 0 0 2px 2px;
     height:50%;
 }
-  .card-action {height:40px;}
+  .card-action {height:40px; padding: 0 0 0 0 !important;}
 
 .collection-action{
   width:100px;
   color:#109e49;
   font-size: 30px;
-float:right;
+  float:right;
 }
 
 .collection-action-grp{
@@ -28,6 +28,7 @@ float:right;
   bottom:30px;
   right:1%;
   z-index: 20px;
+
 }
 /*.card-action{max-height:45px;position:absolute;bottom:0px; width:100%; display:inline-block;}
 card-content{max-height:50px;}*/
@@ -38,8 +39,12 @@ card-content{max-height:50px;}*/
   font-size: 20px;
   position:absolute;
   bottom:0px;
-  left:25%;
+
+  margin: 0 auto;
+  width:100%;
   z-index: 20px;
+  text-align: center;
+
 }
 .action-grp-filler{
   height:40px;

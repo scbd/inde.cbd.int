@@ -13,8 +13,8 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-  app.controller("events", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location', //"$http", "$filter", "Thesaurus",
-    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location) { //, $http, $filter, Thesaurus
+  app.controller("events", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','$element', //"$http", "$filter", "Thesaurus",
+    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,$element) { //, $http, $filter, Thesaurus
 
 
 
@@ -47,7 +47,13 @@ define(['app', 'lodash',
           $scope.orgs=response.data;
         });
       };// archiveOrg
-
+      $scope.searchToggle= function (){
+        var serEl =$element.find('.search');
+        serEl.toggleClass('search-expanded');
+        serEl.focus();
+        $scope.sOpen=!$scope.sOpen;
+        $scope.search='';
+      };// archiveOrg
       //=======================================================================
       //
       //=======================================================================

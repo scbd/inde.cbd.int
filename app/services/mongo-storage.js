@@ -110,7 +110,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadDocs";
 
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"document.meta.status":{"$ne":"archived"}}&f={"document":1}'));//}&f={"document":1}'))
+            return $q.when( $http.get('/api/v2015/'+schema+'?q={"document.meta.status":{"$ne":"archived"},"document.meta.v":{"$ne":0}}&f={"document":1}'));//}&f={"document":1}'))
 
         }
         //=======================================================================

@@ -104,5 +104,30 @@ h1{font-size: 20px;
 line-height: 30px;
 vertical-align: middle;}
 
-
+.select-list-container {
+	overflow: auto;
+	height: 300px;
+	border-width: .5px;
+	border-style: ridge;
+	border-color: ##109e49;
+}
+.search {
+ width: 5px;
+ height:30px;
+ border-radius: 20px;
+ border-color:#444444 !important;
+ background-color: #bbbbbb;
+ padding-left: 5px;
+ position:absolute;
+ top:3px;
+ left:15px;
+ -webkit-transition: all .5s ease;
+ -moz-transition: all .5s ease;
+ transition: all .5s ease;
+}
+.search:focus {outline:none;}
+.search-expanded {
+ width: 200px;
+ left:-170px;
+}
 
