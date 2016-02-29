@@ -17,7 +17,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
                var prevDoc    = _.cloneDeep(document.initialState) || {};
                var currentDoc = _.cloneDeep(document);
-               var url        = '/api/v2015/'+schema;
+               var url        = 'https://api.cbd.int/api/v2015/'+schema;
                var params     = {};
                var data       = {};
 
@@ -61,7 +61,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         function deleteRecord (schema,id) {
 
-            $http.delete('/api/v2015/'+schema+'/'+id);
+            $http.delete('https://api.cbd.int/api/v2015/'+schema+'/'+id);
 
         }
         //============================================================
@@ -69,7 +69,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         function deleteTempRecords(schema) {
 
-            $http.get('/api/v2015/'+schema+'?q={"document.meta.v":0}&f={"_id":1}').then(function(res){
+            $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.v":0}&f={"_id":1}').then(function(res){
                   _.each(res.data,function(obj){
                         $http.delete('/api/v2015/'+schema+'/'+obj._id);
                   });
@@ -83,7 +83,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         function loadDoc (schema,_id){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument line:34";
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"_id":{"$oid":"'+_id+'"}}&f={"document":1}'))//}&f={"document":1}'))
+            return $q.when( $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"_id":{"$oid":"'+_id+'"}}&f={"document":1}'))//}&f={"document":1}'))
                    .then(
                         function(response){
                               if(response.data.length){
@@ -110,7 +110,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadDocs";
 
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"document.meta.status":{"$ne":"archived"},"document.meta.v":{"$ne":0}}&f={"document":1}'));//}&f={"document":1}'))
+            return $q.when( $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":{"$ne":"archived"},"document.meta.v":{"$ne":0}}&f={"document":1}'));//}&f={"document":1}'))
 
         }
         //=======================================================================
@@ -189,7 +189,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                     filename:file.name,
                 }
               };
-              return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
+              return $http.post('https://api.cbd.int/api/v2015/temporary-files', postData).then(function(res) {
               // Create a temp file location to upload to
                 return res.data;
               }).then(function(target) {
@@ -200,7 +200,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                     }
                   }).then(function() {
                     // move temp file form temp to its proper home schema/is/filename
-                    return $http.get("/api/v2015/mongo-document-attachment/"+target.uid, { });
+                    return $http.get("https://api.cbd.int/api/v2015/mongo-document-attachment/"+target.uid, { });
                   });
               });
         } // touch
