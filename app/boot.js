@@ -47,7 +47,7 @@ require.config({
     packages: [
       { name: 'scbd-angularjs-services', location : 'libs/scbd-angularjs-services/services' },
       { name: 'scbd-branding', location : 'libs/scbd-branding/directives' },
-      { name: 'scbd-filters',  location : 'libs/scbd-angularjs-services/filters' },
+      { name: 'scbd-filters',  location : 'libs/scbd-filters/filters' },
       { name: 'scbd-angularjs-filters',  location : 'libs/scbd-angularjs-services/filters' },
       { name: 'scbd-angularjs-controls', location : 'libs/scbd-angularjs-controls/form-control-directives' },
 
