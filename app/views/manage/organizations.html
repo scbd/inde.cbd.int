@@ -9,143 +9,83 @@
     </scbd-side-menu>
 
 
-    <div class="z-depth-3 dash-container" id="getBumped">
-<div class="container-header">
+    <div class="z-depth-3 list-container" id="getBumped">
+      <div class="container-header">
 
-  <h1 ng-click="toggle('dashboard')">Organization</h1>
-
-</div>
-<div class="container-header-filler">
-</div>
-
-
-
-
-
+        <h1 ng-click="toggle('dashboard')">
+          <scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;"></scbd-icon-button>Organizations</h1>
+        <div class="btn-group right ">
+          <scbd-fab-button style="margin-right:5px;" ng-click="goTo('/manage/organizations/0');"><i class="material-icons">&#xE145;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="sortReverse=!sortReverse;"><i class="material-icons">&#xE053;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==2"><i class="material-icons">&#xE8EE;</i></scbd-fab-button>
+            <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==1"><i class="material-icons">&#xE8F0;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==0"><i class="material-icons">&#xE8EF;</i></scbd-fab-button>
 
 
 
-      <div class="registerpage-content">
-
-        <div ng-show="msg" class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
-          <strong>{{msg}}</strong>
-        </div>
-
-        <div class="alert alert-error" ng-show="hasError()">
-          <strong>Error as occured...</strong>
-          <div>{{error}}</div>
-        </div>
-
-        <div ng-show="isLoading()">
-          <i class="fa fa-spinner fa-spin"></i> Loading...
-        </div>
-
-
-
-        <form name="editForm" class="editForm" style="margin-top:10px">
-<div class="row">
-          <div class="col-xs-12" >
-            <div class="row">
-            <span km-form-languages ng-model="doc.meta.locales"></span>
-            <scbd-tooltip ><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Select the languages in which you would like to complete this form.</span></scbd-tooltip>
-
-</div>
-          </div>
-
+          <scbd-fab-button  ng-click="toggleArchived();" ng-if="!showArchived"><i class="material-icons">&#xE149;</i></scbd-fab-button>
+          <scbd-fab-button  ng-click="toggleArchived();" ng-if="showArchived"><i class="material-icons">&#xE169;</i></scbd-fab-button>
 
         </div>
-          <div>
-            <legend class="container-subheader"><h2>Identification Information</h2></legend>
-            <div class="row">
-              <div class="col-md-7 col-xs-12">
-                <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title" >
-<scbd-tooltip style="display:inline-block;top:2px;"  ng-if="0"><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span></scbd-tooltip>
-                  <div km-textbox-ml name="title" ng-model="doc.title" required locales="doc.meta.locales" style="display:inline-block;width:93%;"></div>
-                </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="container-header-filler">
+      </div>
 
+       <section  class="row" ng-if="listView">
+          <div class="col s12 m3 lg4" ng-repeat="org in orgs |orderBy:'document.title.en':sortReverse">
+            <div class="card small ">
+              <div class="card-image" ng-if="org.document.logo">
+                <img src="{{org.document.logo}}">
               </div>
-
-              <div class="col-md-5 col-xs-12">
-                <div class="km-control-group" name="acronym" caption="Acronym" ng-required="!form.organization.$valid">
-                  <div class="help-block" ng-if="0">Abbreviation for long name</div>
-                  <div km-textbox-ml name="acronym" ng-model="doc.acronym" placeholder=" " locales="doc.meta.locales"></div>
-
-                </div>
+              <div class="card-content">
+                  <div class="center">
+                      <scbd-localizer value="org.document.title" class="valign"></scbd-localizer>
+                  </div>
               </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-3">
-                <div class="km-control-group" name="type" caption="Type">
-                  <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
-                </div>
-              </div>
-
-              <div class="col-md-3">
-                <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Home Country">
-                  <div km-select name="country" ng-model="doc.country" items="options.countries()" required></div>
-                </div>
+              <div class="card-action">
+                <span class="action-grp ">
+                    <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(org._id);" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveOrg(org);" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button>
+                </span>
               </div>
             </div>
           </div>
-          <div>
-
-            <legend>Social Media</legend>
-
-            <div class="row">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="website" caption="Website">
-                  <div class="help-block" ng-if="0">Please enter the organization's Website address</div>
-                  <input class="form-control" type="url" ng-model="doc.website" placeholder=" ">
+    </section>
+    <section  class="row" ng-if="!listView">
+        <div class="col s12 collection" ng-repeat="org in orgs |orderBy:'document.title.en':sortReverse">
+          <div class="collection-item avatar " >
+            <!-- <div class="card-image" ng-if="org.document.logo"> -->
+              <img src="{{org.document.logo}}" style="background-color:#cccccc;"class="circle"></img>
+              <i ng-if="!org.document.logo.length" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
+              <span class="title"><scbd-localizer value="org.document.title" class="valign"></scbd-localizer></span>
+              <div ><scbd-localizer value="org.document.acronym" class="valign"></scbd-localizer></div>
+            <!-- </div> -->
+            <!-- <div class="card-content">
+                <div class="center">
+                    <scbd-localizer value="org.document.title" class="valign"></scbd-localizer>
                 </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="facebook" required caption="Facebook Page">
-                  <div class="help-block" ng-if="0">Please enter the organization's Facebook page</div>
-                  <input class="form-control" type="url" ng-model="doc.facebook" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="youtube" caption="Youtube Channel" required>
-                  <div class="help-block" ng-if="0">Please enter the organization's Youtube Channel</div>
-                  <input class="form-control" type="url" ng-model="doc.youtube" placeholder=" ">
-                </div>
-              </div>
-
+            </div>-->
+            <div class="collection-action">
+              <span class="collection-action-grp ">
+                  <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(org._id);" waves></scbd-icon-button>
+                  <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveOrg(org);" ng-if="org.document.meta.status!=='archived'" waves></scbd-icon-button>
+                  <scbd-icon-button type="md" icon-name="&#xE169;" ng-click="unArchiveOrg(org);" ng-if="org.document.meta.status==='archived'" waves></scbd-icon-button>
+                  <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button>
+              </span>
             </div>
-            <div class="row">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="twitter" caption="Twitter Feed">
-                  <div class="help-block" ng-if="0">Please enter the organization's Twitter feed</div>
-                  <input class="form-control" type="url" ng-model="doc.twitter" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="facebook" required caption="Instagram Feed">
-                  <div class="help-block" ng-if="0">Please enter the organization's Instagram feed</div>
-                  <input class="form-control" type="url" ng-model="doc.instagram" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="contact_emails" caption="Google+ Page or Google Local Page" required>
-                  <div class="help-block" ng-if="0">Please enter the organization's Google+ page or local page.</div>
-                  <input class="form-control" type="url" ng-model="doc.google" placeholder=" ">
-                </div>
-              </div>
-
-            </div>
-<scbd-button ng-click="saveDoc()" style="width:100%">Next</button>
-        </form>
+          </div>
 
         </div>
+  </section>
+
+
+    </div>
+
+
+
 
   </section>
 
-  </div>
+</div>
