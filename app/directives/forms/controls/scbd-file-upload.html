@@ -1,0 +1,32 @@
+<style>
+.button {
+    -moz-appearance: button;
+    /* Firefox */
+    -webkit-appearance: button;
+    /* Safari and Chrome */
+    padding: 10px;
+    margin: 10px;
+    width: 70px;
+}
+.drop-box {
+    background: #F8F8F8;
+    border: 5px dashed #DDD;
+
+    height: 150px;
+    text-align: center;
+}
+.dragover {
+    border: 5px dashed blue;
+}
+</style>
+<div ngf-drop ngf-select ng-model="files" class="drop-box"
+		ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true"
+		accept="image/*,application/pdf"
+		ngf-pattern="'image/*'">
+
+<i class="material-icons" class="pull-left" style="position:absolute;left:20px;color:#bbbbbb;font-size:30px;">&#xE439;</i>
+<img src="{{binding}}" style="max-height:140px;" ng-if="binding"></img>
+<span style="position:absolute;bottom:26px;right:25px;color:#bbbbbb;width:100px;text-align:left;">Upload an image by clicking here or draging and droping.</span>
+  </div>
+<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+
