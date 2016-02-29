@@ -25,6 +25,7 @@
     "scbd-angularjs-controls": "https://github.com/scbd/scbd-angularjs-controls.git#7b3f62ecee4c7eb57747c8d981829354cf779890",
     "scbd-angularjs-services": "1.1.6",
     "scbd-branding": "https://github.com/scbd/scbd-branding.git#concept",
+    "scbd-filters": "https://github.com/scbd/scbd-filters#~",
     "js-sha256": "~0.3.0",
     "dropzone": "~4.3.0",
     "ng-file-upload": "~12.0.1"

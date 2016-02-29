@@ -1,12 +1,12 @@
 /* jshint node: true, browser: false */
 'use strict';
 
-process.on('SIGTERM', ()=>process.exit());
+//process.on('SIGTERM', ()=>process.exit());
 
 // CREATE HTTP SERVER AND PROXY
 
 var app = require('express')();
-//var proxy   = require('http-proxy').createProxyServer({});
+var proxy   = require('http-proxy').createProxyServer({});
 
 app.set('views', __dirname + '/app');
 app.set('view engine', 'ejs');
