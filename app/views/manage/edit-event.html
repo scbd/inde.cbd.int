@@ -1,0 +1,18 @@
+<div ng-controller="edit-organization" class="view-container">
+
+  <section class="row relative">
+    <!-- ng-if="isLocked" -->
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="dashboard" is-open="isLocked" hide-lt-sm>
+      <div class="portal-branding dash-nav-header" layout-align="center center">
+        <h1>Management Center</h1>
+      </div>
+    </scbd-side-menu>
+
+
+    <div class="z-depth-3 list-container" id="getBumped">
+     <edit-side-event></edit-side-event>
+    </div>
+
+  </section>
+
+</div>
