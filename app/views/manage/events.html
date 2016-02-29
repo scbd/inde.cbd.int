@@ -1,0 +1,90 @@
+<div ng-controller="events" class="view-container">
+
+  <section class="row relative">
+    <!-- ng-if="isLocked" -->
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="dashboard" is-open="isLocked" hide-lt-sm>
+      <div class="portal-branding dash-nav-header" layout-align="center center">
+        <h1>Management Center</h1>
+      </div>
+    </scbd-side-menu>
+
+
+    <div class="z-depth-3 list-container" id="getBumped">
+      <div class="container-header">
+
+        <h1 ng-click="toggle('dashboard')">
+          <scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>Side Events</h1>
+        <div class="btn-group right ">
+          <scbd-fab-button style="margin-right:5px;" ng-click="goTo('/manage/events/0');"><i class="material-icons">&#xE145;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="sortReverse=!sortReverse;"><i class="material-icons">&#xE053;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==2"><i class="material-icons">&#xE8EE;</i></scbd-fab-button>
+            <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==1"><i class="material-icons">&#xE8F0;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ng-if="listView==0"><i class="material-icons">&#xE8EF;</i></scbd-fab-button>
+
+
+
+          <scbd-fab-button  ng-click="toggleArchived();" ng-if="!showArchived"><i class="material-icons">&#xE149;</i></scbd-fab-button>
+          <scbd-fab-button  ng-click="toggleArchived();" ng-if="showArchived"><i class="material-icons">&#xE169;</i></scbd-fab-button>
+
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="container-header-filler">
+      </div>
+
+       <section  class="row" ng-if="listView">
+          <div class="col s12 m3 lg4" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse">
+            <div class="card small ">
+              <div class="card-image" ng-if="org.document.logo">
+                <img src="{{doc.document.logo}}">
+              </div>
+              <div class="card-content">
+                  <div class="center">
+                      <scbd-localizer value="doc.document.title" class="valign"></scbd-localizer>
+                  </div>
+              </div>
+              <div class="card-action">
+                <span class="action-grp ">
+                    <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveOrg(doc);" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button>
+                </span>
+              </div>
+            </div>
+          </div>
+    </section>
+    <section  class="row" ng-if="!listView">
+        <div class="col s12 collection" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse">
+          <div class="collection-item avatar " >
+            <!-- <div class="card-image" ng-if="org.document.logo"> -->
+              <img src="{{doc.document.logo}}" style="background-color:#cccccc;"class="circle"></img>
+              <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
+              <span class="title"><scbd-localizer value="doc.document.title" class="valign"></scbd-localizer></span>
+              <div ><scbd-localizer value="doc.document.acronym" class="valign"></scbd-localizer></div>
+            <!-- </div> -->
+            <!-- <div class="card-content">
+                <div class="center">
+                    <scbd-localizer value="org.document.title" class="valign"></scbd-localizer>
+                </div>
+            </div>-->
+            <div class="collection-action">
+              <span class="collection-action-grp ">
+                  <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>
+                  <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveDoc(doc);" waves></scbd-icon-button>
+                  <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button>
+              </span>
+            </div>
+          </div>
+
+        </div>
+  </section>
+
+
+    </div>
+
+
+
+
+  </section>
+
+</div>
