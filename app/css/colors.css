@@ -46,11 +46,12 @@
 }
 /*setting global button colors*/
 .scbd-btn,  .scbd-btn-floating,  .scbd-btn-large {
-  background-color:#428bca;
-  color:#fff;
+  background-color:#444444;
+  color:#bbbbbb;
 }
 .scbd-btn:hover,  .scbd-btn-floating:hover,  .scbd-btn-large:hover, .scbd-btn:active,  .scbd-btn-floating:active,  .scbd-btn-large:hover  {
-  background-color:#069554;
+  background-color:#555555;
+	color:#ffffff;
 }
 
 /*menu styles*/
