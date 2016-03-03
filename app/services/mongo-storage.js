@@ -6,8 +6,9 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         authentication.getUser().then(function(u){
           user=u;
         });
-        var clientOrg = 0;
+        var clientOrg = 0; // means cbd
 
+        var statuses=['draft','published','request','deleted','archived','canceled','rejected'];
 
 
         //============================================================
@@ -56,14 +57,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                 }  //create
         }
 
-        //============================================================
-        //
-        //============================================================
-        function deleteRecord (schema,id) {
 
-            $http.delete('https://api.cbd.int/api/v2015/'+schema+'/'+id);
-
-        }
         //============================================================
         //
         //============================================================
@@ -88,6 +82,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                         function(response){
                               if(response.data.length){
                                  response.data[0].document.initialState=_.cloneDeep(response.data[0].document);
+
                                  return [response.data[0]._id,response.data[0].document];
                               }
                            }
@@ -100,18 +95,45 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadArchives";
 
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"document.meta.status":"archived"}&f={"document":1}'));//}&f={"document":1}'))
+            return $q.when( $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":"archived"}&f={"document":1}'));//}&f={"document":1}'))
 
         }
         //============================================================
         //
         //============================================================
-        function loadDocs (schema){
+        function loadDocs (schema,status){
+          //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
+          var qStr='';
+            if(!schema) throw "Error: failed to indicate schema loadOwnerDocs";
+            if(!status)
+              return $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":{"$nin":["archived","deleted"]},"document.meta.v":{"$ne":0}}&f={"document":1}');
+
+            if(!_.isArray(status))
+              return $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0}}&f={"document":1}');
+            else {
+              _.each(status,function(stat,key){
+
+                  qStr =  qStr+'"'+stat+'"';
+                  if(status.length!==key+1)
+                    qStr =qStr+',';
+              });
+              qStr= '{"$in":['+ qStr +']}';
+              return $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":'+qStr+',"document.meta.v":{"$ne":0}}&f={"document":1}');
+            }
+
+
+        }
+        //============================================================
+        //
+        //============================================================
+        function loadOwnerDocs (schema){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadDocs";
-
-            return $q.when( $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":{"$ne":"archived"},"document.meta.v":{"$ne":0}}&f={"document":1}'));//}&f={"document":1}'))
-
+            return  $q.when( authentication.getUser().then(function(u){
+                      user=u;
+                    }).then( function(){
+                        return $http.get('https://api.cbd.int/api/v2015/'+schema+'?q={"document.meta.status":{"$nin":["archived","deleted"]},"document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}');
+                      }));
         }
         //=======================================================================
         // creates a doc with version  0 in order ot have a base doc for images
@@ -138,6 +160,16 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               docObj.document.meta.status='archived';
               return save(schema,docObj.document,_id);
         }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function deleteDoc(schema,docObj,_id){
+              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.document.meta.status='deleted';
+              return save(schema,docObj.document,_id);
+        }
+
         //=======================================================================
         //
         //=======================================================================
@@ -146,6 +178,37 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               docObj.document.meta.status='draft';
               return save(schema,docObj.document,_id);
         }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function getStatusFacits(schema,statusFacits,statArry,stat){
+
+              if(!statArry)
+                statArry=statuses;
+              if(stat){
+                $http.get('https://api.cbd.int/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
+                  function(res){
+                    console.log(res.data);
+                    statusFacits[stat]=res.data.count;
+                    statusFacits['all']+=res.data.count;
+                  }
+                );
+              }
+              else
+              _.each(statArry,function(status){
+
+                    $http.get('https://api.cbd.int/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
+                      function(res){
+                        console.log(statusFacits);
+                        statusFacits[status]=res.data.count;
+                        statusFacits['all']+=res.data.count;
+                      }
+                    );
+
+              });
+        }//getStatusFacits
+
         //=======================================================================
         //
         //=======================================================================
@@ -206,7 +269,10 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          getStatusFacits:getStatusFacits,
+          deleteDoc:deleteDoc,
           loadDoc:loadDoc,
+          loadOwnerDocs:loadOwnerDocs,
           createDoc:createDoc,
           save:save,
           uploadDocAtt:uploadDocAtt,
