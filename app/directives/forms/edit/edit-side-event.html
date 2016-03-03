@@ -1,9 +1,9 @@
 <div  class="view-container">
 
     <div class="container-header center">
-      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="goTo('/manage/organizations')"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
+      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="close();"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
       <h1 ng-click="toggle('dashboard')"><scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;" ></scbd-icon-button> Add Side Event</h1>
-      <div class="btn-group right "><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div>
+      <!-- <div class="btn-group right "><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
       <div class="clearfix"></div>
     </div>
     <div class="container-header-filler"></div>
@@ -26,6 +26,8 @@
 
         <form name="editForm" class="editForm" style="margin-top:10px">
 
+          <scbd-select-list ng-modal="doc.confrences" schema="confrences" ></scbd-select-list>
+
           <div>
             <legend class="container-subheader"><h2>Identity</h2>{{doc._id}}</legend>
             <div class="row">
@@ -34,19 +36,13 @@
                   <scbd-tooltip style="display:inline-block;top:2px;"  ng-if="0"><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span></scbd-tooltip>
                   <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales" ></div>
                 </div>
-
               </div>
+
               <div class="col-md-6 col-xs-12">
                 <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Logo" >
                   <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
-
                   <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
-
-                    <!-- <img src="{{doc.logo}}" style="display:inline-block;max-height:150px;top:-200px;"></img> -->
-
-
                 </div>
-
               </div>
 
               <div class="col-md-2 col-xs-12">

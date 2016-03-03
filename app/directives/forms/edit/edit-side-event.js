@@ -18,13 +18,14 @@ define(['app', 'lodash',
 '../controls/scbd-select-list',
     '../../../services/mongo-storage',
     '../controls/scbd-file-upload',
-    './edit-organization'
+    './edit-organization',
+  'scbd-branding/scbd-media'
 
 ], function(app, _,template) { //'scbd-services/utilities',
 
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication', //"$http", "$filter", "Thesaurus",
-      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$window', //"$http", "$filter", "Thesaurus",
+      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth,$window) {
       return {
         restrict   : 'E',
         template   : template,
@@ -43,7 +44,7 @@ define(['app', 'lodash',
               $scope.doc={};
               $scope.doc.hostOrgs=[];
               $scope.updateProfile=1;
-              
+
               init();
 
               //============================================================
@@ -85,7 +86,7 @@ define(['app', 'lodash',
 auth.getUser().then(function(user){
 
   $scope.user=user;
-  return $http.get('/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
+  return $http.get('https://api.cbd.int/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
       console.log('response.data',response.data);
       if(!$scope.doc)$scope.doc={};
       if(!$scope.doc.contact)$scope.doc.contact={};
@@ -209,6 +210,13 @@ auth.getUser().then(function(user){
               $scope.goTo = function(url){
 
                   $location.url(url);
+              };
+              //=======================================================================
+              //
+              //=======================================================================
+              $scope.close = function(){
+
+                  $window.history.back();
               };
         }//link
       };//return
