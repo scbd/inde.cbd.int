@@ -7,8 +7,8 @@ app.directive('portalNav', function () {
     scope: {
             uid: '@',
     },
-    controller: ['$scope','$location','$window','$timeout','$element',
-            function ($scope,$location,$window,$timeout,$element) {
+    controller: ['$scope','$location','$window','$timeout','$element','authentication',
+            function ($scope,$location,$window,$timeout,$element,authentication) {
 
 
               $scope.isOpen = false;
@@ -39,6 +39,11 @@ app.directive('portalNav', function () {
       $scope.goTo = function(path){
           return $location.url(path);
       };
+
+      authentication.getUser().then(function (user) {
+        $scope.isAuthenticated=user.isAuthenticated;
+        $scope.isAdmin=(_.intersection(['Administrator','IndeAdministrator'], user.roles).length>0);
+      });
 
       angular.element($window).on('resize',setMedia);
 
