@@ -2,35 +2,36 @@ define(['app', 'lodash',
   'css!./organizations',
   'scbd-branding/side-menu/scbd-side-menu',
   'scbd-branding/scbd-button',
-  'scbd-branding/side-menu/scbd-menu-service',
-  '../../directives/scbd-localizer',
-    'scbd-branding/scbd-icon-button',
-    'scbd-branding/scbd-tooltip',
-    '../../services/mongo-storage'
+  './menu',
+  'scbd-branding/scbd-icon-button',
+  '../../services/mongo-storage',
+  '../../directives/scbd-tip'
+], function(app, _) {
 
-], function(app, _) { //'scbd-services/utilities',
-
-  // If you specify less than all of the keys, it will inherit from the
-  // default shades
-
-  app.controller("events", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','$element', //"$http", "$filter", "Thesaurus",
-    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,$element) { //, $http, $filter, Thesaurus
-
+  app.controller("events", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','authentication', //"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,authentication) { //, $http, $filter, Thesaurus
 
 
       $scope.loading=false;
       $scope.schema="inde-side-events";
+      $scope.createURL='/manage/events/0';
+      $scope.editURL='/manage/events/';
 
-      $scope.toggle = scbdMenuService.toggle;
-      $scope.dashboard = scbdMenuService.dashboard;
-
-      $scope.orgs;
+      $scope.toggle = dashMenu.toggle;
+      $scope.sections = dashMenu.getMenu('dashboard');
 
       $scope.sortReverse=0;
-      $scope.listView=0;//list,tiles,details
+      $scope.listView=0;
       $scope.showArchived=0;
 
+      $scope.docs=[];
 
+      authentication.getUser().then(function (user) {
+        $scope.isAuthenticated=user.isAuthenticated;
+      }).then(function(){
+        if(!$scope.isAuthenticated)
+          $('#loginDialog').modal('show');
+      });
 
       //=======================================================================
       //
@@ -39,14 +40,19 @@ define(['app', 'lodash',
 
               $scope.loadList ();
       }//init
+
       //=======================================================================
       //
       //=======================================================================
       $scope.archiveList = function (){
         mongoStorage.loadArchives($scope.schema).then(function(response){
-          $scope.orgs=response.data;
+          $scope.docs=response.data;
         });
       };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.searchToggle= function (){
         var serEl =$element.find('.search');
         serEl.toggleClass('search-expanded');
@@ -62,6 +68,7 @@ define(['app', 'lodash',
            $scope.docs=response.data;
          });
       };// archiveOrg
+
       //=======================================================================
       //
       //=======================================================================
@@ -85,7 +92,6 @@ define(['app', 'lodash',
         else
             $scope.loadList();
         $scope.showArchived=!$scope.showArchived;
-
       };// archiveOrg
 
       //=======================================================================
@@ -93,9 +99,28 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.archiveDoc = function (docObj){
           mongoStorage.archiveDoc($scope.schema,docObj,docObj._id).then(function(){
-                _.remove($scope.orgs,function(obj){return obj._id===docObj._id;});
+                _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
           });
 
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.deleteDoc = function (docObj){
+          mongoStorage.deleteDoc($scope.schema,docObj,docObj._id).then(function(){
+                _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
+          });
+
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.unArchiveDoc = function (docObj){
+          mongoStorage.unArchiveDoc($scope.schema,docObj,docObj._id).then(function(){
+                _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
+          });
       };// archiveOrg
 
       //=======================================================================
@@ -104,16 +129,15 @@ define(['app', 'lodash',
       $scope.goTo = function (url){
         $location.url(url);
       }// archiveOrg
+
       //=======================================================================
       //
       //=======================================================================
       $scope.edit = function (id){
-        $location.url('/manage/events/'+id);
+        $location.url($scope.editURL+id);
       }// archiveOrg
+      init();
 
-init();
-
-
-    }// link
-  ]);//directive
-});// require
+    }
+  ]);
+});

@@ -1,8 +1,8 @@
-<div ng-controller="edit-organization" class="view-container">
+<div ng-controller="edit-event" class="view-container">
 
   <section class="row relative">
     <!-- ng-if="isLocked" -->
-    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="dashboard" is-open="isLocked" hide-lt-sm>
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="sections" is-open="isLocked" hide-lt-sm>
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>Management Center</h1>
       </div>
@@ -10,7 +10,10 @@
 
 
     <div class="z-depth-3 list-container" id="getBumped">
-     <edit-side-event></edit-side-event>
+     <edit-side-event ng-if="isAuthenticated"></edit-side-event>
+<br><br>
+      <!-- <h1 style="width:200px;">Kindly signin order to request and schedule your side event.</h1> -->
+
     </div>
 
   </section>

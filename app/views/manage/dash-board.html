@@ -2,29 +2,33 @@
 
   <section class="row relative">
     <!-- ng-if="isLocked" -->
-    <scbd-side-menu id="dashboard" sections="dashboard" bump-id="getBumped" open hide-lt-sm>
+    <scbd-side-menu id="dashboard" sections="sections" bump-id="getBumped" open hide-lt-sm>
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>Management Center</h1>
       </div>
     </scbd-side-menu>
 
 
-    <div class="z-depth-3 dash-container " id="getBumped">
+    <div class="z-depth-3 dash-container " id="getBumped" ng-if="isAuthenticated">
 
 <scbd-select-list ng-modal="test" schema="inde-orgs">
 
 </scbd-select-list>
       <div>
-        <h1>Dashboard <scbd-icon-button  style="z-index:100;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button></h1>
+        <h1 scbd-tip="Views" >Dashboard </h1>
+          <scbd-icon-button  style="z-index:100;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
         <div class="menu-btn" ng-click="toggle('dashboard')">&#9776; Menu</div>
       </div><i class="material-icons">transfer_within_a_station</i>
-
-      <scbd-flat-button active="active-dash-menu" active-path="{{section.path}}" class="dash-menu" ng-disabled="section.disabled">
+<a>ddddd    <div class="tool-tip left">test tipdddddddd</div></a>
+      <scbd-flat-button  active="active-dash-menu" active-path="{{section.path}}" class="dash-menu" ng-disabled="section.disabled">
         <i class="material-icons">transfer_within_a_station</i> my test button
+
       </scbd-flat-button>
 
-      <scbd-button ui-sref-active="active" ui-sref="{{section.path}}" ng-disabled="section.disabled" color="{{color}}" back-ground="{{backGround}}">
+      <scbd-button  ui-sref-active="active" ui-sref="{{section.path}}" ng-disabled="section.disabled" color="{{color}}" back-ground="{{backGround}}">
+
         <i class="material-icons">transfer_within_a_station</i> my test button
+
       </scbd-button>
 
       <scbd-fab-button ui-sref-active="active" ui-sref="{{section.path}}" ng-disabled="section.disabled" color="{{color}}" back-ground="{{backGround}}">
@@ -34,11 +38,11 @@
       1
       <scbd-icon-button type="md" icon-name="close" waves-light></scbd-icon-button>
       2 3
-      <scbd-icon-button type="fa" icon-name="fa-bars" to-icon-name="fa-times" ani="tada"></scbd-icon-button>
+      <scbd-icon-button scbd-tip="sdfsdf"  type="fa" icon-name="fa-bars" to-icon-name="fa-times" ani="tada"></scbd-icon-button>
       4
-      <scbd-icon-button type="fa" icon-name="fa-plus" to-icon-name="fa-times" ani="rubberBand" waves></scbd-icon-button>
+      <scbd-icon-button scbd-tip="sdfsdf"  type="fa" icon-name="fa-plus" to-icon-name="fa-times" ani="rubberBand" waves></scbd-icon-button>
       <scbd-icon-button type="fa" icon-name="fa-bell" data-badge="2"></scbd-icon-button>
-      <scbd-icon-button type="md" icon-name="notifications" data-badge="3"></scbd-icon-button>
+      <scbd-icon-button scbd-tip="sdfsdf" type="md" icon-name="notifications" data-badge="3"></scbd-icon-button>
       <!-- 5  <scbd-icon-button   > <i class="material-icons md-badge md-badge--overlap" data-badge="11">notifications</i></scbd-icon-button>
       <scbd-icon-button   > <i class="fa fa-bell fa-badge fa-badge--overlap" data-badge="5"></i></scbd-icon-button> -->
       6

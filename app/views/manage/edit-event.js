@@ -1,8 +1,8 @@
 define(['app', 'lodash',
-  'css!./organizations',
+  'css!./edit-event',
   'scbd-branding/side-menu/scbd-side-menu',
   'scbd-branding/scbd-button',
-  'scbd-branding/side-menu/scbd-menu-service',
+  './menu',
   '../../directives/scbd-localizer',
   '../../directives/forms/edit/edit-side-event',
     'scbd-branding/scbd-icon-button',
@@ -12,14 +12,21 @@ define(['app', 'lodash',
 ], function(app, _) { //'scbd-services/utilities',
 
 
-  app.controller("edit-organization", ['$scope', 'scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location', //"$http", "$filter", "Thesaurus",
-    function($scope, scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location) { //, $http, $filter, Thesaurus
+  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication', //"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication) { //, $http, $filter, Thesaurus
 
       $scope.loading=false;
-      $scope.schema="inde-orgs";
+      $scope.schema="inde-side-events";
 
-      $scope.toggle = scbdMenuService.toggle;
-      $scope.dashboard = scbdMenuService.dashboard;
+      $scope.toggle = dashMenu.toggle;
+      $scope.sections = dashMenu.getMenu('dashboard');
+
+      authentication.getUser().then(function (user) {
+        $scope.isAuthenticated=user.isAuthenticated;
+      }).then(function(){
+        if(!$scope.isAuthenticated)
+          $('#loginDialog').modal('show');
+      });
 
     }
   ]);
