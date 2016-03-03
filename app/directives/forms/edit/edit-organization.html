@@ -1,9 +1,9 @@
 <div  class="view-container " >
 
     <div class="container-header center">
-      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="goTo('/manage/organizations')" ng-if="!shortForm"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
+      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="close()" ng-if="!shortForm"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
       <h1 ng-click="toggle('dashboard')"><scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;" ></scbd-icon-button> Add Organization</h1>
-      <div class="btn-group right " ng-if="!shortForm"><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div>
+      <!-- <div class="btn-group right " ng-if="!shortForm"><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
       <div class="clearfix"></div>
     </div>
     <div class="container-header-filler"></div>
@@ -40,7 +40,7 @@
                 <div class="km-control-group nowrap" name="organization_logo" ng-required="!form.logo.$valid" caption="Logo" >
 
                   <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
-    
+
 
                 </div>
 

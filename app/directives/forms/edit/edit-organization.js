@@ -20,8 +20,8 @@ define(['app', 'lodash',
 ], function(app, _,template) { //'scbd-services/utilities',
 
 
-  app.directive("editOrganization", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location', //"$http", "$filter", "Thesaurus",
-      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location) {
+  app.directive("editOrganization", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','$window', //"$http", "$filter", "Thesaurus",
+      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,$window) {
       return {
         restrict   : 'E',
         template   : template,
@@ -105,17 +105,23 @@ define(['app', 'lodash',
 
                         if(!($scope.hide  !== undefined && $scope.hide !== null)){
                                 $scope._id=res.data._id;
-                                $location.path('/manage/organizations/');
+                                $window.history.back();
                         } else{
                           $scope.hide=0;
 
                           if(!$scope.selectedOrgs)$scope.selectedOrgs=[];
                           $scope.selectedOrgs.push({'identifier':res.data._id});
                         }
-
-
                   });
               };
+
+                //=======================================================================
+                //
+                //=======================================================================
+                $scope.close = function(){
+
+                    $window.history.back();
+                };
 
               //=======================================================================
               //
