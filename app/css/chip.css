@@ -19,11 +19,58 @@
   border-radius: 50%;
   z-index:200;
 }
-
+.chip i.fa {
+  cursor: pointer;
+  float: right;
+  font-size: 16px;
+  line-height: 32px;
+  padding-left: 8px;
+}
 .chip i.material-icons {
   cursor: pointer;
   float: right;
   font-size: 16px;
   line-height: 32px;
   padding-left: 8px;
+}
+.chip div {
+  float: left;
+  position: relative;
+  margin: 0 8px 0 -12px;
+  height: 32px;
+  width: 32px;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  border-radius: 50%;
+  z-index:200;
+}
+.chip div > i {
+position: absolute;
+left:28%;
+top:20%;
+font-size: 18px;
+}
+.chip div > i.material-icons {
+position: absolute;
+left:-15%;
+top:1%;
+font-size: 22px;
+}
+.chip-active div {
+  border-color: rgba(0,155,72, 0.1);
+  background-color: rgba(0,155,72, 0.1);
+}
+.chip-active  {
+  border-color: rgba(0,155,72, 0.1);
+  background-color: rgba(0,155,72, 0.1);
+}
+.chip .sqr {
+	width: 20px;
+	height: 20px;
+	background: #fff;
+  padding: 3px 3px 3px 3px;
+margin-left:4px;
+  border-radius: 35%;
+
 }
