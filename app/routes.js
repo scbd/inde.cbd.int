@@ -10,16 +10,25 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
             when('/',                   { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home', { redirectTo: '/' }).
             when('/',                     { templateUrl: 'views/index.html',                 resolveController: true, resolveUser: true }).
-            when('/about',                { templateUrl: 'views/about.html',                 resolveUser: true }).
+            // when('/about',                { templateUrl: 'views/about.html',                 resolveUser: true }).
             when('/help',                 { templateUrl: 'views/help.html',                  resolveUser: true }).
-            when('/manage/events',               { templateUrl: 'views/manage/events.html',                resolveController: true, resolveUser: true }).
-            when('/manage/users',               { templateUrl: 'views/manage/users.html',                resolveController: true, resolveUser: true }).
-            when('/manage/events/:id',            { templateUrl: 'views/manage/edit-event.html',                 resolveController: true, resolveUser: true }).
-            when('/manage/organizations', { templateUrl: 'views/manage/organizations.html',        resolveController: true, resolveUser: true,reloadOnSearch : false  }).
-            when('/manage/organizations/:id', { templateUrl: 'views/manage/edit-organization.html',        resolveController: true, resolveUser: true,reloadOnSearch : false  }).
-            when('/manage',               { templateUrl: 'views/manage/dash-board.html',        resolveController: true, resolveUser: true,resolve : { securized : securize() }}).
-            when('/manage/config',        { templateUrl: 'views/manage/config.html',        resolveController: true, resolveUser: true, reloadOnSearch : false  }).
-            when('/404',                  { templateUrl: 'views/404.html',                   resolveUser: true }).
+
+            when('/admin',                    { templateUrl: 'views/admin/admin-dash-board.html',            resolveController: true, resolveUser: true}).
+            when('/admin/events',              { templateUrl: 'views/admin/events.html',                resolveController: true, resolveUser: true,resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
+            when('/admin/users',               { templateUrl: 'views/admin/users.html',                 resolveController: true, resolveUser: true,resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
+            when('/admin/organizations',       { templateUrl: 'views/admin/organizations.html',         resolveController: true, resolveUser: true,reloadOnSearch : false ,resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
+            when('/admin/config',              { templateUrl: 'views/admin/config.html',                resolveController: true, resolveUser: true, reloadOnSearch : false,resolve : { securized : securize(['Administrator','IndeAdministrator']) }  }).
+            when('/admin/meetings',            { templateUrl: 'views/admin/meetings.html',              resolveController: true, resolveUser: true, reloadOnSearch : false,resolve : { securized : securize(['Administrator','IndeAdministrator']) }  }).
+            when('/admin/meetings/:id',        { templateUrl: 'views/admin/edit-meetings.html',         resolveController: true, resolveUser: true, reloadOnSearch : false, resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
+
+
+            when('/manage/events',             { templateUrl: 'views/manage/events.html',                resolveController: true, resolveUser: true }).
+            when('/manage/events/:id',         { templateUrl: 'views/manage/edit-event.html',            resolveController: true, resolveUser: true }).
+            when('/manage/organizations',      { templateUrl: 'views/manage/organizations.html',         resolveController: true, resolveUser: true,reloadOnSearch : false  }).
+            when('/manage/organizations/:id',  { templateUrl: 'views/manage/edit-organization.html',     resolveController: true, resolveUser: true,reloadOnSearch : false  }).
+            when('/manage',                    { templateUrl: 'views/manage/dash-board.html',            resolveController: true, resolveUser: true}).
+
+            when('/404',                       { templateUrl: 'views/404.html',                          resolveUser: true }).
             otherwise({ redirectTo: '/404' });
     }]);
 
