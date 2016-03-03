@@ -1,0 +1,146 @@
+<div ng-controller="events" class="view-container">
+
+  <section class="row relative">
+    <!-- ng-if="isLocked" -->
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="sections" is-open="isLocked" hide-lt-sm>
+      <div class="portal-branding dash-nav-header" layout-align="center center">
+        <h1>Management Center</h1>
+      </div>
+    </scbd-side-menu>
+
+
+    <div class="z-depth-3 list-container" id="getBumped">
+      <div class="container-header">
+
+        <h1 ng-click="toggle('dashboard')">
+          <scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>Side Events</h1>
+        <div class="btn-group right ">
+          <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
+          <scbd-fab-button style="margin-right:5px;" ng-click="searchToggle();"><i class="material-icons" ng-if="!sOpen">&#xE8B6;</i><i class="material-icons" ng-if="sOpen">&#xE5CD;</i></scbd-fab-button>
+          <scbd-fab-button scbd-tip="Archive" style="margin-right:5px;" ng-click="goTo(createURL);"><i class="material-icons">&#xE145;</i></scbd-fab-button>
+          <scbd-fab-button style="margin-right:5px;" ng-click="sortReverse=!sortReverse;"><i class="material-icons">&#xE053;</i></scbd-fab-button>
+
+          <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ><i ng-if="listView==0" class="material-icons">&#xE8EF;</i><i ng-if="listView==1" class="material-icons">&#xE8F0;</i><i ng-if="listView==2" class="material-icons">&#xE8EE;</i></scbd-fab-button>
+          <scbd-fab-button ng-click="toggleArchived();" ><i ng-if="!showArchived" class="material-icons">&#xE149;</i><i ng-if="showArchived" class="material-icons">&#xE169;</i></scbd-fab-button>
+
+
+        </div>
+        <div class="clearfix"></div>
+      </div>
+      <div class="container-header-filler">
+      </div>
+<div class="row">
+  <!-- ng-repeat="status in statiFacits " -->
+
+  <div id="chip-all" class="chip" ng-if="!showArchived" ng-click="selectChip('all')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xEB3D;"></scbd-icon-button>
+    </div>All
+    <span class="sqr">{{statusFacits.all}}</span>
+    <scbd-icon-button ng-if="selectedChip=='all'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+
+  <div id="chip-request" class="chip" ng-if="!showArchived" ng-click="selectChip('request')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE0C6;"></scbd-icon-button>
+    </div>Requests
+    <span class="sqr">{{statusFacits.request}}</span>
+    <scbd-icon-button ng-if="selectedChip=='request'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-published" class="chip" ng-if="!showArchived" ng-click="selectChip('published')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE8DC;"></scbd-icon-button>
+    </div>Approved
+    <span class="sqr">{{statusFacits.published}}</span>
+    <scbd-icon-button ng-if="selectedChip=='published'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-canceled" class="chip" ng-if="!showArchived" ng-click="selectChip('canceled')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE8DD;"></scbd-icon-button>
+    </div>Canceled
+    <span class="sqr">{{statusFacits.canceled}}</span>
+    <scbd-icon-button ng-if="selectedChip=='canceled'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-rejected" class="chip" ng-if="!showArchived" ng-click="selectChip('rejected')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE8DB;"></scbd-icon-button>
+    </div>Rejected
+    <span class="sqr">{{statusFacits.rejected}}</span>
+    <scbd-icon-button ng-if="selectedChip=='rejected'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-all" class="chip" ng-if="showArchived" ng-click="selectChip('all')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xEB3D;"></scbd-icon-button>
+    </div>All
+    <span class="sqr">{{statusFacitsArcView.all}}</span>
+    <scbd-icon-button ng-if="selectedChip=='all'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-archived" class="chip" ng-if="showArchived" ng-click="selectChip('archived')">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE149;"></scbd-icon-button>
+    </div>Archived
+    <span class="sqr">{{statusFacitsArcView.archived}}</span>
+    <scbd-icon-button ng-if="selectedChip=='archived'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+  <div id="chip-deleted" class="chip" ng-if="showArchived">
+    <div>
+      <scbd-icon-button type="md" icon-name="&#xE872;"></scbd-icon-button>
+    </div>Deleted
+    <span class="sqr">{{statusFacitsArcView.deleted}}</span>
+    <scbd-icon-button ng-if="selectedChip=='deleted'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
+  </div>
+</div>
+      <!-- CARD VIEW -->
+      <section class="row" ng-if="listView">
+        <div class="col s12 m3 lg4" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search | filter:{document.meta.status===selectedChip}" >
+          <div class="card small ">
+            <div class="card-image" ng-if="doc.document.logo">
+              <img src="{{doc.document.logo}}">
+            </div>
+            <div class="card-content">
+              <div class="center">
+                {{doc.document.title | lstring}}
+              </div>
+            </div>
+            <div class="card-action ">
+              <span class="action-grp">
+                <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>
+                <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'" waves></scbd-icon-button>
+                <scbd-icon-button type="md" icon-name="&#xE169;" ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'" waves></scbd-icon-button>
+                <scbd-icon-button style="color:red;" type="md" icon-name="&#xE872;" ng-click="deleteDoc(doc);" ng-if="doc.document.meta.status==='archived' || doc.document.meta.status==='deleted'" waves></scbd-icon-button>
+
+                <i class="material-icons"></i>
+                <!-- <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button> -->
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIST VIEW -->
+      <section class="row" ng-if="!listView">
+        <div class="col s12 collection fx-fade-up fx-ease-sine" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search" >
+          <div class="collection-item avatar ">
+            <img src="{{doc.document.logo}}" style="background-color:#cccccc;" class="circle"></img>
+            <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
+            <span class="title">{{doc.document.title | lstring}}</span>
+            <!-- <div>{{doc.document.acronym | lstring}}</div> -->
+            <div class="collection-action">
+              <span class="collection-action-grp ">
+                <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>
+                <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'" waves></scbd-icon-button>
+                <scbd-icon-button type="md" icon-name="&#xE169;" ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'" waves></scbd-icon-button>
+                <scbd-icon-button style="color:red;" type="md" icon-name="&#xE872;" ng-click="deleteDoc(doc);" ng-if="doc.document.meta.status==='archived' || doc.document.meta.status==='deleted'" waves></scbd-icon-button>
+                <!-- <scbd-icon-button type="md" icon-name="&#xE90B;" waves></scbd-icon-button> -->
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+  </section>
+
+</div>
