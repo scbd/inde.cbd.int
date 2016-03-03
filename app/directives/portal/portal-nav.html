@@ -1,5 +1,12 @@
 <div ng-cloak >
-  <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass"  ng-cloak hide-gt-sm>
+  <div style="position:fixed;top:0px;left:0px;z-index:10000;" hide-gt-sm>
+<img src="/app/images/orchid-bee.jpg" style="width:100%;text-align:center;"></img>
+
+<h1>Under Construction in Mobile View.</h1>
+<h2> Kindly check back soon.</h2>
+<img src="/app/images/cbd-logo-green-en.svg" style="padding: 25px 5px 25px 20px;"></img>
+  </div>
+  <!-- <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass"  ng-cloak hide-gt-sm>
 
 
     <scbd-fab-button aria-label="Meeting" class="md-fab md-raised md-mini" ng-click="goTo('/#meeting');">
@@ -19,18 +26,17 @@
     <scbd-icon-button  type="md" icon-name="dashboard">dashboard</scbd-icon-button>
   </scbd-fab-button>
 
-  </div>
+  </div> -->
 
 
 
 <div class="z-depth-2" style="background:#444444;"  ng-cloak>
 <section  hide-lt-sm>
   <span class="cl-effect-14" >
-    <a ng-click="goTo('/#meeting');">Meeting </a>
-    <a ng-click="goTo('/#search');">Side Events</a>
-    <a ng-click="goTo('/#about');">About</a>
-    <a ng-click="goTo('/#request');">Submit Request</a>
-    <a ng-click="goTo('/manage');" >Dashboard</a>
+    <a ng-click="goTo('/');">Home </a>
+    <a ng-click="goTo('/manage/events/0');">Request</a>
+    <a ng-click="goTo('/manage');" ng-if="isAuthenticated">Dashboard</a>
+    <a ng-click="goTo('/admin');" ng-if="isAdmin">Admin</a>
     <a ng-click="goTo('/help');" class="pull-right"> Help</a>
   </span>
 </section>
