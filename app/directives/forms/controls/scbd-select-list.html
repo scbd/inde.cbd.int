@@ -3,9 +3,13 @@
 </style>
 <div class="z-depth-3 scbd-list-container">
   <div class="container-header">
+    <div id="icon-here"></div>
 
     <h1 ng-click="toggle('dashboard')">
-      <scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;"></scbd-icon-button>Organizations</h1>
+      <scbd-icon-button ng-if="schema=='confrences'" type="md" icon-name="&#xE407;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>
+      <scbd-icon-button ng-if="schema=='inde-orgs'" type="md" icon-name="&#xE5CD;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>
+
+      {{schema| schemaName}} </h1>
     <div class="btn-group right ">
       <input type="text" ng-model="search" placeholder="search..." class="search">   </input>
       <scbd-fab-button style="margin-right:5px;" ng-click="searchToggle();"><i class="material-icons" ng-if="!sOpen">&#xE8B6;</i><i class="material-icons" ng-if="sOpen">&#xE5CD;</i></scbd-fab-button>

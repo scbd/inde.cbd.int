@@ -1,16 +1,20 @@
 define([ 'app', 'lodash','text!./scbd-select-list.html',
 'css!./scbd-select-list',
+'../../../services/filters',
+'../../../services/services',
     '../../../services/mongo-storage'
 ], function( app, _,template) { 'use strict';
 
-app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage', function ($location,$timeout,mongoStorage) {
+app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile', function ($location,$timeout,mongoStorage,schemaIcon,$compile) {
 	return {
 		restrict   : 'E',
 		template   : template,
 		//replace    : true,
 		transclude : false,
-		scope      : {binding:"=ngModal"	},
-		link : function($scope, $element, $attrs) {
+		scope      : {binding:"=ngModal",
+    items:"=?"
+  },
+		link: function($scope, $element, $attrs) {
 
 
 					$scope.name = $attrs.name;
@@ -24,14 +28,13 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage', function
 					}// init
 					$scope.loading=false;
 		      $scope.schema=$attrs.schema;
-
+		      $scope.icon=schemaIcon($attrs.schema);
 
 		      $scope.docs;
 
 		      $scope.sortReverse=0;
 		      $scope.listView=0;//list,tiles,details
 					$scope.sOpen=0; //search open
-
 
 					//=======================================================================
 		      //
