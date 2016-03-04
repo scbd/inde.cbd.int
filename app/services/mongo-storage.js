@@ -212,6 +212,18 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         //
         //=======================================================================
+        function generateEventId(confId){
+
+
+              return  $http.get('https://api.cbd.int/api/v2015/inde-side-events?c=1&q={"document.confrence":"'+confId+'"}');
+
+        }//getStatusFacits
+
+
+
+        //=======================================================================
+        //
+        //=======================================================================
         function touch(doc){
           return authentication.getUser().then(function(u){
             user=u;
@@ -269,6 +281,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          generateEventId:generateEventId,
           getStatusFacits:getStatusFacits,
           deleteDoc:deleteDoc,
           loadDoc:loadDoc,
