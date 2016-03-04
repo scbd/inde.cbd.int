@@ -35,7 +35,7 @@ app.directive('scbdFileUpload', ["$http","Upload","$timeout",'mongoStorage', fun
 										_.each(files,function(file){
 												if (!file.$error)
 														mongoStorage.uploadDocAtt($attrs.schema,$attrs.docId,file).then(function(){
-										
+
 																$scope.binding='https://s3.amazonaws.com/mongo.document.attachments'+'/'+$attrs.schema+'/'+$attrs.docId+'/'+file.name;
 														});
 												else

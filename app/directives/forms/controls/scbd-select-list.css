@@ -1,7 +1,7 @@
 
 .collection{margin: 0 0 0 0;}
 .collection .title{font-weight: bold;}
-.card.small{height:200px;}
+.card.small{height:190px;}
 .card .card-content {
     padding: 3px 10px 3px 10px;
     border-radius: 0 0 2px 2px;
@@ -27,7 +27,7 @@ float:right;
   font-size: 30px;
   position:absolute;
   bottom:30px;
-  right:1%;
+  right:5%;
   z-index: 20px;
 }
 /*.card-action{max-height:45px;position:absolute;bottom:0px; width:100%; display:inline-block;}
@@ -127,7 +127,8 @@ card-content{max-height:50px;}*/
   transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
   z-index:0;
-height: 350px;
+max-height: 350px;
+height:310px;
 overflow: hidden;
 
 }
