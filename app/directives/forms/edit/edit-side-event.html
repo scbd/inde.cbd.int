@@ -25,8 +25,15 @@
 
 
         <form name="editForm" class="editForm" style="margin-top:10px">
+            <legend class="container-subheader"><h2>Confrence</h2></legend>
 
-          <scbd-select-list ng-modal="doc.confrences" schema="confrences" ></scbd-select-list>
+          <scbd-select-list single ng-modal="doc.confrence" schema="confrences" ></scbd-select-list>
+<div class="col-md-6 col-xs-12">
+  <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="ID Number">
+
+    <input class="form-control"  type="number" ng-model="doc.id"  disabled>
+  </div>
+</div>
 
           <div>
             <legend class="container-subheader"><h2>Identity</h2>{{doc._id}}</legend>
@@ -39,13 +46,15 @@
               </div>
 
               <div class="col-md-6 col-xs-12">
-                <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Logo" >
+                <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Logo (Not Org. Logo)" >
                   <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
+                  <br>[ <input   type="checkbox" ng-model="doc.requirements.catering" value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"> No Logo, Icon Only ] [ <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]
                   <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
+
                 </div>
               </div>
 
-              <div class="col-md-2 col-xs-12">
+              <div class="col-md-12 col-xs-12">
                 <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
                   <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" ">
                 </div>
@@ -148,10 +157,10 @@
   								</div>
   							</div>
   							<div class="row">
-  								<div class="col-sm-6">
+  								<div class="col-sm-12">
   									<div class="form-group">
   										<label>Country</label>
-  										<div><select name="Country" class="form-control" ng-model="doc.contact.country" ng-options="c.identifier as c.name for c in countries"></select></div>
+                      <scbd-select-list single ng-modal="doc.contact.country" items="countries" ></scbd-select-list>
   									</div>
   								</div>
   							</div>

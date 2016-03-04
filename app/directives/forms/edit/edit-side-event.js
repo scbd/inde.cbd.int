@@ -45,10 +45,24 @@ define(['app', 'lodash',
               $scope.doc.hostOrgs=[];
               $scope.updateProfile=1;
 
+              $scope.$watch('doc.confrence',function(){
+                if($scope.doc.confrence){
+                  generateEventId($scope.doc.confrence);
+                }
+              });
+
+
+            return $http.get("https://api.cbd.int/api/v2015/countries", {
+                cache: true
+            }).then(function(o) {
+
+                $scope.countries =  $filter("orderBy")(o.data, "name");
+            });
+
+
               init();
 
               //============================================================
-              //
               //
               //============================================================
               function init() {
@@ -62,6 +76,7 @@ define(['app', 'lodash',
                             $scope.loading=true;
                             $scope._id=document[0];
                             $scope.doc=document[1];
+                            initProfile();
                       });
                   }
                 else{
@@ -79,45 +94,64 @@ define(['app', 'lodash',
               }// init
               //============================================================
               //
-              //
               //============================================================
-              function initProfile() {
+              function saveProfile() {
+                  var data;
+                  data.Email = $scope.doc.contact.email;
+                  data.Address = $scope.doc.contact.address;
+                  data.City = $scope.doc.contact.city;
+                  data.Country = $scope.doc.contact.country;
+                  data.personalTitle = $scope.doc.contact.personalTitle;
+                  data.State = $scope.doc.contact.state;
+                  data.Zip =  $scope.doc.contact.zip;
+                  data.Phone = $scope.doc.contact.phone;
+                  data.FirstName = $scope.doc.contact.firstName;
+                  data.LastName = $scope.doc.contact.lastName;
+                  data.Designation = $scope.doc.contact.jobTitle;
+console.log(data);return;
+                authHttp.put('/api/v2013/users/' + $scope.user.userID, angular.toJson(data)).success(function () {
 
-auth.getUser().then(function(user){
+                    //$location.path('/profile/done');
 
-  $scope.user=user;
-  return $http.get('https://api.cbd.int/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
-      console.log('response.data',response.data);
-      if(!$scope.doc)$scope.doc={};
-      if(!$scope.doc.contact)$scope.doc.contact={};
-
-
-       $scope.doc.contact.email = _.clone(response.data.Email);
-       $scope.doc.contact.address= _.clone(response.data.Address);
-       $scope.doc.contact.city= _.clone(response.data.City);
-       $scope.doc.contact.country= _.clone(response.data.Country);
-       $scope.doc.contact.personalTitle= _.clone(response.data.Title);
-       $scope.doc.contact.state= _.clone(response.data.State);
-       $scope.doc.contact.zip= _.clone(response.data.Zip);
-       $scope.doc.contact.phone= _.clone(response.data.Phone);
-       $scope.doc.contact.firstName= _.clone(response.data.FirstName);
-       $scope.doc.contact.lastName= _.clone(response.data.LastName);
-       $scope.doc.contact.jobTitle= _.clone(response.data.Designation);
-
-  }).catch(function onerror (response) {
-
-      $scope.error = response.data;
-  });
-
-
-});
-
+                }).error(function (data) {
+                    $scope.waiting = false;
+                    $scope.error = data;
+                });
 
               }// initProfile()
 
               //============================================================
               //
-              //
+              //============================================================
+              function initProfile() {
+                  auth.getUser().then(function(user){
+                    $scope.user=user;
+                    return $http.get('https://api.cbd.int/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
+                        console.log('response.data',response.data);
+                        if(!$scope.doc)$scope.doc={};
+                        if(!$scope.doc.contact)$scope.doc.contact={};
+
+
+                         $scope.doc.contact.email = _.clone(response.data.Email);
+                         $scope.doc.contact.address= _.clone(response.data.Address);
+                         $scope.doc.contact.city= _.clone(response.data.City);
+                         $scope.doc.contact.country= _.clone(response.data.Country);
+                         $scope.doc.contact.personalTitle= _.clone(response.data.Title);
+                         $scope.doc.contact.state= _.clone(response.data.State);
+                         $scope.doc.contact.zip= _.clone(response.data.Zip);
+                         $scope.doc.contact.phone= _.clone(response.data.Phone);
+                         $scope.doc.contact.firstName= _.clone(response.data.FirstName);
+                         $scope.doc.contact.lastName= _.clone(response.data.LastName);
+                         $scope.doc.contact.jobTitle= _.clone(response.data.Designation);
+
+                    }).catch(function onerror (response) {
+                        $scope.error = response.data;
+                    });
+                  });
+              }// initProfile()
+
+              //============================================================
+              ///app/images/ic_event_black_48px.svg
               //============================================================
               function randomPic() {
                     var num = Math.floor((Math.random() * 12) + 1);
@@ -125,25 +159,37 @@ auth.getUser().then(function(user){
 
               }// initProfile()
 
+              $scope.randomPic = function (){
+                $scope.doc.logo=randomPic();
+              }
 
               //============================================================
               //
+              //============================================================
+              $scope.toggleIcon= function() {
+                  if($scope.doc.logo==='/app/images/ic_event_black_48px.svg')
+                      $scope.doc.logo=randomPic();
+                  else
+                      $scope.doc.logo='/app/images/ic_event_black_48px.svg';
+              }// initProfile()
+
+              //============================================================
               //
               //============================================================
-              $scope.saveProfile = function() {
+              function generateEventId(confId) {
 
-                  $scope.waiting = true;
+                return mongoStorage.generateEventId(confId).then(function(res){
 
-                  $http.put('/api/v2013/users/' + $scope.user.userID, angular.toJson($scope.document)).success(function () {
+                    console.log(res);
+                      return res;
+                });
+              }// generateEventId
 
-                      $location.path('/profile/done');
 
-                  }).error(function (data) {
-                      $scope.waiting = false;
-                      $scope.error = data;
-                  });
-              };
 
+              //============================================================
+              //
+              //============================================================
               $scope.options = {
                   hostOrgs: function() {
                       return mongoStorage.loadDocs('inde-orgs')
@@ -190,11 +236,12 @@ auth.getUser().then(function(user){
                           $scope.doc.prefDate[key] = Number(toTimestamp(pref));
                   });
 
-
-
-                  mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(data){
-
-
+                  if(!$scope.doc.confrence) throw "Error no confrence selected";
+                  generateEventId($scope.doc.confrence).then(
+                    function(res){
+                      $scope.doc.id=Number(res.data.count)+1;
+                      saveProfile();
+                      mongoStorage.save($scope.schema,$scope.doc,$scope._id);
                   });
               };
               //=======================================================================
@@ -203,7 +250,8 @@ auth.getUser().then(function(user){
              function toTimestamp(dateString){
                 var newDate = dateString.split("-");
                 return new Date(newDate[0],newDate[1],newDate[2]).getTime();
-              };
+              }
+
               //=======================================================================
               //
               //=======================================================================
@@ -211,6 +259,7 @@ auth.getUser().then(function(user){
 
                   $location.url(url);
               };
+
               //=======================================================================
               //
               //=======================================================================
