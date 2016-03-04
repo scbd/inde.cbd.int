@@ -1,5 +1,6 @@
 define([ 'app', 'lodash','text!./scbd-select-list.html',
 'css!./scbd-select-list',
+'css!flag-icon-css',
 '../../../services/filters',
 '../../../services/services',
     '../../../services/mongo-storage'
@@ -18,23 +19,91 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 
 
 					$scope.name = $attrs.name;
-					//==================================
+
+          if($attrs.hasOwnProperty('single'))
+            $scope.single=true;
+          else {
+            $scope.single=false;
+          }
+
+					$scope.loading=false;
+          if($attrs.schema)
+		      $scope.schema=$attrs.schema;
+		      $scope.icon=schemaIcon($attrs.schema);
+
+		      $scope.docs;
+          $scope.atCapacity=0;
+		      $scope.sortReverse=0;
+		      $scope.listView=0;//list,tiles,details
+					$scope.sOpen=0; //search open
+
+          $scope.$watch('binding',function(){
+              //if($scope.binding && $scope.binding.length >0)
+                  setChips();
+          },true);
+          $scope.$watch('items',function(){
+              if(!$scope.schema && $scope.items  && $scope.items.length > 0 )
+                $scope.docs=$scope.items;
+              console.log('$scope.items',$scope.items);
+          },true);
+          //==================================
 					//
 					//
 					//==================================
 					function init () {
 
-								$scope.loadList ();
+                if($scope.schema)
+								       $scope.loadList();
+
 					}// init
-					$scope.loading=false;
-		      $scope.schema=$attrs.schema;
-		      $scope.icon=schemaIcon($attrs.schema);
 
-		      $scope.docs;
+          //==================================
+					//
+					//
+					//==================================
+					function setChips () {
+								if($scope.binding){
+                      if($scope.single){
 
-		      $scope.sortReverse=0;
-		      $scope.listView=0;//list,tiles,details
-					$scope.sOpen=0; //search open
+                        _.each($scope.docs,function(doc){
+                              if(doc._id===$scope.binding)
+                                doc.selected=true;
+                        });
+                      }
+                    else {
+                      _.each($scope.docs,function(doc){
+                        _.each($scope.binding,function(id){
+                            if(doc._id===id)
+                              doc.selected=true;
+                        });
+                      });
+                    }
+              }
+
+					}// init
+          //=======================================================================
+		      //
+		      //=======================================================================
+		      $scope.checkCapacity= function (capacity){
+              if($scope.binding && $scope.single)
+                    if($scope.binding)
+                      return true;
+                    else
+                      return false;
+               else if($scope.binding && !$scope.single){
+
+                  if(!capacity)return false;
+                  if($scope.binding && $scope.binding.length>= capacity)
+                      return true;
+                  else
+                      return false;
+            }//if
+
+
+
+
+            return false;
+		      };// archiveOrg
 
 					//=======================================================================
 		      //
@@ -51,7 +120,9 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      //=======================================================================
 		      $scope.loadList = function (){
 		        mongoStorage.loadDocs($scope.schema).then(function(response){
-		           $scope.docs=response.data;
+  //console.log(response.data);
+  $scope.docs=response.data;
+               setChips();
 		         });
 		      };// archiveOrg
 		      //=======================================================================
@@ -69,13 +140,31 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      //
 		      //=======================================================================
 		      $scope.select = function (docObj){
-		        	docObj.selected=!docObj.selected;
-							if(!_.isArray($scope.binding))$scope.binding=[];
+            if($scope.atCapacity  && !docObj.selected) return;
 
-							if(docObj.selected)
-								$scope.binding.push(docObj._id);
-							else
-								_.remove($scope.binding,function(obj){return obj===docObj._id;});
+            $timeout(function(){
+
+              docObj.selected=!docObj.selected;
+              if($scope.single){
+                if(docObj.selected)
+                    $scope.binding=docObj._id;
+                else
+                     $scope.binding='';
+
+              }else {
+                if(!_.isArray($scope.binding))$scope.binding=[];
+
+                if(docObj.selected)
+                  $scope.binding.push(docObj._id);
+                else
+                  _.remove($scope.binding,function(obj){return obj===docObj._id;});
+              }
+
+              $scope.atCapacity=$scope.checkCapacity();
+
+
+            });
+
 
 		      };// archiveOrg
 

@@ -1,15 +1,21 @@
 <style>
-
+.scbd-list-container{
+  border-width: 0.5px;
+  border-style: solid;
+  border-color: #009b48;
+}
 </style>
-<div class="z-depth-3 scbd-list-container">
+<div class=" scbd-list-container">
   <div class="container-header">
     <div id="icon-here"></div>
 
     <h1 ng-click="toggle('dashboard')">
       <scbd-icon-button ng-if="schema=='confrences'" type="md" icon-name="&#xE407;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>
-      <scbd-icon-button ng-if="schema=='inde-orgs'" type="md" icon-name="&#xE5CD;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>
+      <scbd-icon-button ng-if="schema=='inde-orgs'" type="md" icon-name="&#xE0AF;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>
 
-      {{schema| schemaName}} </h1>
+      <span ng-if="single">Select a {{schema| schemaNameSingular}} below: </span>
+      <span ng-if="!single">Select one or more {{schema| schemaName}} below: </span>
+    </h1>
     <div class="btn-group right ">
       <input type="text" ng-model="search" placeholder="search..." class="search">   </input>
       <scbd-fab-button style="margin-right:5px;" ng-click="searchToggle();"><i class="material-icons" ng-if="!sOpen">&#xE8B6;</i><i class="material-icons" ng-if="sOpen">&#xE5CD;</i></scbd-fab-button>
@@ -23,26 +29,46 @@
   </div>
   <div class="container-header-filler">
   </div>
-<div class="row">
 
-<div class="chip" ng-repeat="doc in docs | filter:{selected:true}"><img src="{{doc.document.logo}}" />{{doc.document.acronym | lstring}}<i class="material-icons" ng-click="select(doc)">&#xE5CD;</i></div>
+<div class="row" style="padding-top:4px;">
+
+  <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
+    <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
+    <div ng-if="!doc.document.logo.length || doc.document.logo.length<=0">
+
+      <scbd-icon-button type="md" icon-name="&#xE407;" ng-if="(schema=='confrences')"></scbd-icon-button>
+      <scbd-icon-button type="md" icon-name="&#xE0AF;" ng-if="(schema=='inde-orgs')"></scbd-icon-button>
+    </div>
+    {{doc.document.acronym | lstring}}
+    <i class="material-icons" ng-click="select(doc)">&#xE5CD;</i>
+  </div>
 </div>
-
+<div style="padding-bottom :3px;">Showing:  <span class="badge">{{filtered.length}}</span></div>
 <div class="scbd-scroll-box">
   <section class="row" ng-show="listView" style="overflow:auto;position:relative;">
+
     <div class="col s12 m3 lg4" ng-repeat="docObj in docs |orderBy:'document.title.en':sortReverse | filter:search">
+
 <scbd-flat-button  style="width:100%;height:210px;background-color:transparent;overflow:none;" ng-click="select(docObj);" waves>
       <div class="card small " >
 
-        <div class="card-image" ng-if="docObj.document.logo">
-          <img src="{{docObj.document.logo}}">
+        <div class="card-image" >
+          <img src="{{docObj.document.logo}}" ng-if="(docObj.document.logo.length)">
+
+          <i ng-if="(!docObj.document.logo.length  && schema=='confrences')" class="material-icons" style="color:#aaaaaa;font-size:100px;position:absolute;top:28px;left:36%;">&#xE407;</i>
+          <i ng-if="(!docObj.document.logo.length  && schema=='inde-orgs')" class="material-icons" style="color:#aaaaaa;font-size:100px;position:absolute;top:28px;left:36%;">&#xE0AF;</i>
         </div>
         <div class="card-content">
-          <div class="center">
-            {{docObj.document.title | lstring}} {{search}}
+          <div class="center" ng-if="schema=='confrences'">
+              <div style="font-weight:bold;font-size:1.5em;">{{docObj.document.acronym | lstring}} <br></div>
+            <div style="font-size:0.8em;">{{docObj.document.title | lstring}} {{search}}<br></div>
           </div>
+          <div class="center" ng-if="schema=='inde-orgs'">
+            <div style="font-weight:bold;">{{docObj.document.acronym | lstring}} <br></div>
+            <div style="font-size:0.8em;padding-top:5px;">{{docObj.document.title | lstring}} <br></div>
         </div>
-        <div class="card-action">
+        </div>
+        <div class="card-action" ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
           <span class="action-grp">
             <scbd-icon-button  style="z-index:100;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
           </span>
@@ -54,17 +80,34 @@
   </section>
 
   <section class="row" ng-show="!listView" style="overflow:auto;position:relative;">
-    <div class="col s12 collection" ng-repeat="docObj in docs |orderBy:'document.title.en':sortReverse | filter:search">
+
+    <div class="col s12 collection" ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)">
+
       <scbd-flat-button style="width:105%;left:-17px;text-align:left;height:84px;" ng-click="select(docObj);" waves>
           <div class="collection-item avatar ">
             <!-- <div class="card-image" ng-if="org.document.logo"> -->
+
             <img src="{{docObj.document.logo}}" style="background-color:#cccccc;" class="circle"></img>
-            <i ng-if="!docObj.document.logo.length" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
-            <span class="title" style="">
+            <span class="flag-icon flag-icon-ca"  style="position:absolute;top:10px;left:5px;font-size:45px;"></span>
+            <i ng-if="(!docObj.document.logo.length  && schema=='confrences')" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE407;</i>
+            <i ng-if="(!docObj.document.logo.length  && schema=='inde-orgs')" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
+            <!-- <span class="title" style="">
               {{docObj.document.title | lstring}} {{search}}
             </span>
             <div>
               {{docObj.document.acronym | lstring}}
+            </div> -->
+            <div  >
+              <div style="font-weight:bold;">{{docObj.name | lstring}} </div>
+              {{docObj.code }}
+          </div>
+            <div  ng-if="schema=='inde-orgs'">
+              <div style="font-weight:bold;">{{docObj.document.acronym | lstring}} </div>
+              {{docObj.document.title | lstring}}
+          </div>
+            <div  ng-if="schema=='confrences'">
+                <div class="title" style="font-weight:bold;font-size:1.5em;">{{docObj.document.acronym | lstring}} <br></div>
+              <div style="font-size:0.8em;">{{docObj.document.title | lstring}} <br></div>
             </div>
             <!-- </div> -->
             <!-- <div class="card-content">
@@ -72,8 +115,8 @@
                     <scbd-localizer value="org.document.title" class="valign"></scbd-localizer>
                 </div>
             </div>-->
-            <div class="collection-action">
-              <span class="collection-action-grp ">
+            <div class="collection-action" >
+              <span class="collection-action-grp " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
                 <!-- <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(docObj._id);" waves></scbd-icon-button>
                 <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveOrg(org);" waves></scbd-icon-button> -->
                 <scbd-icon-button class="right" style="z-index:100;position:absolute;right:30px;top:15px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
