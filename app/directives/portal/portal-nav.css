@@ -97,13 +97,13 @@ letter-spacing:1px;
 margin-left:10px;
 margin-right:10px;
 
-outline-color:rgb(35, 117, 70);
+/*outline-color:rgb(35, 117, 70);
 outline-style:none;
-outline-width:0px;
+outline-width:0px;*/
 
-padding-left:10px;
+/*padding-left:10px;
 padding-right:10px;
-
+*/
 position:relative;
 text-align:center;
 
@@ -193,4 +193,12 @@ text-transform:uppercase;
 	transform: rotate(0deg) translateX(50%);
 }
 
+
+.cl-effect-14 .active  {
+  color: #fff;
+  	opacity: 1;
+  	height: 30px;
+  	line-height: 30px;
+    cursor:pointer;
+}
 

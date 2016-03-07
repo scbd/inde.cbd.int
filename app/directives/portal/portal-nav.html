@@ -33,11 +33,11 @@
 <div class="z-depth-2" style="background:#444444;"  ng-cloak>
 <section  hide-lt-sm>
   <span class="cl-effect-14" >
-    <a ng-click="goTo('/');">Home </a>
-    <a ng-click="goTo('/manage/events/0');">Request</a>
-    <a ng-click="goTo('/manage');" ng-if="isAuthenticated">Dashboard</a>
-    <a ng-click="goTo('/admin');" ng-if="isAdmin">Admin</a>
-    <a ng-click="goTo('/help');" class="pull-right"> Help</a>
+    <a id="home" ng-click="goTo('/');setActivePath();">Home </a>
+    <a id="request" ng-click="goTo('/manage/events/0');setActivePath();">Request</a>
+    <a id="dash" ng-click="goTo('/manage/events');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
+    <a id="admin" ng-click="goTo('/admin');setActivePath();"  ng-if="isAdmin">Admin</a>
+    <!-- <a id="help" ng-click="goTo('/help');setActivePath();" class="pull-right"> Help</a> -->
   </span>
 </section>
 </div>

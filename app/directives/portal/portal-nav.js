@@ -11,6 +11,41 @@ app.directive('portalNav', function () {
             function ($scope,$location,$window,$timeout,$element,authentication) {
 
 
+
+
+              //============================================================
+              //
+              //============================================================
+              $scope.setActivePath = function (){
+                  $scope.path=$location.url();
+
+                  if($scope.path==='/')
+                    $element.find("#home").addClass('active');
+                  else
+                    $element.find("#home").removeClass('active');
+
+                  if($scope.path==='/manage/events/0')
+                      $element.find("#request").addClass('active');
+                  else
+                    $element.find("#request").removeClass('active');
+
+                  if($scope.path==='/help')
+                      $element.find("#help").addClass('active');
+                  else
+                    $element.find("#help").removeClass('active');
+
+                  if($scope.path==='/manage/events' || $scope.path==='/manage' || $scope.path==='/manage' )
+                      $element.find("#dash").addClass('active');
+                  else
+                      $element.find("#dash").removeClass('active');
+
+                  if($scope.path==='/admin')
+                          $element.find("#admin").addClass('active');
+                  else
+                          $element.find("#admin").removeClass('active');
+
+              }//isActivePath
+$scope.setActivePath ();
               $scope.isOpen = false;
                $scope.demo = {
                  isOpen: false,
