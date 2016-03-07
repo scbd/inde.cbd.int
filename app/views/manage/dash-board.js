@@ -13,12 +13,20 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-    app.controller("dashBoard", ['$scope','dashMenu','authentication', //"$http", "$filter", "Thesaurus",
-     function($scope,dashMenu,authentication) { //, $http, $filter, Thesaurus
+    app.controller("dashBoard", ['$scope','dashMenu','authentication','$location','$timeout', //"$http", "$filter", "Thesaurus",
+     function($scope,dashMenu,authentication,$location,$timeout) { //, $http, $filter, Thesaurus
       $scope.test=[];
-      $scope.$watch('test',function(){console.log('watch in dash',$scope.test);},true);
+
+
       $scope.toggle = dashMenu.toggle;
       $scope.sections = dashMenu.getMenu('dashboard');
+      if(dashMenu.history.length===1)
+        $timeout(function(){
+              dashMenu.toggle('dashboard');
+            $timeout(function(){
+              dashMenu.toggle('dashboard');
+            },500);
+        },500);
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
