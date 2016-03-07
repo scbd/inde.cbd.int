@@ -1,316 +1,342 @@
-<div  class="view-container">
+<div class="view-container">
 
-    <div class="container-header center">
-      <div class="left"><scbd-fab-button  style="margin-right:5px;" ng-click="close();"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
-      <h1 ng-click="toggle('dashboard')"><scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;" ></scbd-icon-button> Add Side Event</h1>
-      <!-- <div class="btn-group right "><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
-      <div class="clearfix"></div>
+  <div class="container-header center" >
+    <div class="left">
+      <scbd-fab-button style="margin-right:5px;" ng-click="close();"><i class="material-icons">&#xE5CD;</i></scbd-fab-button>
     </div>
-    <div class="container-header-filler"></div>
-
-        <div ng-show="msg" class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
-          <strong>{{msg}}</strong>
-        </div>
-
-        <div class="alert alert-error" ng-show="hasError()">
-          <strong>Error as occured...</strong>
-          <div>{{error}}</div>
-        </div>
-
-        <div ng-show="isLoading()">
-          <i class="fa fa-spinner fa-spin"></i> Loading...
-        </div>
-
-
-
-        <form name="editForm" class="editForm" style="margin-top:10px">
-            <legend class="container-subheader"><h2>Confrence</h2></legend>
-
-          <scbd-select-list single ng-modal="doc.confrence" schema="confrences" ></scbd-select-list>
-<div class="col-md-6 col-xs-12">
-  <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="ID Number">
-
-    <input class="form-control"  type="number" ng-model="doc.id"  disabled>
+    <h1 >
+      <scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;"></scbd-icon-button> Side Event</h1>
+    <!-- <div class="btn-group right "><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
+    <div class="clearfix"></div>
   </div>
-</div>
+  <div class="container-header-filler"></div>
 
-          <div>
-            <legend class="container-subheader"><h2>Identity</h2>{{doc._id}}</legend>
-            <div class="row">
-              <div class="col-md-6 col-xs-12">
-                <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title" >
-                  <scbd-tooltip style="display:inline-block;top:2px;"  ng-if="0"><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span></scbd-tooltip>
-                  <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales" ></div>
-                </div>
-              </div>
+  <div ng-show="msg" class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+    <strong>{{msg}}</strong>
+  </div>
 
-              <div class="col-md-6 col-xs-12">
-                <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Logo (Not Org. Logo)" >
-                  <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
-                  <br>[ <input   type="checkbox" ng-model="doc.requirements.catering" value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"> No Logo, Icon Only ] [ <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]
-                  <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
+  <div class="alert alert-error" ng-show="hasError()">
+    <strong>Error as occured...</strong>
+    <div>{{error}}</div>
+  </div>
 
-                </div>
-              </div>
+  <div ng-show="isLoading()">
+    <i class="fa fa-spinner fa-spin"></i> Loading...
+  </div>
 
-              <div class="col-md-12 col-xs-12">
-                <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
-                  <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" ">
-                </div>
-              </div>
-              <div class="col-md-10 col-xs-12">
-                <div class="km-control-group" name="description" caption="Description" ng-required="!form.description.$valid">
-                  <div class="help-block" ng-if="0">Description of side event</div>
-                  <div km-rich-textbox rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
 
-                </div>
-              </div>
-            </div>
+
+  <form name="editForm" class="editForm" style="margin-top:10px">
+    <legend class="container-subheader">
+      <h2>Confrence</h2>
+    </legend>
+
+    <scbd-select-list single ng-modal="doc.confrence" schema="confrences"></scbd-select-list>
+
+
+    <div>
+      <legend class="container-subheader">
+        <h2>Identity</h2></legend>
+      <div class="row">
+        <div class="col-md-6 col-xs-12">
+          <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title">
+            <scbd-tooltip style="display:inline-block;top:2px;" ng-if="0">
+              <scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;" waves></scbd-icon-button>
+              <span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span>
+            </scbd-tooltip>
+            <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales"></div>
+          </div>
+        </div>
+
+        <div class="col-md-6 col-xs-12">
+          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Logo (Not Org. Logo)">
+            <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
+            <br>[
+            <input type="checkbox"  value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"> No Logo, Icon Only ] [
+            <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]
+            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
 
           </div>
+        </div>
 
-            <legend class="container-subheader"><h2>Organization(s)</h2></legend>
-            <div class="row">
-              <div class="col-md-12 col-xs-12">
-                <div class="km-control-group" name="hostOrgs" caption="">
-                  <div style="padding-left:18px;padding-bottom:7px;">Select the host organizations and/or create a new one <scbd-fab-button style="margin-right:5px;" ng-click="toggleOrg($event);" ><i class="material-icons" ng-if="!showOrgForm">&#xE145;</i><i class="material-icons" ng-if="showOrgForm">&#xE5CD;</i></scbd-fab-button></div>
-                  <!-- <div km-select watch-items no-hover multiple name="hostOrgs" ng-model="doc.hostOrgs" placeholder=" " locales="doc.meta.locales" items="options.hostOrgs()"></div> -->
-                  <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" ng-if="!showOrgForm"></scbd-select-list>
-
-                </div>
-              </div>
-              <div class="col-md-12 col-xs-12" ng-show="showOrgForm">
-                <div style="padding-bottom:8px;border-width:1px;border-color:#109e49;">
-              <edit-organization  short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="doc.hostOrgs"></edit-organization>
-            </div>
-            </div>
-
-            <legend class="container-subheader"><h2>Contact Person</h2></legend>
-            <div class="row">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="personalTitle" caption="Personal Title">
-                  <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" ">
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="firstName" caption="First Name">
-                  <input class="form-control" type="text" ng-model="doc.contact.firstName" placeholder=" ">
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="lastName" caption="Last Name">
-                  <input class="form-control" type="text" ng-model="doc.contact.lastName" placeholder=" ">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="jobTitla" caption="Job Title">
-                  <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" ">
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="website" caption="Phone">
-                  <input class="form-control" type="text" ng-model="doc.contact.phone" placeholder=" ">
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="email" caption="Email">
-                  <input class="form-control" type="email" ng-model="doc.contact.email" placeholder=" ">
-                </div>
-              </div>
-
-            </div>
-            <div class="row">
-              <div class="col-sm-offset-1 col-sm-11">
-            <div class="panel panel-default panel-address">
-  						<div class="panel-body">
-  							<div class="row">
-  								<div class="col-sm-6">
-  									<div class="form-group">
-  										<label for="address">Address</label>
-  										<textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
-  									</div>
-  								</div>
-  								<div class="col-sm-6">
-  									<div class="form-group">
-  										<label for="city">City</label>
-  										<input type="text" class="form-control" id="city" ng-model="doc.contact.city">
-  									</div>
-  								</div>
-  							</div>
-  							<div class="row">
-  								<div class="col-sm-6">
-  									<div class="form-group">
-  										<label for="state">State / Province / Region</label>
-  										<input type="text" class="form-control" id="state" ng-model="doc.contact.state">
-  									</div>
-  								</div>
-  								<div class="col-sm-3">
-  									<div class="form-group">
-  										<label for="zip">Postal / Zip code</label>
-  										<input type="text" class="form-control" id="zip" ng-model="doc.contact.zip">
-  									</div>
-  								</div>
-  							</div>
-  							<div class="row">
-  								<div class="col-sm-12">
-  									<div class="form-group">
-  										<label>Country</label>
-                      <scbd-select-list single ng-modal="doc.contact.country" items="countries" ></scbd-select-list>
-  									</div>
-  								</div>
-  							</div>
-  						</div>
-  					</div>
-</div>
-</div>
-
-            <div class="row">
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="mobile" caption="Mobile Phone *">
-                  <input class="form-control" type="text" ng-model="doc.mobile" placeholder=" ">
-                </div>
-              </div>
-
-            <div class="col-md-6col-xs-12">
-              <div class="km-control-group" name="updateProfile" caption="Update Your Profile With the Changes Made Here?">
-                <!-- <input type="checkbox" ng-model="updateProfile" checked> -->
-                <scbd-icon-button  style="color:#109e49;font-size:25px;" type="fa" icon-name="fa-check-square-o"  to-icon-name="fa-square-o" ani="tada" active="updateProfile" ></scbd-icon-button>
-              </div>
-            </div>
+        <div class="col-md-12 col-xs-12">
+          <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
+            <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" ">
           </div>
-            <legend class="container-subheader"><h2>Preferred Date and Time {{prefDate}}</h2></legend>
-            <div class="row">
+        </div>
+        <div class="col-md-10 col-xs-12">
+          <div class="km-control-group" name="description" caption="Description" ng-required="!form.description.$valid">
+            <div class="help-block" ng-if="0">Description of side event</div>
+            <div km-rich-textbox rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
 
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="prefDate.one" caption="First Choice" ng-required="!form.description.$valid">
-                  <select class="form-control" ng-model="doc.prefDate.one" >
-                    <option value="">Select Date</option>
-                    <option value="lunch">2016/04/28</option>
-                  </select>
-                  <select class="form-control" ng-model="doc.prefDateTime.one" >
-                    <option value="">Select Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="prefDate.two" caption="Second Choice" ng-required="!form.description.$valid">
-                  <select class="form-control" ng-model="doc.prefDate.two" >
-                    <option value="">Select a Date</option>
-                    <option value="lunch">2016/04/28</option>
-                  </select>
-                  <select class="form-control" ng-model="doc.prefDateTime.two" >
-                    <option value="">Select a Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
-                  </select>
-
-                </div>
-              </div>
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="prefDate.three" caption="Third Choice" ng-required="!form.description.$valid">
-                  <select class="form-control" ng-model="doc.prefDate.three" >
-                    <option value="">Select a Date</option>
-                    <option value="lunch">2016/04/28</option>
-                  </select>
-                  <select class="form-control" ng-model="doc.prefDateTime.three" >
-                    <option value="">Select a Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <legend class="container-subheader"><h2>Requirements</h2></legend>
-            <div class="row">
-
-              <div class="col-md-4 col-xs-4">
-                  <div >LCD Projector</div>
-                    <input type="checkbox" ng-model="doc.requirements.lcd" value="LCD Projector">
-              </div>
-              <div class="col-md-4 col-xs-4">
-                  <div >PC</div>
-                    <input type="checkbox" ng-model="doc.requirements.pc" value="PC">
-              </div>
-              <div class="col-md-4 col-xs-4">
-                  <div >Overhead Projector</div>
-                    <input type="checkbox" ng-model="doc.requirements.overhead" value="Overhead Projector">
-              </div>
-            </div>
-              <div class="row">
-              <div class="col-md-4 col-xs-4">
-                  <div >Sound System</div>
-                    <input type="checkbox" ng-model="doc.requirements.sound" value="Sound System">
-              </div>
-              <div class="col-md-4 col-xs-4">
-                  <div >Interpretation <span style="font-size:9px;">(expense will be at your own costs)</span></div>
-                    <input type="checkbox" ng-model="doc.requirements.interpretation" value="Interpretation">
-              </div>
-              <div class="col-md-4 col-xs-4">
-                  <div >Catering <span style="font-size:9px;">(expense will be at your own costs)</span></div>
-                    <input type="checkbox" ng-model="doc.requirements.catering" value="Catering">
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-xs-12">
-                  <div >Other <span style="font-size:9px;">(Please indicate any other requirements you may need)</span></div>
-                    <input class="form-control" type="text" ng-model="doc.requirements.other" >
-              </div>
           </div>
+        </div>
+      </div>
 
+    </div>
 
+    <legend class="container-subheader">
+      <h2>Organization(s)</h2>
+    </legend>
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <div class="km-control-group" name="hostOrgs" caption="">
+          <div style="padding-left:18px;padding-bottom:7px;">Select the host organizations and/or create a new one
+            <scbd-fab-button style="margin-right:5px;" ng-click="toggleOrg($event);"><i class="material-icons" ng-if="!showOrgForm">&#xE145;</i><i class="material-icons" ng-if="showOrgForm">&#xE5CD;</i></scbd-fab-button>
+          </div>
+          <!-- <div km-select watch-items no-hover multiple name="hostOrgs" ng-model="doc.hostOrgs" placeholder=" " locales="doc.meta.locales" items="options.hostOrgs()"></div> -->
+          <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" ng-if="!showOrgForm"></scbd-select-list>
 
-            <legend class="container-subheader"><h2>Side Event Promotion <span style="font-size:9px;">(How will you be letting other participants know about your side event?)</span></h2></legend>
+        </div>
+      </div>
+      <div class="col-md-12 col-xs-12" ng-show="showOrgForm">
+        <div style="padding-bottom:8px;border-width:1px;border-color:#109e49;">
+          <edit-organization short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="doc.hostOrgs"></edit-organization>
+        </div>
+      </div>
 
-            <div class="row">
-              <div class="col-md-2 col-xs-4">
-                  <div >Facebook Event</div>
-                    <input type="checkbox" ng-model="doc.promotion.fbEvent" >
-              </div>
+      <legend class="container-subheader">
+        <h2>Contact Person</h2>
+      </legend>
+      <div class="row">
 
-              <div class="col-md-2 col-xs-4">
-                  <div >Flyers</div>
-                    <input type="checkbox" ng-model="doc.promotion.flyers" value="PC">
-              </div>
-              <div class="col-md-2 col-xs-4">
-                  <div >Email Cmapaign</div>
-                    <input type="checkbox" ng-model="doc.promotion.emailCampaign" >
-              </div>
-            </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="personalTitle" caption="Personal Title">
+            <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" ">
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="firstName" caption="First Name">
+            <input class="form-control" type="text" ng-model="doc.contact.firstName" placeholder=" ">
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="lastName" caption="Last Name">
+            <input class="form-control" type="text" ng-model="doc.contact.lastName" placeholder=" ">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="jobTitla" caption="Job Title">
+            <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" ">
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="website" caption="Phone">
+            <input class="form-control" type="text" ng-model="doc.contact.phone" placeholder=" ">
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="email" caption="Email">
+            <input class="form-control" type="email" ng-model="doc.contact.email" placeholder=" ">
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-sm-offset-1 col-sm-11">
+          <div class="panel panel-default panel-address">
+            <div class="panel-body">
               <div class="row">
-
-                <div class="col-md-6 col-xs-12">
-                    <div >Your Website Promoting the Side Event  </div>
-                      <input class="form-control" type="url" ng-model="doc.promotion.website" >
-                </div>
-                <div class="col-md-6 col-xs-12">
-                    <div >Other <span style="font-size:9px;">(Please indicate any other steps you have taken to promote your side event)</span></div>
-                      <input class="form-control" type="text" ng-model="doc.promotion.other" >
-                </div>
-            </div>
-
-              <legend class="container-subheader"><h2>Additional Information</h2></legend>
-              <div class="row">
-
-                <div class="col-md-12 col-xs-12">
-                  <div class="km-control-group" name="additionalInfo" caption="Message">
-                    <div km-rich-textbox name="additionalInfo" ng-model="doc.additionalInfo"  locales="doc.meta.locales"></div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
                   </div>
                 </div>
-
-
-            <div class="row">
-            <scbd-button ng-click="saveDoc();goTo('/manage/events');" style="width:100%">Save Side Event</button>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" class="form-control" id="city" ng-model="doc.contact.city">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="state">State / Province / Region</label>
+                    <input type="text" class="form-control" id="state" ng-model="doc.contact.state">
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="zip">Postal / Zip code</label>
+                    <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label style="margin-left:26px;margin-bottom:5px;">Country</label>
+                    <scbd-select-list single ng-modal="doc.contact.country" items="countries"></scbd-select-list>
+                  </div>
+                </div>
+              </div>
             </div>
-            <scbd-button ng-click="saveDoc();goTo('/manage/events');" style="width:100%">Save & Request Approval</button>
-        </form>
+          </div>
+        </div>
+      </div>
 
-</div>
+      <div class="row">
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="mobile" caption="Mobile Phone *">
+            <input class="form-control" type="text" ng-model="doc.mobile" placeholder=" ">
+          </div>
+        </div>
+
+
+      </div>
+      <legend class="container-subheader">
+        <h2>Preferred Date and Time {{prefDate}}</h2>
+      </legend>
+      <div class="row">
+
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="prefDate.one" caption="First Choice" ng-required="!form.description.$valid">
+            <select class="form-control" ng-model="doc.prefDate.one">
+              <option value="" selected>Select a Date</option>
+              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+            </select>
+            <select class="form-control" ng-model="doc.prefDateTime.one">
+              <option value="" selected>Select a Time</option>
+              <option value="lunch">Lunch: 13:15 - 14:45</option>
+              <option value="evening">Evening: 18:15 - 19:45</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="prefDate.two" caption="Second Choice" ng-required="!form.description.$valid">
+            <select class="form-control" ng-model="doc.prefDate.two">
+              <option value="" selected>Select a Date</option>
+              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+            </select>
+            <select class="form-control" ng-model="doc.prefDateTime.two">
+              <option value="" selected>Select a Time</option>
+              <option value="lunch">Lunch: 13:15 - 14:45</option>
+              <option value="evening">Evening: 18:15 - 19:45</option>
+            </select>
+
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12">
+          <div class="km-control-group" name="prefDate.three" caption="Third Choice" ng-required="!form.description.$valid">
+            <select class="form-control" ng-model="doc.prefDate.three">
+              <option value="" selected>Select a Date</option>
+              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+            </select>
+            <select class="form-control" ng-model="doc.prefDateTime.three">
+              <option value="" selected>Select a Time</option>
+              <option value="lunch">Lunch: 13:15 - 14:45</option>
+              <option value="evening">Evening: 18:15 - 19:45</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <legend class="container-subheader">
+        <h2>Requirements</h2>
+      </legend>
+      <div class="row">
+
+        <div class="col-md-4 col-xs-4">
+          <div>LCD Projector</div>
+          <input type="checkbox" ng-model="doc.requirements.lcd" value="LCD Projector">
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div>PC</div>
+          <input type="checkbox" ng-model="doc.requirements.pc" value="PC">
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div>Overhead Projector</div>
+          <input type="checkbox" ng-model="doc.requirements.overhead" value="Overhead Projector">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-xs-4">
+          <div>Sound System</div>
+          <input type="checkbox" ng-model="doc.requirements.sound" value="Sound System">
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div>Interpretation
+            <span style="font-size:9px;">(expense will be at your own costs)</span>
+          </div>
+          <input type="checkbox" ng-model="doc.requirements.interpretation" value="Interpretation">
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div>Catering
+            <span style="font-size:9px;">(expense will be at your own costs)</span>
+          </div>
+          <input type="checkbox" ng-model="doc.requirements.catering" value="Catering">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <div>Other
+            <span style="font-size:9px;">(Please indicate any other requirements you may need)</span>
+          </div>
+          <input class="form-control" type="text" ng-model="doc.requirements.other">
+        </div>
+      </div>
+
+
+
+      <legend class="container-subheader">
+        <h2>Side Event Promotion
+          <span style="font-size:9px;">(How will you be letting other participants know about your side event?)</span>
+        </h2>
+      </legend>
+
+      <div class="row">
+        <div class="col-md-2 col-xs-4">
+          <div>Facebook Event</div>
+          <input type="checkbox" ng-model="doc.promotion.fbEvent">
+        </div>
+
+        <div class="col-md-2 col-xs-4">
+          <div>Flyers</div>
+          <input type="checkbox" ng-model="doc.promotion.flyers" value="PC">
+        </div>
+        <div class="col-md-2 col-xs-4">
+          <div>Email Cmapaign</div>
+          <input type="checkbox" ng-model="doc.promotion.emailCampaign">
+        </div>
+      </div>
+      <div class="row">
+
+        <div class="col-md-6 col-xs-12">
+          <div>Your Website Promoting the Side Event </div>
+          <input class="form-control" type="url" ng-model="doc.promotion.website">
+        </div>
+        <div class="col-md-6 col-xs-12">
+          <div>Other
+            <span style="font-size:9px;">(Please indicate any other steps you have taken to promote your side event)</span>
+          </div>
+          <input class="form-control" type="text" ng-model="doc.promotion.other">
+        </div>
+      </div>
+
+      <legend class="container-subheader">
+        <h2>Additional Information</h2>
+      </legend>
+      <div class="row">
+
+        <div class="col-md-12 col-xs-12">
+          <div class="km-control-group" name="additionalInfo" caption="Message">
+            <div km-rich-textbox name="additionalInfo" ng-model="doc.additionalInfo" locales="doc.meta.locales"></div>
+          </div>
+        </div>
+
+
+        <div class="row">
+
+          <scbd-button ng-click="saveDoc();publishRequestDial();" style="width:100%"><i class="material-icons" style='vertical-align: middle'>&#xE161;</i> Save</button>
+        </div>
+
+  </form>
+
+  </div>

@@ -1,7 +1,11 @@
 define(['app', 'lodash',
 
   'text!./edit-side-event.html',
-    'css!./edit-side-event',
+    'moment',
+    'text!/app/directives/forms/edit/publish-dialog.html',
+      'css!/app/libs/ng-dialog/css/ngDialog.css',
+    'css!/app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
+        'css!./edit-side-event',
   'scbd-branding/side-menu/scbd-side-menu',
   'scbd-branding/scbd-button',
   'scbd-branding/side-menu/scbd-menu-service',
@@ -19,13 +23,14 @@ define(['app', 'lodash',
     '../../../services/mongo-storage',
     '../controls/scbd-file-upload',
     './edit-organization',
-  'scbd-branding/scbd-media'
-
-], function(app, _,template) { //'scbd-services/utilities',
+  'scbd-branding/scbd-media',
 
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$window', //"$http", "$filter", "Thesaurus",
-      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth,$window) {
+], function(app, _,template,moment,dialogTemplate) { //'scbd-services/utilities',
+
+
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$window','ngDialog','$compile', //"$http", "$filter", "Thesaurus",
+      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth,$window,ngDialog,$compile) {
       return {
         restrict   : 'E',
         template   : template,
@@ -44,21 +49,55 @@ define(['app', 'lodash',
               $scope.doc={};
               $scope.doc.hostOrgs=[];
               $scope.updateProfile=1;
+              var data ={}; //catch for profile data
 
               $scope.$watch('doc.confrence',function(){
                 if($scope.doc.confrence){
-                  generateEventId($scope.doc.confrence);
+                  //generateEventId($scope.doc.confrence);
+                  generateDates();
                 }
               });
 
 
-            return $http.get("https://api.cbd.int/api/v2015/countries", {
+            $http.get("https://api.cbd.int/api/v2015/countries", {
                 cache: true
             }).then(function(o) {
 
-                $scope.countries =  $filter("orderBy")(o.data, "name");
-            });
+                $scope.countries =  $filter("orderBy")(o.data, "name.en");
+                _.each($scope.countries, function(c){
+                    c.title=c.name;
+                    //c._id=c.code;
 
+                });
+            });
+            //============================================================
+            //
+            //============================================================
+            $scope.publishRequestDial = function () {
+              //dialogTemplate = $compile(dialogTemplate,$scope);
+               if($scope.doc.meta.status!=='published')
+                  ngDialog.open({ template: dialogTemplate, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
+                else
+                  $scope.saveDoc();
+
+            };
+            //============================================================
+            //
+            //============================================================
+            $scope.requestPublish = function () {
+              //dialogTemplate = $compile(dialogTemplate,$scope);
+
+              $scope.doc.meta.status='request';
+              mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+                _.each($scope.doc.hostOrgs,function(org){
+                    mongoStorage.loadDoc('inde-orgs',org).then(function(conf){
+                      console.log('conf',conf);
+                      if(conf[1].meta.status!=='request')
+                       mongoStorage.requestDoc('inde-orgs',{document:conf[1]},conf[0]);
+                    });
+                });
+              });
+            };
 
               init();
 
@@ -92,24 +131,103 @@ define(['app', 'lodash',
                 }
 
               }// init
+
+              //=======================================================================
+              //
+              //=======================================================================
+              $scope.toTitleCase =  function(str)
+              {
+                  return str.replace(/\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+              };
+              //============================================================
+              //
+              //============================================================
+              function generateDates() {
+                    mongoStorage.loadDoc('confrences',$scope.doc.confrence).then(function(confr){
+
+                          var diff = Number(confr[1].end)-Number(confr[1].start);
+                          var numDays = Math.ceil(diff/86400);
+                          if(!$scope.options)$scope.options={};
+                          if(!$scope.options.dates)$scope.options.dates=[];
+                          for (var i = 0; i < numDays; i++) {
+                              $scope.options.dates[i]=moment.unix(Number(confr[1].start)).format("YYYY/MMM/DD");
+                              confr[1].start=confr[1].start+86400;
+                          }
+
+
+                    });
+
+
+              }// init
               //============================================================
               //
               //============================================================
               function saveProfile() {
-                  var data;
-                  data.Email = $scope.doc.contact.email;
-                  data.Address = $scope.doc.contact.address;
-                  data.City = $scope.doc.contact.city;
-                  data.Country = $scope.doc.contact.country;
-                  data.personalTitle = $scope.doc.contact.personalTitle;
-                  data.State = $scope.doc.contact.state;
-                  data.Zip =  $scope.doc.contact.zip;
-                  data.Phone = $scope.doc.contact.phone;
-                  data.FirstName = $scope.doc.contact.firstName;
-                  data.LastName = $scope.doc.contact.lastName;
-                  data.Designation = $scope.doc.contact.jobTitle;
-console.log(data);return;
-                authHttp.put('/api/v2013/users/' + $scope.user.userID, angular.toJson(data)).success(function () {
+
+                  var tempMobile;
+                  var isChange = 0;
+
+                  if(data.Email !== $scope.doc.contact.email){
+
+
+                    data.Email = _.clone($scope.doc.contact.email);
+                    isChange='email';
+                  }
+                  if(data.Address !== $scope.doc.contact.address){
+                    data.Address = _.clone($scope.doc.contact.address);
+                    isChange='address';
+                  }
+
+                  if(data.City !== $scope.doc.contact.city){
+                    data.City = _.clone($scope.doc.contact.city);
+                    isChange='city';
+                  }
+
+                  if(data.Country !== $scope.doc.contact.country){
+                    data.Country = _.clone($scope.doc.contact.country);
+                    isChange='country';
+                  }
+                  if(data.Title !== $scope.doc.contact.personalTitle){
+                    data.Title = _.clone($scope.doc.contact.personalTitle);
+                    isChange='personaltitle';
+                  }
+                  if(data.State !== $scope.doc.contact.state){
+                    data.State = _.clone($scope.doc.contact.state);
+                    isChange='state';
+                  }
+                  if(data.Zip !== $scope.doc.contact.zip){
+                    data.Zip = _.clone($scope.doc.contact.zip);
+                    isChange='zip';
+                  }
+                  if(data.Phone !== $scope.doc.contact.phone){
+                    data.Phone = _.clone($scope.doc.contact.phone);
+                    isChange='phone';
+                  }
+
+                  if(data.FirstName !== $scope.doc.contact.firstName){
+                    data.FirstName = _.clone($scope.doc.contact.firstName);
+                    isChange='firestname';
+                  }
+                  if(data.LastName !== $scope.doc.contact.lastName){
+                    data.LastName = _.clone($scope.doc.contact.lastName);
+                    isChange='lastName';
+                  }
+                  if(data.Designation !== $scope.doc.contact.jobTitle){
+                    data.Designation = _.clone($scope.doc.contact.jobTitle);
+                    isChange='Designation';
+                  }
+
+                  data.UserID=$scope.user.userID;
+
+                if($scope.doc.contact.mobile)
+                  tempMobile = _.clone($scope.doc.contact.mobile);
+                delete($scope.doc.contact);
+                $scope.doc.contact={};
+                $scope.doc.contact.mobile=tempMobile;
+
+
+                if(isChange)
+                $http.put('https://api.cbd.int/api/v2013/users/' + $scope.user.userID, angular.toJson(data)).success(function () {
 
                     //$location.path('/profile/done');
 
@@ -127,7 +245,7 @@ console.log(data);return;
                   auth.getUser().then(function(user){
                     $scope.user=user;
                     return $http.get('https://api.cbd.int/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
-                        console.log('response.data',response.data);
+                        data=response.data;
                         if(!$scope.doc)$scope.doc={};
                         if(!$scope.doc.contact)$scope.doc.contact={};
 
@@ -228,29 +346,28 @@ console.log(data);return;
               //=======================================================================
               $scope.saveDoc = function(){
 
-                //delete($scope.doc.meta);
-                  console.log('saving',$scope.doc);
-                  if($scope.doc.prefDate)
-                    _.each($scope.doc.prefDate,function(pref,key){
-                        if(pref)
-                          $scope.doc.prefDate[key] = Number(toTimestamp(pref));
-                  });
-
                   if(!$scope.doc.confrence) throw "Error no confrence selected";
                   generateEventId($scope.doc.confrence).then(
                     function(res){
-                      $scope.doc.id=Number(res.data.count)+1;
-                      saveProfile();
-                      mongoStorage.save($scope.schema,$scope.doc,$scope._id);
+                      if(Number(res.data.count)===0 )
+                        $scope.doc.id= 1000;
+                      else if (Number(res.data.count)<1000)
+                        $scope.doc.id=Number(res.data.count)+1000;
+                      else
+                        $scope.doc.id=Number(res.data.count)+2;
+
+                      mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+                        saveProfile();
+                      });
                   });
               };
               //=======================================================================
               //
               //=======================================================================
-             function toTimestamp(dateString){
-                var newDate = dateString.split("-");
-                return new Date(newDate[0],newDate[1],newDate[2]).getTime();
-              }
+            //  function toTimestamp(dateString){
+            //     var newDate = dateString.split("-");
+            //     return new Date(newDate[0],newDate[1],newDate[2]).getTime();
+            //   }
 
               //=======================================================================
               //
