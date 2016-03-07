@@ -1,27 +1,125 @@
-<div style="padding:5px 25px 10px 25px;">
+<div  ng-controller="home" >
 
-    <h1>SEED</h1>
+  <section  ng-repeat="con in confrences ">
+            <div class="parallax-container">
+              <div class="parallax">
+                <img class="parallax-img" src="{{con.document.venueObj.image}}">
+                <div class="center scrim">
+                  <h1 Style="font-size:35px;letter-spacing:5px;padding-bottom:5px;">{{con.document.acronym| lstring}}</h1>
+                  <h5 style="color:white;font-size:12px;letter-spacing:2px;">({{con.document.title | lstring}})</h5>
+<div class="annonce">
+   <h1><i class="material-icons">&#xE85A;</i>  Announcement:</h1>
+   <div>
+     Please note the side event scedule will be posted for the first week of April 2016.
+   </div>
+</div>
+                  <div class="venue">
+                    <div class="container-header-venue"><i class="material-icons left" style="font-size:38px;padding-right:6px;">date_range</i>
+                      <span style="font-size:17px;font-weight:bold;">Venue</span>
+                      <div style="margin-right:5px;">{{con.document.start * 1000 | date:'yyyy-MM-dd' }}
+                        <span style="padding:5px 5px 0px 5px;line-height:18px;"> to </span> {{con.document.end * 1000 | date:'yyyy-MM-dd'}}</div>
+                    </div>
+                    <div class="container-header-filler"></div>
+                    <img ng-if="con.document.venueObj.logo" src="{{con.document.venueObj.logo}}" class="host-logo">
+                    <div style="text-align:left;white-space: nowrap;line-height:26px;margin-left:10px;">
+                      <i class="material-icons">&#xE0AF;</i> {{con.document.venueObj.title | lstring}}
+                      <span ng-if="con.document.venueObj.acronym">({{con.document.venueObj.acronym| lstring}})</span>
+                      <br>
+                      <i class="material-icons">&#xE0C8;</i>
+                      <span ng-if="con.document.venueObj.address"> {{con.document.venueObj.address}}</span>
+                      <br>
+                      <i class="material-icons">&#xE7F1;</i>
+                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.city}}</span>
+                      <span ng-if="con.document.venueObj.state">, {{con.document.venueObj.state}}</span>
+                      <br>
+                      <i class="material-icons">&#xE554;</i>
+                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.zip}}</span>
+                      <br>
+                    </div>
+                  </div>
 
-    <p >This project is an application skeleton for typical SCBD AngularJS/RequireJS/Bootstrap web apps.</p>
+                </div>
+              </div>
+            </div>
 
-	<p>Iis igitur est difficilius satis facere, qui se Latina scripta dicunt contemnere. in quibus hoc primum est in quo admirer, cur in gravissimis rebus non delectet eos sermo patrius, cum idem fabellas Latinas ad verbum e Graecis expressas non inviti legant. quis enim tam inimicus paene nomini Romano est, qui Ennii Medeam aut Antiopam Pacuvii spernat aut reiciat, quod se isdem Euripidis fabulis delectari dicat, Latinas litteras oderit?</p>
 
-	<p>Tantum autem cuique tribuendum, primum quantum ipse efficere possis, deinde etiam quantum ille quem diligas atque adiuves, sustinere. Non enim neque tu possis, quamvis excellas, omnes tuos ad honores amplissimos perducere, ut Scipio P. Rupilium potuit consulem efficere, fratrem eius L. non potuit. Quod si etiam possis quidvis deferre ad alterum, videndum est tamen, quid ille possit sustinere.</p>
+      <div class="conf-container z-depth-2" >
+        <div class="container-header">
 
-	<p>Tempore quo primis auspiciis in mundanum fulgorem surgeret victura dum erunt homines Roma, ut augeretur sublimibus incrementis, foedere pacis aeternae Virtus convenit atque Fortuna plerumque dissidentes, quarum si altera defuisset, ad perfectam non venerat summitatem.</p>
-  <p >This project is an application skeleton for typical SCBD AngularJS/RequireJS/Bootstrap web apps.</p>
+          <h1 >
+            <scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;"></scbd-icon-button>{{con.document.acronym| lstring}} Approved Side Events </h1>
+          <div class="btn-group right ">
+            <input id="{{con._id}}" type="text" ng-model="search" placeholder="search..." class="search"> </input>
+            <scbd-fab-button style="margin-right:5px;" ng-click="searchToggle(con._id);search='';"><i class="material-icons" ng-if="!sOpen">&#xE8B6;</i><i class="material-icons" ng-if="sOpen">&#xE5CD;</i></scbd-fab-button>
+            <scbd-fab-button scbd-tip="Archive" style="margin-right:5px;" ng-click="goTo(createURL);"><i class="material-icons">&#xE145;</i></scbd-fab-button>
+            <scbd-fab-button style="margin-right:5px;" ng-click="sortReverse=!sortReverse;"><i class="material-icons">&#xE053;</i></scbd-fab-button>
+            <!-- <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ><i ng-if="listView==0" class="material-icons">&#xE8EF;</i><i ng-if="listView==1" class="material-icons">&#xE8F0;</i><i ng-if="listView==2" class="material-icons">&#xE8EE;</i></scbd-fab-button> -->
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <div class="container-header-filler"></div>
 
-<p>Iis igitur est difficilius satis facere, qui se Latina scripta dicunt contemnere. in quibus hoc primum est in quo admirer, cur in gravissimis rebus non delectet eos sermo patrius, cum idem fabellas Latinas ad verbum e Graecis expressas non inviti legant. quis enim tam inimicus paene nomini Romano est, qui Ennii Medeam aut Antiopam Pacuvii spernat aut reiciat, quod se isdem Euripidis fabulis delectari dicat, Latinas litteras oderit?</p>
 
-<p>Tantum autem cuique tribuendum, primum quantum ipse efficere possis, deinde etiam quantum ille quem diligas atque adiuves, sustinere. Non enim neque tu possis, quamvis excellas, omnes tuos ad honores amplissimos perducere, ut Scipio P. Rupilium potuit consulem efficere, fratrem eius L. non potuit. Quod si etiam possis quidvis deferre ad alterum, videndum est tamen, quid ille possit sustinere.</p>
+          <div class="row home-event-list-container">
+             <div class="col s12 m3 lg4" ng-repeat="doc in con.document.events |orderBy:'document.title.en':sortReverse | filter:search " >
+              <div class="card small ">
+                <div class="card-image" >
 
-<p>Tempore quo primis auspiciis in mundanum fulgorem surgeret victura dum erunt homines Roma, ut augeretur sublimibus incrementis, foedere pacis aeternae Virtus convenit atque Fortuna plerumque dissidentes, quarum si altera defuisset, ad perfectam non venerat summitatem.</p>
-<p >This project is an application skeleton for typical SCBD AngularJS/RequireJS/Bootstrap web apps.</p>
+                  <img ng-if="doc.document.logo.length" src="{{doc.document.logo}}" style="margin-top:8px;">
+                  <!-- <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:5px;left:30%;color:#cccccc;font-size:100px;">&#xE0AF;</i> -->
 
-<p>Iis igitur est difficilius satis facere, qui se Latina scripta dicunt contemnere. in quibus hoc primum est in quo admirer, cur in gravissimis rebus non delectet eos sermo patrius, cum idem fabellas Latinas ad verbum e Graecis expressas non inviti legant. quis enim tam inimicus paene nomini Romano est, qui Ennii Medeam aut Antiopam Pacuvii spernat aut reiciat, quod se isdem Euripidis fabulis delectari dicat, Latinas litteras oderit?</p>
+                  <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(6,149,84, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
 
-<p>Tantum autem cuique tribuendum, primum quantum ipse efficere possis, deinde etiam quantum ille quem diligas atque adiuves, sustinere. Non enim neque tu possis, quamvis excellas, omnes tuos ad honores amplissimos perducere, ut Scipio P. Rupilium potuit consulem efficere, fratrem eius L. non potuit. Quod si etiam possis quidvis deferre ad alterum, videndum est tamen, quid ille possit sustinere.</p>
+                  <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(213,0,0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
 
-<p>Tempore quo primis auspiciis in mundanum fulgorem surgeret victura dum erunt homines Roma, ut augeretur sublimibus incrementis, foedere pacis aeternae Virtus convenit atque Fortuna plerumque dissidentes, quarum si altera defuisset, ad perfectam non venerat summitatem.</p>
+                </div>
+                <div class="card-content">
+                  <div class="center">
+                    {{doc.document.title | lstring}} {{}}
+                  </div>
+                </div>
+                <!-- <div class="card-action ">
+                  <span class="action-grp">
+                    <scbd-icon-button type="md" icon-name="&#xE8DC;" ng-click="approveDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='published')" waves></scbd-icon-button>
 
+                    <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE149;" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE8DD;" ng-click="cancelDoc(doc);" ng-if="doc.document.meta.status!=='archived'" waves></scbd-icon-button>
+                    <scbd-icon-button type="md" icon-name="&#xE8DB;" ng-click="rejectDoc(doc);" ng-if="doc.document.meta.status!=='archived'" waves></scbd-icon-button>
+
+                    <scbd-icon-button type="md" icon-name="&#xE169;" ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'" waves></scbd-icon-button>
+                    <scbd-icon-button style="color:red;" type="md" icon-name="&#xE872;" ng-click="deleteDoc(doc);" ng-if="doc.document.meta.status==='archived' || doc.document.meta.status==='deleted'" waves></scbd-icon-button>
+                  </span>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+  </section>
+
+
+
+  <!-- <div class="conf-container z-depth-2">
+    <div class="container-header">
+
+      <h1 ng-click="toggle('dashboard')">
+        <scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;"></scbd-icon-button>Your Organizations</h1>
+      <div class="btn-group right ">
+        <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
+        <scbd-fab-button style="margin-right:5px;" ng-click="searchToggle();"><i class="material-icons" ng-if="!sOpen">&#xE8B6;</i><i class="material-icons" ng-if="sOpen">&#xE5CD;</i></scbd-fab-button>
+        <scbd-fab-button scbd-tip="Archive" style="margin-right:5px;" ng-click="goTo(createURL);"><i class="material-icons">&#xE145;</i></scbd-fab-button>
+        <scbd-fab-button style="margin-right:5px;" ng-click="sortReverse=!sortReverse;"><i class="material-icons">&#xE053;</i></scbd-fab-button>
+
+        <scbd-fab-button style="margin-right:5px;" ng-click="toggleListView()" ><i ng-if="listView==0" class="material-icons">&#xE8EF;</i><i ng-if="listView==1" class="material-icons">&#xE8F0;</i><i ng-if="listView==2" class="material-icons">&#xE8EE;</i></scbd-fab-button>
+        <scbd-fab-button ng-click="toggleArchived();" ><i ng-if="!showArchived" class="material-icons">&#xE149;</i><i ng-if="showArchived" class="material-icons">&#xE169;</i></scbd-fab-button>
+
+
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+  </div> -->
 </div>
