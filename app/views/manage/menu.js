@@ -16,13 +16,13 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           childrenColorClass: 'dash-menu-children-color',
           childrenActiveClass: 'dash-menu-children-active'
         });
-        scbdMenuService.menus.dashboard.push({
-          name: 'Dashboard',
-          type: 'link',
-          mdIcon: 'dashboard',
-          path: '/manage',
-
-        });
+        // scbdMenuService.menus.dashboard.push({
+        //   name: 'Dashboard',
+        //   type: 'link',
+        //   mdIcon: 'dashboard',
+        //   path: '/manage',
+        //
+        // });
         scbdMenuService.menus.dashboard.push({
           name: 'Side Events',
           type: 'link',
