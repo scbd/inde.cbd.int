@@ -42,9 +42,10 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
                   setChips();
           },true);
           $scope.$watch('items',function(){
-              if(!$scope.schema && $scope.items  && $scope.items.length > 0 )
-                $scope.docs=$scope.items;
-              console.log('$scope.items',$scope.items);
+              if(!$scope.schema && $scope.items  && $scope.items.length > 0 ){
+                  $scope.docs=$scope.items;
+              }
+
           },true);
           //==================================
 					//
@@ -64,11 +65,24 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 					function setChips () {
 								if($scope.binding){
                       if($scope.single){
+                        if($scope.binding.length===2){
+                          _.each($scope.docs,function(doc){
+                                if(doc.code===$scope.binding.toUpperCase()){
+                                    doc.selected=true;
+                                  $scope.search=doc.title.en;
+                                }
 
-                        _.each($scope.docs,function(doc){
-                              if(doc._id===$scope.binding)
-                                doc.selected=true;
-                        });
+                          });
+                        }else
+                          _.each($scope.docs,function(doc){
+                                if(doc._id===$scope.binding){
+                                  doc.selected=true;
+                                  if(doc.document.title && doc.document.title.en)
+                                      $scope.search=doc.document.title.en;
+
+                                }
+
+                          });
                       }
                     else {
                       _.each($scope.docs,function(doc){
@@ -79,7 +93,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
                       });
                     }
               }
-
+              $scope.atCapacity=$scope.checkCapacity();
 					}// init
           //=======================================================================
 		      //
@@ -98,10 +112,6 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
                   else
                       return false;
             }//if
-
-
-
-
             return false;
 		      };// archiveOrg
 
@@ -146,10 +156,19 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 
               docObj.selected=!docObj.selected;
               if($scope.single){
-                if(docObj.selected)
+                if(docObj.selected){
                     $scope.binding=docObj._id;
-                else
-                     $scope.binding='';
+                    if(docObj.code)$scope.binding=docObj.code;
+                    if(docObj.document.title.en)
+                      $scope.search=docObj.document.title.en;
+
+                }
+
+                else{
+                    $scope.binding='';
+                    $scope.search='';
+                }
+
 
               }else {
                 if(!_.isArray($scope.binding))$scope.binding=[];
