@@ -24,6 +24,7 @@ require.config({
         'moment'                   : 'libs/moment/moment',
         'ng-file-upload'           :'libs/ng-file-upload/ng-file-upload.min',
         'ng-file-upload-shim'      :'libs/ng-file-upload/ng-file-upload.shim.min',
+        'ngDialog':'libs/ng-dialog/js/ngDialog.min',
         'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
         'shim'                     : 'libs/require-shim/src/shim',
         'text'                     : 'libs/requirejs-text/text',
