@@ -24,10 +24,11 @@ define(['app', 'lodash',
       $scope.listView=0;
       $scope.showArchived=0;
       $scope.statusFacits={};
-      $scope.statusFacits.all=0
+      $scope.statusFacits.all=0;
       $scope.statusFacitsArcView={};
       $scope.statusFacitsArcView.all=0;
       $scope.selectedChip;
+
       $scope.docs=[];
       var statuses=['published','request','canceled','rejected'];
       var statusesArchived=['deleted','archived'];
@@ -41,7 +42,64 @@ define(['app', 'lodash',
               mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
               mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
       }//init
+      $scope.statusFilter = function (doc) {
+        if (doc.document.meta.status === $scope.selectedChip)
+        return doc;
+        else if($scope.selectedChip==='all' || $scope.selectedChip==='')
+        return doc;
 
+      };
+
+      $scope.customSearch = function (doc) {
+
+        if(!$scope.search || $scope.search==' ' || $scope.search.length<=2) return true;
+        var temp = JSON.stringify(doc);
+       return (temp.toLowerCase().indexOf($scope.search.toLowerCase())>=0);
+
+      };
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.approveDoc = function (docObj){
+        mongoStorage.approveDoc($scope.schema,docObj,docObj._id).then(function(){
+            _.each(docObj.document.hostOrgs,function(org,key){
+                mongoStorage.loadDoc('inde-orgs',org).then(function(conf){
+                  if(conf[1].meta.status!=='published')
+                   mongoStorage.approveDoc('inde-orgs',{document:conf[1]},conf[0]);
+                });
+            });
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          //$scope.loadList ();
+        });
+      };// archiveOrg
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.cancelDoc = function (docObj){
+        mongoStorage.cancelDoc($scope.schema,docObj,docObj._id).then(function(){
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          //$scope.loadList ();
+        });
+      };// archiveOrg
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.rejectDoc = function (docObj){
+        mongoStorage.rejectDoc($scope.schema,docObj,docObj._id).then(function(){
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          //$scope.loadList ();
+        });
+      };// archiveOrg
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.toTitleCase =  function(str)
+      {
+          return str.replace(/\w+/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+      };
       //=======================================================================
       //
       //=======================================================================
@@ -56,8 +114,10 @@ define(['app', 'lodash',
       $scope.selectChip= function (chip){
         $element.find('.chip').removeClass('chip-active');
         $element.find('#chip-'+chip).addClass('chip-active');
-        $scope.selectedChip=chip;
-
+        if(chip==='all')
+          $scope.selectedChip='';
+        else
+          $scope.selectedChip=chip;
       };// archiveOrg
       //=======================================================================
       //
@@ -75,6 +135,25 @@ define(['app', 'lodash',
       $scope.loadList = function (docObj){
         mongoStorage.loadDocs($scope.schema,['published','request','canceled','rejected']).then(function(response){
            $scope.docs=response.data;
+           _.each($scope.docs,function(doc){
+
+                   mongoStorage.loadDoc('confrences',doc.document.confrence).then(function(conf){
+                      doc.document.confrenceObj=conf[1];
+                   });
+                   doc.document.orgs=[];
+                   _.each(doc.document.hostOrgs,function(org,key){
+                       mongoStorage.loadDoc('inde-orgs',org).then(function(conf){
+                          doc.document.orgs.push(conf[1]);
+                       });
+                   });
+
+                  $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess (response) {
+                        doc.document.contact=response.data;
+                  });
+
+
+
+           });
          });
       };// archiveOrg
 
@@ -109,6 +188,8 @@ define(['app', 'lodash',
       $scope.archiveDoc = function (docObj){
           mongoStorage.archiveDoc($scope.schema,docObj,docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
+                mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+                mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           });
 
       };// archiveOrg
@@ -119,6 +200,8 @@ define(['app', 'lodash',
       $scope.deleteDoc = function (docObj){
           mongoStorage.deleteDoc($scope.schema,docObj,docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
+                mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+                mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           });
 
       };// archiveOrg
@@ -146,7 +229,7 @@ define(['app', 'lodash',
         $location.url($scope.editURL+id);
       }// archiveOrg
       init();
-
+      $scope.selectChip('all');
     }
   ]);
 });

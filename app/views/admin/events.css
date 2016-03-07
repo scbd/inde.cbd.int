@@ -59,15 +59,17 @@ float:right;
 }
 /*.card-action{max-height:45px;position:absolute;bottom:0px; width:100%; display:inline-block;}
 card-content{max-height:50px;}*/
-
+.card-action{text-align: center;left:0px; background-color:#ffffff;}
 .action-grp{
   height:40px;
   color:#109e49;
   font-size: 20px;
   position:absolute;
   bottom:0px;
-  left:25%;
+  width:100%;
   z-index: 20px;
+  text-align: center;
+  left:0px;
 }
 .action-grp-filler{
   height:40px;
@@ -164,3 +166,4 @@ card-content{max-height:50px;}*/
     z-index:0;
   }
 }
+
