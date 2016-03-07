@@ -160,7 +160,38 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               docObj.document.meta.status='archived';
               return save(schema,docObj.document,_id);
         }
-
+        //=======================================================================
+        //
+        //=======================================================================
+        function requestDoc(schema,docObj,_id){
+              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.document.meta.status='request';
+              return save(schema,docObj.document,_id);
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function approveDoc(schema,docObj,_id){
+              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.document.meta.status='published';
+              return save(schema,docObj.document,_id);
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function cancelDoc(schema,docObj,_id){
+              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.document.meta.status='canceled';
+              return save(schema,docObj.document,_id);
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function rejectDoc(schema,docObj,_id){
+              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.document.meta.status='rejected';
+              return save(schema,docObj.document,_id);
+        }
         //=======================================================================
         //
         //=======================================================================
@@ -183,7 +214,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function getStatusFacits(schema,statusFacits,statArry,stat){
-
+              statusFacits.all=0;
               if(!statArry)
                 statArry=statuses;
               if(stat){
@@ -200,7 +231,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
                     $http.get('https://api.cbd.int/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
                       function(res){
-                        console.log(statusFacits);
                         statusFacits[status]=res.data.count;
                         statusFacits['all']+=res.data.count;
                       }
@@ -281,6 +311,10 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          requestDoc:requestDoc,
+          rejectDoc:rejectDoc,
+          approveDoc:approveDoc,
+          cancelDoc:cancelDoc,
           generateEventId:generateEventId,
           getStatusFacits:getStatusFacits,
           deleteDoc:deleteDoc,
