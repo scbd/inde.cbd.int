@@ -38,6 +38,8 @@ define(['app', 'lodash',
                 $scope._id = $route.current.params.id;
               $scope.toggle = scbdMenuService.toggle;
               $scope.dashboard = scbdMenuService.dashboard;
+              $scope.doc={};
+
 
 
               if(!$scope._id || $scope._id==='0'){
@@ -46,6 +48,7 @@ define(['app', 'lodash',
                           $scope.loading=true;
                           $scope._id=document[0];
                           $scope.doc=document[1];
+                          $scope.doc.logo='/app/images/ic_business_black_48px.svg';
                         }
                 );
 
@@ -59,6 +62,8 @@ define(['app', 'lodash',
                         $scope.loading=true;
                         $scope._id=document[0];
                         $scope.doc=document[1];
+                        if(!$scope.doc.logo)
+                          $scope.doc.logo='/app/images/ic_business_black_48px.svg';
                   });
               }
 
@@ -114,7 +119,12 @@ define(['app', 'lodash',
                         }
                   });
               };
-
+              //============================================================
+              //
+              //============================================================
+              $scope.toggleIcon= function() {
+                      $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+              }// initProfile()
                 //=======================================================================
                 //
                 //=======================================================================

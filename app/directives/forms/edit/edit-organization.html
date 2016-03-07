@@ -37,13 +37,14 @@
 
               </div>
               <div class="col-md-6 col-xs-12">
-                <div class="km-control-group nowrap" name="organization_logo" ng-required="!form.logo.$valid" caption="Logo" >
+                <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Logo (Not Org. Logo)">
+                  <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
+                  <br>[
+                  <scbd-icon-button type="fa" icon-name="fa-times" to-icon-name="fa-times" ani="rubberBand" ng-click="toggleIcon();" ng-if="doc.logo!=='/app/images/ic_business_black_48px.svg'" waves></scbd-icon-button> No Logo, Icon Only ]
 
-                  <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" ></scbd-file-upload>
-
+                  <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
 
                 </div>
-
               </div>
 
 
@@ -122,7 +123,7 @@
               </div>
 
             </div>
-            <scbd-button ng-click="saveDoc();" style="width:100%">Save Organization</button>
+            <scbd-button ng-click="saveDoc();" style="width:100%"><i class="material-icons" style='vertical-align: middle'>&#xE161;</i> Save </button>
         </form>
 
 </div>
