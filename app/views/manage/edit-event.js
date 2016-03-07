@@ -12,14 +12,21 @@ define(['app', 'lodash',
 ], function(app, _) { //'scbd-services/utilities',
 
 
-  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication) { //, $http, $filter, Thesaurus
+  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout', //"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout) { //, $http, $filter, Thesaurus
 
       $scope.loading=false;
       $scope.schema="inde-side-events";
 
       $scope.toggle = dashMenu.toggle;
       $scope.sections = dashMenu.getMenu('dashboard');
+      if(dashMenu.history.length===1)
+        $timeout(function(){
+              dashMenu.toggle('dashboard');
+            $timeout(function(){
+              dashMenu.toggle('dashboard');
+            },500);
+        },500);
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
