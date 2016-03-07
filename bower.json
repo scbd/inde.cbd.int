@@ -24,7 +24,7 @@
     "requirejs-text": "2.0.14",
     "scbd-angularjs-controls": "https://github.com/scbd/scbd-angularjs-controls.git#7b3f62ecee4c7eb57747c8d981829354cf779890",
     "scbd-angularjs-services": "1.1.6",
-    "scbd-branding": "https://github.com/scbd/scbd-branding.git#5fdb0a8c07d5d228ace807f7d5593b6df74de0d0",
+    "scbd-branding": "https://github.com/scbd/scbd-branding.git#197d0b0ac00547a4789d7c0c65ea5a50eab7e7ce",
     "scbd-filters": "1.0.0",
     "js-sha256": "~0.3.0",
     "dropzone": "~4.3.0",
