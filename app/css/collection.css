@@ -22,10 +22,10 @@
 
 .collection .collection-item.avatar .circle {
   position: absolute;
-  width: 42px;
-  height: 42px;
+  width: 72px;
+  height: 72px;
   overflow: hidden;
-  left: 15px;
+  left: -5px;
   display: inline-block;
   vertical-align: middle;
 }

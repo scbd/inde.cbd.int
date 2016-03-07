@@ -9,8 +9,40 @@
   margin: 0 1px 0 2px;
   border-radius: 16px;
   background-color: #e4e4e4;
+  cursor: pointer;
+  -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.chip:hover {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    -webkit-transition: all 0.3s ease;
+      -moz-transition: all 0.3s ease;
+      -o-transition: all 0.3s ease;
+      transition: all 0.3s ease;
 }
 
+.chip.small{
+  display: inline-block;
+  height: 25px;
+  font-size: 15px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.6);
+  line-height: 25px;
+  padding: 0 12px;
+  margin: 0 1px 0 2px;
+  border-radius: 16px;
+  background-color: #e4e4e4;
+}
+.chip.small img {
+  float: left;
+  margin: -1px 6px 0 0;
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  z-index:200;
+}
 .chip img {
   float: left;
   margin: 0 8px 0 -12px;
@@ -32,6 +64,25 @@
   font-size: 16px;
   line-height: 32px;
   padding-left: 8px;
+}
+.chip.small i.material-icons {
+  cursor: pointer;
+  float: right;
+  font-size: 13px;
+  line-height: 25px;
+  padding-left: 8px;
+}
+.chip.small div {
+  float: left;
+  position: relative;
+  margin: 0 8px 0 -12px;
+  height: 25px;
+  width: 25px;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  border-radius: 50%;
+  z-index:200;
 }
 .chip div {
   float: left;
@@ -57,6 +108,15 @@ left:-15%;
 top:1%;
 font-size: 22px;
 }
+.chip div > i.flag-icon {
+  float: left;
+
+
+  position: absolute;
+  left:3px;
+  top:6px;
+  z-index:200;
+}
 .chip-active div {
   border-color: rgba(0,155,72, 0.1);
   background-color: rgba(0,155,72, 0.1);
@@ -72,5 +132,38 @@ font-size: 22px;
   padding: 3px 3px 3px 3px;
 margin-left:4px;
   border-radius: 35%;
+
+}
+.cir img {position:relative;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  z-index:200;
+}
+
+.cir i.material-icons {
+position:relative;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  border-radius: 50%;
+  background-color: #e3e3e3;
+  font-size: 18px;
+
+}
+.cir  span{
+position:relative;
+line-height: 20px;
+
+
+}
+.cir {
+
+color:#52575f;
+position:absolute;
+bottom:0px;
 
 }
