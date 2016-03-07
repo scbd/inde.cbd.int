@@ -5,6 +5,12 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         var user;
         authentication.getUser().then(function(u){
           user=u;
+          if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
+          {
+            deleteTempRecords('inde-orgs');
+            deleteTempRecords('inde-side-events');
+          }
+
         });
         var clientOrg = 0; // means cbd
 
@@ -238,7 +244,45 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
               });
         }//getStatusFacits
+        //=======================================================================
+        //
+        //=======================================================================
+        function getOwnerFacits(schema,statusFacits,statArry,stat){
+          statusFacits.draft=0;
+          statusFacits.deleted=0;
+          statusFacits.approved=0;
+          statusFacits.rejected=0;
+          statusFacits.canceled=0;
+          statusFacits.archived=0;
+          statusFacits.all=0;
+          return  $q.when( authentication.getUser().then(function(u){
+                            user=u;
+                          }).then( function(){
+                            statusFacits.all=0;
+                            if(!statArry)
+                              statArry=statuses;
+                            if(stat){
+                              $http.get('https://api.cbd.int/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}').then(
+                                function(res){
+                                  console.log(res.data);
+                                  statusFacits[stat]=res.data.count;
+                                  statusFacits['all']+=res.data.count;
+                                }
+                              );
+                            }
+                            else
+                            _.each(statArry,function(status){
 
+                                  $http.get('https://api.cbd.int/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}').then(
+                                    function(res){
+                                      statusFacits[status]=res.data.count;
+                                      statusFacits['all']+=res.data.count;
+                                    }
+                                  );
+                            });
+                          })
+                  );
+        }//getStatusFacits
         //=======================================================================
         //
         //=======================================================================
@@ -311,6 +355,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          getOwnerFacits:getOwnerFacits,
           requestDoc:requestDoc,
           rejectDoc:rejectDoc,
           approveDoc:approveDoc,

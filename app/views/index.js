@@ -39,9 +39,9 @@ define(['app', 'lodash','jquery',
                                       c.document.venueObj=v.data[0].document;
                                 });
 
-                                $http.get('https://api.cbd.int/api/v2015/inde-side-events?q={"document.confrence":"'+c._id+'"}&f={"document":1}').then(function(res){
+                                $http.get('https://api.cbd.int/api/v2015/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}&f={"document":1}').then(function(res){
                                       c.document.events=res.data;
-console.log($scope.confrences);
+
                                 });
                         });
 

@@ -61,16 +61,17 @@
 
 
           <div class="row home-event-list-container">
+            <div style="padding-bottom :3px;">Showing:  <span class="badge">{{con.document.events.length}}</span></div>
              <div class="col s12 m3 lg4" ng-repeat="doc in con.document.events |orderBy:'document.title.en':sortReverse | filter:search " >
               <div class="card small ">
                 <div class="card-image" >
 
-                  <img ng-if="doc.document.logo.length" src="{{doc.document.logo}}" style="margin-top:8px;">
+                  <img ng-if="doc.document.logo.length" src="{{doc.document.logo}}" style="margin-top:10px;">
                   <!-- <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:5px;left:30%;color:#cccccc;font-size:100px;">&#xE0AF;</i> -->
 
-                  <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(6,149,84, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
+                  <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgb(0,155,72) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
 
-                  <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(213,0,0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
+                  <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgb(213,0,0) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-weight:bold;margin-right:5px;">#{{doc.document.id }}</span></div>
 
                 </div>
                 <div class="card-content">

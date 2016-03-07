@@ -45,8 +45,8 @@ define(['app', 'lodash',
       function init(){
 
               $scope.loadList ();
-              mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
-              mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+              mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
+              mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
       }//init
 
       $scope.statusFilter = function (doc) {
@@ -71,8 +71,8 @@ define(['app', 'lodash',
       $scope.approveDoc = function (docObj){
         console.log('sssss');
         mongoStorage.approveDoc($scope.schema,docObj,docObj._id).then(function(){
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
         });
       };// archiveOrg
@@ -81,8 +81,8 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.cancelDoc = function (docObj){
         mongoStorage.cancelDoc($scope.schema,docObj,docObj._id).then(function(){
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
         });
       };// archiveOrg
@@ -91,8 +91,8 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.rejectDoc = function (docObj){
         mongoStorage.rejectDoc($scope.schema,docObj,docObj._id).then(function(){
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
-          mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
+          mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
         });
       };// archiveOrg

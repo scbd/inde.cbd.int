@@ -125,7 +125,7 @@ define(['app', 'lodash',
                               $scope._id=document[0];
                               $scope.doc=document[1];
                               $scope.doc.logo=randomPic();
-                              initProfile();
+                              initProfile(true);
                             }
                     );
                 }
@@ -241,10 +241,19 @@ define(['app', 'lodash',
               //============================================================
               //
               //============================================================
-              function initProfile() {
+              function initProfile(newDoc) {
+                  var userId;
                   auth.getUser().then(function(user){
-                    $scope.user=user;
-                    return $http.get('https://api.cbd.int/api/v2013/users/' + $scope.user.userID).then(function onsuccess (response) {
+                    if(newDoc){
+                      $scope.user=user;
+                      userId=$scope.user.userID;
+                    }
+                    else {
+                      userId = $scope.doc.meta.createdBy;
+                    }
+
+
+                    return $http.get('https://api.cbd.int/api/v2013/users/' + userId).then(function onsuccess (response) {
                         data=response.data;
                         if(!$scope.doc)$scope.doc={};
                         if(!$scope.doc.contact)$scope.doc.contact={};
@@ -345,7 +354,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               $scope.saveDoc = function(){
-
+                  var tempMobile;
                   if(!$scope.doc.confrence) throw "Error no confrence selected";
                   generateEventId($scope.doc.confrence).then(
                     function(res){
@@ -356,7 +365,13 @@ define(['app', 'lodash',
                       else
                         $scope.doc.id=Number(res.data.count)+2;
 
-                      mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+                        if($scope.doc.contact.mobile)
+                          tempMobile = _.clone($scope.doc.contact.mobile);
+
+                        delete($scope.doc.contact);
+                        $scope.doc.contact={};
+                        $scope.doc.contact.mobile=tempMobile;
+                        mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
                         saveProfile();
                       });
                   });

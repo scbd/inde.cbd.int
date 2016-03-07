@@ -8,7 +8,7 @@ define(['app', 'lodash',
   '../../directives/scbd-tip'
 ], function(app, _) {
 
-  app.controller("events", ['$scope', 'adminMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element',//"$http", "$filter", "Thesaurus",
+  app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element',//"$http", "$filter", "Thesaurus",
     function($scope, adminMenu, $q, $http,$filter,$route,mongoStorage,$location,$element) { //, $http, $filter, Thesaurus
 
 
