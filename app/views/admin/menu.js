@@ -17,7 +17,7 @@ app.factory("adminMenu", ['scbdMenuService', function(scbdMenuService) {
           childrenActiveClass: 'dash-menu-children-active'
         });
         scbdMenuService.menus.admin.push({
-          name: 'Dashboard',
+          name: 'Admin Dashboard',
           type: 'link',
           mdIcon: 'dashboard',
           path: '/admin',
