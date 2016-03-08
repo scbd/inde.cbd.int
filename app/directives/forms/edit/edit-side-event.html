@@ -32,7 +32,40 @@
       <h2>Confrence</h2>
     </legend>
 
-    <scbd-select-list single ng-modal="doc.confrence" schema="confrences"></scbd-select-list>
+    <div class="col s12 collection" ng-repeat="docObj in options.confrences" style="margin-bottom:8px;">
+
+      <scbd-flat-button style="width:105%;left:-17px;text-align:left;height:50px;" ng-click="select(docObj);" waves>
+          <div class="collection-item " style="height:50px;">
+            <!-- <div class="card-image" ng-if="org.document.logo"> -->
+            <div style="width:70px;height:50px; position:absolute;top:0px;left:0px;">
+              <div style="width:70px;height:50px; position:ralative;text-align:center;vertical-align:middle;">
+
+                <img src="{{docObj.document.logo}}" style="clear:both;max-width:100%;height:50px;" ></img>
+                <i ng-if="(!docObj.document.logo.length)" class="material-icons" style="position:absolute;top:13px;left:10px;color:#aaaaaa;font-size:55px;">&#xE407;</i>
+
+              </div>
+            </div>
+
+            <div style="position:absolute; top:0px;left:80px;width:100%;height:50px;">
+              <div>
+                <div class="title" style="font-weight:bold;font-size:1.5em;">{{docObj.document.acronym | lstring}}
+                  <br>
+                </div>
+                <div style="font-size:0.8em;">{{docObj.document.title | lstring}}
+                  <br>
+                </div>
+              </div>
+            </div>
+
+            <div class="collection-action" >
+              <span class="collection-action-grp " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
+                <scbd-icon-button class="right" style="z-index:100;position:absolute;right:30px;top:35px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+              </span>
+            </div>
+          </div>
+      </scbd-flat-button>
+    </div>
+
 
 
     <div>
@@ -90,6 +123,7 @@
 
         </div>
       </div>
+
       <div class="col-md-12 col-xs-12" ng-show="showOrgForm">
         <div style="padding-bottom:8px;border-width:1px;border-color:#109e49;">
           <edit-organization short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="doc.hostOrgs"></edit-organization>
@@ -196,11 +230,11 @@
 
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="prefDate.one" caption="First Choice" ng-required="!form.description.$valid">
-            <select class="form-control" ng-model="doc.prefDate.one">
+            <select class="form-control" ng-model="doc.prefDate.one" ng-disabled="!options.dates">
               <option value="" selected>Select a Date</option>
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
-            <select class="form-control" ng-model="doc.prefDateTime.one">
+            <select class="form-control" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates">
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
@@ -209,11 +243,11 @@
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="prefDate.two" caption="Second Choice" ng-required="!form.description.$valid">
-            <select class="form-control" ng-model="doc.prefDate.two">
+            <select class="form-control" ng-model="doc.prefDate.two" ng-disabled="!options.dates">
               <option value="" selected>Select a Date</option>
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
-            <select class="form-control" ng-model="doc.prefDateTime.two">
+            <select class="form-control" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates">
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
@@ -223,11 +257,11 @@
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="prefDate.three" caption="Third Choice" ng-required="!form.description.$valid">
-            <select class="form-control" ng-model="doc.prefDate.three">
+            <select class="form-control" ng-model="doc.prefDate.three" ng-disabled="!options.dates">
               <option value="" selected>Select a Date</option>
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
-            <select class="form-control" ng-model="doc.prefDateTime.three">
+            <select class="form-control" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates">
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
@@ -242,7 +276,7 @@
       <div class="row">
 
         <div class="col-md-4 col-xs-4">
-          <div>LCD Projector</div>
+          <div>Internet Connection</div>
           <input type="checkbox" ng-model="doc.requirements.lcd" value="LCD Projector">
         </div>
         <div class="col-md-4 col-xs-4">
@@ -270,6 +304,12 @@
             <span style="font-size:9px;">(expense will be at your own costs)</span>
           </div>
           <input type="checkbox" ng-model="doc.requirements.catering" value="Catering">
+        </div>
+        <div class="col-md-4 col-xs-4">
+          <div>Skype
+            <span style="font-size:9px;"></span>
+          </div>
+          <input type="checkbox" ng-model="doc.requirements.skype" value="Catering">
         </div>
       </div>
 

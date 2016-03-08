@@ -59,6 +59,12 @@ define(['app', 'lodash',
               });
 
 
+                  $http.get("https://api.cbd.int/api/v2015/confrences", {
+                      cache: true
+                  }).then(function(o) {
+                      $scope.options.confrences= $filter("orderBy")(o.data, "title");
+                  });
+
             $http.get("https://api.cbd.int/api/v2015/countries", {
                 cache: true
             }).then(function(o) {
@@ -144,13 +150,13 @@ define(['app', 'lodash',
               //============================================================
               function generateDates() {
                     mongoStorage.loadDoc('confrences',$scope.doc.confrence).then(function(confr){
-
+                           $scope.doc.confrenceObj=confr[1];
                           var diff = Number(confr[1].end)-Number(confr[1].start);
                           var numDays = Math.ceil(diff/86400);
                           if(!$scope.options)$scope.options={};
                           if(!$scope.options.dates)$scope.options.dates=[];
                           for (var i = 0; i < numDays; i++) {
-                              $scope.options.dates[i]=moment.unix(Number(confr[1].start)).format("YYYY/MMM/DD");
+                              $scope.options.dates[i]=moment.unix(Number(confr[1].start)).format("YYYY/MM/DD");
                               confr[1].start=confr[1].start+86400;
                           }
 
