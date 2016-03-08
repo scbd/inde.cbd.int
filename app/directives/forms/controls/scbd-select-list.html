@@ -88,7 +88,7 @@
 
   <section class="row" ng-show="!listView" style="overflow:auto;position:relative;">
 
-    <div class="col s12 collection" ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)">
+    <div class="col s12 collection" ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
 
       <scbd-flat-button style="width:105%;left:-17px;text-align:left;height:50px;" ng-click="select(docObj);" waves>
           <div class="collection-item " style="height:50px;">

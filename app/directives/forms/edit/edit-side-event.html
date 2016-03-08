@@ -65,10 +65,10 @@
             <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" ">
           </div>
         </div>
-        <div class="col-md-10 col-xs-12">
+        <div class="col-md-12 col-xs-12">
           <div class="km-control-group" name="description" caption="Description" ng-required="!form.description.$valid">
             <div class="help-block" ng-if="0">Description of side event</div>
-            <div km-rich-textbox rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
+            <div km-textbox-ml rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
 
           </div>
         </div>
@@ -169,10 +169,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-sm-12">
-                  <div class="form-group">
-                    <label style="margin-left:26px;margin-bottom:5px;">Country</label>
-                    <scbd-select-list single ng-modal="doc.contact.country" items="countries"></scbd-select-list>
+                <div class="col-md-3">
+                  <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Home Country" ng-if="doc.type.identifier!=='64432E86-23C9-4D9A-B835-962D8221E6CA'">
+                    <div km-select name="country" ng-model="doc.country" items="options.countries()" required></div>
                   </div>
                 </div>
               </div>
@@ -327,7 +326,7 @@
 
         <div class="col-md-12 col-xs-12">
           <div class="km-control-group" name="additionalInfo" caption="Message">
-            <div km-rich-textbox name="additionalInfo" ng-model="doc.additionalInfo" locales="doc.meta.locales"></div>
+            <div km-textbox-ml rows="4" name="additionalInfo" ng-model="doc.additionalInfo" locales="doc.meta.locales"></div>
           </div>
         </div>
 

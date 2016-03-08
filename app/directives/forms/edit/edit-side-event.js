@@ -331,6 +331,13 @@ define(['app', 'lodash',
                           return $filter("orderBy")(o.data, "title");
                       });
                   },
+                  countries: function() {
+                      return $http.get("https://api.cbd.int/api/v2015/countries", {
+                          cache: true
+                      }).then(function(o) {
+                          return $filter("orderBy")(o.data, "name");
+                      });
+                  },
 
               };
 
