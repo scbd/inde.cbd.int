@@ -107,6 +107,36 @@ define(['app', 'lodash',
 
               init();
 
+
+              //=======================================================================
+              //
+              //=======================================================================
+              $scope.select = function (docObj){
+
+                $timeout(function(){
+                    docObj.selected=!docObj.selected;
+                    if(true){
+                      if(docObj.selected){
+                          $scope.binding=docObj._id;
+                      }
+                      else{
+                          $scope.binding='';
+                          $scope.search='';
+                      }
+                  }
+                  // else {
+                  //   if(!_.isArray($scope.binding))$scope.binding=[];
+                  //
+                  //   if(docObj.selected)
+                  //     $scope.confrence.push(docObj._id);
+                  //   else
+                  //     _.remove($scope.binding,function(obj){return obj===docObj._id;});
+                  // }
+                });
+
+
+              };// archiveOrg
+
               //============================================================
               //
               //============================================================
