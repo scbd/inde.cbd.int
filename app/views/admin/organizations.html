@@ -98,7 +98,7 @@
 </div>
       <!-- CARD VIEW -->
       <section class="row" ng-if="listView">
-        <div class="col s12 m3 lg4" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter" >
+        <div class="col-md-3 col-xs-12" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter" >
           <div class="card small ">
             <div class="card-image" >
 

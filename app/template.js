@@ -1,11 +1,7 @@
 define(['app', 'jquery',
-'css!outdated-browser-css',
 'css!font-awsome-css',
 'css!app-css',
-// 'css!materialize',
-// 'css!bootstrap-css',
-//'css!libs/angular-loading-bar/src/loading-bar',
-
+'directives/scbd-media',
 'scbd-angularjs-services/authentication',
 'directives/portal/portal-branding',
 'directives/portal/portal-nav',

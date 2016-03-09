@@ -1,0 +1,12 @@
+<div class="site-overlay" ng-click="toggle()"></div>
+<nav class="pushy" >
+  <!-- ng-show="isOpen" -->
+  <section></section>
+  <div ng-repeat="section in sections" ng-class="{'parentActive' : vm.isSectionSelected(section)}">
+    <h2 ng-if="section.type === 'heading'" id="heading_{{section.name }}">
+      {{ section.name }}
+    </h2>
+    <menu-link section="section" ng-if="section.type === 'link'" user="user"></menu-link>
+    <menu-toggle section="section" ng-if="section.type === 'toggle'" user="user"></menu-toggle>
+  </div>
+</nav>

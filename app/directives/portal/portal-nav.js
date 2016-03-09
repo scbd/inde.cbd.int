@@ -7,8 +7,8 @@ app.directive('portalNav', function () {
     scope: {
             uid: '@',
     },
-    controller: ['$scope','$location','$window','$timeout','$element','authentication',
-            function ($scope,$location,$window,$timeout,$element,authentication) {
+    controller: ['$scope','$location','$window','$timeout','$element','authentication','scbdMedia',
+            function ($scope,$location,$window,$timeout,$element,authentication,media) {
 
 
 

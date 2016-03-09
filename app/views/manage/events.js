@@ -1,9 +1,9 @@
 define(['app', 'lodash',
   'css!./events',
-  'scbd-branding/side-menu/scbd-side-menu',
-  'scbd-branding/scbd-button',
+  'directives/side-menu/scbd-side-menu',
+  'directives/scbd-button',
   './menu',
-  'scbd-branding/scbd-icon-button',
+  'directives/scbd-icon-button',
   '../../services/mongo-storage',
   '../../directives/scbd-tip'
 ], function(app, _) {

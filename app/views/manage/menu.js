@@ -1,4 +1,4 @@
-define(['app','scbd-branding/side-menu/scbd-menu-service'], function (app,_) {
+define(['app','directives/side-menu/scbd-menu-service'], function (app,_) {
 
 app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
 

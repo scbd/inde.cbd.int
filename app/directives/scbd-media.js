@@ -11,8 +11,11 @@ define(['app'], function(app) {
       var isLg;
       var isGtLg;
 
-      angular.element($window).on('resize',console.log('sssss'));
 
+      $($window).resize(function() {
+            setMedia();
+          //console.log('sssssss');
+          });
       function setMedia(){
 
           if(!screen.width){
@@ -57,7 +60,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isXs);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -69,7 +72,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isSm);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -82,7 +85,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isMd);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -95,7 +98,50 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isLg);
-            console.log($element);
+
+            $compile($element)($scope);
+      } //end controller
+    }; // return
+  }]);
+  app.directive('hideLtSm', ['scbdMedia','$compile','$window', function(scbdMedia,$compile,$window) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            if(!screen.width)
+              $scope.isGtSm = ($window.innerWidth >= 960);
+            else
+              $scope.isGtSm = (screen.width >= 960);
+
+              if(!$scope.isGtSm)
+                  $element.css('display','none');
+              else
+                  $element.css('display','block');
+            $($window).resize(function() {
+              if(!screen.width)
+                $scope.isGtSm = ($window.innerWidth >= 960);
+              else
+                $scope.isGtSm = (screen.width >= 960);
+
+              if(!$scope.isGtSm)
+                  $element.css('display','none');
+              else
+                  $element.css('display','block');
+
+            });
+
+      } //end controller
+    }; // return
+  }]);
+  app.directive('hideLtMd', ['scbdMedia','$compile', function(scbdMedia,$compile) {
+    return {
+      priority: 600,
+      terminal: true,
+      restrict: 'A',
+      link: function($scope, $element, $attr) {
+            $element.attr('ng-if', scbdMedia.isGtMd);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -107,7 +153,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isGtSm);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -120,7 +166,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isGtMd);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return
@@ -133,7 +179,7 @@ define(['app'], function(app) {
       restrict: 'A',
       link: function($scope, $element, $attr) {
             $element.attr('ng-if', !scbdMedia.isGtLg);
-            console.log($element);
+
             $compile($element)($scope);
       } //end controller
     }; // return

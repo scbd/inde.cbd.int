@@ -1,0 +1,16 @@
+<div ng-click="toggle()" aria-expanded="section.open"  style="position:relative;height:40px;" ng-if="hasRole()">
+  <!-- flex -->
+
+<scbd-icon-button class="right" style="position:absolute;right:8px;top:8px;" type="fa" icon-name="fa-plus"  to-icon-name="fa-times" ani="tada" active="section.open" ></scbd-icon-button>
+  <!-- <span aria-hidden="true" class="pull-right fa fa-plus md-toggle-icon"  ng-class="{'toggled' : isOpen()}"></span> -->
+  <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i>
+  <i class="material-icons" ng-if="section.mdIcon" style="position:relative;top:5px;">{{section.mdIcon}}</i>
+  <img ng-src="{{section.imgSrc}}" style="height:22px;" ng-if="section.imgSrc"></img>
+  {{section.name}}
+
+</div>
+<ul id="side-menu-{{section.name}}"  class="menu-toggle-list" ng-show="section.open">
+  <li ng-repeat="page in section.pages" style="color:{{childrenColor}};background-color:{{childrenBackGround}};">
+    <menu-link section="page" user="user"></menu-link>
+  </li>
+</ul>

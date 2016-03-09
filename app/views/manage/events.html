@@ -2,7 +2,7 @@
 
   <section class="row relative">
     <!-- ng-if="isLocked" -->
-    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="sections" is-open="isLocked" hide-lt-sm>
+    <scbd-side-menu open id="dashboard" bump-id="getBumped" sections="sections" is-open="isLocked" >
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>MANAGEMENT Center</h1>
       </div>
@@ -98,7 +98,7 @@
 </div>
       <!-- CARD VIEW -->
       <section class="row" ng-if="listView">
-        <div class="col s12 m3 lg4" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter" >
+        <div class="ccol-lg-4 col-md-3 col-xs-12" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter" >
           <div class="card small ">
             <div class="card-image" ng-if="doc.document.logo">
 
@@ -133,8 +133,8 @@
       </section>
 
       <!-- LIST VIEW -->
-      <section class="row" ng-if="!listView">
-        <div class="col s12 collection fx-fade-up fx-ease-sine" ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter" style="margin-bottom:8px;">
+      <section ng-if="!listView">
+        <div class="row collection " ng-repeat="doc in docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter" style="margin-bottom:8px;">
           <div class="collection-item ">
             <div style="width:130px;height:115px; position:absolute;top:0px;left:0px;">
               <div style="width:130px;height:115px; position:ralative;text-align:center;">
@@ -144,7 +144,7 @@
               </div>
             </div>
             <div  style="position:absolute; left:140px;width:100%;height:100px;">
-                  <div style="margin-bottom:25px;"><span class="title">{{doc.document.confrenceObj.acronym | lstring}}/#{{doc.document.id}}</span> - {{doc.document.title | lstring}}</div>
+                  <div style="margin-bottom:25px;width:80%;"><span style="white-space: normal;">{{doc.document.confrenceObj.acronym | lstring}}/#{{doc.document.id}}</span> - {{doc.document.title | lstring}}</div>
 
                   <div class="cir">
                     <span  ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
