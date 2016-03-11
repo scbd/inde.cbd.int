@@ -1,16 +1,15 @@
-<div ng-click="toggle()" aria-expanded="section.open"  style="position:relative;height:40px;" ng-if="hasRole()">
-  <!-- flex -->
 
-<scbd-icon-button class="right" style="position:absolute;right:8px;top:8px;" type="fa" icon-name="fa-plus"  to-icon-name="fa-times" ani="tada" active="section.open" ></scbd-icon-button>
-  <!-- <span aria-hidden="true" class="pull-right fa fa-plus md-toggle-icon"  ng-class="{'toggled' : isOpen()}"></span> -->
+
+<button id="toggle-button" class="scbd-btn-flat waves-effect" ng-click="toggle()" aria-expanded="section.open" active="active" active-path="{{section.path}}"  ng-disabled="section.disabled" style="position: relative;width:100%;text-align:left;" ng-show="hasRole()" >
   <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i>
-  <i class="material-icons" ng-if="section.mdIcon" style="position:relative;top:5px;">{{section.mdIcon}}</i>
-  <img ng-src="{{section.imgSrc}}" style="height:22px;" ng-if="section.imgSrc"></img>
-  {{section.name}}
+  <i class="material-icons" ng-if="section.mdIcon" >{{section.mdIcon}}</i>
+  <img ng-src="{{section.imgSrc}}" style="height:26px;padding-top:3px;" ng-if="section.imgSrc"></img>
+  <span style="padding-left:5px;position:absolute;left:25px;bottom:-1px;" >{{section.name}}</span>
+  <scbd-icon-button class="right" style="position:absolute;right:8px;top:2px;" type="fa" icon-name="fa-plus"  to-icon-name="fa-times" ani="tada" active="section.open" ></scbd-icon-button>
+</button>
+
+<div id="side-menu-{{section.name}}" ng-repeat="page in section.pages" style="color:{{childrenColor}};background-color:{{childrenBackGround}};" class="menu-toggle-list" ng-show="section.open">
+
+    <menu-link section="page" user="user"></menu-link>
 
 </div>
-<ul id="side-menu-{{section.name}}"  class="menu-toggle-list" ng-show="section.open">
-  <li ng-repeat="page in section.pages" style="color:{{childrenColor}};background-color:{{childrenBackGround}};">
-    <menu-link section="page" user="user"></menu-link>
-  </li>
-</ul>

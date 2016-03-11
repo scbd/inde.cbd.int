@@ -59,6 +59,7 @@ function(app,template,_) {
                     function isActivePath (){
                         return ($scope.section.path===$location.url());
                     }//isActivePath
+
                     //============================================================
                     //
                     //============================================================
@@ -109,11 +110,13 @@ function(app,template,_) {
                     //   go to url, uri or clal function
                     //============================================================
                     $scope.goTo = function (){
-                          // if path is a function call it
+                            // if path is a function call it
                           if(isActivePath()){deactivate();activate();return;}
                           scbdMenuService.closeAllActive($scope.section.config.selfMenu);
                           $timeout(function(){activate();},200);
+
                           if($scope.section.path && _.isFunction($scope.section.path)){
+                    console.log('detects function');
                             $scope.section.path();
 
                           }
