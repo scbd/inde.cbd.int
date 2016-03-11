@@ -19,6 +19,27 @@ define(['app', 'lodash',
 
       $scope.toggle = dashMenu.toggle;
       $scope.sections = dashMenu.getMenu('dashboard');
+      $scope.sectionsOptions = dashMenu.getMenu('options');
+
+      var sec = _.findWhere($scope.sectionsOptions, {name:'Sort Order'});
+      sec.path=sortOrder;
+      sec = _.findWhere($scope.sectionsOptions, {name:'View Archive'});
+      sec.path=toggleArchived;
+      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'All'});
+      sec.path=selectChipAll;
+      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Draft'});
+      sec.path=selectChipDraft;
+      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Requests'});
+      sec.path=selectChipRequest;
+      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Approved'});
+      sec.path=selectChipApproved;
+      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Canceled'});
+      sec.path=selectChipCanceled;
+      console.log('sec',sec);
+
+
+
+
       if(dashMenu.history.length===1)
         $timeout(function(){
               dashMenu.toggle('dashboard');
@@ -43,17 +64,46 @@ define(['app', 'lodash',
       //
       //=======================================================================
       function init(){
+        $(document).ready(function(){
+$('[data-toggle="tooltip"]').tooltip();
+});
+
+$('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
+    var that = $(this);
+
+    var element = that[0];
+    if(element.myShowTooltipEventNum == null){
+        element.myShowTooltipEventNum = 0;
+    }else{
+        element.myShowTooltipEventNum++;
+    }
+    var eventNum = element.myShowTooltipEventNum;
+
+    setTimeout(function(){
+        if(element.myShowTooltipEventNum == eventNum){
+            that.tooltip('hide');
+        }
+        // else skip timeout event
+    }, 1000);
+});
 
               $scope.loadList ();
               mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
               mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
       }//init
-      $scope.statusFilter = function (doc) {
+      $scope.statusFilter = function  (doc) {
         if (doc.document.meta.status === $scope.selectedChip)
         return doc;
         else if($scope.selectedChip==='all' || $scope.selectedChip==='')
         return doc;
 
+      };
+
+      function  sortOrder () {
+        console.log('here');
+        $scope.sortReverse=!$scope.sortReverse;
+
+        $scope.toggle('options');
       };
 
       $scope.customSearch = function (doc) {
@@ -109,15 +159,17 @@ define(['app', 'lodash',
       //=======================================================================
       //
       //=======================================================================
-      $scope.archiveList = function (){
+      function archiveList (){
         mongoStorage.loadArchives($scope.schema).then(function(response){
           $scope.docs=response.data;
+
         });
       };// archiveOrg
+
       //=======================================================================
       //
       //=======================================================================
-      $scope.selectChip= function (chip){
+      function selectChip (chip){
         $element.find('.chip').removeClass('chip-active');
         $element.find('#chip-'+chip).addClass('chip-active');
         if(chip==='all')
@@ -125,6 +177,11 @@ define(['app', 'lodash',
         else
           $scope.selectedChip=chip;
       };// archiveOrg
+      $scope.selectChip = selectChip;
+
+
+
+
       //=======================================================================
       //
       //=======================================================================
@@ -132,15 +189,20 @@ define(['app', 'lodash',
         var serEl =$element.find('.search');
         serEl.toggleClass('search-expanded');
         serEl.focus();
+        var serElb =$element.find('.search-btn');
+        serElb.toggleClass('search-btn-expanded');
+
         $scope.sOpen=!$scope.sOpen;
         $scope.search='';
       };// archiveOrg
+
       //=======================================================================
       //
       //=======================================================================
       $scope.loadList = function (docObj){
         mongoStorage.loadOwnerDocs($scope.schema,['draft','published','request','canceled','rejected']).then(function(response){
            $scope.docs=response.data;
+
            _.each($scope.docs,function(doc){
 
                    mongoStorage.loadDoc('confrences',doc.document.confrence).then(function(conf){
@@ -176,13 +238,15 @@ define(['app', 'lodash',
       //=======================================================================
       //
       //=======================================================================
-      $scope.toggleArchived = function (docObj){
+      function toggleArchived  (docObj){
 
         if(!$scope.showArchived)
-            $scope.archiveList();
+            archiveList();
         else
             $scope.loadList();
         $scope.showArchived=!$scope.showArchived;
+
+        $scope.toggle('options');
       };// archiveOrg
 
       //=======================================================================
@@ -231,6 +295,42 @@ define(['app', 'lodash',
       $scope.edit = function (id){
         $location.url($scope.editURL+id);
       }// archiveOrg
+      //=======================================================================
+      //
+      //=======================================================================
+      function selectChipAll (){
+        selectChip('all');
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      function selectChipDraft (){
+        selectChip('draft');
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      function selectChipRequest (){
+        selectChip('request');
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      function selectChipApproved (){
+        selectChip('published');
+      };// archiveOrg
+
+      //=======================================================================
+      //
+      //=======================================================================
+      function selectChipCanceled (){
+        selectChip('canceled');
+      };// archiveOrg
+
+
       init();
       $scope.selectChip('all');
     }

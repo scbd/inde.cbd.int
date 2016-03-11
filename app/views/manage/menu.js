@@ -23,6 +23,7 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
         //   path: '/manage',
         //
         // });
+
         scbdMenuService.menus.dashboard.push({
           name: 'Side Events',
           type: 'link',
@@ -36,56 +37,134 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           path: '/manage/organizations',
         });
         scbdMenuService.validateMenus();// minds color classes and animation ect
-        // menus.dashboard.push({
-        //   name: 'heading',
-        //   type: 'heading',
-        //
-        //
-        // });
+
+
+        scbdMenuService.menus.options= [];
+        scbdMenuService.menus.options.push({
+          type: 'config',
+          menuClass:'dash-menu',
+          colorClass: 'dash-menu-color',
+          activeClass: 'dash-menu-active',
+          iconClass: 'pulse',
+          selfMenu: scbdMenuService.menus.options,// needed shouls be added programatically in parent service
+          childrenColorClass: 'dash-menu-children-color',
+          childrenActiveClass: 'dash-menu-children-active'
+        });
         // scbdMenuService.menus.dashboard.push({
-        //   name: 'Administration',
-        //   type: 'toggle',
-        //   open:1,
-        //   mdIcon: 'supervisor_account',
-        //   roles:['Administrator','IndeAdministrator'],
-        //   pages: [
-        //     {
-        //       name: 'Side Events',
-        //       type: 'link',
-        //       path: '/admin/events',
-        //       mdIcon: 'event',
-        //       roles:['Administrator','IndeAdministrator'],
-        //     },
-        //     {
-        //       name: 'Organizations',
-        //       type: 'link',
-        //       path: '/admin/organizations',
-        //       mdIcon: 'business',
-        //       roles:['Administrator','IndeAdministrator'],
-        //     },
-        //     {
-        //     name: 'Meetings',
-        //     type: 'link',
-        //     path: '/admin/meetings',
-        //     mdIcon: 'nature_people',
-        //     roles:['Administrator','IndeAdministrator'],
+        //   name: 'Dashboard',
+        //   type: 'link',
+        //   mdIcon: 'dashboard',
+        //   path: '/manage',
         //
-        //   }, {
-        //     name: 'Inde Configuration',
-        //     path: '/admin/config',
-        //     type: 'link',
-        //     imgSrc: '/app/images/inde-logo.svg',
-        //     roles:['Administrator','IndeAdministrator'],
-        //   },
-        //   {
-        //     name: 'User Management',
-        //     path: '/admin/users',
-        //     type: 'link',
-        //     faIcon: 'fa fa-users',
-        //     faIconSize: 'fa-lg',
-        //     roles:['Administrator','IndeAdministrator'],
-        //   }],
         // });
+        scbdMenuService.menus.options.push({
+          name: 'Register',
+          type: 'link',
+          mdIcon: 'add_box',
+          path: '/manage/events/new',
+        });
+        scbdMenuService.menus.options.push({
+          name: 'View Archive',
+          type: 'link',
+          mdIcon: 'archive',
+          path: '/manage/events/archived',
+        });
+        scbdMenuService.menus.options.push({
+          name: 'Sort Order',
+          type: 'link',
+          mdIcon: 'sort_by_alpha',
+          path: '/manage/events/sort',
+        });
+
+        scbdMenuService.menus.options.push({
+          name: 'Filter',
+          type: 'toggle',
+          open:0,
+          mdIcon: 'filter_list',
+          roles:['Administrator','IndeAdministrator'],
+          pages: [
+            {
+              name: 'All',
+              type: 'link',
+              path: '/admin/events/all',
+              mdIcon: 'all_inclusive',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+              name: 'Draft',
+              type: 'link',
+              path: '/admin/events/all',
+              mdIcon: 'insert_drive_file',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+              name: 'Requests',
+              type: 'link',
+              path: '/admin/events/all',
+              mdIcon: 'live_help',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+              name: 'Approved',
+              type: 'link',
+              path: '/admin/events/all',
+              mdIcon: 'thumb_up',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+              name: 'Canceled',
+              type: 'link',
+              path: '/admin/events/all',
+              mdIcon: 'thumbs_up_down',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            // {
+            //   name: 'Rejected',
+            //   type: 'link',
+            //   path: '/admin/events/all',
+            //   mdIcon: 'view_module',
+            //   roles:['Administrator','IndeAdministrator'],
+            // },
+            // {
+            //   name: 'Archived',
+            //   type: 'link',
+            //   path: '/admin/events/all',
+            //   mdIcon: 'archived',
+            //   roles:['Administrator','IndeAdministrator'],
+            // },
+          ]
+        });
+        scbdMenuService.menus.options.push({
+          name: 'View',
+          type: 'toggle',
+          open:0,
+          mdIcon: 'remove_red_eye',
+          roles:['Administrator','IndeAdministrator'],
+          pages: [
+            {
+              name: 'Card View',
+              type: 'link',
+              path: '/admin/events/card-view',
+              mdIcon: 'view_module',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+              name: 'List View',
+              type: 'link',
+              path: '/admin/events/list-view',
+              mdIcon: 'view_list',
+              roles:['Administrator','IndeAdministrator'],
+            },
+            {
+            name: 'Detail View',
+            type: 'link',
+            path: '/admin/events/detail-view',
+            mdIcon: 'view_headline',
+            roles:['Administrator','IndeAdministrator'],
+
+          }],
+        });
+          scbdMenuService.validateMenus();// minds color classes and animation ect
         return scbdMenuService;
   }]);
 });
