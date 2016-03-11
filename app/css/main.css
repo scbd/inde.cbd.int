@@ -8,12 +8,69 @@
 @import url(chip.css);
 @import url(paralax.css);
 
+/* line 23, ../libs/bootstrap-sass/lib/_buttons.scss */
+.btn:focus {
+  outline: thin dotted #333;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
+/* line 28, ../libs/bootstrap-sass/lib/_buttons.scss */
+.btn:hover, .btn:focus {
+  color: #333333;
+  text-decoration: none;
+	  -webkit-box-shadow: none;
+		box-shadow:none !important;
+		font-weight:normal;
+					text-shadow:none;
+}
+
+.btn i {color:#333;}
+.btn:hover i {color:#333;}
+
+/* line 34, ../libs/bootstrap-sass/lib/_buttons.scss */
+.btn:active, .btn.active {
+  outline: 0;
+	background-color: #009B48;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+		box-shadow:none;
+}
+/* line 42, ../libs/bootstrap-sass/lib/_buttons.scss */
+.btn.disabled, .btn[disabled], fieldset[disabled] .btn {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: alpha(opacity=65);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+
+}
+
+/* line 55, ../libs/bootstrap-sass/lib/_buttons.scss */
+.btn-default {
+  color: #333333;
+  background-color: white;
+  border-color: #ccc;
+	box-shadow: none;
+	   background-image:none;
+}
+/* line 470, ../libs/bootstrap-sass/lib/_mixins.scss */
+.btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
+  color: #333;
+  	background-color: ##e6e6e6;
+  border-color: #adadad;
+			font-weight:normal;
+			text-shadow:none;
+}
+
+
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
    License: none (public domain)
 */
 
-html, body, div, span, applet, object, iframe,
+/*html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote,button, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
@@ -35,11 +92,11 @@ time, mark, audio, video {
   outline: none;
 }
 /* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure,
+/*article, aside, details, figcaption, figure,
 footer, header, hgroup, menu, nav, section {
 	display: block;
-}
-body {
+}*/
+/*body {
 	line-height: 1;
 }
 ol, ul {
@@ -66,9 +123,9 @@ font-weight: normal;
 color: rgba(0, 0, 0, 0.87);
 -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
-}
+}*/
 
-a {
+/*a {
   background-color: transparent;
   text-decoration: none:
 }
@@ -88,8 +145,8 @@ select,
 textarea {
   margin: 0;
 
-}
-
+}*/
+/*
 @media (max-width: 960px) {
   html *{
     font-family: Roboto,"Helvetica Neue",sans-serif;
@@ -103,7 +160,7 @@ body {
 }
 h1{font-size: 20px;
 line-height: 30px;
-vertical-align: middle;}
+vertical-align: middle;}*/
 
 .select-list-container {
 	overflow: auto;
@@ -116,12 +173,13 @@ vertical-align: middle;}
  width: 5px;
  height:30px;
  border-radius: 20px;
- border-color:#444444 !important;
- background-color: #bbbbbb;
+ border-color:#009B48 !important;
+ background-color: rgba(0,155,72, 0.4);;
  padding-left: 5px;
  position:absolute;
  top:3px;
- left:15px;
+ left:61px;
+ opacity:0;
  -webkit-transition: all .5s ease;
  -moz-transition: all .5s ease;
  transition: all .5s ease;
@@ -129,6 +187,38 @@ vertical-align: middle;}
 .search:focus {outline:none;}
 .search-expanded {
  width: 200px;
- left:-170px;
+ left:61px;
+ opacity:1;
 }
+.search-btn {
+	/*display: inline-block !important;
+  border: none !important;;*/
+  position: relative !important;
+	z-index:10;
+  /*overflow: hidden !important;
+  z-index: 1 !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 !important;*/
+  /*background-color: #26a69a;*/
+  /*border-radius: 50% !important;
+  transition: .3s !important;
+  cursor: pointer !important;
+  vertical-align: middle !important;
+  font-size:18px !important;*/
+}
+.search-btn-expanded {
 
+animation: slide .5s;
+animation-fill-mode: forwards;
+}
+@keyframes slide {
+  0% {
+    left: 0;
+    top: 0;
+  }
+  100% {
+    left: 190px;
+  }
+}

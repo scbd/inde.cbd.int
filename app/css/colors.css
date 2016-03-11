@@ -11,12 +11,9 @@
 }*/
 /*deafault botton collors*/
 .pulse {
-	display: inline-block;
-  color:#009b48;
-	-moz-animation: pulse 2s infinite linear;
-	-o-animation: pulse 2s infinite linear;
-	-webkit-animation: pulse 2s infinite linear;
-	animation: pulse 2s infinite linear;
+		display: inline-block;
+  	color:#009b48;
+		font-size:2em;
 }
 
 @-webkit-keyframes pulse {
@@ -46,23 +43,23 @@
 }
 /*setting global button colors*/
 .scbd-btn,  .scbd-btn-floating,  .scbd-btn-large {
-  background-color:#444444;
-  color:#bbbbbb;
+  background-color:#009B48;
+  color:#fff;
 }
 .scbd-btn:hover,  .scbd-btn-floating:hover,  .scbd-btn-large:hover, .scbd-btn:active,  .scbd-btn-floating:active,  .scbd-btn-large:hover  {
-  background-color:#555555;
-	color:#ffffff;
+  background-color:rgba(0,155,72, 0.4);
+	color:rgba(0, 0, 0, 0.6);
 }
 
 /*menu styles*/
 .dash-menu{
-color:#bbbbbb;
-background-color:#424242 !important;
+color::#009B48;
+background-color:#fff !important;
 }
 
 .dash-menu-color {
-color:#bbbbbb;
-background-color:#424242;
+color:#009B48;
+background-color:#fff;
   text-transform: uppercase;
 -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -70,10 +67,11 @@ background-color:#424242;
   transition: all 0.3s ease;
 }
 .dash-menu-active{
-color:#ffffff;
+
 position:absolute;
 bottom:5px;
-background-color:#555555;
+color:#222;
+background-color:#fff;
 text-transform: uppercase;
 box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 /*margin: 1px 0 8px 0;*/
@@ -84,8 +82,8 @@ box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .dash-menu-children-color {
-  color:#bbbbbb;
-  background-color:#424242;
+	color:#009B48;
+	background-color:#fff;
   position:absolute;
     left:10px;
     text-transform: capitalize;
@@ -96,10 +94,11 @@ box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .dash-menu-children-active{
-  color:#ffffff;
+
   position:absolute;
   bottom:5px;
-  background-color:#555555;
+	color:#222;
+	background-color:#fff;
   left:10px;
   text-transform: capitalize ;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
