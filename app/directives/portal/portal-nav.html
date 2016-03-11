@@ -1,10 +1,5 @@
 <div ng-cloak >
-  <div style="position:fixed;top:0px;left:0px;z-index:10000;" hide-gt-sm>
 
-
-
-<img src="/app/images/cbd-logo-green-en.svg" style="padding: 25px 5px 25px 20px;"></img>
-  </div>
   <!-- <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass"  ng-cloak hide-gt-sm>
 
 
@@ -29,10 +24,10 @@
 
 
 
-<div class="z-depth-2" style="background:#444444;"  ng-cloak>
-<section  hide-lt-sm>
+<div  ng-cloak>
+<section  class="lg-menu hidden-xs hidden-sm" >
   <span class="cl-effect-14" >
-    <a id="home" ng-click="goTo('/');setActivePath();">Home </a>
+    <a id="home" ng-click="goTo('/');setActivePath();">Meetings </a>
     <a id="request" ng-click="goTo('/manage/events/0');setActivePath();">Request</a>
     <a id="dash" ng-click="goTo('/manage/events');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
     <a id="admin" ng-click="goTo('/admin');setActivePath();"  ng-if="isAdmin">Admin</a>
@@ -40,8 +35,8 @@
   </span>
 </section>
 </div>
-<div class="space-filler" ng-class="spaceFillClass" hide-gt-sm>
-</div>
+<!-- <div class="space-filler" ng-class="spaceFillClass" hide-gt-sm> -->
+<!-- </div> -->
 
 
 </div>
