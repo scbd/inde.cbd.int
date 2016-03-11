@@ -29,7 +29,7 @@
 }
 
 .scbd-btn i, .scbd-btn-large i, .scbd-btn-floating i, .scbd-btn-large i, .scbd-btn-flat i {
-  font-size: 1.3rem;
+  font-size: 1.8rem;
   line-height: inherit;
 }
 
@@ -52,20 +52,21 @@
 }*/
 
 .scbd-btn-floating {
-  display: inline-block;
-
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-  width: 32px;
-  height: 32px;
-  line-height: 40px;
-  padding: 0;
+  display: inline-block !important;
+  border: none !important;;
+  position: relative !important;
+  overflow: hidden !important;
+  z-index: 1 !important;
+  width: 32px !important;
+  height: 32px !important;
+  line-height: 32px !important;
+  padding: 0 !important;
   /*background-color: #26a69a;*/
-  border-radius: 50%;
-  transition: .3s;
-  cursor: pointer;
-  vertical-align: middle;
+  border-radius: 50% !important;
+  transition: .3s !important;
+  cursor: pointer !important;
+  vertical-align: middle !important;
+  font-size:18px !important;
 }
 /*.scbd-btn-icon i{
   display: inline-block;

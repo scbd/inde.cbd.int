@@ -353,13 +353,20 @@ define(['app','lodash'],function(app,_) {
           } else
             throw "Error: thrying to register a nav controler in the scbd-menuservice with out a navId";
         }
+        //============================================================
+        //
+        //
+        //============================================================
+        function isOpen(navId) {
 
-
+              return whenNavCtrlLoaded(navId).then(function(){return navRegistry[navId].isOpen;});
+        }
         //============================================================
         //
         //
         //============================================================
         function toggle(navId) {
+
               whenNavCtrlLoaded(navId).then(navRegistry[navId].toggle());
         }
         //=======================================================================
@@ -465,7 +472,7 @@ define(['app','lodash'],function(app,_) {
             cssTransforms3d:cssTransforms3d,
             closeAllActive:closeAllActive,
             registerNavInstance:registerNavInstance,
-            // isOpen:isOpenRight,
+            isOpen:isOpen,
             toggle: toggle,
             close: close,
             open: open,

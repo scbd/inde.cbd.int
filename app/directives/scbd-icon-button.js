@@ -17,7 +17,7 @@ function(app,  iconate,_) {
       //type from to to
       scope:{active:'=',
     },
-              template: '<i ng-click="click();">{{iconName}}<ng-transclude></ng-transclude></i>',
+              template: '<i class="scbd-icon" ng-click="click();">{{iconName}}<ng-transclude></ng-transclude></i>',
               link:function ($scope, $element, $attr) {
 
                 var iconName;

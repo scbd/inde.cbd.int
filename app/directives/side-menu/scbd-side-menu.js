@@ -77,21 +77,23 @@ define(['app',
           function($scope, $element, $timeout, $log, $transclude,$window) {
                 var pushy = $element.find('.pushy');
                 $scope.isOpen=false;
+                var isOpen=false;
 
                 var
 
             		container = angular.element($document[0].body).find('#'+$scope.bumpId), //container css class
             		push = $element.find('.push'), //css class to add pushy capability
+                containerWidth = $('.view').innerWidth() || $window.innerWidth,
             		// siteOverlay = $element.find('.site-overlay'), //site overlay
-                // pushyClass = "pushy-left pushy-open", //menu position & menu open class
+                // pushyClass = "pueft pushy-open", //menu position & menu open class
             		pushyClassLeft = "pushy-left pushy-open", //menu position & menu open class
             		pushyClassRight = "pushy-right pushy-open", //menu position & menu open class
             		pushyActiveClass = "pushy-active", //css class to toggle site overlay
             		// containerClass = "container-push", //container open class
             		// pushClass = "push-push", //css class to add pushy capability
             		// menuBtn = $('.menu-btn, .pushy a'), //css classes to toggle the menu
-            		menuSpeed = 200, //jQuery fallback menu speed
-                containerWidth;
+            		menuSpeed = 200; //jQuery fallback menu speed
+
                 var resizeInProgress = false;
             		//menuWidth = pushy.width() + "px"; //jQuery fallback menu width
 
@@ -123,6 +125,7 @@ define(['app',
 
                     pushy.toggleClass('pushy-right'); // if left must do this first
                     pushy.addClass('p-right');
+                    pushy.css('display','none');
                   }
                 else
                     pushy.toggleClass('pushy-left'); // if left must do this first
@@ -168,9 +171,16 @@ define(['app',
             //
             //============================================================
             function openPushyRight(){
+              pushy.css('display','block');
+              $timeout(function(){
                 pushy.toggleClass(pushyClassRight);
                 pushContainerLeft();
+
+              },100);
+
                 $scope.isOpen=true;
+                isOpen=true;
+
             }
 
             //============================================================
@@ -180,6 +190,7 @@ define(['app',
                 pushy.toggleClass(pushyClassLeft);
                 pushContainerRight();
                 $scope.isOpen=true;
+                isOpen=true;
             }// openPushyLeft
 
             //============================================================
@@ -190,6 +201,9 @@ define(['app',
                 pushy.toggleClass(pushyClassRight);
                 resetContainer();
                 $scope.isOpen=false;
+                isOpen=false;
+
+                $timeout(function(){pushy.css('display','none');},100);
             }// closePushyRight
 
             //============================================================
@@ -199,6 +213,7 @@ define(['app',
                 pushy.toggleClass(pushyClassLeft);
                 resetContainer();
                 $scope.isOpen=false;
+                isOpen=false;
             }//closePushyLeft
 
             //============================================================
@@ -242,6 +257,13 @@ define(['app',
               container.css('-ms-transform','translate3d(0,0,0)');
               container.css('-o-transform','translate3d(0,0,0)');
               container.css('transform','translate3d(0,0,0)');
+              containerWidth = $('.view').innerWidth() || $window.innerWidth;
+
+var mLeft = container.css('margin-left');
+var mRight = container.css('margin-right');
+
+              containerWidth = containerWidth - Number(mLeft.slice(0, -2)) - Number(mRight.slice(0, -2));
+
               container.css('width',containerWidth);
           	}// resetContainer
 
@@ -251,10 +273,11 @@ define(['app',
             function resizeContainer(){
                   if(!resizeInProgress){
                         resizeInProgress =true;
-                        $timeout(function(){
-                            container.css('width',($window.innerWidth-278));
+
+                            containerWidth = $('.view').innerWidth() || $window.innerWidth,
+                            container.css('width',(containerWidth-278));
                             resizeInProgress =false;
-                        },100);
+
                   }
           	}//resizeContainer
 
@@ -309,6 +332,7 @@ define(['app',
             this.closeAllToggles = closeAllToggles;
             this.toggle=togglePushy;
             this.getId=getId;
+            this.isOpen=isOpen;
           }
         ], //controller
 
