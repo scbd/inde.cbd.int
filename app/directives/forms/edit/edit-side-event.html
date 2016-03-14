@@ -1,14 +1,7 @@
-<div class="view-container">
 
-  <div class="container-header center" >
-    <div class="left">
-      <scbd-fab-button style="margin-right:5px;" ng-click="close();"><i class="material-icons">&#xE5CD;</i></scbd-fab-button>
-    </div>
-    <h1 >
-      <scbd-icon-button type="md" icon-name="&#xE878;" style="font-size:30px;padding-right:10px;"></scbd-icon-button> Side Event</h1>
-    <!-- <div class="btn-group right "><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
-    <div class="clearfix"></div>
-  </div>
+<div>
+
+
   <div class="container-header-filler"></div>
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
@@ -27,68 +20,63 @@
 
 
 
-  <form name="editForm" class="editForm" style="margin-top:10px">
+  <form name="editForm"  style="margin-top:10px">
     <legend class="container-subheader">
-      <h2>Confrence</h2>
+      <h2>Meeting </h2>
     </legend>
-    <div>Please select a confrence.</div>
+    <div>Select a Meeting </div>
+
     <div class="row">
-    <div class="col-xs-12 " ng-repeat="docObj in options.confrences" style="margin:5px 8px 20px 0;  ">
 
-      <scbd-flat-button style="text-align:left;height:50px;" ng-click="select(docObj);" waves>
-          <div class="collection-item " style="height:50px;">
-            <!-- <div class="card-image" ng-if="org.document.logo"> -->
-            <div style="width:70px;height:50px; position:absolute;top:0px;left:0px;">
-              <div style="width:70px;height:50px; position:ralative;text-align:center;vertical-align:middle;">
+      <div class="col-xs-12 " ng-repeat="docObj in options.confrences" style="margin:5px 8px 20px 0;  ">
+          <!-- <input type="text" ng-model="doc.confrence"style="z-index:-10;position:absolute;top:10px;left:20px;" required/> -->
+        <scbd-flat-button style="outline:none;text-align:left;height:60px;width:100%;background-color:#fff;border-style:solid;border-width:.5px;border-color:rgb(224, 224, 224);" ng-click="select(docObj);" waves>
+            <div class="collection-item " style="height:100%;">
+              <!-- <div class="card-image" ng-if="org.document.logo"> -->
+              <div style="width:70px;height:50px; position:absolute;top:0px;left:0px;">
+                <div style="width:70px;height:50px; position:ralative;text-align:center;vertical-align:middle;">
 
-                <img src="{{docObj.document.logo}}" style="clear:both;max-width:100%;height:50px;" ></img>
-                <i ng-if="(!docObj.document.logo.length)" class="material-icons" style="position:absolute;top:13px;left:10px;color:#aaaaaa;font-size:55px;">&#xE407;</i>
+                  <img src="{{docObj.document.logo}}" style="clear:both;max-width:100%;height:50px;" ></img>
+                  <i ng-if="(!docObj.document.logo.length)" class="material-icons" style="position:absolute;top:13px;left:10px;color:#aaaaaa;font-size:55px;">&#xE407;</i>
 
-              </div>
-            </div>
-
-            <div style="position:absolute; top:0px;left:80px;width:100%;height:50px;">
-              <div>
-                <div class="title" style="font-weight:bold;font-size:1.5em;">{{docObj.document.acronym | lstring}}
-                  <br>
-                </div>
-                <div style="font-size:0.8em;">{{docObj.document.title | lstring}}
-                  <br>
                 </div>
               </div>
-            </div>
 
-            <div class="collection-action" >
-              <span class="collection-action-grp " ng-show="((!doc.confrence && !docObj.selected) || (doc.confrence && docObj.selected) )">
-                <scbd-icon-button class="right" style="z-index:100;position:absolute;right:30px;top:35px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
-              </span>
+              <div style="position:absolute; top:0px;left:80px;margin-bottom:3px;">
+                  <span  style="font-weight:bold;font-size:1.1rem;">{{docObj.document.acronym | lstring}}</span>
+                    <div style="font-size:0.8rem;line-height:1.3rem;">{{docObj.document.title | lstring}}
+
+              </div>
+
+              </div>
+
+              <div class="collection-action" >
+                <span class="collection-action-grp " ng-show="((!doc.confrence && !docObj.selected) || (doc.confrence && docObj.selected) )">
+                  <scbd-icon-button class="right" style="z-index:100;position:absolute;right:5px;top:-8px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+                </span>
+              </div>
             </div>
-          </div>
-      </scbd-flat-button>
+        </scbd-flat-button>
+      </div>
     </div>
-</div>
 
 
     <div>
       <legend class="container-subheader">
         <h2>Identity</h2></legend>
       <div class="row">
-        <div class="col-md-6 col-xs-12">
-          <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title">
-            <scbd-tooltip style="display:inline-block;top:2px;" ng-if="0">
-              <scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;" waves></scbd-icon-button>
-              <span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span>
-            </scbd-tooltip>
-            <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales"></div>
+        <div class="col-xs-12">
+          <div class="km-control-group nowrap" name="title"  caption="Title" >
+            <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales" ></div>
           </div>
         </div>
 
-        <div class="col-md-6 col-xs-12">
+        <div class="col-xs-12">
           <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Logo (Not Org. Logo)">
-            <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
-            <br>[
-            <input type="checkbox"  value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"> No Logo, Icon Only ] [
-            <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]
+
+
+            [ <input type="checkbox"  value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"/> No Logo, Icon Only ] [
+            <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]<span style="font-size:10px;line-height:20px;"> (Keep the system generated logo or upload an image of your own.)</span>
             <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
 
           </div>
@@ -96,7 +84,7 @@
 
         <div class="col-md-12 col-xs-12">
           <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
-            <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" ">
+            <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" "/>
           </div>
         </div>
         <div class="col-md-12 col-xs-12">
@@ -113,18 +101,20 @@
     <legend class="container-subheader">
       <h2>Organization(s)</h2>
     </legend>
+
     <div class="row">
       <div class="col-md-12 col-xs-12">
         <div class="km-control-group" name="hostOrgs" caption="">
           <div style="padding-left:18px;padding-bottom:7px;">Select the host organizations and/or create a new one
-            <scbd-fab-button style="margin-right:5px;" ng-click="toggleOrg($event);"><i class="material-icons" ng-if="!showOrgForm">&#xE145;</i><i class="material-icons" ng-if="showOrgForm">&#xE5CD;</i></scbd-fab-button>
+
+  <button  class="btn btn-default btn-sm" ng-click="toggleOrg($event);" style="outline:none;"><i class="fa fa-plus" ng-if="!showOrgForm"></i><i class="fa fa-times" ng-if="showOrgForm"></i></button>
           </div>
           <!-- <div km-select watch-items no-hover multiple name="hostOrgs" ng-model="doc.hostOrgs" placeholder=" " locales="doc.meta.locales" items="options.hostOrgs()"></div> -->
           <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" ng-if="!showOrgForm"></scbd-select-list>
 
         </div>
       </div>
-
+    </div>
       <div class="col-md-12 col-xs-12" ng-show="showOrgForm">
         <div style="padding-bottom:8px;border-width:1px;border-color:#109e49;">
           <edit-organization short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="doc.hostOrgs"></edit-organization>
@@ -132,23 +122,31 @@
       </div>
 
       <legend class="container-subheader">
-        <h2>Contact Person</h2>
+        <h2>Contact Person </h2>
       </legend>
+      <div class="row">
+        <div style="padding:0 20px 0 20px;">
+        <div class="alert alert-danger" role="alert">
+
+          <span style="font-size:1rem;">Please note this information will be <strong>published online</strong> with the event information.  Rest assured your email is well protected from spam. You may enter your information or a colleagues.</span>
+        </div>
+      </div>
+    </div>
       <div class="row">
 
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="personalTitle" caption="Personal Title">
-            <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" ">
+            <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" "/>
           </div>
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="firstName" caption="First Name">
-            <input class="form-control" type="text" ng-model="doc.contact.firstName" placeholder=" ">
+            <input class="form-control" type="text" ng-model="doc.contact.firstName" placeholder=" "/>
           </div>
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="lastName" caption="Last Name">
-            <input class="form-control" type="text" ng-model="doc.contact.lastName" placeholder=" ">
+            <input class="form-control" type="text" ng-model="doc.contact.lastName" placeholder=" "/>
           </div>
         </div>
       </div>
@@ -156,26 +154,25 @@
 
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="jobTitla" caption="Job Title">
-            <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" ">
+            <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" "/>
           </div>
         </div>
         <div class="col-md-4 col-xs-12">
           <div class="km-control-group" name="website" caption="Phone">
-            <input class="form-control" type="text" ng-model="doc.contact.phone" placeholder=" ">
+            <input class="form-control" type="text" ng-model="doc.contact.phone" placeholder=" "/>
           </div>
         </div>
         <div class="col-md-4 col-xs-12">
-          <div class="km-control-group" name="email" caption="Email">
-            <input class="form-control" type="email" ng-model="doc.contact.email" placeholder=" ">
+          <div class="km-control-group" name="mobile" caption="Mobile Phone *">
+            <input class="form-control" type="text" ng-model="doc.mobile" placeholder=" " />
           </div>
         </div>
 
       </div>
-      <div class="row">
-        <div class="col-sm-offset-1 col-sm-11">
-          <div class="panel panel-default panel-address">
-            <div class="panel-body">
-              <div class="row">
+
+
+
+            <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="address">Address</label>
@@ -185,7 +182,7 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="city">City</label>
-                    <input type="text" class="form-control" id="city" ng-model="doc.contact.city">
+                    <input type="text" class="form-control" id="city" ng-model="doc.contact.city"/>
                   </div>
                 </div>
               </div>
@@ -193,37 +190,39 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="state">State / Province / Region</label>
-                    <input type="text" class="form-control" id="state" ng-model="doc.contact.state">
+                    <input type="text" class="form-control" id="state" ng-model="doc.contact.state"/>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="zip">Postal / Zip code</label>
-                    <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip">
+                    <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip"/>
                   </div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-3">
-                  <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Home Country" ng-if="doc.type.identifier!=='64432E86-23C9-4D9A-B835-962D8221E6CA'">
-                    <div km-select name="country" ng-model="doc.country" items="options.countries()" required></div>
+                <div class="col-md-6 col-xs-12">
+                  <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Home Country" >
+                    <div km-select name="country" ng-model="doc.contact.country" items="options.countries()" ></div>
+                  </div>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                  <div class="km-control-group" name="email" caption="Email">
+                    <input class="form-control" type="email" ng-model="doc.contact.email" placeholder=" "/>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
+              <div class="row">
+                <div class="col-md-6 col-xs-12">
+                  <div class="km-control-group" caption="Would you like to update your profile at accounts.cbd.int with this contact data?" >
+                    <input type="checkbox" ng-model="updateProfile"  ng-true-value="'Yes'" ng-false-value="'No'"> {{updateProfile}}
+                  </div>
+                </div>
 
-      <div class="row">
-        <div class="col-md-4 col-xs-12">
-          <div class="km-control-group" name="mobile" caption="Mobile Phone *">
-            <input class="form-control" type="text" ng-model="doc.mobile" placeholder=" ">
-          </div>
-        </div>
+              </div>
 
 
-      </div>
+
       <legend class="container-subheader">
         <h2>Preferred Date and Time {{prefDate}}</h2>
       </legend>
@@ -278,48 +277,48 @@
 
         <div class="col-md-4 col-xs-4">
           <div>Internet Connection</div>
-          <input type="checkbox" ng-model="doc.requirements.lcd" value="LCD Projector">
+          <input type="checkbox" ng-model="doc.requirements.lcd" value="LCD Projector"/>
         </div>
         <div class="col-md-4 col-xs-4">
           <div>PC</div>
-          <input type="checkbox" ng-model="doc.requirements.pc" value="PC">
+          <input type="checkbox" ng-model="doc.requirements.pc" value="PC"/>
         </div>
         <div class="col-md-4 col-xs-4">
           <div>Overhead Projector</div>
-          <input type="checkbox" ng-model="doc.requirements.overhead" value="Overhead Projector">
+          <input type="checkbox" ng-model="doc.requirements.overhead" value="Overhead Projector"/>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4 col-xs-4">
           <div>Sound System</div>
-          <input type="checkbox" ng-model="doc.requirements.sound" value="Sound System">
+          <input type="checkbox" ng-model="doc.requirements.sound" value="Sound System"/>
         </div>
         <div class="col-md-4 col-xs-4">
           <div>Interpretation
             <span style="font-size:9px;">(expense will be at your own costs)</span>
           </div>
-          <input type="checkbox" ng-model="doc.requirements.interpretation" value="Interpretation">
+          <input type="checkbox" ng-model="doc.requirements.interpretation" value="Interpretation"/>
         </div>
         <div class="col-md-4 col-xs-4">
           <div>Catering
             <span style="font-size:9px;">(expense will be at your own costs)</span>
           </div>
-          <input type="checkbox" ng-model="doc.requirements.catering" value="Catering">
+          <input type="checkbox" ng-model="doc.requirements.catering" value="Catering"/>
         </div>
         <div class="col-md-4 col-xs-4">
           <div>Skype
             <span style="font-size:9px;"></span>
           </div>
-          <input type="checkbox" ng-model="doc.requirements.skype" value="Catering">
+          <input type="checkbox" ng-model="doc.requirements.skype" value="Catering"/>
         </div>
       </div>
 
       <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 km-control-group">
           <div>Other
             <span style="font-size:9px;">(Please indicate any other requirements you may need)</span>
           </div>
-          <input class="form-control" type="text" ng-model="doc.requirements.other">
+          <input class="form-control" type="text" ng-model="doc.requirements.other"/>
         </div>
       </div>
 
@@ -327,36 +326,36 @@
 
       <legend class="container-subheader">
         <h2>Side Event Promotion
-          <span style="font-size:9px;">(How will you be letting other participants know about your side event?)</span>
+
         </h2>
       </legend>
 
       <div class="row">
         <div class="col-md-2 col-xs-4">
           <div>Facebook Event</div>
-          <input type="checkbox" ng-model="doc.promotion.fbEvent">
+          <input type="checkbox" ng-model="doc.promotion.fbEvent"/>
         </div>
 
         <div class="col-md-2 col-xs-4">
           <div>Flyers</div>
-          <input type="checkbox" ng-model="doc.promotion.flyers" value="PC">
+          <input type="checkbox" ng-model="doc.promotion.flyers" value="PC"/>
         </div>
         <div class="col-md-2 col-xs-4">
           <div>Email Cmapaign</div>
-          <input type="checkbox" ng-model="doc.promotion.emailCampaign">
+          <input type="checkbox" ng-model="doc.promotion.emailCampaign"/>
         </div>
       </div>
       <div class="row">
 
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-6 col-xs-12 km-control-group">
           <div>Your Website Promoting the Side Event </div>
-          <input class="form-control" type="url" ng-model="doc.promotion.website">
+          <input class="form-control" type="url" ng-model="doc.promotion.website"/>
         </div>
-        <div class="col-md-6 col-xs-12">
+        <div class="col-md-6 col-xs-12 km-control-group">
           <div>Other
             <span style="font-size:9px;">(Please indicate any other steps you have taken to promote your side event)</span>
           </div>
-          <input class="form-control" type="text" ng-model="doc.promotion.other">
+          <input class="form-control" type="text" ng-model="doc.promotion.other"/>
         </div>
       </div>
 
@@ -371,12 +370,13 @@
           </div>
         </div>
 
+        <div class="col-md-2 col-xs-12">
 
-        <div class="row">
+                  <button class="btn btn-primary" ng-click="saveDoc();publishRequestDial();" style="width:100%;"><i class="fa fa-floppy-o" ></i> Save</button>
+        </div>
 
-          <scbd-button ng-click="saveDoc();publishRequestDial();" style="width:100%"><i class="material-icons" style='vertical-align: middle'>&#xE161;</i> Save</button>
+
         </div>
 
   </form>
-
-  </div>
+</div>
