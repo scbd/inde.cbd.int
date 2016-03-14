@@ -10,7 +10,7 @@ define(['angular','angular-animate','angular-loading-bar','ng-file-upload','ngDi
 
     app.config(['$httpProvider', function($httpProvider){
 
-        $httpProvider.useApplyAsync(true);
+        // $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('realmHttpIntercepter');
     }]);
