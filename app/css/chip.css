@@ -167,3 +167,36 @@ position:absolute;
 bottom:0px;
 
 }
+
+.circ img {position:relative;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  z-index:200;
+}
+
+.circ i.material-icons {
+position:relative;
+  border-width: .5px;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-style: solid;
+  border-radius: 50%;
+  background-color: #e3e3e3;
+  font-size: 18px;
+
+}
+.circ  span{
+position:relative;
+line-height: 20px;
+
+
+}
+.circ {
+
+color:#52575f;
+
+
+}
