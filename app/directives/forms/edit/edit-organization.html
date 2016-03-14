@@ -1,12 +1,6 @@
-<div  class="view-container " >
+<div  >
 
-    <div class="container-header center">
-      <div class="right"><scbd-fab-button  style="margin-right:5px;" ng-click="close()" ng-if="!shortForm"><i class="material-icons">&#xE5CD;</i></scbd-fab-button></div>
-      <h1 ><scbd-icon-button type="md" icon-name="business" style="font-size:30px;padding-right:10px;" ></scbd-icon-button> Add Organization</h1>
-      <!-- <div class="btn-group right " ng-if="!shortForm"><scbd-fab-button  style="margin-right:5px;"><i class="material-icons">&#xE894;</i></scbd-fab-button><scbd-fab-button  ><i class="material-icons">&#xE889;</i></scbd-fab-button>  </div> -->
-      <div class="clearfix"></div>
-    </div>
-    <div class="container-header-filler"></div>
+
 
         <div ng-show="msg" class="alert alert-success alert-dismissable">
           <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
@@ -27,18 +21,18 @@
         <form name="editForm" class="editForm" style="margin-top:10px">
 
           <div>
-            <legend class="container-subheader"><h2>Identity</h2>{{doc._id}}</legend>
+            <legend class="container-subheader"><h2>Identity</h2></legend>
             <div class="row">
               <div class="col-md-9 col-xs-12">
-                <div class="km-control-group nowrap" name="organization_title" ng-required="!form.organization.$valid" caption="Title" >
+                <div class="km-control-group nowrap" name="organization_title"  caption="Title" >
                   <scbd-tooltip style="display:inline-block;top:2px;"  ng-if="0"><scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;"  waves></scbd-icon-button><span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span></scbd-tooltip>
-                  <div km-textbox-ml name="title" ng-model="doc.title" required locales="doc.meta.locales" ></div>
+                  <div km-textbox-ml name="title" ng-model="doc.title"  locales="doc.meta.locales" ></div>
                 </div>
 
               </div>
 
               <div class="col-md-3 col-xs-12">
-                <div class="km-control-group" name="acronym" caption="Acronym" ng-required="!form.organization.$valid">
+                <div class="km-control-group" name="acronym" caption="Acronym" >
                   <div class="help-block" ng-if="0">Abbreviation for long name</div>
                   <div km-textbox-ml name="acronym" ng-model="doc.acronym" placeholder=" " locales="doc.meta.locales"></div>
 
@@ -46,7 +40,7 @@
               </div>
 
               <div class="col-md-12 col-xs-12">
-                <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Logo">
+                <div class="km-control-group nowrap" name="logo" caption="Logo">
                   <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
                   <br><span ng-if="doc.logo!=='/app/images/ic_business_black_48px.svg'"> [<scbd-icon-button type="fa" icon-name="fa-times" to-icon-name="fa-times" ani="rubberBand" ng-click="toggleIcon();" ng-if="doc.logo!=='/app/images/ic_business_black_48px.svg'" waves></scbd-icon-button>No Logo, Icon Only ]</span>
 
@@ -60,15 +54,15 @@
             </div>
 
             <div class="row">
-              <div class="col-md-3">
+              <!-- <div class="col-md-3">
                 <div class="km-control-group" name="type" caption="Type">
                   <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="col-md-3">
-                <div class="km-control-group" name="country" ng-required="!form.contact_country.$valid" caption="Country" >
-                  <div km-select name="country" ng-model="doc.country" items="options.countries()" required></div>
+                <div class="km-control-group" name="country" caption="Country (Head Office)" >
+                  <div km-select name="country" ng-model="doc.country" items="options.countries()" ></div>
                 </div>
               </div>
             </div>
@@ -125,7 +119,21 @@
               </div>
 
             </div> -->
-            <scbd-button ng-click="saveDoc();" style="width:100%"><i class="material-icons" style='vertical-align: middle'>&#xE161;</i> Save </button>
+            <div class="row">
+              <!-- <div class="col-md-3">
+                <div class="km-control-group" name="type" caption="Type">
+                  <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
+                </div>
+              </div> -->
+
+              <div class="col-lg-2 col-sm-12">
+
+            <button class="btn btn-primary" ng-click="saveDoc();publishRequestDial();" style="width:100%"><i class="fa fa-floppy-o" ></i> Save </button>
+
+              </div>
+            </div>
+
+
         </form>
 
 </div>
