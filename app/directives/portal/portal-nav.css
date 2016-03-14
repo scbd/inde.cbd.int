@@ -34,9 +34,10 @@
 
     }
 }*/
+.portal-nav-mobi-filler{height:55px;}
 .portal-nav-mobi{
 position: fixed;
-top:30px;
+top:70px;
 padding: 5px 5px 5px 5px;
 
 border-style: solid;
@@ -45,7 +46,7 @@ height:55px;
 line-height: 40px;
 width:100%;
 
-background-color:#A5C4D4;
+background-color:#eee;
 color:#fff;
 z-index:50;
 }
@@ -89,7 +90,14 @@ z-index:50;
   border-top-color:#eee;
 
 }
-
+.sm-menu{
+  height:40px;
+  margin: 0 0 5px; 0;
+ border-top-style:solid;
+ border-top-width:.5px;
+  border-top-color:#eee;
+  font-size:1rem;
+}
 /* Effect 21: borders slight translate */
 .cl-effect-14 a {
 
