@@ -17,7 +17,7 @@ define(['app', 'jquery',
         //     $window.location = "https://chm.cbd.int/";
 
 
-
+console.log($location.path());
 
 
 
