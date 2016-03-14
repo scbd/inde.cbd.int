@@ -1,8 +1,10 @@
 define(['app', 'lodash','jquery',
-  'css!./index', '../services/mongo-storage'], function(app,_,$) {
+  'css!./index', '../services/mongo-storage',
+        'services/filters'
+], function(app,_,$) {
 
-    app.controller("home", ['$scope', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window', //"$http", "$filter", "Thesaurus",
-      function($scope,  $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window) { //, $http, $filter, Thesaurus
+    app.controller("home", ['$scope', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','$anchorScroll','authentication', //"$http", "$filter", "Thesaurus",
+      function($scope,  $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,$anchorScroll,auth) { //, $http, $filter, Thesaurus
 
 
 
@@ -14,27 +16,33 @@ define(['app', 'lodash','jquery',
 
 
           $scope.sortReverse=0;
-          $scope.listView=0;
+          $scope.listView=1;
           $scope.showArchived=0;
 
           $scope.statusFacits={};
-          $scope.statusFacits.all=0
           $scope.statusFacitsArcView={};
           $scope.statusFacitsArcView.all=0;
-          $scope.selectedChip;
+
           var statuses=['published','request','canceled','rejected'];
           var statusesArchived=['deleted','archived'];
           $scope.docs=[];
+          auth.getUser().then(function(user){
 
+             $scope.user = user;
+ //              console.log($scope.user);
+           }).then(function(){init();});
 
           //=======================================================================
           //
           //=======================================================================
           function init(){
-                  $scope.confrences={};
+                  $scope.confrences=[];
+
                   $http.get('https://api.cbd.int/api/v2015/confrences?f={"document":1}').then(function(conf){
                         $scope.confrences=conf.data;
                         _.each($scope.confrences,function(c){
+
+
                                 $http.get('https://api.cbd.int/api/v2015/venues?q={"_id":{"$oid":"'+c.document.venue+'"}}&f={"document":1}').then(function(v){
                                       c.document.venueObj=v.data[0].document;
                                 });
@@ -51,7 +59,11 @@ define(['app', 'lodash','jquery',
                   mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
                   //mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           }//init
-
+          $scope.newMeetingFilter = function (doc) {
+                var timestamp = Math.round((new Date()).getTime() / 1000);
+                if (doc.document.start > timestamp || $scope.hasRole(['IndeAdministrator','Administrator']))
+                return doc;
+          };
           $scope.statusFilter = function (doc) {
             if (doc.document.meta.status === $scope.selectedChip)
             return doc;
@@ -59,7 +71,33 @@ define(['app', 'lodash','jquery',
             return doc;
 
           };
+          //=======================================================================
+          //
+          //=======================================================================
+          $scope.searchToggle= function (i){
 
+            var serEl =$element.find('#ind-search'+i);
+            serEl.toggleClass('ind-search-expanded');
+            serEl.focus();
+            var serElb =$element.find('#search-btn'+i);
+
+            serElb.toggleClass('search-btn-expanded');
+
+            $scope.sOpen=!$scope.sOpen;
+
+          };// archiveOrg
+
+          //============================================================
+          //
+          //
+          //============================================================
+          $scope.hasRole = function (roles) {
+              if(!$scope.user)return false;
+
+            return _.intersection(roles, $scope.user.roles).length>0;
+
+
+          };//hasRole
           $scope.customSearch = function (doc) {
 
             if(!$scope.search || $scope.search==' ' || $scope.search.length<=2) return true;
@@ -67,6 +105,10 @@ define(['app', 'lodash','jquery',
            return (temp.toLowerCase().indexOf($scope.search.toLowerCase())>=0);
 
           };
+
+          $scope.gotoAnchor = function(x) {
+                $anchorScroll(x);
+            };
 //           $scope.customSearch = function (doc) {
 // console.log('sssss');
 //             if(!$scope.search || $scope.search==' ' || $scope.search.length<=2) return true;
@@ -126,17 +168,7 @@ define(['app', 'lodash','jquery',
               $scope.selectedChip=chip;
           };// archiveOrg
 
-          //=======================================================================
-          //
-          //=======================================================================
-          $scope.searchToggle= function (id){
-            var serEl =$element.find('#'+id);
-            serEl.toggleClass('search-expanded');
-            serEl.focus();
-            $scope.sOpen=!$scope.sOpen;
 
-
-          };// archiveOrg
           // //=======================================================================
           // //
           // //=======================================================================
@@ -213,7 +245,7 @@ define(['app', 'lodash','jquery',
           $scope.edit = function (id){
             $location.url($scope.editURL+id);
           }// archiveOrg
-          init();
+
 
 
           //=======================================================================
