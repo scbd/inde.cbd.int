@@ -16,7 +16,7 @@ define(['app',
     app.directive('scbdSideMenu',['scbdMenuService','$document','authentication', function(scbdMenuService,$document,auth) {
       return {
         restrict: 'E',
-        priority: 0, //parent has 0 priority
+        priority: 600, //parent has 0 priority
         template: template,
         scope: {
           sections: '=',
@@ -62,9 +62,12 @@ define(['app',
           $element.find('.site-overlay').attr('id','site-overlay-'+$attr.id);
 
 
-          scbdSideMenu.init($attr.id,scbdSideMenu);
 
 
+          $scope.$watch('sections',function(){
+              if($scope.sections && $scope.sections.length>=2)
+                scbdSideMenu.init($attr.id,scbdSideMenu);
+          });
 
         },
 
@@ -113,6 +116,7 @@ define(['app',
 //                 }
 //               }
 //             }
+
           function init(navId,scbdSideMenu){
 
                 scbdMenuService.registerNavInstance(navId,scbdSideMenu);
@@ -127,8 +131,11 @@ define(['app',
                     pushy.addClass('p-right');
                     pushy.css('display','none');
                   }
-                else
-                    pushy.toggleClass('pushy-left'); // if left must do this first
+                else{
+                  pushy.toggleClass('pushy-left');
+                  pushy.css('display','block');
+                }
+                     // if left must do this first
 
                 pushy.addClass($scope.sections[0].menuClass);
                 //

@@ -91,10 +91,13 @@ function(app,template,_) {
                     //
                     //============================================================
                     function activate(){
+        
+                      $element.parent().parent().find('button').removeClass(activeClass);
                         $element.find('button').addClass(activeClass);
                         $element.find('i').addClass(iconClass);
                         $element.find('img').addClass(iconClass);
                         $scope.section.active=true;
+
                     }//activate
 
                     //============================================================
@@ -116,7 +119,7 @@ function(app,template,_) {
                           $timeout(function(){activate();},200);
 
                           if($scope.section.path && _.isFunction($scope.section.path)){
-                    console.log('detects function');
+
                             $scope.section.path();
 
                           }
