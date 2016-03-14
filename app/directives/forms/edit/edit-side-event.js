@@ -2,9 +2,9 @@ define(['app', 'lodash',
 
   'text!./edit-side-event.html',
     'moment',
-    'text!/app/directives/forms/edit/publish-dialog.html',
-      'css!/app/libs/ng-dialog/css/ngDialog.css',
-    'css!/app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
+    'text!app/directives/forms/edit/publish-dialog.html',
+      'css!app/libs/ng-dialog/css/ngDialog.css',
+    'css!app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
         // 'css!./edit-side-event',
   '../../side-menu/scbd-side-menu',
 
@@ -302,7 +302,7 @@ define(['app', 'lodash',
               }// initProfile()
 
               //============================================================
-              ///app/images/ic_event_black_48px.svg
+              //  app/images/ic_event_black_48px.svg
               //============================================================
               function randomPic() {
                     var num = Math.floor((Math.random() * 12) + 1);
@@ -318,10 +318,10 @@ define(['app', 'lodash',
               //
               //============================================================
               $scope.toggleIcon= function() {
-                  if($scope.doc.logo==='/app/images/ic_event_black_48px.svg')
+                  if($scope.doc.logo==='app/images/ic_event_black_48px.svg')
                       $scope.doc.logo=randomPic();
                   else
-                      $scope.doc.logo='/app/images/ic_event_black_48px.svg';
+                      $scope.doc.logo='app/images/ic_event_black_48px.svg';
               }// initProfile()
 
               //============================================================

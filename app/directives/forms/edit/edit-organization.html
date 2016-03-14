@@ -42,7 +42,7 @@
               <div class="col-md-12 col-xs-12">
                 <div class="km-control-group nowrap" name="logo" caption="Logo">
                   <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
-                  <br><span ng-if="doc.logo!=='/app/images/ic_business_black_48px.svg'"> [<scbd-icon-button type="fa" icon-name="fa-times" to-icon-name="fa-times" ani="rubberBand" ng-click="toggleIcon();" ng-if="doc.logo!=='/app/images/ic_business_black_48px.svg'" waves></scbd-icon-button>No Logo, Icon Only ]</span>
+                  <br><span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'"> [<scbd-icon-button type="fa" icon-name="fa-times" to-icon-name="fa-times" ani="rubberBand" ng-click="toggleIcon();" ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'" waves></scbd-icon-button>No Logo, Icon Only ]</span>
 
                   <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
 

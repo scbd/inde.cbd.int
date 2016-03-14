@@ -1,10 +1,10 @@
 define(['app', 'lodash',
     'text!./edit-organization.html',
-    'text!/app/directives/forms/edit/publish-dialog-org.html',
+    'text!app/directives/forms/edit/publish-dialog-org.html',
     'scbd-angularjs-controls/km-inputtext-ml',
     'scbd-angularjs-controls/km-control-group',
-    'css!/app/libs/ng-dialog/css/ngDialog.css',
-    'css!/app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
+    'css!app/libs/ng-dialog/css/ngDialog.css',
+    'css!app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
     'scbd-angularjs-controls/km-select',
     'scbd-angularjs-controls/km-form-languages',
     'scbd-angularjs-controls/km-inputtext-list',
@@ -42,7 +42,7 @@ define(['app', 'lodash',
                           $scope.loading=true;
                           $scope._id=document[0];
                           $scope.doc=document[1];
-                          $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+                          $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=true;
                         }
                 );
@@ -58,7 +58,7 @@ define(['app', 'lodash',
                         $scope._id=document[0];
                         $scope.doc=document[1];
                         if(!$scope.doc.logo)
-                          $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+                          $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=false;
                   });
               }
@@ -94,7 +94,7 @@ define(['app', 'lodash',
 
                         if(!($scope.hide  !== undefined && $scope.hide !== null)){
                                 $scope._id=res.data._id;
-                                
+
                         } else{
                           $scope.hide=0;
 
@@ -107,7 +107,7 @@ define(['app', 'lodash',
               //
               //============================================================
               $scope.toggleIcon= function() {
-                      $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+                      $scope.doc.logo='app/images/ic_business_black_48px.svg';
               }// initProfile()
                 //=======================================================================
                 //

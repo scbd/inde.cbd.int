@@ -129,7 +129,7 @@ define(['app','lodash'],function(app,_) {
         menus.cbdMenu.push({
           name: 'The Convention',
           type: 'toggle',
-          imgSrc: '/app/images/cbd-leaf-white.svg',
+          imgSrc: 'app/images/cbd-leaf-white.svg',
           pages: [{
             name: 'Text of the Convention',
             type: 'link',

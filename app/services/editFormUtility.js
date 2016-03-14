@@ -1,4 +1,4 @@
-﻿define(['app','/app/js/common.js'], function (app) {
+﻿define(['app','app/js/common.js'], function (app) {
 
 app.factory("editFormUtility", ["IStorage", "IWorkflows", "$q", "realm","commonjs", function(storage, workflows, $q, realm, commonjs) {
 
@@ -148,7 +148,7 @@ app.factory("editFormUtility", ["IStorage", "IWorkflows", "$q", "realm","commonj
 				//Save document
 				if(schema == 'contact')
 					return storage.documents.put(identifier, document);	// return documentInfo
-				
+
 				//Incase of publish save draft and let the workflow publish the document.
 				return storage.drafts.put(identifier, document);
 			})
