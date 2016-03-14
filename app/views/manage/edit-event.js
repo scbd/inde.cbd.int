@@ -27,7 +27,7 @@ define(['app', 'lodash',
 
       }).then(function(){
         if(!$scope.isAuthenticated)
-              $window.location.href='https://accounts.cbd.int/signin?returnUrl=';
+              $window.location.href='https://accounts.cbd.int/signin?returnUrl='+encodeURIComponent($location.absUrl());
       });
 
       //=======================================================================
