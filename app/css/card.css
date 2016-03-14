@@ -1,12 +1,28 @@
-.card-panel {
+.card-inde-panel {
   transition: box-shadow .25s;
-  padding: 20px;
+  padding: 5px;
   margin: 0.5rem 0 1rem 0;
   border-radius: 2px;
   background-color: #fff;
 }
+.card-inde-action{text-align: center;left:0px; background-color:#ffffff;}
+.action-grp{
+  height:7%;
+  color:#109e49;
+  font-size: 20px;
+  /*position:absolute;
+  bottom:0px;*/
+  width:100%;
+  /*z-index: 20px;*/
+  text-align: center;
+  /*left:0px;*/
+}
+/*.action-grp-filler{
+  height:40px;
+  position: relative;
+}*/
 
-.card {
+.card-inde {
   border-top: solid;
   border-top-width: .5px;
   border-top-color: #109e49;
@@ -22,55 +38,57 @@
   border-radius: 2px;
 }
 
-.card .card-title {
+.card-inde .card-inde-title {
   font-size: 24px;
   font-weight: 300;
 }
 
-.card .card-title.activator {
+.card-inde .card-inde-title.activator {
   cursor: pointer;
 }
 
-.card.small, .card.medium, .card.large {
+.card-inde.small, .card-inde.medium, .card-inde.large {
   position: relative;
 }
 
-.card.small .card-image, .card.medium .card-image, .card.large .card-image {
-  max-height: 60%;
+.card-inde.small .card-inde-image, .card-inde.medium .card-inde-image, .card-inde.large .card-inde-image {
+  max-height: 30%;
   overflow: hidden;
 }
 
-.card.small .card-content, .card.medium .card-content, .card.large .card-content {
-  max-height: 40%;
+.card-inde.small .card-inde-content, .card-inde.medium .card-inde-content, .card-inde.large .card-inde-content {
+  height: 49%;
+  padding: 5px;
+  text-overflow: ellipsis;
   overflow: hidden;
 }
 
-.card.small .card-action, .card.medium .card-action, .card.large .card-action {
-  position: absolute;
+.card-inde.small .card-inde-action, .card-inde.medium .card-inde-action, .card-inde.large .card-inde-action {
+  /*position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 1;
-  background-color: inherit;
+  background-color: inherit;*/
 }
 
-.card.small {
+.card-inde.small {
   height: 300px;
 }
 
-.card.medium {
+.card-inde.medium {
   height: 400px;
 }
 
-.card.large {
+.card-inde.large {
   height: 500px;
 }
 
-.card .card-image {
+.card-inde .card-inde-image {
   position: relative;
 }
 
-.card .card-image img {
+.card-inde .card-inde-image img {
   display: block;
   border-radius: 2px 2px 0 0;
   position: relative;
@@ -82,47 +100,48 @@
   margin:0 auto;
 }
 
-.card .card-image .card-title {
+.card-inde .card-inde-image .card-inde-title {
   color: #fff;
   position: absolute;
   bottom: 0;
   left: 0;
-  padding: 20px;
+  padding: 5px;
 }
 
-.card .card-content {
-  padding: 20px;
+.card-inde .card-inde-content {
+  padding: 5px;
   border-radius: 0 0 2px 2px;
 }
 
-.card .card-content p {
+.card-inde .card-inde-content p {
   margin: 0;
   color: inherit;
 }
 
-.card .card-content .card-title {
-  line-height: 48px;
+.card-inde .card-inde-content .card-inde-title {
+  line-height: 20px;
 }
 
-.card .card-action {
+.card-inde .card-inde-action {
   border-top: 1px solid rgba(160, 160, 160, 0.2);
-  padding: 20px;
+  /*padding: 20px;*/
   z-index:500;
 }
 
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+.card-inde .card-inde-action a:not(.btn):not(.btn-large):not(.btn-floating) {
   color: #ffab40;
-  margin-right: 20px;
+  margin-right: 5px;
   transition: color .3s ease;
   text-transform: uppercase;
+  max-height:10%;
 }
 
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+.card-inde .card-inde-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
   color: #ffd8a6;
 }
 
-.card .card-reveal {
-  padding: 20px;
+.card-inde .card-inde-reveal {
+  padding: 5px;
   position: absolute;
   background-color: #fff;
   width: 100%;
@@ -133,7 +152,7 @@
   display: none;
 }
 
-.card .card-reveal .card-title {
+.card-inde .card-inde-reveal .card-inde-title {
   cursor: pointer;
   display: block;
 }
