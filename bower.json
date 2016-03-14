@@ -32,7 +32,8 @@
     "ng-dialog": "~0.5.8",
     "tether": "~1.2.0",
     "ngSmoothScroll": "~2.0.0",
-    "scroll-animate-directive": "~0.1.2"
+    "scroll-animate-directive": "~0.1.2",
+    "socket.io-1.4.5": "https://cdn.socket.io/socket.io-1.4.5.js"
   },
   "resolutions": {
     "angular": "1.5.0",
