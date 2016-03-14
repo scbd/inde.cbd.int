@@ -1,6 +1,4 @@
 define([ 'app', 'lodash','text!./scbd-select-list.html',
-'css!./scbd-select-list',
-'css!flag-icon-css',
 '../../../services/filters',
 '../../../services/services',
     '../../../services/mongo-storage'
@@ -115,16 +113,21 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
             return false;
 		      };// archiveOrg
 
-					//=======================================================================
-		      //
-		      //=======================================================================
-		      $scope.searchToggle= function (){
-		        var serEl =$element.find('.search');
-						serEl.toggleClass('search-expanded');
-						serEl.focus();
-						$scope.sOpen=!$scope.sOpen;
-						$scope.search='';
-		      };// archiveOrg
+
+          //=======================================================================
+          //
+          //=======================================================================
+          $scope.searchToggle= function (){
+            var serEl =$element.find('.search');
+            serEl.toggleClass('search-expanded');
+            serEl.focus();
+            var serElb =$element.find('.search-btn');
+            serElb.toggleClass('search-btn-expanded');
+
+            $scope.sOpen=!$scope.sOpen;
+            $scope.search='';
+          };// archiveOrg
+
 		      //=======================================================================
 		      //
 		      //=======================================================================
