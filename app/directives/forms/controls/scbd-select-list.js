@@ -45,11 +45,9 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
                   setChips();
           },true);
           $scope.$watch('items',function(){
-              if(!$scope.schema && $scope.items  && $scope.items.length > 0 ){
-                  $scope.docs=$scope.items;
-              }
 
-          },true);
+              init();
+          });
           //==================================
 					//
 					//
@@ -219,7 +217,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      };// archiveOrg
 
 
-		init();
+	//	init();
 		}
 	};
 }]);

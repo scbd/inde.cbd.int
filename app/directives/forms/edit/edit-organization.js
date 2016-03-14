@@ -34,7 +34,8 @@ define(['app', 'lodash',
               // $scope.dashboard = scbdMenuService.dashboard;
               $scope.doc={};
 
-
+              if($attrs.selectedOrgs)
+                $scope.isInForm=true;
 
               if(!$scope._id || $scope._id==='0' || $scope._id==='new'){
                 mongoStorage.createDoc('inde-orgs').then(
@@ -98,8 +99,19 @@ define(['app', 'lodash',
                         } else{
                           $scope.hide=0;
 
-                          if(!$scope.selectedOrgs)$scope.selectedOrgs=[];
-                          $scope.selectedOrgs.push({'identifier':res.data._id});
+                          if($scope.isInForm){
+                            if(!_.isArray($scope.selectedOrgs))$scope.selectedOrgs=[];
+                            $scope.selectedOrgs.push(res.data._id);
+                          }
+                          mongoStorage.createDoc('inde-orgs').then(
+                                  function(document){
+                                    $scope.loading=true;
+                                    $scope._id=document[0];
+                                    $scope.doc=document[1];
+                                    $scope.doc.logo='app/images/ic_business_black_48px.svg';
+                                    $scope.isNew=true;
+                                  }
+                          );
                         }
                   });
               };
@@ -139,8 +151,8 @@ define(['app', 'lodash',
               //
               //============================================================
               $scope.publishRequestDial = function () {
-
-                    ngDialog.open({ template: dailogTemp, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
+                    if(!$scope.isInForm)
+                        ngDialog.open({ template: dailogTemp, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
 
 
               };

@@ -52,7 +52,12 @@ define(['app', 'lodash',
                   generateDates();
                 }
               });
+              $scope.$watch('doc.hostOrgs',function(){
+                if($scope.showOrgForm && doc.hostOrgs && doc.hostOrgs.length){
+                  $scope.showOrgForm=false;
 
+                }
+              });
 
                   $http.get("https://api.cbd.int/api/v2015/confrences", {
                       cache: true
@@ -407,9 +412,17 @@ define(['app', 'lodash',
 
                       if($scope.updateProfile ==='Yes')
                         saveProfile();
-                        //delete($scope.doc.contact);
-                        //$scope.doc.contact={};
-                        //$scope.doc.contact.mobile=tempMobile;
+
+                        _.each($scope.doc.hostOrgs,function(orgId){
+
+                              mongoStorage.loadDoc('inde-orgs',orgId).then(function(orgObj){
+
+                                  if(orgObj[1].meta.status==='draft'){
+                                        orgObj[1].meta.status='request';
+                                        mongoStorage.save('inde-orgs',orgObj[1],orgObj._id);
+                                  }
+                              });
+                        });
                         mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
 
                       });
