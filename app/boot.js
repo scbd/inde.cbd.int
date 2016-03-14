@@ -29,7 +29,7 @@ require.config({
         'outdated-browser-css'     : 'libs/outdated-browser/outdatedbrowser/outdatedbrowser.min',
         'scroll-directive'         :'libs/scroll-animate-directive/src/scroll-animate-directive',
         'shim'                     : 'libs/require-shim/src/shim',
-        'teather'                  :'libs/tether/dist/js/tether.min',
+        'teather'                  :'libs/tether/dist/js/tether',
         'text'                     : 'libs/requirejs-text/text',
         // 'text-angular-sanitize' : 'libs/textAngular/dist/textAngular-sanitize.min',
         // 'text-angular'          : 'libs/textAngular/dist/textAngular.min',
