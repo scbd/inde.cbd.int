@@ -1,16 +1,122 @@
-<div ng-controller="dashBoard" class="view-container">
+<div ng-controller="dashBoard" >
 
   <section class="row relative">
     <!-- ng-if="isLocked" -->
-    <scbd-side-menu id="dashboard" sections="sections" bump-id="getBumped" open hide-lt-sm>
+    <scbd-side-menu id="dashboard" sections="sections"  overlay>
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>Management Center</h1>
       </div>
     </scbd-side-menu>
 
+    <div class="container-header-name hidden-lg-up">Dashbord</div>
+    <div class="list-container " style="height:300px;" ng-if="isAuthenticated">
+      <div class="container-header " >
+        <div class="pull-xs-left ">
+          <button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="Hooray!" ng-click="toggle('dashboard')"><i class="fa fa-bars" ng-if="!mOpen"></i></button>
 
-    <div class="z-depth-3 dash-container " style="height:300px;" id="getBumped" ng-if="isAuthenticated">
-      <div class="menu-btn right" ng-click="toggle('dashboard')">&#9776; Menu</div>
+          <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
+        </div>
+        <span class="container-header-name hidden-lg-down" ><h1 style="display:inline;">Dashboard</h1></span>
+        <div class=" pull-xs-right" >
+
+          <button class="btn btn-default btn-sm" ng-click="close()"><i class="fa fa-times"></i></button>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+  <div class="container-header-filler"></div>
+
+      <div style="padding-top:10px;">
+        <div class="col-lg-offset-2  col-lg-4 col-sm-6 col-xs-12" >
+
+          <div class="card">
+
+              <div class="card-block">
+                 <span>Your Side Events</span>
+                <blockquote class="card-blockquote">
+                    <div class="bs-callout bs-callout-default">
+                      <span class="title">All</span>
+                      <span class="label label-pill label-default pull-xs-right middle" style="margin-top:3px;">{{facets.all}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-primary">
+                      <span class="title">Drafts</span>
+                      <span class="label label-pill label-primary pull-xs-right middle" style="margin-top:3px;">{{facets.draft}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-success">
+                      <span class="title">Published</span>
+                      <span class="label label-pill label-success pull-xs-right middle" style="margin-top:3px;">{{facets.published}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-warning">
+                      <span class="title">Requests</span>
+                      <span class="label label-pill label-warning pull-xs-right middle" style="margin-top:3px;">{{facets.request}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-danger-little">
+                      <span class="title">Canceled</span>
+                      <span class="label label-pill label-danger-little pull-xs-right middle" style="margin-top:3px;">{{facets.canceled}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-info">
+                      <span class="title">Archived</span>
+                      <span class="label label-pill label-info pull-xs-right middle" style="margin-top:3px;">{{facets.archived}}</span>
+                    </div>
+                    <div class="bs-callout bs-callout-danger">
+                      <span class="title">Rejected</span>
+                      <span class="label label-pill label-danger pull-xs-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
+                    </div>
+
+                </blockquote>
+                <a href="#" class="btn btn-primary pull-xs-right btn-sm" style="margin-top:15px;" ng-click="goTo('/manage/events')">Go To Events</a>
+              </div>
+
+            <div class="card-block">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4 col-sm-6 col-xs-12" >
+
+          <div class="card">
+
+              <div class="card-block">
+                 <span>Your Organizations</span>
+                 <blockquote class="card-blockquote">
+                     <div class="bs-callout bs-callout-default">
+                       <span class="title">All</span>
+                       <span class="label label-pill label-default pull-xs-right middle" style="margin-top:3px;">{{facetsO.all}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-primary">
+                       <span class="title">Drafts</span>
+                       <span class="label label-pill label-primary pull-xs-right middle" style="margin-top:3px;">{{facetsO.draft}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-success">
+                       <span class="title">Published</span>
+                       <span class="label label-pill label-success pull-xs-right middle" style="margin-top:3px;">{{facetsO.published}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-warning">
+                       <span class="title">Requests</span>
+                       <span class="label label-pill label-warning pull-xs-right middle" style="margin-top:3px;">{{facetsO.request}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-danger-little">
+                       <span class="title">Canceled</span>
+                       <span class="label label-pill label-danger-little pull-xs-right middle" style="margin-top:3px;">{{facetsO.canceled}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-info">
+                       <span class="title">Archived</span>
+                       <span class="label label-pill label-info pull-xs-right middle" style="margin-top:3px;">{{facetsO.archived}}</span>
+                     </div>
+                     <div class="bs-callout bs-callout-danger">
+                       <span class="title">Rejected</span>
+                       <span class="label label-pill label-danger pull-xs-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
+                     </div>
+                      <a href="#" class="btn btn-primary pull-xs-right btn-sm" style="margin-top:15px;" ng-click="goTo('/manage/organizations')">Go To Organizations</a>
+                 </blockquote>
+
+
+              </div>
+            <div class="card-block">
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
 
   </section>
