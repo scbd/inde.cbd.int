@@ -1,8 +1,8 @@
 
 define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs-services/extended-route',  'scbd-angularjs-services/authentication'], function(app, _, rootTemplate) { 'use strict';
 
-    app.config(['extendedRouteProvider', '$locationProvider', function($routeProvider, $locationProvider) {
-
+    app.config(['extendedRouteProvider', '$locationProvider','$location', function($routeProvider, $locationProvider,$location) {
+console.log($location.path());
         $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix('!');
 
