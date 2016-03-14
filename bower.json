@@ -29,10 +29,14 @@
     "js-sha256": "~0.3.0",
     "dropzone": "~4.3.0",
     "ng-file-upload": "~12.0.1",
-    "ng-dialog": "~0.5.8"
+    "ng-dialog": "~0.5.8",
+    "tether": "~1.2.0",
+    "ngSmoothScroll": "~2.0.0",
+    "scroll-animate-directive": "~0.1.2"
   },
   "resolutions": {
     "angular": "1.5.0",
-    "bootstrap": "3.3.6"
+    "bootstrap": "3.3.6",
+    "scbd-angularjs-services": "de4cd6f92a1dd1ac7955e992575709d47bc1a350"
   }
 }
