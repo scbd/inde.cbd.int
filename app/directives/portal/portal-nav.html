@@ -1,35 +1,27 @@
 <div ng-cloak >
 
-  <!-- <div   class="portal-nav-mobi portal-branding" layout="row" layout-align="center center" ng-class="portalMobiNavClass"  ng-cloak hide-gt-sm>
+  <div   class="row portal-nav-mobi portal-branding center hidden-lg-up"  ng-class="portalMobiNavClass"  ng-cloak >
 
 
-    <scbd-fab-button aria-label="Meeting" class="md-fab md-raised md-mini" ng-click="goTo('/#meeting');">
-      <scbd-icon-button  type="md" icon-name="nature_people"></scbd-icon-button>
-    </scbd-fab-button>
-  <scbd-fab-button aria-label="Event" class="md-fab md-raised md-mini" ng-click="goTo('/#search');">
-    <scbd-icon-button  type="md" icon-name="nature_people">event</scbd-icon-button>
-  </scbd-fab-button>
+    <div class="btn-group ">
+      <button  class="btn btn-default search-btn btn-sm" ng-click="goTo('/');">Meetings</button>
+      <button  class="btn btn-default search-btn btn-sm" ng-click="goTo('/manage/events/new');">Register</button>
+      <button  class="btn btn-default search-btn btn-sm" ng-click="goTo('/manage');" ng-if="isAuthenticated">Dashboard</button>
+      <button  class="btn btn-default search-btn btn-sm" ng-click="goTo('/admin');" ng-if="isAdmin">Admin</button>
+    </div>
 
-  <scbd-fab-button aria-label="About" class="md-fab md-raised md-mini" ng-click="goTo('/#about');">
-    <scbd-icon-button  type="md" icon-name='info_outline'>info_outline</scbd-icon-button>
-  </scbd-fab-button>
-  <scbd-fab-button aria-label="Request" class="md-fab md-raised md-mini" ng-click="goTo('/#request');">
-    <scbd-icon-button type="md" icon-name='add_location'>add_location</scbd-icon-button>
-  </scbd-fab-button>
-  <scbd-fab-button aria-label="Manage" class="md-fab md-raised md-mini" ng-click="goTo('/manage');" >
-    <scbd-icon-button  type="md" icon-name="dashboard">dashboard</scbd-icon-button>
-  </scbd-fab-button>
+  </div>
+  <div   class="row portal-nav-mobi-filler hidden-lg-up"  ng-cloak >
 
-  </div> -->
-
+  </div>
 
 
 <div  ng-cloak>
-<section  class="lg-menu hidden-xs hidden-sm" >
+<section  class="lg-menu  hidden-lg-down" >
   <span class="cl-effect-14" >
     <a id="home" ng-click="goTo('/');setActivePath();">Meetings </a>
-    <a id="request" ng-click="goTo('/manage/events/0');setActivePath();">Request</a>
-    <a id="dash" ng-click="goTo('/manage/events');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
+    <a id="request" ng-click="goTo('/manage/events/new');setActivePath();">Register</a>
+    <a id="dash" ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
     <a id="admin" ng-click="goTo('/admin');setActivePath();"  ng-if="isAdmin">Admin</a>
     <!-- <a id="help" ng-click="goTo('/help');setActivePath();" class="pull-right"> Help</a> -->
   </span>
