@@ -1,16 +1,20 @@
 define(['app', 'lodash',
-  'css!./events',
-  'directives/side-menu/scbd-side-menu',
-  'directives/scbd-button',
+
   './menu',
   'directives/scbd-icon-button',
   '../../services/mongo-storage',
-  '../../directives/scbd-tip'
+      '../../services/filters'
 ], function(app, _) {
 
-  app.controller("events", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout',//"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout) { //, $http, $filter, Thesaurus
+  app.controller("events", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication',//"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication) { //, $http, $filter, Thesaurus
 
+      authentication.getUser().then(function (user) {
+        $scope.isAuthenticated=user.isAuthenticated;
+      }).then(function(){
+        if(!$scope.isAuthenticated)
+            $window.location.href='https://accounts.cbd.int/signin?returnUrl=';
+      });
 
       $scope.loading=false;
       $scope.schema="inde-side-events";
@@ -21,32 +25,35 @@ define(['app', 'lodash',
       $scope.sections = dashMenu.getMenu('dashboard');
       $scope.sectionsOptions = dashMenu.getMenu('options');
 
-      var sec = _.findWhere($scope.sectionsOptions, {name:'Sort Order'});
+      var sec = _.findWhere($scope.sectionsOptions, {name:'Sort'});
       sec.path=sortOrder;
-      sec = _.findWhere($scope.sectionsOptions, {name:'View Archive'});
+      sec = _.findWhere($scope.sectionsOptions, {name:'Archives'});
       sec.path=toggleArchived;
-      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'All'});
+      sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'All'});
       sec.path=selectChipAll;
-      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Draft'});
+      sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Drafts'});
       sec.path=selectChipDraft;
-      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Requests'});
+      sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Requests'});
       sec.path=selectChipRequest;
-      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Approved'});
+      sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Approved'});
       sec.path=selectChipApproved;
-      sec = _.findWhere($scope.sectionsOptions[4].pages, {name:'Canceled'});
+      sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Canceled'});
       sec.path=selectChipCanceled;
-      console.log('sec',sec);
+      sec = _.findWhere($scope.sectionsOptions[6].pages, {name:'Card View'});
+      sec.path=cardView;
+      sec = _.findWhere($scope.sectionsOptions[6].pages, {name:'List View'});
+      sec.path=listView;
+      // sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Detail View'});
+      // sec.path=detailView;
 
 
-
-
-      if(dashMenu.history.length===1)
-        $timeout(function(){
-              dashMenu.toggle('dashboard');
-            $timeout(function(){
-              dashMenu.toggle('dashboard');
-            },500);
-        },500);
+      // if(dashMenu.history.length===1)
+      //   $timeout(function(){
+      //         dashMenu.toggle('dashboard');
+      //       $timeout(function(){
+      //         dashMenu.toggle('dashboard');
+      //       },500);
+      //   },500);
       $scope.sortReverse=0;
       $scope.listView=0;
       $scope.showArchived=0;
@@ -64,28 +71,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       function init(){
-        $(document).ready(function(){
-$('[data-toggle="tooltip"]').tooltip();
-});
-
-$('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
-    var that = $(this);
-
-    var element = that[0];
-    if(element.myShowTooltipEventNum == null){
-        element.myShowTooltipEventNum = 0;
-    }else{
-        element.myShowTooltipEventNum++;
-    }
-    var eventNum = element.myShowTooltipEventNum;
-
-    setTimeout(function(){
-        if(element.myShowTooltipEventNum == eventNum){
-            that.tooltip('hide');
-        }
-        // else skip timeout event
-    }, 1000);
-});
+        registerToolTip();
 
               $scope.loadList ();
               mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
@@ -99,6 +85,34 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
 
       };
 
+
+      function registerToolTip(){
+        $timeout(function(){
+          $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+          });
+
+          $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
+              var that = $(this);
+
+              var element = that[0];
+              if(element.myShowTooltipEventNum == null){
+                  element.myShowTooltipEventNum = 0;
+              }else{
+                  element.myShowTooltipEventNum++;
+              }
+              var eventNum = element.myShowTooltipEventNum;
+
+              setTimeout(function(){
+                  if(element.myShowTooltipEventNum == eventNum){
+                      that.tooltip('hide');
+                  }
+                  // else skip timeout event
+              }, 1000);
+          });
+        },2000);
+      }
+      
       function  sortOrder () {
         console.log('here');
         $scope.sortReverse=!$scope.sortReverse;
@@ -110,7 +124,9 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
 
         if(!$scope.search || $scope.search==' ' || $scope.search.length<=2) return true;
         var temp = JSON.stringify(doc);
+
        return (temp.toLowerCase().indexOf($scope.search.toLowerCase())>=0);
+
 
       };
       //=======================================================================
@@ -172,6 +188,7 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       function selectChip (chip){
         $element.find('.chip').removeClass('chip-active');
         $element.find('#chip-'+chip).addClass('chip-active');
+
         if(chip==='all')
           $scope.selectedChip='';
         else
@@ -225,29 +242,43 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       //
       //=======================================================================
-      $scope.toggleListView = function (docObj){
-
-        if($scope.listView===0)
-            $scope.listView=1;
-        else if($scope.listView===1)
-            $scope.listView=2;
-        else
-          $scope.listView=0;
+      function toggleListView  (docObj){
+        $timeout(function(){
+          if($scope.listView===0)
+              $scope.listView=1;
+          // else if($scope.listView===1)
+          //     $scope.listView=2;
+          else
+            $scope.listView=0;
+        });
+        registerToolTip();
       };//toggleListView
+      $scope.toggleListView = toggleListView ;
 
       //=======================================================================
       //
       //=======================================================================
-      function toggleArchived  (docObj){
-
-        if(!$scope.showArchived)
-            archiveList();
-        else
-            $scope.loadList();
-        $scope.showArchived=!$scope.showArchived;
-
-        $scope.toggle('options');
-      };// archiveOrg
+      function listView  (docObj){
+            $scope.listView=0;
+            $scope.toggle('options');
+            registerToolTip();
+      };//toggleListView
+      //=======================================================================
+      //
+      //=======================================================================
+      function cardView  (docObj){
+            $scope.listView=1;
+            $scope.toggle('options');
+            registerToolTip();
+      };//toggleListView
+      //=======================================================================
+      //
+      //=======================================================================
+      function detailView  (docObj){
+            $scope.listView=2;
+            $scope.toggle('options');
+            registerToolTip();
+      };//toggleListView
 
       //=======================================================================
       //
@@ -300,6 +331,7 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       function selectChipAll (){
         selectChip('all');
+        $scope.toggle('options');
       };// archiveOrg
 
       //=======================================================================
@@ -307,6 +339,7 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       function selectChipDraft (){
         selectChip('draft');
+        $scope.toggle('options');
       };// archiveOrg
 
       //=======================================================================
@@ -314,6 +347,7 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       function selectChipRequest (){
         selectChip('request');
+        $scope.toggle('options');
       };// archiveOrg
 
       //=======================================================================
@@ -321,6 +355,7 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       function selectChipApproved (){
         selectChip('published');
+        $scope.toggle('options');
       };// archiveOrg
 
       //=======================================================================
@@ -328,9 +363,47 @@ $('[data-toggle="tooltip"]').on('shown.bs.tooltip', function () {
       //=======================================================================
       function selectChipCanceled (){
         selectChip('canceled');
+        $scope.toggle('options');
       };// archiveOrg
 
+      //=======================================================================
+      //
+      //=======================================================================
+      function toggleArchived  (docObj){
+        $timeout(function(){
+          if(!$scope.showArchived){
+            mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+            archiveList();
+          }
 
+          else{
+            mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
+            $scope.loadList();
+          }
+
+          $scope.showArchived=!$scope.showArchived;
+
+
+          $scope.toggle('options');
+          selectChip('archived');
+          registerToolTip();
+        });
+        $timeout(function(){
+
+          if($scope.selectedChip==='archived')
+              $scope.selectedChip='all';
+          else
+            $scope.selectedChip='archived';
+
+        },500);
+      }// archiveOrg
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.close = function(){
+
+          $window.history.back();
+      };
       init();
       $scope.selectChip('all');
     }
