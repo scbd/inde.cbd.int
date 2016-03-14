@@ -5,32 +5,26 @@ define(['app', 'lodash',
     'text!/app/directives/forms/edit/publish-dialog.html',
       'css!/app/libs/ng-dialog/css/ngDialog.css',
     'css!/app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
-        'css!./edit-side-event',
-  'scbd-branding/side-menu/scbd-side-menu',
-  'scbd-branding/scbd-button',
-  'scbd-branding/side-menu/scbd-menu-service',
+        // 'css!./edit-side-event',
+  '../../side-menu/scbd-side-menu',
+
   'scbd-angularjs-controls/km-inputtext-ml',
   'scbd-angularjs-controls/km-control-group',
   'scbd-angularjs-controls/km-date',
-  'scbd-angularjs-controls/km-rich-textbox',
 
-      'scbd-branding/scbd-icon-button',
-    'scbd-branding/scbd-tooltip',
-    'scbd-angularjs-controls/km-select',
-    // 'scbd-angularjs-controls/km-form-languages',
     'scbd-angularjs-controls/km-inputtext-list',
 '../controls/scbd-select-list',
     '../../../services/mongo-storage',
     '../controls/scbd-file-upload',
-    './edit-organization',
-  'scbd-branding/scbd-media',
+    './edit-organization'
+
 
 
 ], function(app, _,template,moment,dialogTemplate) { //'scbd-services/utilities',
 
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$window','ngDialog','$compile', //"$http", "$filter", "Thesaurus",
-      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth,$window,ngDialog,$compile) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$window','ngDialog','$compile','$timeout', //"$http", "$filter", "Thesaurus",
+      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,auth,$window,ngDialog,$compile,$timeout) {
       return {
         restrict   : 'E',
         template   : template,
@@ -43,12 +37,13 @@ define(['app', 'lodash',
               $scope.loading=false;
               $scope.schema="inde-side-events";
               $scope.showOrgForm = 0;
-
-              $scope.toggle = scbdMenuService.toggle;
-              $scope.dashboard = scbdMenuService.dashboard;
+              $scope.isNew=true;
+              // $scope.toggle = scbdMenuService.toggle;
+              // $scope.dashboard = scbdMenuService.dashboard;
               $scope.doc={};
               $scope.doc.hostOrgs=[];
-              $scope.updateProfile=1;
+              $scope.updateProfile='No';
+
               var data ={}; //catch for profile data
 
               $scope.$watch('doc.confrence',function(){
@@ -63,28 +58,17 @@ define(['app', 'lodash',
                       cache: true
                   }).then(function(o) {
                       $scope.options.confrences= $filter("orderBy")(o.data, "title");
+
                   });
 
-            $http.get("https://api.cbd.int/api/v2015/countries", {
-                cache: true
-            }).then(function(o) {
 
-                $scope.countries =  $filter("orderBy")(o.data, "name.en");
-                _.each($scope.countries, function(c){
-                    c.title=c.name;
-                    //c._id=c.code;
-
-                });
-            });
             //============================================================
             //
             //============================================================
             $scope.publishRequestDial = function () {
-              //dialogTemplate = $compile(dialogTemplate,$scope);
-               if($scope.doc.meta.status!=='published')
+
                   ngDialog.open({ template: dialogTemplate, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
-                else
-                  $scope.saveDoc();
+
 
             };
             //============================================================
@@ -97,7 +81,7 @@ define(['app', 'lodash',
               mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
                 _.each($scope.doc.hostOrgs,function(org){
                     mongoStorage.loadDoc('inde-orgs',org).then(function(conf){
-                      console.log('conf',conf);
+
                       if(conf[1].meta.status!=='request')
                        mongoStorage.requestDoc('inde-orgs',{document:conf[1]},conf[0]);
                     });
@@ -117,21 +101,14 @@ define(['app', 'lodash',
                     docObj.selected=!docObj.selected;
                     if(true){
                       if(docObj.selected){
-                          $scope.binding=docObj._id;
+                          $scope.doc.confrence=docObj._id;
                       }
                       else{
-                          $scope.binding='';
+                          $scope.doc.confrence='';
                           $scope.search='';
                       }
                   }
-                  // else {
-                  //   if(!_.isArray($scope.binding))$scope.binding=[];
-                  //
-                  //   if(docObj.selected)
-                  //     $scope.confrence.push(docObj._id);
-                  //   else
-                  //     _.remove($scope.binding,function(obj){return obj===docObj._id;});
-                  // }
+
                 });
 
 
@@ -142,8 +119,9 @@ define(['app', 'lodash',
               //============================================================
               function init() {
 
-                if($scope._id!=='0' ){
-                    if($scope._id.search('^[0-9A-Fa-f]{24}$')<0)
+                if($scope._id!=='0' && $scope._id!=='new'){
+
+                    if(($scope._id.search('^[0-9A-Fa-f]{24}$')<0 ))
                       $location.url('/404');
                     else
                       mongoStorage.loadDoc($scope.schema,$scope._id).then(function(document){
@@ -151,7 +129,8 @@ define(['app', 'lodash',
                             $scope.loading=true;
                             $scope._id=document[0];
                             $scope.doc=document[1];
-                            initProfile();
+                            $scope.isNew=false;
+
                       });
                   }
                 else{
@@ -162,6 +141,7 @@ define(['app', 'lodash',
                               $scope.doc=document[1];
                               $scope.doc.logo=randomPic();
                               initProfile(true);
+                              $scope.isNew=true;
                             }
                     );
                 }
@@ -192,7 +172,10 @@ define(['app', 'lodash',
 
 
                     });
-
+                    _.each($scope.options.confrences,function(conf){
+                          if(conf._id===$scope.doc.confrence)
+                            conf.selected=true;
+                    })
 
               }// init
               //============================================================
@@ -209,6 +192,7 @@ define(['app', 'lodash',
                     data.Email = _.clone($scope.doc.contact.email);
                     isChange='email';
                   }
+
                   if(data.Address !== $scope.doc.contact.address){
                     data.Address = _.clone($scope.doc.contact.address);
                     isChange='address';
@@ -219,6 +203,11 @@ define(['app', 'lodash',
                     isChange='city';
                   }
 
+                  if($scope.doc.contact.country && $scope.doc.contact.country.identifier && data.Country !== $scope.doc.contact.country.identifier){
+                    data.Country = _.clone($scope.doc.contact.country.identifier);
+                    isChange='country';
+                  }
+                  if($scope.doc.contact.country && !$scope.doc.contact.country.identifier)
                   if(data.Country !== $scope.doc.contact.country){
                     data.Country = _.clone($scope.doc.contact.country);
                     isChange='country';
@@ -260,7 +249,6 @@ define(['app', 'lodash',
                 delete($scope.doc.contact);
                 $scope.doc.contact={};
                 $scope.doc.contact.mobile=tempMobile;
-
 
                 if(isChange)
                 $http.put('https://api.cbd.int/api/v2013/users/' + $scope.user.userID, angular.toJson(data)).success(function () {
@@ -342,8 +330,6 @@ define(['app', 'lodash',
               function generateEventId(confId) {
 
                 return mongoStorage.generateEventId(confId).then(function(res){
-
-                    console.log(res);
                       return res;
                 });
               }// generateEventId
@@ -371,7 +357,15 @@ define(['app', 'lodash',
                       return $http.get("https://api.cbd.int/api/v2015/countries", {
                           cache: true
                       }).then(function(o) {
-                          return $filter("orderBy")(o.data, "name");
+                        $scope.countries =  $filter("orderBy")(o.data, "name.en");
+
+                        _.each($scope.countries, function(c){
+                            c.title=c.name;
+
+                            c.identifier=c.code.toLowerCase();
+
+                        });
+                        return $scope.countries;
                       });
                   },
 
@@ -411,11 +405,13 @@ define(['app', 'lodash',
                         if($scope.doc.contact.mobile)
                           tempMobile = _.clone($scope.doc.contact.mobile);
 
-                        delete($scope.doc.contact);
-                        $scope.doc.contact={};
-                        $scope.doc.contact.mobile=tempMobile;
-                        mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+                      if($scope.updateProfile ==='Yes')
                         saveProfile();
+                        //delete($scope.doc.contact);
+                        //$scope.doc.contact={};
+                        //$scope.doc.contact.mobile=tempMobile;
+                        mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+
                       });
                   });
               };
