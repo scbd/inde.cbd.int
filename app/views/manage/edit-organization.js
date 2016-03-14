@@ -1,39 +1,43 @@
 define(['app', 'lodash',
   'css!./edit-organization',
-    'scbd-branding/side-menu/scbd-side-menu',
-  './menu',
-  'scbd-branding/scbd-button',
+    'directives/side-menu/scbd-side-menu',
+  './menu-orgs',
   '../../directives/scbd-localizer',
   '../../directives/forms/edit/edit-organization',
-    'scbd-branding/scbd-icon-button',
-    'scbd-branding/scbd-tooltip',
-    '../../services/mongo-storage'
+
 
 ], function(app, _) { //'scbd-services/utilities',
 
 
-  app.controller("edit-organization", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout) { //, $http, $filter, Thesaurus
+  app.controller("edit-organization", ['$scope', 'orgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout', //"$http", "$filter", "Thesaurus",
+    function($scope, orgMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout) { //, $http, $filter, Thesaurus
 
       $scope.loading=false;
       $scope.schema="inde-orgs";
 
-      $scope.toggle = dashMenu.toggle;
-      $scope.sections = dashMenu.getMenu('dashboard');
-      if(dashMenu.history.length===1)
-        $timeout(function(){
-              dashMenu.toggle('dashboard');
-            $timeout(function(){
-              dashMenu.toggle('dashboard');
-            },500);
-        },500);
+
+      $scope.toggle = orgMenu.toggle;
+      $scope.sections = orgMenu.getMenu('dashboard');
+      $scope.sectionsOptions = orgMenu.getMenu('editOrgOptions');
+
+      $scope.isNew=true;
+      $scope._id = $route.current.params.id;
+      if($scope._id.length>3)$scope.isNew=false;
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
       }).then(function(){
         if(!$scope.isAuthenticated)
-          $('#loginDialog').modal('show');
+            $window.location.href='https://accounts.cbd.int/signin?returnUrl=';
       });
+
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.close = function(){
+
+          $window.history.back();
+      };
     }
   ]);
 });
