@@ -4,11 +4,10 @@ define([ 'app', 'lodash','text!./scbd-select-list.html',
     '../../../services/mongo-storage'
 ], function( app, _,template) { 'use strict';
 
-<<<<<<< d4dc8a1f624c237ef2acf53d0454aa8b2a7a7d7f
-app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http', function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http) {
-=======
+
+
 app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http','authentication','$window',function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http,authentication,$window) {
->>>>>>> critical bug fix ... show only published and user's drafts orgs
+
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -138,18 +137,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      //
 		      //=======================================================================
 		      $scope.loadList = function (){
-<<<<<<< d4dc8a1f624c237ef2acf53d0454aa8b2a7a7d7f
-            $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}&f={"document":1}').then(function(res){
-                  $scope.docs=res.data;
-                   setChips();
-            });
-  //           .then(function(response){
-  // //console.log(response.data);
-  // $scope.docs=response.data;
-  //              setChips();
-	// 	         });
-		      };// archiveOrg
-=======
+
             authentication.getUser().then(function (user) {
 
 //"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft"
@@ -169,7 +157,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
             });
 
           };
->>>>>>> critical bug fix ... show only published and user's drafts orgs
+
 		      //=======================================================================
 		      //
 		      //=======================================================================
@@ -228,7 +216,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      //=======================================================================
 		      $scope.goTo = function (url){
 		        $location.url(url);
-		      }// archiveOrg
+		      };// archiveOrg
 
 
 		init();
