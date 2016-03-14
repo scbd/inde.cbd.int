@@ -5,14 +5,15 @@
     <title>Side Events - Convention on Biological Diversity</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- <link rel="stylesheet" href="/app/libs/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/app/libs/font-awesome/css/font-awesome.min.css"> -->
     <!-- <link rel="stylesheet" href="/app/libs/nprogress/nprogress.css">
     <link rel="stylesheet" href="/app/libs/animate.css/animate.min.css"> -->
     <link rel="shortcut icon" href="/app/images/favicon.ico">
-    <link href="app/libs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="app/libs/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+     <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"> -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons"  rel="stylesheet">
     <style>
 
@@ -82,25 +83,25 @@
   <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
     <!-- HEADER (MOBILE) -->
-    <header class="mobile navbar visible-xs" role="banner" >
+    <header class="mobile navbar hidden-lg-up" role="banner" id="top">
         <div class="container">
 
             <div class="navbar-header">
-                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                    <i class="fa fa-bars" style="font-size:1.66em;"></i>
-                </button>
 
-                <div ng-cloak ng-show="user" class="pull-right">
 
+                <div ng-cloak ng-show="user" class="btn-group pull-right">
+                  <a class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse" style="display:inline;">
+                      <i class="fa fa-bars" style="font-size:1.66rem;"></i>
+                  </a>
                     <a ng-hide="user.isAuthenticated" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
-                        <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
+                        <i  class="fa fa-power-off" style="font-size:1.66rem;"></i>
                     </a>
 
-                    <div ng-show="user.isAuthenticated" class="dropdown">
+                    <div ng-show="user.isAuthenticated" class="dropdown" style="display:inline;">
 
-                        <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          <i class="fa fa-user" style="font-size:1.66em;"></i>
-                        </button>
+                        <a class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                          <i class="fa fa-user" style="font-size:1.66rem;"></i>
+                        </a>
 
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
                             <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
@@ -131,11 +132,11 @@
     </header>
 
     <!-- HEADER (LARGE) -->
-    <header class="large hidden-xs">
+    <header class="large hidden-lg-down" id="top">
         <div class="container whitebg">
             <div>
 
-                <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
+                <div ng-cloak ng-show="user" class="pull-xs-right" style="margin:5px">
 
                     <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
                         <i  class="fa fa-power-off"></i> Sign in
@@ -160,12 +161,12 @@
 
                 <div class="pull-right">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="/convention">The Convention</a></li>
-                        <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
-                        <li class="active"><a href="/abs">Nagoya Protocol</a></li>
-                        <li class="active"><a href="/programmes">Programmes</a></li>
-                        <li class="active"><a href="/information">Information</a></li>
-                        <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="/convention">The Convention</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="/biosafety">Cartagena Protocol</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="/abs">Nagoya Protocol</a></li>
+                        <li class="nav-item active"><a  class="nav-link" href="/programmes">Programmes</a></li>
+                        <li class="nav-item active"><a class="nav-link" href="/information">Information</a></li>
+                        <li class="nav-item active hidden-sm"><a class="nav-link" href="/secretariat">Secretariat</a></li>
                     </ul>
                 </div>
                 <div class="clearfix"></div>
@@ -175,6 +176,7 @@
 
     <!-- CONTENT -->
     <div class="container whitebg view">
+
 <portal-nav></portal-nav>
         <ng-view></ng-view>
     </div>
