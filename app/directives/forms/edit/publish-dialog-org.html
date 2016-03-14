@@ -1,0 +1,22 @@
+<div ng-if="isNew">
+<div style="margin-bottom:17px;">
+
+ Your organization will be reviewed for publishing and once approved it will be registered allowing it to be published with yours or other's side events.
+</div>
+<button  class="btn btn-primary" style="width:100%;outline:none;" ng-click="requestPublish();closeThisDialog()">
+  <i class="fa fa-floppy-o" ></i> Register
+
+</button>
+
+</div>
+<div ng-if="!isNew">
+<div style="margin-bottom:17px;">
+
+Your changes will be reviewed and once approved published.
+</div>
+<button   class="btn btn-primary" style="width:100%;outline:none;" ng-click="requestPublish();closeThisDialog()">
+   <i class="fa fa-floppy-o" ></i> Register Changes
+
+</button>
+
+</div>
