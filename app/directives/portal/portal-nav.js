@@ -80,24 +80,8 @@ $scope.setActivePath ();
         $scope.isAdmin=(_.intersection(['Administrator','IndeAdministrator'], user.roles).length>0);
       });
 
-      angular.element($window).on('resize',setMedia);
 
-      function setMedia(){
 
-        $timeout(function(){
-
-          $scope.isXs = ($window.innerWidth < 600);
-          $scope.isGtXs = ($window.innerWidth >= 600);
-          $scope.isSm = (600 <= $window.innerWidth < 960);
-          $scope.isGtSm = ($window.innerWidth >= 960);
-          $scope.isMd = (960 <= $window.innerWidth < 1280);
-          $scope.isGtMd = ($window.innerWidth >= 1280);
-          $scope.isLg = (1280 <= $window.innerWidth < 1920 );
-          $scope.isGtLg = ($window.innerWidth >= 1920);
-        });
-
-      }
-      setMedia();
 
       }]};//end controller
   });
