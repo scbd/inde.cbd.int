@@ -33,7 +33,7 @@ require.config({
         'text'                     : 'libs/requirejs-text/text',
         // 'text-angular-sanitize' : 'libs/textAngular/dist/textAngular-sanitize.min',
         // 'text-angular'          : 'libs/textAngular/dist/textAngular.min',
-        'socket.io'             : 'libs/socket.io-1.4.5/index'
+       // 'socket.io'             : 'libs/socket.io-1.4.5/index'
 //        'URIjs'                    : 'libs/uri.js/src',
     },
     shim: {
