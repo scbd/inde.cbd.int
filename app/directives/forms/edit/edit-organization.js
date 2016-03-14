@@ -1,27 +1,20 @@
 define(['app', 'lodash',
-
-  'text!./edit-organization.html',
-    'css!./edit-organization',
-  'scbd-branding/side-menu/scbd-side-menu',
-  'scbd-branding/scbd-button',
-  'scbd-branding/side-menu/scbd-menu-service',
-  'scbd-angularjs-controls/km-inputtext-ml',
-  'scbd-angularjs-controls/km-control-group',
-
-    'scbd-branding/scbd-icon-button',
-    'scbd-branding/scbd-tooltip',
+    'text!./edit-organization.html',
+    'text!/app/directives/forms/edit/publish-dialog-org.html',
+    'scbd-angularjs-controls/km-inputtext-ml',
+    'scbd-angularjs-controls/km-control-group',
+    'css!/app/libs/ng-dialog/css/ngDialog.css',
+    'css!/app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
     'scbd-angularjs-controls/km-select',
     'scbd-angularjs-controls/km-form-languages',
     'scbd-angularjs-controls/km-inputtext-list',
-
     '../../../services/mongo-storage',
     '../controls/scbd-file-upload'
+], function(app, _,template,dailogTemp) { //'scbd-services/utilities',
 
-], function(app, _,template) { //'scbd-services/utilities',
 
-
-  app.directive("editOrganization", ['scbdMenuService', '$q', '$http','$filter','$route','mongoStorage','$location','$window', //"$http", "$filter", "Thesaurus",
-      function(scbdMenuService, $q, $http,$filter,$route,mongoStorage,$location,$window) {
+  app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog', //"$http", "$filter", "Thesaurus",
+      function( $q, $http,$filter,$route,mongoStorage,$location,$window,ngDialog) {
       return {
         restrict   : 'E',
         template   : template,
@@ -34,21 +27,23 @@ define(['app', 'lodash',
               $scope.loading=false;
               $scope.schema="inde-orgs";
               $scope.shortForm =($attrs.short !== undefined && $attrs.short !== null);
+              $scope.isNew=true;
               if(!$scope.shortForm)
                 $scope._id = $route.current.params.id;
-              $scope.toggle = scbdMenuService.toggle;
-              $scope.dashboard = scbdMenuService.dashboard;
+              // $scope.toggle = scbdMenuService.toggle;
+              // $scope.dashboard = scbdMenuService.dashboard;
               $scope.doc={};
 
 
 
-              if(!$scope._id || $scope._id==='0'){
+              if(!$scope._id || $scope._id==='0' || $scope._id==='new'){
                 mongoStorage.createDoc('inde-orgs').then(
                         function(document){
                           $scope.loading=true;
                           $scope._id=document[0];
                           $scope.doc=document[1];
                           $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+                          $scope.isNew=true;
                         }
                 );
 
@@ -64,25 +59,13 @@ define(['app', 'lodash',
                         $scope.doc=document[1];
                         if(!$scope.doc.logo)
                           $scope.doc.logo='/app/images/ic_business_black_48px.svg';
+                          $scope.isNew=false;
                   });
               }
 
 
 
-                $scope.dropzoneConfig = {
-                  'options': { // passed into the Dropzone constructor
-                    'url': '/api/v2015/temporary-files',
-                    'method':'post'
-                  },
-                  'eventHandlers': {
-                    'sending': function (file, xhr, formData) {
-                      console.log('sending');
-                    },
-                    'success': function (file, response) {
-                      console.log('response form sending');
-                    }
-                  }
-                };
+
 
               $scope.options = {
                   countries: function() {
@@ -92,13 +75,14 @@ define(['app', 'lodash',
                           return $filter("orderBy")(o.data, "name");
                       });
                   },
-                  organizationTypes: function() {
-                      return $http.get("https://api.cbd.int/api/v2013/thesaurus/domains/Organization%20Types/terms", {
-                          cache: true
-                      }).then(function(o) {
-                          return o.data;
-                      });
-                  }
+
+                  // organizationTypes: function() {
+                  //     return $http.get("https://api.cbd.int/api/v2015/t_reg_org_typs", {
+                  //         cache: true
+                  //     }).then(function(o) {
+                  //         return o.data;
+                  //     });
+                  // }
               };
 
               //=======================================================================
@@ -110,7 +94,7 @@ define(['app', 'lodash',
 
                         if(!($scope.hide  !== undefined && $scope.hide !== null)){
                                 $scope._id=res.data._id;
-                                $window.history.back();
+                                
                         } else{
                           $scope.hide=0;
 
@@ -129,7 +113,6 @@ define(['app', 'lodash',
                 //
                 //=======================================================================
                 $scope.close = function(){
-
                     $window.history.back();
                 };
 
@@ -139,6 +122,27 @@ define(['app', 'lodash',
               $scope.goTo = function(url){
 
                   $location.url(url);
+              };
+
+              //============================================================
+              //
+              //============================================================
+              $scope.requestPublish = function () {
+                //dialogTemplate = $compile(dialogTemplate,$scope);
+
+                $scope.doc.meta.status='request';
+                mongoStorage.save($scope.schema,$scope.doc,$scope._id);
+
+              };
+
+              //============================================================
+              //
+              //============================================================
+              $scope.publishRequestDial = function () {
+
+                    ngDialog.open({ template: dailogTemp, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
+
+
               };
         }//link
       };//return
