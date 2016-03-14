@@ -2,9 +2,9 @@ define(['app', 'lodash',
 
   'text!./edit-side-event.html',
     'moment',
-    'text!app/directives/forms/edit/publish-dialog.html',
-      'css!app/libs/ng-dialog/css/ngDialog.css',
-    'css!app/libs/ng-dialog/css/ngDialog-theme-default.min.css',
+    'text!directives/forms/edit/publish-dialog.html',
+      'css!libs/ng-dialog/css/ngDialog.css',
+    'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
         // 'css!./edit-side-event',
   '../../side-menu/scbd-side-menu',
 
