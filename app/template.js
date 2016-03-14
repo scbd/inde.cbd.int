@@ -28,7 +28,7 @@ define(['app', 'jquery',
 
         $scope.$on("$routeChangeSuccess", function(evt, current){
             $scope.routeLoaded = true;
-            $("head > title").text(current.$$route.label || "Plevra (Side event Registration)");
+            $("head > title").text(current.$$route.label || "Side event Registration");
         });
 
 
