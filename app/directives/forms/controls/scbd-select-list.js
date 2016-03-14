@@ -4,7 +4,11 @@ define([ 'app', 'lodash','text!./scbd-select-list.html',
     '../../../services/mongo-storage'
 ], function( app, _,template) { 'use strict';
 
+<<<<<<< d4dc8a1f624c237ef2acf53d0454aa8b2a7a7d7f
 app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http', function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http) {
+=======
+app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http','authentication','$window',function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http,authentication,$window) {
+>>>>>>> critical bug fix ... show only published and user's drafts orgs
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -14,6 +18,8 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
     items:"=?"
   },
 		link: function($scope, $element, $attrs) {
+
+
 
 
 					$scope.name = $attrs.name;
@@ -128,10 +134,11 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
             $scope.search='';
           };// archiveOrg
 
-		      //=======================================================================
+          //=======================================================================
 		      //
 		      //=======================================================================
 		      $scope.loadList = function (){
+<<<<<<< d4dc8a1f624c237ef2acf53d0454aa8b2a7a7d7f
             $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}&f={"document":1}').then(function(res){
                   $scope.docs=res.data;
                    setChips();
@@ -142,6 +149,27 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
   //              setChips();
 	// 	         });
 		      };// archiveOrg
+=======
+            authentication.getUser().then(function (user) {
+
+//"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft"
+              $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]},"document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res){
+                        $scope.docs=res.data;
+                $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft","document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res2){
+
+                      $scope.docs = $scope.docs.concat(res2.data);
+                      setChips();
+                });
+
+
+
+
+
+              });
+            });
+
+          };
+>>>>>>> critical bug fix ... show only published and user's drafts orgs
 		      //=======================================================================
 		      //
 		      //=======================================================================
