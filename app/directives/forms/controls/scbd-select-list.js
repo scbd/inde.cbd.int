@@ -4,7 +4,7 @@ define([ 'app', 'lodash','text!./scbd-select-list.html',
     '../../../services/mongo-storage'
 ], function( app, _,template) { 'use strict';
 
-app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile', function ($location,$timeout,mongoStorage,schemaIcon,$compile) {
+app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http', function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http) {
 	return {
 		restrict   : 'E',
 		template   : template,
@@ -132,11 +132,15 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIc
 		      //
 		      //=======================================================================
 		      $scope.loadList = function (){
-		        mongoStorage.loadDocs($scope.schema).then(function(response){
-  //console.log(response.data);
-  $scope.docs=response.data;
-               setChips();
-		         });
+            $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}&f={"document":1}').then(function(res){
+                  $scope.docs=res.data;
+                   setChips();
+            });
+  //           .then(function(response){
+  // //console.log(response.data);
+  // $scope.docs=response.data;
+  //              setChips();
+	// 	         });
 		      };// archiveOrg
 		      //=======================================================================
 		      //
