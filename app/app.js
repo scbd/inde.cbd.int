@@ -1,6 +1,6 @@
-define(['angular','angular-animate','angular-loading-bar','ng-file-upload','text-angular','ngDialog'], function(angular) { 'use strict';
+define(['angular','angular-animate','angular-loading-bar','ng-file-upload','ngDialog','ngSmoothScroll','scroll-directive'], function(angular) { 'use strict';
 
-    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','LocalStorageModule','angular-messages','ngFileUpload','textAngular','ngDialog'];
+    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','LocalStorageModule','angular-messages','ngFileUpload','ngDialog','smoothScroll','scroll-animate-directive'];
 
     angular.defineModules(deps);
 
