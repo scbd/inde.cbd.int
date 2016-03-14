@@ -1,39 +1,42 @@
 define(['app', 'lodash',
-  'css!./edit-event',
-  'scbd-branding/side-menu/scbd-side-menu',
-  'scbd-branding/scbd-button',
+
+  '../../directives/side-menu/scbd-side-menu',
+  '../../directives/scbd-button',
   './menu',
-  '../../directives/scbd-localizer',
   '../../directives/forms/edit/edit-side-event',
-    'scbd-branding/scbd-icon-button',
-    'scbd-branding/scbd-tooltip',
     '../../services/mongo-storage'
 
 ], function(app, _) { //'scbd-services/utilities',
 
 
-  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout) { //, $http, $filter, Thesaurus
+  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window', //"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout,$window) { //, $http, $filter, Thesaurus
 
-      $scope.loading=false;
-      $scope.schema="inde-side-events";
 
       $scope.toggle = dashMenu.toggle;
       $scope.sections = dashMenu.getMenu('dashboard');
-      if(dashMenu.history.length===1)
-        $timeout(function(){
-              dashMenu.toggle('dashboard');
-            $timeout(function(){
-              dashMenu.toggle('dashboard');
-            },500);
-        },500);
+      $scope.sectionsOptions = dashMenu.getMenu('editEventOptions');
+
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
+
+        $scope.isNew=true;
+        $scope._id = $route.current.params.id;
+        if($scope._id.length>3)$scope.isNew=false;
+
       }).then(function(){
         if(!$scope.isAuthenticated)
-          $('#loginDialog').modal('show');
+              $window.location.href='https://accounts.cbd.int/signin?returnUrl=';
       });
+
+      //=======================================================================
+      //
+      //=======================================================================
+      $scope.close = function(){
+
+          $window.history.back();
+      };
 
     }
   ]);
