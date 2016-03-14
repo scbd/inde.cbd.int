@@ -51,7 +51,7 @@ app.factory("adminMenu", ['scbdMenuService', function(scbdMenuService) {
         //   name: 'Inde Configuration',
         //   path: '/admin/config',
         //   type: 'link',
-        //   imgSrc: '/app/images/inde-logo.svg',
+        //   imgSrc: 'app/images/inde-logo.svg',
         //   roles:['Administrator','IndeAdministrator'],
         // });
         //
