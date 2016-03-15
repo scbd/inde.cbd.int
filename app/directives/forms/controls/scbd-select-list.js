@@ -1,12 +1,11 @@
 define([ 'app', 'lodash','text!./scbd-select-list.html',
 '../../../services/filters',
-'../../../services/services',
     '../../../services/mongo-storage'
 ], function( app, _,template) { 'use strict';
 
 
 
-app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','schemaIcon','$compile','$http','authentication','$window',function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http,authentication,$window) {
+app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$compile','$http','authentication','$window',function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http,authentication,$window) {
 
 	return {
 		restrict   : 'E',
