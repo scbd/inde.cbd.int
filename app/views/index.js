@@ -6,14 +6,10 @@ define(['app', 'lodash','jquery',
     app.controller("home", ['$scope', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','$anchorScroll','authentication', //"$http", "$filter", "Thesaurus",
       function($scope,  $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,$anchorScroll,auth) { //, $http, $filter, Thesaurus
 
-
-
           $scope.loading=false;
           $scope.schema="inde-orgs";
           $scope.createURL='/manage/events/0';
           $scope.editURL='/manage/events/';
-
-
 
           $scope.sortReverse=0;
           $scope.listView=1;

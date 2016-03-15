@@ -16,10 +16,8 @@
         <div class="collection-item ">
           <div>
             Select A Meeting:
-
             <div scroll-to="top">
               <div ani-scroll="550" class="float-button" style="padding-top:5px;">
-
                 <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
               </div>
             </div>
@@ -27,7 +25,6 @@
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="row">
@@ -57,7 +54,7 @@
 
 
 
-  <!-- select meeting -->
+  <!-- venue-->
   <section ng-repeat="con in confrences | filter:newMeetingFilter ">
     <div class="row">
       <div id="venue{{$index}}" class="parallax-container">
@@ -143,7 +140,7 @@
 
     <!-- Side events -->
       <div id="events{{$index}}" class="ind-container-header relative" style="margin-top:8px;">
-        <div style="position:absolute;left:10px;top:10px;">
+        <div style="position:absolute;left:10px;top:12px;">
           <button id="search-btn{{$index}}" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle($index);search='';sO=!sO;"><i class="fa fa-search" ng-if="!sO"></i><i class="fa fa-times" ng-if="sO"></i></button>
           <input id="ind-search{{$index}}" type="text" ng-model="search" placeholder="search..." class="ind-search"> </input>
         </div>
@@ -153,6 +150,10 @@
         </span>
         <span class="ind-container-header-name hidden-lg-up">Side Events </span>
         <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
+
+        <div class="btn-group" style="position:absolute;right:10px;top:12px;">
+          <button id="search-btn{{$index}}" data-toggle="tooltip" title="Register Side Event" class="btn btn-default search-btn btn-sm" ng-click="goTo('/manage/events/new');"><i class="fa fa-plus" ></i></button>
+        </div>
         <div class="clearfix"></div>
       </div>
 
@@ -229,7 +230,7 @@
                 <div class="collection-action">
                   <span class="collection-action-grp ">
                     <div class="btn-group btn-group-vertical btn-group-sm" ng-if="doc.document.meta.status!=='archived'">
-                      <button data-toggle="tooltip" title="More Information" class="btn btn-default" ng-click="" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-info-circle"></i></button>
+                      <!-- <button data-toggle="tooltip" title="More Information" class="btn btn-default" ng-click="" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-info-circle"></i></button> -->
 
                     </div>
                   </span>
