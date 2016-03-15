@@ -1,60 +1,63 @@
-<div ng-controller="home" >
+<div ng-controller="home">
 
-<div class="row">
-  <div class="ind-container-header relative" style="height:40px;">
-    <div class="pull-xs-left ">
+  <div class="row">
+    <div class="ind-container-header relative" style="height:40px;">
+      <div class="pull-xs-left ">
+      </div>
+      <span class="container-header-name hidden-lg-down">
+        <h1 style="display:inline;">Side Events</h1>
+      </span>
+      <span class="ind-container-header-name hidden-lg-up"> Side Events</span>
+      <div class="clearfix"></div>
     </div>
-    <span class="container-header-name hidden-lg-down" >
-      <h1 style="display:inline;">Side Events</h1>
-    </span>
-    <span class="ind-container-header-name hidden-lg-up"> Side Events</span>
-    <div class="clearfix"></div>
-  </div>
 
-  <div style="padding:10px; 0 10px 10px;">
-    <div class="collection ">
-      <div class="collection-item ">
-        <div>
-          Select A Meeting:
+    <div style="padding:10px; 0 10px 10px;">
+      <div class="collection ">
+        <div class="collection-item ">
+          <div>
+            Select A Meeting:
 
-          <div scroll-to="top">
-            <div ani-scroll="550" class="float-button" style="padding-top:5px;">
+            <div scroll-to="top">
+              <div ani-scroll="550" class="float-button" style="padding-top:5px;">
 
-              <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
+                <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
   </div>
 
-</div>
-
-
-<div class="row">
+  <div class="row">
     <div class="col-md-12" ng-class="{ 'col-lg-12': (confrences.length===1),'col-lg-4 col-lg-offset-2': (confrences.length===2), 'col-lg-4': (confrences.length===3),'col-lg-3': (confrences.length>=4) }" ng-repeat="con in filCon = (confrences | filter:newMeetingFilter)">
       <div class="card">
-        <img style="width:100%;max-height:150px;" class="card-img-top" src="{{con.document.image}}"  alt="{{con.document.acronym| lstring}}">
-        <div >
+        <img style="width:100%;max-height:150px;" class="card-img-top" src="{{con.document.image}}" alt="{{con.document.acronym| lstring}}">
+        <div class="center">
           <div class="center" style="width:100%;border-bottom-style:solid;border-bottom-width:.5px;border-bottom-color:#eee;">
-            <span Style="font-size:20px;color:#222;letter-spacing:2px;padding-bottom:5px;"><strong>{{con.document.acronym| lstring}}</strong></span>
-          </div><p></p>
-          <ul style=" list-style-type: none;">
-              <li> <button class="btn btn-sm btn-primary" scroll-to="venue{{$index}}" duration="1000" >Venue</button><p></p>
-              </li>
-              <li><button class="btn btn-sm btn-primary" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button><p></p>
-              </li>
-              <li><button class="btn btn-sm btn-primary" scroll-to="events{{$index}}" duration="1000"> Side Events</button><p></p>
-              </li>
-          </ul>
+            <span Style="font-size:20px;color:#222;letter-spacing:2px;padding-bottom:5px;">
+              <strong>{{con.document.acronym| lstring}}</strong>
+            </span>
+          </div>
+          <p></p>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-secondary" scroll-to="venue{{$index}}" duration="1000">Venue</button>
+
+            <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
+
+            <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000"> Side Events</button>
+
+          </div>
+          <p></p>
         </div>
       </div>
     </div>
-</div>
+  </div>
 
 
 
-
+  <!-- select meeting -->
   <section ng-repeat="con in confrences | filter:newMeetingFilter ">
     <div class="row">
       <div id="venue{{$index}}" class="parallax-container">
@@ -63,12 +66,7 @@
           <div class="center scrim">
             <h1 Style="font-size:35px;letter-spacing:5px;padding-bottom:5px;">{{con.document.acronym| lstring}}</h1>
             <h5 style="color:white;font-size:12px;letter-spacing:2px;margin-bottom:4px;">({{con.document.title | lstring}})</h5>
-            <!-- <div class="annonce">
-   <h1><i class="material-icons">&#xE85A;</i>  Announcement:</h1>
-   <div>
-     Please note the side event scedule will be posted for the first week of April 2016.
-   </div>
-</div> -->
+
             <div class="venue">
               <div class="container-header-venue"><i class="material-icons left" style="font-size:38px;">date_range</i>
                 <span style="font-size:16px;font-weight:bold;position:absolute;top:8px;">Venue</span>
@@ -76,30 +74,30 @@
                   <span style=""> to </span> {{con.document.end * 1000 | date:'yyyy-MM-dd'}}</div>
               </div>
 
-              <div  class="ven-add-out-cont" >
-                <div class="ven-add-out-cont" >
-                    <img ng-if="con.document.venueObj.logo" src="{{con.document.venueObj.logo}}" class="host-logo">
+              <div class="ven-add-out-cont">
+                <div class="ven-add-out-cont">
+                  <img ng-if="con.document.venueObj.logo" src="{{con.document.venueObj.logo}}" class="host-logo">
                 </div>
                 <div class="ven-add-in-cont" style="display:inline-block;">
 
-                  <div class="venadd" >
+                  <div class="venadd">
                     <p style='line-height: 25px;margin-bottom:0;'>
-                    <i class="material-icons" style="vertical-align:top;">&#xE0AF;</i> {{con.document.venueObj.title | lstring}}
-                    <span ng-if="con.document.venueObj.acronym">({{con.document.venueObj.acronym| lstring}})</span>
-                  </p>
-                        <p style='line-height: 25px;margin-bottom:0;'>
-                    <i class="material-icons" style="vertical-align:top;">&#xE0C8;</i>
-                    <span ng-if="con.document.venueObj.address"> {{con.document.venueObj.address}}</span>
+                      <i class="material-icons" style="vertical-align:top;">&#xE0AF;</i> {{con.document.venueObj.title | lstring}}
+                      <span ng-if="con.document.venueObj.acronym">({{con.document.venueObj.acronym| lstring}})</span>
                     </p>
                     <p style='line-height: 25px;margin-bottom:0;'>
-                    <i class="material-icons" style="vertical-align:top;">&#xE7F1;</i>
-                    <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.city}}</span>
-                    <span ng-if="con.document.venueObj.state">, {{con.document.venueObj.state}}</span>
+                      <i class="material-icons" style="vertical-align:top;">&#xE0C8;</i>
+                      <span ng-if="con.document.venueObj.address"> {{con.document.venueObj.address}}</span>
                     </p>
-                  <p style='line-height: 25px;margin-bottom:0;'>
-                    <i class="material-icons" style="vertical-align:top;"> &#xE554;</i>
-                    <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.zip}}</span>
-                  </p>
+                    <p style='line-height: 25px;margin-bottom:0;'>
+                      <i class="material-icons" style="vertical-align:top;">&#xE7F1;</i>
+                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.city}}</span>
+                      <span ng-if="con.document.venueObj.state">, {{con.document.venueObj.state}}</span>
+                    </p>
+                    <p style='line-height: 25px;margin-bottom:0;'>
+                      <i class="material-icons" style="vertical-align:top;"> &#xE554;</i>
+                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.zip}}</span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -112,56 +110,61 @@
     </div>
     <div class="row">
 
+  <!-- side event schedule -->
+      <div id="schedule{{$index}}" class="ind-container-header relative" style="height:60px;">
+        <div class="pull-xs-left ">
 
-         <div id="schedule{{$index}}" class="ind-container-header relative" style="height:60px;">
-          <div class="pull-xs-left ">
+        </div>
+        <span class="container-header-name hidden-lg-down">
+          <h1 style="display:inline;">Side Event Schedule</h1>
+          <h6> ({{con.document.acronym| lstring}})</h6>
+        </span>
+        <span class="ind-container-header-name hidden-lg-up"> Side Event Schedule </span>
+        <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
+        <div class="clearfix"></div>
 
+      </div>
+      <div style="width:80%;padding-top:10px;">
+
+        <div class="collection " style="margin-left:25%;">
+          <div class="collection-item ">
+            <h5>
+              <p style="line-height: 25px;"><i class="material-icons" style="vertical-align:bottom;">&#xE85A;</i> Announcement:</h5>
+            </p>
+            <div>
+              The side event scedule will be posted for the first week of April 2016.
+            </div>
           </div>
-          <span class="container-header-name hidden-lg-down">
-            <h1 style="display:inline;">Side Event Schedule</h1><h6> ({{con.document.acronym| lstring}})</h6>
-          </span>
-          <span class="ind-container-header-name hidden-lg-up"> Side Event Schedule </span><div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
-          <div class="clearfix"></div>
-
-        </div>
-        <div style="width:80%;padding-top:10px;">
-
-          <div class="collection " style="margin-left:25%;">
-            <div class="collection-item ">
-        <h5><p style="line-height: 25px;"><i class="material-icons" style="vertical-align:bottom;">&#xE85A;</i>  Announcement:</h5></p>
-        <div>
-        The side event scedule will be posted for the first week of April 2016.
-        </div>
         </div>
       </div>
-    </div>
     </div>
     <div class="row">
 
 
-
-        <div id="events{{$index}}" class="ind-container-header relative" style="margin-top:8px;">
-          <div style="position:absolute;left:10px;top:10px;">
-            <button id="search-btn{{$index}}" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle($index);search='';sO=!sO;"><i class="fa fa-search" ng-if="!sO"></i><i class="fa fa-times" ng-if="sO"></i></button>
-            <input id="ind-search{{$index}}" type="text" ng-model="search" placeholder="search..." class="ind-search"> </input>
-          </div>
-          <span class="container-header-name hidden-lg-down">
-            <h1 style="display:inline;">Side Events</h1> <h6> ({{con.document.acronym| lstring}})</h6>
-          </span>
-          <span class="ind-container-header-name hidden-lg-up">Side Events </span><div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
-          <div class="clearfix"></div>
-
+    <!-- Side events -->
+      <div id="events{{$index}}" class="ind-container-header relative" style="margin-top:8px;">
+        <div style="position:absolute;left:10px;top:10px;">
+          <button id="search-btn{{$index}}" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle($index);search='';sO=!sO;"><i class="fa fa-search" ng-if="!sO"></i><i class="fa fa-times" ng-if="sO"></i></button>
+          <input id="ind-search{{$index}}" type="text" ng-model="search" placeholder="search..." class="ind-search"> </input>
         </div>
+        <span class="container-header-name hidden-lg-down">
+          <h1 style="display:inline;">Side Events</h1>
+          <h6> ({{con.document.acronym| lstring}})</h6>
+        </span>
+        <span class="ind-container-header-name hidden-lg-up">Side Events </span>
+        <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
+        <div class="clearfix"></div>
+      </div>
 
-        <!-- LIST VIEW -->
-        <div style="padding: 0 5px; 0 5px;">
+      <!-- LIST VIEW -->
+      <div style="padding: 0 5px; 0 5px;">
         <section ng-if="listView">
           <div class="row chips-row hidden-lg-down">
             showing:
             <span class="label label-pill label-primary ">{{filtered.length}} </span>
             <span ng-if="search">for '{{search}}'</span>
           </div>
-          <div style="margin-top:5px;height:500px;overflow:auto;">
+          <div style="margin-top:5px;max-height:500px;overflow:auto;">
             <div class="row collection " ng-repeat="doc in filtered = (con.document.events |filter:search)" style="margin-bottom:8px;">
               <div class="collection-item ">
                 <div style=" position:absolute;top:0px;left:0px;">
@@ -221,8 +224,6 @@
 
                 </div>
 
-
-
                 <div style="height:95px;"></div>
 
                 <div class="collection-action">
@@ -243,5 +244,4 @@
 
   </section>
 
-
-  </div>
+</div>
