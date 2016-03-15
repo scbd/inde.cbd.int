@@ -165,7 +165,7 @@
             <span class="label label-pill label-primary ">{{filtered.length}} </span>
             <span ng-if="search">for '{{search}}'</span>
           </div>
-          <div style="margin-top:5px;max-height:500px;overflow:auto;">
+          <div style="margin-top:5px;min-height:100px;overflow:auto;">
             <div class="row collection " ng-repeat="doc in filtered = (con.document.events |filter:search)" style="margin-bottom:8px;">
               <div class="collection-item ">
                 <div style=" position:absolute;top:0px;left:0px;">
