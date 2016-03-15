@@ -37,6 +37,7 @@
   },
   "resolutions": {
     "angular": "1.5.0",
-    "bootstrap": "3.3.6"
+    "bootstrap": "3.3.6",
+    "scbd-angularjs-services": "1.1.8"
   }
 }
