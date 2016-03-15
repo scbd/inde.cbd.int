@@ -5,7 +5,7 @@ define([ 'app', 'lodash','text!./scbd-select-list.html',
 
 
 
-app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$compile','$http','authentication','$window',function ($location,$timeout,mongoStorage,schemaIcon,$compile,$http,authentication,$window) {
+app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','authentication',function ($location,$timeout,mongoStorage,$http,authentication) {
 
 	return {
 		restrict   : 'E',
@@ -31,7 +31,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$compile
 					$scope.loading=false;
           if($attrs.schema)
 		      $scope.schema=$attrs.schema;
-		      $scope.icon=schemaIcon($attrs.schema);
+		    //  $scope.icon=schemaIcon($attrs.schema);
 
 		      $scope.docs;
           $scope.atCapacity=0;

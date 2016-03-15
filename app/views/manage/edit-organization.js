@@ -2,7 +2,6 @@ define(['app', 'lodash',
   'css!./edit-organization',
     'directives/side-menu/scbd-side-menu',
   './menu-orgs',
-  '../../directives/scbd-localizer',
   '../../directives/forms/edit/edit-organization',
 
 

@@ -25,17 +25,13 @@ position:relative;
     </div>
     <div class="clearfix"></div>
   </div>
-    <div class="container-header-filler"></div>
 
-<div class="row" style="margin-left:25px;padding-top:7px;">
+
+<div class="row" style="margin-left:20px;padding-top:7px;">
 
   <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
     <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
-    <div ng-if="!doc.document.logo.length || doc.document.logo.length<=0">
-      <i ng-if="doc.code" class="flag-icon flag-icon-{{doc.code.toLowerCase()}}"  ></i>
-      <scbd-icon-button type="md" icon-name="&#xE407;" ng-if="(schema=='confrences')"></scbd-icon-button>
-      <scbd-icon-button type="md" icon-name="&#xE0AF;" ng-if="(schema=='inde-orgs')"></scbd-icon-button>
-    </div>
+
 
 
     <span ng-if="doc.document.acronym">{{doc.document.acronym | lstring}}</span>
@@ -66,7 +62,7 @@ position:relative;
               <div ng-if="schema=='inde-orgs'">
                 <div style="font-weight:bold;">{{docObj.document.acronym | lstring}} </div>
                 <span class="hidden-lg-down">{{docObj.document.title | lstring}}</span>
-                <span class="hidden-lg-up">{{docObj.document.title | lstring | characters:26}}</span>                
+                <span class="hidden-lg-up">{{docObj.document.title | lstring | characters:26}}</span>
               </div>
             </div>
 
