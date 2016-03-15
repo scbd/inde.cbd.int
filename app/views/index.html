@@ -47,8 +47,8 @@
 
             <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000">Side Event Schedule</button>
 
-            <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button>
-            <button class="btn btn-sm btn-info" ng-click="goTo('/manage/events/new?m=');">Register a Side Event</button>
+            <!-- <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button> -->
+            <button class="btn btn-sm btn-info" ng-click="goTo(con._id);">Register a Side Event</button>
           </div>
           <p></p>
         </div>
@@ -156,7 +156,7 @@
         <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
 
         <div class="btn-group" style="position:absolute;right:10px;top:12px;">
-          <button id="search-btn{{$index}}" data-toggle="tooltip" title="Register Side Event" class="btn btn-default search-btn btn-sm" ng-click="goTo('/manage/events/new');"><i class="fa fa-plus" ></i></button>
+          <button id="search-btn{{$index}}" data-toggle="tooltip" title="Register Side Event" class="btn btn-default search-btn btn-sm" ng-click="goTo(con._id);"><i class="fa fa-plus" ></i></button>
         </div>
         <div class="clearfix"></div>
       </div>
