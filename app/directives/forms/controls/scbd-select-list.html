@@ -6,47 +6,35 @@
 position:relative;
 }
 </style>
-<div >
 
 
 
 
-<div class="row" style="margin-left:20px;padding-top:7px;">
+<div class="row" style="padding:7px 20px 5px 20px;">
   <div class="container-header" style="position:relative;margin-bottom:7px;">
-    <div class="pull-xs-left ">
-
-
-    </div>
 
     <div class="pull-xs-left ">
-
       <button style=margin-top:2px;"" data-toggle="tooltip" title="Search" class="btn btn-default search-lbtn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
       <input  type="text" ng-model="search" placeholder="search..." class="lst-search"> </input>
-    </div>
-    <div class=" pull-xs-right" >
-
-
     </div>
     <div class="clearfix"></div>
   </div>
   <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
     <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
-
-
-
     <span ng-if="doc.document.acronym">{{doc.document.acronym | lstring}}</span>
     <i class="material-icons" ng-click="select(doc)">&#xE5CD;</i>
   </div>
-</div>
+
+
 <div style="margin-left:25px;padding-bottom :3px;">Showing:  <span class="badge">{{filtered.length}}</span></div>
-<div class="list-container" >
 
 
-  <section class="row" style="overflow:auto;height:400px;position:relative;">
+
+  <section  style="overflow:auto;height:400px;">
 
     <div class="col s12 collection" ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
 
-      <scbd-flat-button style="width:105%;left:-17px;text-align:left;height:50px;" ng-click="select(docObj);" waves>
+      <scbd-flat-button style="position:relative;width:105%;left:-5px;text-align:left;height:50px;" ng-click="select(docObj);" waves>
           <div class="collection-item " style="height:50px;">
             <!-- <div class="card-image" ng-if="org.document.logo"> -->
             <div style="width:70px;height:50px; position:absolute;top:0px;left:8px;">
@@ -67,15 +55,17 @@ position:relative;
             </div>
 
             <div class="collection-action" >
-              <span class="collection-action-grp " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
-                <scbd-icon-button class="right" style="z-index:100;position:absolute;right:55px;top:5px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+              <span class="collection-action-grp relative " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
+                <scbd-icon-button class="right hidden-lg-up" style="z-index:100;position:absolute;right:-115px;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+                <scbd-icon-button class="right hidden-md-down" style="z-index:100;position:absolute;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+
               </span>
             </div>
           </div>
       </scbd-flat-button>
     </div>
   </section>
-    </div>
+
 </div>
 
 
