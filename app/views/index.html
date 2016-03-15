@@ -10,7 +10,6 @@
       <span class="ind-container-header-name hidden-lg-up"> Side Events</span>
       <div class="clearfix"></div>
     </div>
-
     <div style="padding:10px; 0 10px 10px;">
       <div class="collection ">
         <div class="collection-item">
@@ -49,7 +48,7 @@
             <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000">Side Event Schedule</button>
 
             <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button>
-
+            <button class="btn btn-sm btn-info" ng-click="goTo('/manage/events/new?m=');">Register a Side Event</button>
           </div>
           <p></p>
         </div>
