@@ -183,89 +183,6 @@ define(['app', 'lodash',
                     })
 
               }// init
-              //============================================================
-              //
-              //============================================================
-              function saveProfile() {
-
-                  var tempMobile;
-                  var isChange = 0;
-
-                  if(data.Email !== $scope.doc.contact.email){
-
-
-                    data.Email = _.clone($scope.doc.contact.email);
-                    isChange='email';
-                  }
-
-                  if(data.Address !== $scope.doc.contact.address){
-                    data.Address = _.clone($scope.doc.contact.address);
-                    isChange='address';
-                  }
-
-                  if(data.City !== $scope.doc.contact.city){
-                    data.City = _.clone($scope.doc.contact.city);
-                    isChange='city';
-                  }
-
-                  if($scope.doc.contact.country && $scope.doc.contact.country.identifier && data.Country !== $scope.doc.contact.country.identifier){
-                    data.Country = _.clone($scope.doc.contact.country.identifier);
-                    isChange='country';
-                  }
-                  if($scope.doc.contact.country && !$scope.doc.contact.country.identifier)
-                  if(data.Country !== $scope.doc.contact.country){
-                    data.Country = _.clone($scope.doc.contact.country);
-                    isChange='country';
-                  }
-                  if(data.Title !== $scope.doc.contact.personalTitle){
-                    data.Title = _.clone($scope.doc.contact.personalTitle);
-                    isChange='personaltitle';
-                  }
-                  if(data.State !== $scope.doc.contact.state){
-                    data.State = _.clone($scope.doc.contact.state);
-                    isChange='state';
-                  }
-                  if(data.Zip !== $scope.doc.contact.zip){
-                    data.Zip = _.clone($scope.doc.contact.zip);
-                    isChange='zip';
-                  }
-                  if(data.Phone !== $scope.doc.contact.phone){
-                    data.Phone = _.clone($scope.doc.contact.phone);
-                    isChange='phone';
-                  }
-
-                  if(data.FirstName !== $scope.doc.contact.firstName){
-                    data.FirstName = _.clone($scope.doc.contact.firstName);
-                    isChange='firestname';
-                  }
-                  if(data.LastName !== $scope.doc.contact.lastName){
-                    data.LastName = _.clone($scope.doc.contact.lastName);
-                    isChange='lastName';
-                  }
-                  if(data.Designation !== $scope.doc.contact.jobTitle){
-                    data.Designation = _.clone($scope.doc.contact.jobTitle);
-                    isChange='Designation';
-                  }
-
-                  data.UserID=$scope.user.userID;
-
-                if($scope.doc.contact.mobile)
-                  tempMobile = _.clone($scope.doc.contact.mobile);
-                delete($scope.doc.contact);
-                $scope.doc.contact={};
-                $scope.doc.contact.mobile=tempMobile;
-
-                if(isChange)
-                $http.put('https://api.cbd.int/api/v2013/users/' + $scope.user.userID, angular.toJson(data)).success(function () {
-
-                    //$location.path('/profile/done');
-
-                }).error(function (data) {
-                    $scope.waiting = false;
-                    $scope.error = data;
-                });
-
-              }// initProfile()
 
               //============================================================
               //
@@ -313,7 +230,7 @@ define(['app', 'lodash',
                     var num = Math.floor((Math.random() * 12) + 1);
                     return 'https://s3.amazonaws.com/mongo.document.attachments/inde-config/56c4863bc0e5501192caa152/Avatar'+num+'.svg';
 
-              }// initProfile()
+              }
 
               $scope.randomPic = function (){
                 $scope.doc.logo=randomPic();
@@ -327,7 +244,7 @@ define(['app', 'lodash',
                       $scope.doc.logo=randomPic();
                   else
                       $scope.doc.logo='app/images/ic_event_black_48px.svg';
-              }// initProfile()
+              }
 
               //============================================================
               //
@@ -409,9 +326,6 @@ define(['app', 'lodash',
 
                         if($scope.doc.contact.mobile)
                           tempMobile = _.clone($scope.doc.contact.mobile);
-
-                      if($scope.updateProfile ==='Yes')
-                        saveProfile();
 
                         _.each($scope.doc.hostOrgs,function(orgId){
 
