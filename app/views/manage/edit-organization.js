@@ -1,15 +1,13 @@
-define(['app', 'lodash',
+define(['app',
   'css!./edit-organization',
     'directives/side-menu/scbd-side-menu',
   './menu-orgs',
   '../../directives/forms/edit/edit-organization',
+], function(app) { //'scbd-services/utilities',
 
 
-], function(app, _) { //'scbd-services/utilities',
-
-
-  app.controller("edit-organization", ['$scope', 'orgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout', //"$http", "$filter", "Thesaurus",
-    function($scope, orgMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout) { //, $http, $filter, Thesaurus
+  app.controller("edit-organization", ['$scope', 'orgMenu', 'authentication','$window','$route', //"$http", "$filter", "Thesaurus",
+    function($scope, orgMenu, authentication,$window,$route) { //, $http, $filter, Thesaurus
 
       $scope.loading=false;
       $scope.schema="inde-orgs";
