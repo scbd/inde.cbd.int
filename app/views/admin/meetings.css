@@ -127,7 +127,6 @@ card-content{max-height:50px;}*/
   -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
   position: relative;
-  z-index:0;
   min-height:400px;
 }
 @media (max-width: 960px) {
@@ -138,6 +137,5 @@ card-content{max-height:50px;}*/
     -webkit-transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
     transition: 0.02s padding cubic-bezier(0.35, 0, 0.25, 1);
     position: relative;
-    z-index:0;
   }
 }
