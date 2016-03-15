@@ -25,7 +25,6 @@
         <span class="container-header-name hidden-lg-down" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Organizations</h1></span>
         <div class=" pull-xs-right" >
           <button class="btn btn-default btn-sm" ng-click="toggle('orgOptions')"><i class="fa fa-ellipsis-h"></i></button>
-          <button class="btn btn-default btn-sm" ng-click="close()"><i class="fa fa-times"></i></button>
         </div>
         <div class="clearfix"></div>
       </div>
@@ -42,7 +41,6 @@
             <scbd-icon-button type="md" icon-name="&#xEB3D;"></scbd-icon-button>
           </div>All
           <span class="sqr">{{statusFacits.all}}</span>
-          <scbd-icon-button ng-if="selectedChip==''" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
 
         <div id="chip-draft" class="chip" ng-if="(!showArchived && statusFacits.draft) || selectedChip==='draft'" ng-click="selectChip('draft')">
@@ -50,35 +48,30 @@
             <scbd-icon-button type="md" icon-name="&#xE24D;"></scbd-icon-button>
           </div>Draft
           <span class="sqr">{{statusFacits.draft}}</span>
-          <scbd-icon-button ng-if="selectedChip=='draft'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
         <div id="chip-request" class="chip" ng-if="(!showArchived && statusFacits.request) || selectedChip==='request'" ng-click="selectChip('request')">
           <div>
             <scbd-icon-button type="md" icon-name="&#xE0C6;"></scbd-icon-button>
           </div>Requests
           <span class="sqr">{{statusFacits.request}}</span>
-          <scbd-icon-button ng-if="selectedChip=='request'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
         <div id="chip-published" class="chip" ng-if="(!showArchived && statusFacits.published) || selectedChip==='published'" ng-click="selectChip('published')">
           <div>
             <scbd-icon-button type="md" icon-name="&#xE8DC;"></scbd-icon-button>
           </div>Approved
           <span class="sqr">{{statusFacits.published}}</span>
-          <scbd-icon-button ng-if="selectedChip=='published'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
         <div id="chip-canceled" class="chip" ng-if="(!showArchived && statusFacits.canceled) || selectedChip==='canceled'" ng-click="selectChip('canceled')">
           <div>
             <scbd-icon-button type="md" icon-name="&#xE8DD;"></scbd-icon-button>
           </div>Canceled
           <span class="sqr">{{statusFacits.canceled}}</span>
-          <scbd-icon-button ng-if="selectedChip=='canceled'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
         <div id="chip-rejected" class="chip" ng-if="(!showArchived && statusFacits.rejected) || selectedChip==='rejected'" ng-click="selectChip('rejected')">
           <div>
             <scbd-icon-button type="md" icon-name="&#xE8DB;"></scbd-icon-button>
           </div>Rejected
           <span class="sqr">{{statusFacits.rejected}}</span>
-          <scbd-icon-button ng-if="selectedChip=='rejected'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
 
         <div id="chip-archived" class="chip chip-active" ng-if="(showArchived && statusFacitsArcView.archived) || selectedChip==='archived'" ng-click="selectChip('archived')">
@@ -86,7 +79,6 @@
             <scbd-icon-button type="md" icon-name="&#xE149;"></scbd-icon-button>
           </div>Archived
           <span class="sqr">{{statusFacitsArcView.archived}}</span>
-          <scbd-icon-button ng-if="selectedChip=='archived'" style="color:#009b48" type="fa" icon-name="fa-circle" to-icon-name="fa-check-circle" ani="tada" active="true"></scbd-icon-button>
         </div>
 
       </div>
