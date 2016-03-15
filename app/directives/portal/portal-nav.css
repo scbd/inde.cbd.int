@@ -36,16 +36,18 @@
 }*/
 .portal-nav-mobi-filler{height:55px;}
 .portal-nav-mobi{
-position: fixed;
-top:70px;
-padding: 5px 5px 5px 5px;
 
+
+padding: 5px 0px 5px 0px;
+
+ position: absolute;
+ left:-10px;
 border-style: solid;
 border-width: 1px;
 height:55px;
 line-height: 40px;
-width:100%;
-
+width:115%;
+white-space: nowrap;
 background-color:#eee;
 color:#fff;
 z-index:50;

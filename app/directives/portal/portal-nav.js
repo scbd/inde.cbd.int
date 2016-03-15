@@ -46,31 +46,31 @@ app.directive('portalNav', function () {
 
               }//isActivePath
 $scope.setActivePath ();
-              $scope.isOpen = false;
-               $scope.demo = {
-                 isOpen: false,
-                 count: 0,
-                 selectedDirection: 'left'
-               };
+              // $scope.isOpen = false;
+              //  $scope.demo = {
+              //    isOpen: false,
+              //    count: 0,
+              //    selectedDirection: 'left'
+              //  };
 
               var lastScrolY=0;
-              angular.element($window).bind(
-              	"scroll", function(e) {
-                       //console.log('window.pageYOffset',e.originalEvent);
-                       if(window.pageYOffset > lastScrolY) {
-                         $scope.portalMobiNavClass = 'portal-nav-mobi-small';
-                         $scope.spaceFillClass='space-filler-small';
-                       } else {
-                         $scope.portalMobiNavClass = 'portal-nav-mobi-big ';
-                         $scope.spaceFillClass='space-filler-big';
-                       }
-                       //console.log('lastScrolY',lastScrolY);
-                       lastScrolY=window.pageYOffset;
+              // angular.element($window).bind(
+              // 	"scroll", function(e) {
+              //          //console.log('window.pageYOffset',e.originalEvent);
+              //          if(window.pageYOffset > lastScrolY) {
+              //            $scope.portalMobiNavClass = 'portal-nav-mobi-small';
+              //            $scope.spaceFillClass='space-filler-small';
+              //          } else {
+              //            $scope.portalMobiNavClass = 'portal-nav-mobi-big ';
+              //            $scope.spaceFillClass='space-filler-big';
+              //          }
+              //          //console.log('lastScrolY',lastScrolY);
+              //          lastScrolY=window.pageYOffset;
+              //
+              //          $scope.$apply();
+              //    });
 
-                       $scope.$apply();
-                 });
-
-      $scope.$root.pageTitle = { text: "" };
+      //$scope.$root.pageTitle = { text: "" };
       $scope.goTo = function(path){
           return $location.url(path);
       };
