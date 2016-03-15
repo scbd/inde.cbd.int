@@ -70,12 +70,25 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            $scope.publishRequestDial = function () {
+            $scope.publishRequestDial = function() {
 
-                  ngDialog.open({ template: dialogTemplate, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
+                var dialog = ngDialog.open({
+                    template: dialogTemplate,
+                    className: 'ngdialog-theme-default',
+                    closeByDocument:false,
+                    plain: true,
+                    scope: $scope
+                });
 
+                dialog.closePromise.then(function(ret) {
 
+                    if(ret.value=='draft')   $scope.close();
+                    if(ret.value=='publish') $scope.requestPublish().then($scope.close);
+
+                    console.log(ret);
+                });
             };
+
             //============================================================
             //
             //============================================================
@@ -83,7 +96,7 @@ define(['app', 'lodash',
               //dialogTemplate = $compile(dialogTemplate,$scope);
 
               $scope.doc.meta.status='request';
-              mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
+              return mongoStorage.save($scope.schema,$scope.doc,$scope._id).then(function(){
                 _.each($scope.doc.hostOrgs,function(org){
                     mongoStorage.loadDoc('inde-orgs',org).then(function(conf){
 
