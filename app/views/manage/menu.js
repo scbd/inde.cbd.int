@@ -25,14 +25,14 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
         });
 
         scbdMenuService.menus.dashboard.push({
-          name: 'Side Events',
+          name: 'Your Side Events',
           type: 'link',
           mdIcon: 'event',
           path: '/manage/events',
               roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.dashboard.push({
-          name: 'Organizations',
+          name: 'Your Organizations',
           type: 'link',
           mdIcon: 'business',
           path: '/manage/organizations',
