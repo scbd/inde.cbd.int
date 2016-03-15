@@ -124,28 +124,7 @@
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
     box-shadow: 0 6px 12px rgba(0,0,0,.175);
 }
-/* line 28, ../libs/bootstrap-sass/lib/_buttons.scss */
-/*.btn:hover, .btn:focus {
-  color: #333333 !important;
-  text-decoration: none !important;
-	  -webkit-box-shadow: none !important;
-		box-shadow:none !important;
-		font-weight:normal !important;
-					text-shadow:none !important;
-}
 
-.btn i {color:#333 !important; }
-.btn:hover i {color:#333 !important;}*/
-
-/* line 34, ../libs/bootstrap-sass/lib/_buttons.scss */
-/*.btn:active, .btn.active {
-  outline: 0 !important;
-	background-color: #009B48 !important;
-  background-image: none !important;
-  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
-		box-shadow:none !important;
-}*/
 
 
 
@@ -165,103 +144,6 @@
 			text-shadow:none !important;
 }
 
-
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0 | 20110126
-   License: none (public domain)
-*/
-
-/*html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote,button, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
-  outline: none;
-}
-/* HTML5 display-role reset for older browsers */
-/*article, aside, details, figcaption, figure,
-footer, header, hgroup, menu, nav, section {
-	display: block;
-}*/
-/*body {
-	line-height: 1;
-}
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
-}
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
-
-html {
-font-family: "Roboto","Helvetica Neue","sans-serif";
-font-size: 16px;
-line-height: 1.5;
-font-weight: normal;
-color: rgba(0, 0, 0, 0.87);
--webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-}*/
-
-/*a {
-  background-color: transparent;
-  text-decoration: none:
-}
-a:active,
-a:hover {
-  outline: 0;
-}
-b,
-strong {
-  font-weight: bold;
-}
-
-button,
-input,
-optgroup,
-select,
-textarea {
-  margin: 0;
-
-}*/
-/*
-@media (max-width: 960px) {
-  html *{
-    font-family: Roboto,"Helvetica Neue",sans-serif;
-    font-size: 12px;
-  }
-}
-
-body {
-    margin: 0px;
-		color: rgba(0, 0, 0, 0.87);
-}
-h1{font-size: 20px;
-line-height: 30px;
-vertical-align: middle;}*/
 
 .select-list-container {
 	overflow: auto;
