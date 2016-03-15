@@ -17,18 +17,16 @@
 
 
 <div  ng-cloak>
-<section  class="lg-menu  hidden-lg-down" >
+<section  class="lg-menu  hidden-md-down" >
   <span class="cl-effect-14" >
     <a id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
     <a id="request" ng-click="goTo('/manage/events/new');setActivePath();">Register</a>
     <a id="dash" ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
     <a id="admin" ng-click="goTo('/admin');setActivePath();"  ng-if="isAdmin">Admin</a>
-    <!-- <a id="help" ng-click="goTo('/help');setActivePath();" class="pull-right"> Help</a> -->
   </span>
 </section>
 </div>
-<!-- <div class="space-filler" ng-class="spaceFillClass" hide-gt-sm> -->
-<!-- </div> -->
+
 
 
 </div>
