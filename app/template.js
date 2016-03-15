@@ -1,7 +1,6 @@
 define(['app', 'jquery',
       'css!font-awsome-css',
       'css!app-css',
-      'directives/scbd-media',
       'scbd-angularjs-services/authentication',
       'directives/portal/portal-nav',
       'scbd-branding/header/header',

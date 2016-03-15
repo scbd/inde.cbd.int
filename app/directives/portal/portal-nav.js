@@ -7,8 +7,8 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
       scope: {
         uid: '@',
       },
-      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication', 'scbdMedia',
-        function($scope, $location, $window, $timeout, $element, authentication, media) {
+      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication',
+        function($scope, $location, $window, $timeout, $element, authentication) {
 
           //============================================================
           //
