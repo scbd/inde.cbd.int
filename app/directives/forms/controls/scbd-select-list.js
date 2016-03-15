@@ -62,6 +62,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 					//
 					//==================================
 					function setChips () {
+            if($scope.binding)
 								if($scope.binding.length>0){
                       $scope.loading=false;
                       _.each($scope.docs,function(doc){
