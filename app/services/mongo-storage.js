@@ -28,8 +28,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                var params     = {};
                var data       = {};
 
-// console.log('saving doc',prevDoc );
-// console.log('saving doc',currentDoc);
 
 
                 // update document
@@ -286,10 +284,10 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         //
         //=======================================================================
-        function generateEventId(confId){
+        function generateEventId(){
 
 
-              return  $http.get('https://api.cbd.int/api/v2015/inde-side-events?c=1&q={"document.confrence":"'+confId+'"}');
+              return  $http.get('https://api.cbd.int/api/v2015/inde-side-events?c=1&q={"document.meta.v":{"$ne":0}}');
 
         }//getStatusFacits
 
