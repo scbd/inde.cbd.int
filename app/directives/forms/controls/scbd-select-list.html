@@ -6,9 +6,13 @@
 position:relative;
 }
 </style>
-<div class=" scbd-list-container">
+<div >
 
-  <div class="container-header" >
+
+
+
+<div class="row" style="margin-left:20px;padding-top:7px;">
+  <div class="container-header" style="position:relative;margin-bottom:7px;">
     <div class="pull-xs-left ">
 
 
@@ -16,8 +20,8 @@ position:relative;
 
     <div class="pull-xs-left ">
 
-      <button style="margin-left:45px;" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
-      <input  type="text" ng-model="search" placeholder="search..." class="search"> </input>
+      <button style=margin-top:2px;"" data-toggle="tooltip" title="Search" class="btn btn-default search-lbtn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
+      <input  type="text" ng-model="search" placeholder="search..." class="lst-search"> </input>
     </div>
     <div class=" pull-xs-right" >
 
@@ -25,10 +29,6 @@ position:relative;
     </div>
     <div class="clearfix"></div>
   </div>
-
-
-<div class="row" style="margin-left:20px;padding-top:7px;">
-
   <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
     <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
 

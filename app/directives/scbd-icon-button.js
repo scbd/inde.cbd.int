@@ -37,7 +37,7 @@ function(app,  iconate,_) {
                 }
 
                 if($attr.type === 'fa'){
-                  $element.addClass('fa');
+                  $element.addClass('fa fa-fw');
                   $element.addClass($attr.iconName);
                 }else if($attr.type === 'md'){
                   $element.addClass('material-icons');

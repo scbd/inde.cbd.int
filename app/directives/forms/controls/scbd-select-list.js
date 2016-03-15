@@ -1,7 +1,9 @@
-define([ 'app', 'lodash','text!./scbd-select-list.html',
-'../../../services/filters',
-    '../../../services/mongo-storage'
-], function( app, _,template) { 'use strict';
+define(['app', 'lodash', 'text!./scbd-select-list.html',
+      'css!./scbd-select-list.css',
+      '../../../services/filters',
+      '../../../services/mongo-storage'
+    ], function(app, _, template) {
+      'use strict';
 
 
 
@@ -120,11 +122,11 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
           //
           //=======================================================================
           $scope.searchToggle= function (){
-            var serEl =$element.find('.search');
-            serEl.toggleClass('search-expanded');
+            var serEl =$element.find('.lst-search');
+            serEl.toggleClass('lst-search-expanded');
             serEl.focus();
-            var serElb =$element.find('.search-btn');
-            serElb.toggleClass('search-btn-expanded');
+            var serElb =$element.find('.search-lbtn');
+            serElb.toggleClass('search-lbtn-expanded');
 
             $scope.sOpen=!$scope.sOpen;
             $scope.search='';
