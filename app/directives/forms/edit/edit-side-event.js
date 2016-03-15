@@ -113,9 +113,10 @@ define(['app', 'lodash',
               //=======================================================================
               //
               //=======================================================================
-              $scope.select = function (docObj){
-
+              $scope.selectMeeting = function (docObj){
                 $timeout(function(){
+                    _.each($scope.options.confrences,function(meeting){meeting.selected=false;  });
+
                     docObj.selected=!docObj.selected;
                     if(true){
                       if(docObj.selected){
@@ -126,10 +127,7 @@ define(['app', 'lodash',
                           $scope.search='';
                       }
                   }
-
                 });
-
-
               };// archiveOrg
 
               //============================================================
