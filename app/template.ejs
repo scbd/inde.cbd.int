@@ -75,6 +75,8 @@
     </style>
 </head>
 <body class="ltr" id="top">
+  <!-- used by authentication service as work around for cross domain storage of token -->
+  <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
     <!-- HEADER (MOBILE) -->
     <header class="mobile navbar visible-xs" role="banner">
