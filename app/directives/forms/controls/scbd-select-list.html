@@ -11,12 +11,32 @@ position:relative;
 
 
 <div class="row" style="padding:7px 20px 5px 20px;">
-  <div class="container-header" style="position:relative;margin-bottom:7px;">
 
-    <div class="pull-xs-left ">
+
+
+
+
+
+  <div class="container-header" style="position:relative;margin-bottom:7px;">
+    <div class="col-xs-6">
+      <div class="form-group" ng-class="{ 'has-warning': form.email.$invalid }">
+
+        <div class="input-group" style="margin-bottom:2px; padding-left: 0px">
+
+          <input type="email" name="email" class="form-control " ng-model="document.Email" >
+
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+          </span>
+        </div>
+
+      </div>
+    </div>
+    <!-- <div class="pull-xs-left ">
       <button style=margin-top:2px;"" data-toggle="tooltip" title="Search" class="btn btn-default search-lbtn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
       <input  type="text" ng-model="search" placeholder="search..." class="lst-search"> </input>
-    </div>
+
+    </div> -->
     <div class="clearfix"></div>
   </div>
   <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
