@@ -19,7 +19,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
   },
 		link: function($scope, $element, $attrs) {
 
-
+          $scope.showOrgForm = false;
 
 					$scope.name = $attrs.name;
 
@@ -29,7 +29,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
             $scope.single=false;
           }
 
-          $scope.now=new Date().getTime();
+          $scope.now=0;
 
 					$scope.loading=true;
           if($attrs.schema)
@@ -38,23 +38,24 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      $scope.docs;
 
 
+          //
+          $scope.$watch('showOrgForm',function(){
 
-          $scope.$watch('binding',function(){
+              $scope.loadList();
 
-              if($scope.binding && $scope.binding.length >0 && $scope.loading)
-                  setChips();
           },true);
-          $scope.$watch('items',function(){
 
-              init();
-          });
+          // $scope.$watch('items',function(){
+          //
+          //     init();
+          // });
           //==================================
 					//
 					//
 					//==================================
 					function init () {
 
-					     $scope.loadList();
+					     //$scope.loadList();
 
 					}// init
 
@@ -70,7 +71,8 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                         _.each($scope.binding,function(id){
 
                             if(doc._id===id){
-                              $scope.select(doc);
+                              doc.selected=!doc.selected;
+                              //$scope.select(doc);
                             }
                         });
                       });
@@ -117,9 +119,9 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      //=======================================================================
 		      $scope.select = function (docObj){
 
-            // stops double fire not sure why its happening
-            var now = new Date().getTime();
-            if((now-$scope.now)<= 100) return;
+            // var now = new Date().getTime();
+            //
+            // if((now-$scope.now)<= 100) return;
 
             docObj.selected=!docObj.selected;
 
@@ -130,8 +132,10 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
               else
                 _.remove($scope.binding,function(obj){return obj===docObj._id;});
 
-              $scope.now=new Date().getTime();
+        //      $scope.now=new Date().getTime();
+
 		      };// archiveOrg
+
 
 		}
 	};

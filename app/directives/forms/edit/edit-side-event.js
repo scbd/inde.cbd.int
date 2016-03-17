@@ -40,23 +40,22 @@ define(['app', 'lodash',
             var data = {}; //catch for profile data
 
             $scope.$watch('doc.confrence', function() {
+              console.log($scope.doc.confrence);
               if ($scope.doc.confrence) {
                 //generateEventId($scope.doc.confrence);
-                generateDates();
+                generateDates($scope.doc.confrence);
               }
             });
             $scope.$watch('doc.hostOrgs', function() {
-              if ($scope.showOrgForm && doc.hostOrgs && doc.hostOrgs.length) {
-                $scope.showOrgForm = false;
+              console.log($scope.doc.hostOrgs);
 
-              }
-            });
+            },true);
 
             $http.get("https://api.cbd.int/api/v2015/confrences", {
               cache: true
             }).then(function(o) {
               $scope.options.confrences = $filter("orderBy")(o.data, "title");
-
+              //$timeout(function(){generateDates($scope.doc.confrence)},1000);
             });
 
 
@@ -170,6 +169,7 @@ init();
             //
             //============================================================
             function generateDates() {
+console.log($scope.doc.confrence);
               mongoStorage.loadDoc('confrences', $scope.doc.confrence).then(function(confr) {
                 $scope.doc.confrenceObj = confr[1];
                 var diff = Number(confr[1].end) - Number(confr[1].start);
@@ -263,23 +263,12 @@ init();
 
 
 
+
             //============================================================
             //
             //============================================================
             $scope.options = {
-              hostOrgs: function() {
-                return mongoStorage.loadDocs('inde-orgs')
-                  .then(function(o) {
-                    _.each(o.data, function(docObj, key) {
-                      if (docObj.document && docObj.document.title && docObj.document.title.en)
-                        docObj.title = docObj.document.title;
-                      else {
-                        delete o.data[key];
-                      }
-                    })
-                    return $filter("orderBy")(o.data, "title");
-                  });
-              },
+
               countries: function() {
                 return $http.get("https://api.cbd.int/api/v2015/countries", {
                   cache: true
@@ -306,20 +295,14 @@ init();
 
             };
 
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.toggleOrg = function(event) {
-              $scope.showOrgForm = !$scope.showOrgForm;
-              event.stopPropagation();
-            };
+
 
             //=======================================================================
             //
             //=======================================================================
             $scope.saveDoc = function() {
               var tempMobile;
-              if (!$scope.doc.confrence) throw "Error no confrence selected";
+            //  if (!$scope.doc.confrence) throw "Error no confrence selected";
               generateEventId().then(
                 function(res) {
                   if (Number(res.data.count) === 0)
@@ -362,6 +345,24 @@ init();
 
               $location.url(url);
             };
+
+            //=======================================================================
+  		      //
+  		      //=======================================================================
+  		      $scope.submitForm = function (formData){
+              $scope.submitted=true;
+              if(formData.$valid){
+                $scope.saveDoc();
+                $scope.publishRequestDial();
+              }else {
+                  console.log('formData.meeting.$pristine',formData.meeting.$pristine);
+                  console.log('formData.meeting.$invalid',formData.meeting.$invalid);
+                  console.log('$scope.submitted',$scope.submitted);
+              }
+
+
+
+  		      };// archiveOrg
 
             //=======================================================================
             //

@@ -93,15 +93,16 @@ define(['app', 'lodash',
 
                   mongoStorage.save('inde-orgs',$scope.doc,$scope._id).then(function(res){
 
-                        if(!($scope.hide  !== undefined && $scope.hide !== null)){
-                                $scope._id=res.data._id;
-
-                        } else{
-                          $scope.hide=0;
+                        // if(!($scope.hide  !== undefined && $scope.hide !== null)){
+                        //         $scope._id=res.data._id;
+                        //
+                        // } else{
+                        //   $scope.hide=0;
 
                           if($scope.isInForm){
                             if(!_.isArray($scope.selectedOrgs))$scope.selectedOrgs=[];
                             $scope.selectedOrgs.push(res.data._id);
+                                 $scope.hide=0;
                           }
                           mongoStorage.createDoc('inde-orgs').then(
                                   function(document){
@@ -110,9 +111,10 @@ define(['app', 'lodash',
                                     $scope.doc=document[1];
                                     $scope.doc.logo='app/images/ic_business_black_48px.svg';
                                     $scope.isNew=true;
+                                    $scope.hide=0;
                                   }
                           );
-                        }
+                      //  }
                   });
               };
               //============================================================

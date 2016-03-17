@@ -150,10 +150,9 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                         status: 'draft'
                       }
                   };
-        console.log('schema',schema);
-      console.log('obj',obj);
+
               return save(schema,obj).then(function(res){
-                console.log(res.data);
+
                   return loadDoc (schema,res.data.id);
               });
         }
@@ -226,7 +225,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               if(stat){
                 $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
                   function(res){
-                    console.log(res.data);
+
                     statusFacits[stat]=res.data.count;
                     statusFacits['all']+=res.data.count;
                   }
@@ -264,7 +263,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             if(stat){
                               $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}').then(
                                 function(res){
-                                  console.log(res.data);
+                  
                                   statusFacits[stat]=res.data.count;
                                   statusFacits['all']+=res.data.count;
                                 }

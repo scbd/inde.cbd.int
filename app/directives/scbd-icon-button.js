@@ -25,7 +25,7 @@ function(app,  iconate,_) {
                 var options; // inimation-transform options
                 // $scope.on = ($attr.hasOwnProperty('on') &&  )|| 0;
                 // if($scope.on)transform();
-
+                $scope.now=new Date().getTime();
                 $element.addClass('btn-icon');
                 if($attr.hasOwnProperty('waves') && $attr.waves!=='false' && $attr.waves!=='0'){
                   wavesService.init();
@@ -78,21 +78,15 @@ function(app,  iconate,_) {
                             $scope.on=!$scope.on;
 
                         };
-                        $timeout(function(){
+
                             $scope.$watch('active',function(newValue, oldValue) {
-                              //if (newValue !== oldValue){
                                   if($scope.active)
                                     transform();
                                   else
                                     transformBack();
-
-                              //}
-
                             });
-                        },2000);
-                        // if($scope.active){
-                        //   $scope.toggle();
-                        // }
+
+
                   }//transfor
 
                   //============================================================
