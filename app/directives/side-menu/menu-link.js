@@ -91,7 +91,7 @@ function(app,template,_) {
                     //
                     //============================================================
                     function activate(){
-        
+
                       $element.parent().parent().find('button').removeClass(activeClass);
                         $element.find('button').addClass(activeClass);
                         $element.find('i').addClass(iconClass);
@@ -164,7 +164,7 @@ function(app,template,_) {
                       //
                       //============================================================
                       $scope.hasRole = function () {
-        // console.log($scope.section.roles);
+        //console.log('rolses',$scope.section.roles);
 
                           if(!$scope.section.roles)
                             return true;

@@ -9,7 +9,7 @@ define(['app',
   ],
   function(app, template, _) {
     //============================================================
-    //  angullar implimentation of by scbd
+    //  angular implimentation of Pushy by scbd
     // Pushy - v0.9.2 - 2014-9-13
     //  github.com/christophery/pushy
     //============================================================
@@ -65,8 +65,10 @@ define(['app',
 
 
           $scope.$watch('sections',function(){
-              if($scope.sections && $scope.sections.length>=2)
-                scbdSideMenu.init($attr.id,scbdSideMenu);
+              if($scope.sections && $scope.sections.length>=2){
+                  scbdSideMenu.init($attr.id,scbdSideMenu);
+              }
+
           });
 
         },

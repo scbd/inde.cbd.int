@@ -21,7 +21,7 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           type: 'link',
           mdIcon: 'dashboard',
           path: '/manage',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
 
         scbdMenuService.menus.dashboard.push({
@@ -29,14 +29,14 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           type: 'link',
           mdIcon: 'event',
           path: '/manage/events',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.dashboard.push({
           name: 'Your Organizations',
           type: 'link',
           mdIcon: 'business',
           path: '/manage/organizations',
-              roles:['Administrator','IndeAdministrator'],
+    //          roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.validateMenus();// minds color classes and animation ect
 
@@ -64,28 +64,28 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           type: 'link',
           mdIcon: 'add_box',
           path: '/manage/events/new',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.options.push({
           name: 'Unarchived',
           type: 'link',
           mdIcon: 'archive',
           path: '/manage/events/',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.options.push({
           name: 'Archives',
           type: 'link',
           mdIcon: 'archive',
           path: '/manage/events/archived',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.options.push({
           name: 'Sort',
           type: 'link',
           mdIcon: 'sort_by_alpha',
           path: '/manage/events/sort',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
         });
 
         scbdMenuService.menus.options.push({
@@ -93,54 +93,54 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           type: 'toggle',
           open:0,
           mdIcon: 'filter_list',
-          roles:['Administrator','IndeAdministrator'],
+  //        roles:['Administrator','IndeAdministrator'],
           pages: [
             {
               name: 'All',
               type: 'link',
-              path: '/admin/events/all',
+              path: '/all',
               mdIcon: 'all_inclusive',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
             },
             {
               name: 'Drafts',
               type: 'link',
-              path: '/admin/events/all',
+              path: '/all',
               mdIcon: 'insert_drive_file',
-              roles:['Administrator','IndeAdministrator'],
+//              roles:['Administrator','IndeAdministrator'],
             },
             {
               name: 'Requests',
               type: 'link',
-              path: '/admin/events/all',
+              path: '/all',
               mdIcon: 'live_help',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
             },
             {
               name: 'Approved',
               type: 'link',
-              path: '/admin/events/all',
+              path: '/all',
               mdIcon: 'thumb_up',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
             },
             {
               name: 'Canceled',
               type: 'link',
-              path: '/admin/events/all',
+              path: '/all',
               mdIcon: 'thumbs_up_down',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
             },
             // {
             //   name: 'Rejected',
             //   type: 'link',
-            //   path: '/admin/events/all',
+            //   path: '/all',
             //   mdIcon: 'view_module',
             //   roles:['Administrator','IndeAdministrator'],
             // },
             // {
             //   name: 'Archived',
             //   type: 'link',
-            //   path: '/admin/events/all',
+            //   path: '/all',
             //   mdIcon: 'archived',
             //   roles:['Administrator','IndeAdministrator'],
             // },
@@ -151,26 +151,26 @@ app.factory("dashMenu", ['scbdMenuService', function(scbdMenuService) {
           type: 'toggle',
           open:0,
           mdIcon: 'remove_red_eye',
-          roles:['Administrator','IndeAdministrator'],
+//          roles:['Administrator','IndeAdministrator'],
           pages: [
             {
               name: 'Card View',
               type: 'link',
-              path: '/admin/events/card-view',
+              path: '/card-view',
               mdIcon: 'view_module',
-              roles:['Administrator','IndeAdministrator'],
+//              roles:['Administrator','IndeAdministrator'],
             },
             {
               name: 'List View',
               type: 'link',
-              path: '/admin/events/list-view',
+              path: '/list-view',
               mdIcon: 'view_list',
-              roles:['Administrator','IndeAdministrator'],
+  //            roles:['Administrator','IndeAdministrator'],
             },
           //   {
           //   name: 'Detail View',
           //   type: 'link',
-          //   path: '/admin/events/detail-view',
+          //   path: '/detail-view',
           //   mdIcon: 'view_headline',
           //   roles:['Administrator','IndeAdministrator'],
           //
