@@ -29,7 +29,7 @@
               </div> -->
 
         <span class="container-header-name hidden-md hidden-sm hidden-xs" ><h1 style="display:inline;">Your <span ng-if="showArchived">Archived</span> Side Events</h1></span>
-        <div class=" pull-xs-right" >
+        <div class=" pull-right" >
           <button data-toggle="tooltip" title="Options"  class="btn btn-default btn-sm" ng-click="toggle('options')"><i class="fa fa-ellipsis-h"></i></button>
         </div>
         <div class="clearfix"></div>
@@ -209,12 +209,12 @@
             <!-- mobi title status-->
             <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
               <span style="white-space: normal;">{{doc.document.confrenceObj.acronym | lstring}}/#{{doc.document.id}}</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-              <span class="pull-xs-right" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
+              <span class="pull-right" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
             </div>
 
             <!-- large status -->
