@@ -49,15 +49,15 @@ position:relative;
             <div style="position:absolute; top:0px;left:80px;width:100%;height:50px;">
               <div ng-if="schema=='inde-orgs'">
                 <div style="font-weight:bold;">{{docObj.document.acronym | lstring}} </div>
-                <span class="hidden-lg-down">{{docObj.document.title | lstring}}</span>
-                <span class="hidden-lg-up">{{docObj.document.title | lstring | characters:26}}</span>
+                <span class="hidden-md hidden-sm hidden-xs">{{docObj.document.title | lstring}}</span>
+                <span class="hidden-lg hidden-xl">{{docObj.document.title | lstring | characters:26}}</span>
               </div>
             </div>
 
             <div class="collection-action" >
               <span class="collection-action-grp relative " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
-                <scbd-icon-button class="right hidden-lg-up" style="z-index:100;position:absolute;right:-115px;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
-                <scbd-icon-button class="right hidden-md-down" style="z-index:100;position:absolute;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+                <scbd-icon-button class="right hidden-lg hidden-xl" style="z-index:100;position:absolute;right:-115px;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
+                <scbd-icon-button class="right hidden-md hidden-sm hidden-xs" style="z-index:100;position:absolute;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
 
               </span>
             </div>

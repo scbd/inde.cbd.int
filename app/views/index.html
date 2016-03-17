@@ -6,6 +6,7 @@
       <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
     </div>
   </div>
+
   <div scroll-to="top" class="hidden-lg hidden-xl">
     <div ani-scroll="550" class="float-button" >
       <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
@@ -14,35 +15,29 @@
 
   <div class="row">
     <div  class="container-header" style="height:40px;margin-bottom:10px;" >
-
       <span class="container-header-name hidden-md hidden-xs hidden-sm">
         <h1 style="display:inline;">Side Events</h1>
       </span>
       <div class="clearfix"></div>
-
     </div>
   </div>
 
     <div class="row">
-
         <div class="col-lg-4 col-sm-6 col-xs-12" ng-class="{ 'col-lg-12': (confrences.length===1),'col-lg-4 col-lg-offset-2': (confrences.length===2), 'col-lg-4': (confrences.length===3),'col-lg-3': (confrences.length>=4) }" ng-repeat="con in filCon = (confrences | filter:newMeetingFilter)" >
-
             <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }" >
                 <div class="panel-heading  text-center">
                   <h2 style="color:inherit">{{con.document.acronym| lstring}}</h2>
-                    <!-- <h2 style="color:inherit"><a style="color:inherit" href="{{m.code}}">{{m.code.toUpperCase()}}</a></h2> -->
                 </div>
                 <div class="panel-body text-center" style="min-height:110px">
                   <div class="btn-group-vertical">
 
                     <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
-
-                    <!-- <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button> -->
                     <button class="btn btn-sm btn-info" ng-click="goTo(con._id);">Register a Side Event</button>
                   </div>
                 </div>
                 <div class="panel-footer text-right">
-                        234 to 234
+                  <div class="text-center" >{{con.document.start * 1000 | date:'yyyy-MM-dd' }}
+                      <span style=""> to </span> {{con.document.end * 1000 | date:'yyyy-MM-dd'}}</div>
                 </div>
             </div>
         </div>

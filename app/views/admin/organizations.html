@@ -13,7 +13,7 @@
         <h1>Options</h1>
       </div>
     </scbd-side-menu>
-    <div class="container-header-name hidden-lg-up">All<span ng-if="showArchived">Archived</span> Organizations</span></div>
+    <div class="container-header-name hidden-lg hidden-xl">All<span ng-if="showArchived">Archived</span> Organizations</span></div>
     <div class="list-container" >
 
       <div class="container-header" >
@@ -22,7 +22,7 @@
           <button class="btn btn-default search-btn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
           <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
         </div>
-        <span class="container-header-name hidden-lg-down" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Organizations</h1></span>
+        <span class="container-header-name hidden-md hidden-sm hidden-xs" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Organizations</h1></span>
         <div class=" pull-xs-right" >
           <button class="btn btn-default btn-sm" ng-click="toggle('orgOptions')"><i class="fa fa-ellipsis-h"></i></button>
         </div>
@@ -34,7 +34,7 @@
 
       <!-- chips -->
       <!-- chips -->
-      <div class="row chips-row hidden-lg-down" ng-if="!search">
+      <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="!search">
 
         <div id="chip-all" class="chip chip-active " ng-if="(!showArchived && statusFacits.all)  || (selectedChip==='all'&& !showArchived)" ng-click="selectChip('all')">
           <div>
@@ -84,7 +84,7 @@
       </div>
       <!-- card VIEW -->
       <section class="row" ng-if="listView">
-        <div class="row chips-row hidden-lg-down" ng-if="search">
+        <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
         <div class="ccol-lg-4 col-md-3 col-xs-12" ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter)">
@@ -145,7 +145,7 @@
 
       <!-- LIST VIEW -->
       <section ng-if="!listView" style="margin-top:5px;">
-        <div class="row chips-row hidden-lg-down" ng-if="search">
+        <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
         <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
@@ -159,23 +159,23 @@
             </div>
             <div  class="event-title-collection">
               <div style="margin-bottom:25px;width:80%;white-space: normal;">
-                <span class="hidden-lg-down"><b>{{doc.document.acronym | lstring}} </b>- </span> {{doc.document.title | lstring | characters:100}}</div>
+                <span class="hidden-md hidden-sm hidden-xs"><b>{{doc.document.acronym | lstring}} </b>- </span> {{doc.document.title | lstring | characters:100}}</div>
                 <div class="cir hidden-sm hidden-md hidden-xs">
-                  <span class="hidden-lg-down" ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
+                  <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
                     <span class="cir">
                       <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                       <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
                     </span>
                     <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym | lstring}} |</span>
                   </span>
-                  <span class="hidden-lg-down" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                  <span class="hidden-lg-down"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
+                  <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
+                  <span class="hidden-md hidden-sm hidden-xs"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
                 </div>
 
             </div>
             <!-- mobi orgs -->
 
-            <div class="cir hidden-lg-up" style="position:absolute; left:1px;bottom:1px;">
+            <div class="cir hidden-lg hidden-xl" style="position:absolute; left:1px;bottom:1px;">
               <span ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
                 <span class="cir">
                   <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
@@ -187,7 +187,7 @@
               <span style="font-size:.8rem;"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
             </div>
             <!-- mobi title status-->
-            <div class="hidden-lg-up" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
+            <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
               <span style="white-space: normal;">{{doc.document.acronym | lstring}}</span>
               <span class="pull-xs-right" ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
               <span class="pull-xs-right" ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
@@ -198,7 +198,7 @@
             </div>
 
             <!-- large status -->
-            <div class="hidden-lg-down" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
+            <div class="hidden-md hidden-sm hidden-xs" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
               <span ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
               <span ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
               <span ng-if="doc.document.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
@@ -210,7 +210,7 @@
 
 
             <div style="height:95px;"></div>
-            <div class="hidden-lg-up" style="height:95px;"></div>
+            <div class="hidden-lg hidden-xl" style="height:95px;"></div>
 
             <div class="collection-action">
               <span class="collection-action-grp ">
