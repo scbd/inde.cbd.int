@@ -129,14 +129,8 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                   _.remove($scope.binding,function(obj){return obj===docObj._id;});
 
             });
-
-
 		      };// archiveOrg
 
-
-
-
-	//	init();
 		}
 	};
 }]);
