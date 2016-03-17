@@ -112,7 +112,7 @@ define(['app', 'lodash',
           });
         },2000);
       }
-      
+
       function  sortOrder () {
         console.log('here');
         $scope.sortReverse=!$scope.sortReverse;

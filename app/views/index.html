@@ -1,115 +1,58 @@
 <div ng-controller="home">
 
+
+  <div scroll-to="top" class="hidden-md hidden-sm hidden-xs">
+    <div ani-scroll="550" class="float-button" style="padding-top:5px;">
+      <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
+    </div>
+  </div>
+  <div scroll-to="top" class="hidden-lg hidden-xl">
+    <div ani-scroll="550" class="float-button" >
+      <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
+    </div>
+  </div>
+
   <div class="row">
-    <div class="ind-container-header relative" style="height:40px;">
-      <div class="pull-xs-left ">
-      </div>
-      <span class="container-header-name hidden-lg-down">
+    <div  class="container-header" style="height:40px;margin-bottom:10px;" >
+
+      <span class="container-header-name hidden-md hidden-xs hidden-sm">
         <h1 style="display:inline;">Side Events</h1>
       </span>
-      <span class="ind-container-header-name hidden-lg-up"> Side Events</span>
       <div class="clearfix"></div>
-    </div>
-    <div style="padding:10px; 0 10px 10px;">
-      <div class="collection ">
-        <div class="collection-item">
-          <div>
-            Select A Meeting:
-            <div scroll-to="top" class="hidden-md-down">
-              <div ani-scroll="550" class="float-button" style="padding-top:5px;">
-                <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
-              </div>
-            </div>
-            <div scroll-to="top" class="hidden-lg-up">
-              <div ani-scroll="550" class="float-button" >
-                <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-md-12" ng-class="{ 'col-lg-12': (confrences.length===1),'col-lg-4 col-lg-offset-2': (confrences.length===2), 'col-lg-4': (confrences.length===3),'col-lg-3': (confrences.length>=4) }" ng-repeat="con in filCon = (confrences | filter:newMeetingFilter)">
-      <div class="card">
-        <img style="width:100%;max-height:150px;" class="card-img-top" src="{{con.document.image}}" alt="{{con.document.acronym| lstring}}">
-        <div class="center">
-          <div class="center" style="width:100%;border-bottom-style:solid;border-bottom-width:.5px;border-bottom-color:#eee;">
-            <span Style="font-size:20px;color:#222;letter-spacing:2px;padding-bottom:5px;">
-              <strong>{{con.document.acronym| lstring}}</strong>
-            </span>
-          </div>
-          <p></p>
-          <div class="btn-group-vertical">
-            <button class="btn btn-sm btn-secondary" scroll-to="venue{{$index}}" duration="1000">Venue</button>
+    <div class="row">
 
-            <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000">Side Event Schedule</button>
+        <div class="col-lg-4 col-sm-6 col-xs-12" ng-class="{ 'col-lg-12': (confrences.length===1),'col-lg-4 col-lg-offset-2': (confrences.length===2), 'col-lg-4': (confrences.length===3),'col-lg-3': (confrences.length>=4) }" ng-repeat="con in filCon = (confrences | filter:newMeetingFilter)" >
 
-            <!-- <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button> -->
-            <button class="btn btn-sm btn-info" ng-click="goTo(con._id);">Register a Side Event</button>
-            <span style="font-size:11px;">(Please note your previous accounts will work in the new system.)</span>
-          </div>
-          <p></p>
+            <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }" >
+                <div class="panel-heading  text-center">
+                  <h2 style="color:inherit">{{con.document.acronym| lstring}}</h2>
+                    <!-- <h2 style="color:inherit"><a style="color:inherit" href="{{m.code}}">{{m.code.toUpperCase()}}</a></h2> -->
+                </div>
+                <div class="panel-body text-center" style="min-height:110px">
+                  <div class="btn-group-vertical">
+
+                    <button class="btn btn-sm btn-secondary" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
+
+                    <!-- <button class="btn btn-sm btn-secondary" scroll-to="events{{$index}}" duration="1000">Approved Side Events</button> -->
+                    <button class="btn btn-sm btn-info" ng-click="goTo(con._id);">Register a Side Event</button>
+                  </div>
+                </div>
+                <div class="panel-footer text-right">
+                        234 to 234
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 
 
   <!-- venue-->
   <section ng-repeat="con in confrences | filter:newMeetingFilter ">
-    <div class="row">
-      <div id="venue{{$index}}" class="parallax-container">
-        <div class="parallax">
-          <img class="parallax-img" src="{{con.document.image}}">
-          <div class="center scrim">
-            <h1 Style="font-size:35px;letter-spacing:5px;padding-bottom:5px;">{{con.document.acronym| lstring}}</h1>
-            <h5 style="color:white;font-size:12px;letter-spacing:2px;margin-bottom:4px;">({{con.document.title | lstring}})</h5>
 
-            <div class="venue">
-              <div class="container-header-venue"><i class="material-icons left" style="font-size:38px;">date_range</i>
-                <span style="font-size:16px;font-weight:bold;position:absolute;top:8px;">Venue</span>
-                <div class="pull-xs-right " style="position:absolute;top:8px;right:5px;">{{con.document.start * 1000 | date:'yyyy-MM-dd' }}
-                  <span style=""> to </span> {{con.document.end * 1000 | date:'yyyy-MM-dd'}}</div>
-              </div>
-
-              <div class="ven-add-out-cont">
-                <div class="ven-add-out-cont">
-                  <img ng-if="con.document.venueObj.logo" src="{{con.document.venueObj.logo}}" class="host-logo">
-                </div>
-                <div class="ven-add-in-cont" style="display:inline-block;">
-
-                  <div class="venadd">
-                    <p style='line-height: 25px;margin-bottom:0;'>
-                      <i class="material-icons" style="vertical-align:top;">&#xE0AF;</i> {{con.document.venueObj.title | lstring}}
-                      <span ng-if="con.document.venueObj.acronym">({{con.document.venueObj.acronym| lstring}})</span>
-                    </p>
-                    <p style='line-height: 25px;margin-bottom:0;'>
-                      <i class="material-icons" style="vertical-align:top;">&#xE0C8;</i>
-                      <span ng-if="con.document.venueObj.address"> {{con.document.venueObj.address}}</span>
-                    </p>
-                    <p style='line-height: 25px;margin-bottom:0;'>
-                      <i class="material-icons" style="vertical-align:top;">&#xE7F1;</i>
-                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.city}}</span>
-                      <span ng-if="con.document.venueObj.state">, {{con.document.venueObj.state}}</span>
-                    </p>
-                    <p style='line-height: 25px;margin-bottom:0;'>
-                      <i class="material-icons" style="vertical-align:top;"> &#xE554;</i>
-                      <span ng-if="con.document.venueObj.city"> {{con.document.venueObj.zip}}</span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row">
 
   <!-- side event schedule -->
@@ -117,44 +60,37 @@
         <div class="pull-xs-left ">
 
         </div>
-        <span class="container-header-name hidden-lg-down">
+        <span class="container-header-name hidden-md hiddensm hidden-xs">
           <h1 style="display:inline;">Side Event Schedule</h1>
           <h6> ({{con.document.acronym| lstring}})</h6>
         </span>
-        <span class="ind-container-header-name hidden-lg-up"> Side Event Schedule </span>
-        <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
+        <span class="ind-container-header-name hidden-lg hidden-lx"> Side Event Schedule </span>
+        <div class="hidden-lg hidden-lx">({{con.document.acronym| lstring}})</div>
         <div class="clearfix"></div>
 
       </div>
-      <div style="width:80%;padding-top:10px;">
-
-        <div class="collection " style="margin-left:25%;">
-          <div class="collection-item ">
-            <h5>
-              <p style="line-height: 25px;"><i class="material-icons" style="vertical-align:bottom;">&#xE85A;</i> Announcement:</h5>
-            </p>
-            <div>
+      <div class="col-xs-6 col-xs-offset-3" style="margin-top:20px; margin-bottom:20px;">
+      <div class="bs-callout bs-callout-info">
+          <h4>Announcement:</h4>
               The side event scedule will be posted for the first week of April 2016.
-            </div>
-          </div>
-        </div>
       </div>
+</div>
     </div>
-    <div class="row">
 
-
+    <div class="row" ng-if="filtered.length">
     <!-- Side events -->
+    <div class="col-xs-10 col-xs-offset-1">
       <div id="events{{$index}}" class="ind-container-header relative" style="margin-top:8px;">
         <div style="position:absolute;left:10px;top:12px;">
           <button id="search-btn{{$index}}" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle($index);search='';sO=!sO;"><i class="fa fa-search" ng-if="!sO"></i><i class="fa fa-times" ng-if="sO"></i></button>
           <input id="ind-search{{$index}}" type="text" ng-model="search" placeholder="search..." class="ind-search"> </input>
         </div>
-        <span class="container-header-name hidden-lg-down">
+        <span class="container-header-name hidden-md hiddensm hidden-xs">
           <h1 style="display:inline;">Side Events</h1>
           <h6> ({{con.document.acronym| lstring}})</h6>
         </span>
-        <span class="ind-container-header-name hidden-lg-up">Side Events </span>
-        <div class="hidden-lg-up">({{con.document.acronym| lstring}})</div>
+        <span class="ind-container-header-name hidden-lg hidden-xl">Side Events </span>
+        <div class="hidden-lg hidden-xl">({{con.document.acronym| lstring}})</div>
 
         <div class="btn-group" style="position:absolute;right:10px;top:12px;">
           <button id="search-btn{{$index}}" data-toggle="tooltip" title="Register Side Event" class="btn btn-default search-btn btn-sm" ng-click="goTo(con._id);"><i class="fa fa-plus" ></i></button>
@@ -164,13 +100,13 @@
 
       <!-- LIST VIEW -->
       <div style="padding: 0 5px; 0 5px;">
-        <section ng-if="listView">
-          <div class="row chips-row hidden-lg-down">
+        <section >
+          <div class="row chips-row hidden-md hidden-sm hidden-sx">
             showing:
             <span class="label label-pill label-primary ">{{filtered.length}} </span>
             <span ng-if="search">for '{{search}}'</span>
           </div>
-          <div style="margin-top:5px;min-height:100px;overflow:auto;">
+          <div style="margin-top:5px;max-height:100px;overflow:auto;">
             <div class="row collection " ng-repeat="doc in filtered = (con.document.events |filter:search)" style="margin-bottom:8px;">
               <div class="collection-item ">
                 <div style=" position:absolute;top:0px;left:0px;">
@@ -181,30 +117,30 @@
                   </div>
                 </div>
                 <div class="event-title-collection">
-                  <div class="hidden-lg-down" style="width:80%;white-space: normal;    text-transform: uppercase;">
+                  <div class="hidden-md hiddensm hidden-xs" style="width:80%;white-space: normal;    text-transform: uppercase;">
                     <strong>#{{doc.document.id }}</strong> - {{doc.document.title | lstring | characters:261 }}
                   </div>
-                  <div class="hidden-lg-up" style="width:80%;white-space: normal;    text-transform: uppercase;">
+                  <div class="hidden-lg hidden-lx" style="width:80%;white-space: normal;    text-transform: uppercase;">
                     <strong>#{{doc.document.id }}</strong> - {{doc.document.title | lstring | characters:80 }}
                   </div>
 
 
                   <div class="cir hidden-sm hidden-md hidden-xs">
-                    <span class="hidden-lg-down" ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
+                    <span class="hidden-md hiddensm hidden-xs" ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
                       <span class="cir">
                         <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                         <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
                       </span>
                       <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym | lstring}} |</span>
                     </span>
-                    <span class="hidden-lg-down" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                    <span class="hidden-lg-down"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
+                    <span class="hidden-md hiddensm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
+                    <span class="hidden-md hiddensm hidden-xs"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
                   </div>
 
                 </div>
                 <!-- mobi orgs -->
 
-                <div class="cir hidden-lg-up" style="position:absolute; left:1px;bottom:1px;">
+                <div class="cir hidden-lg hidden-lx" style="position:absolute; left:1px;bottom:1px;">
                   <span ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
                     <span class="cir">
                       <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
@@ -216,14 +152,14 @@
                   <span style="font-size:.8rem;"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
                 </div>
                 <!-- mobi title status-->
-                <div class="hidden-lg-up" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;height:width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
+                <div class="hidden-lg hidden-lx" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;height:width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
                   <span style="white-space: normal;">{{doc.document.confrenceObj.acronym | lstring}}/#{{doc.document.id}}</span>
                   <span class="pull-xs-right" ng-if="doc.document.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
 
                 </div>
 
                 <!-- large status -->
-                <div ng-if="doc.document.meta.status==='canceled'" class="hidden-lg-down" style=" height:100%; color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;border-style:solid;border-color:red;">
+                <div ng-if="doc.document.meta.status==='canceled'" class="hidden-md hiddensm hidden-xs" style=" height:100%; color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;border-style:solid;border-color:red;">
                   <span style="position:absolute;left:23%;top:30%;"><i class="material-icons">&#xE8DD;</i>
                     <div>Canceled</div>
                   </span>
@@ -247,7 +183,7 @@
         </section>
 
       </div>
-
+      </div>
   </section>
 
 </div>

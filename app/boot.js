@@ -11,7 +11,7 @@ require.config({
         'angular-storage'          : 'libs/angular-local-storage/dist/angular-local-storage.min',
         'angular-messages'         : 'libs/angular-messages/angular-messages.min',
         'app-css'                  : 'css/main',
-        'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min',
+        'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',
         'css'                      : 'libs/require-css/css.min',
         'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
         'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',
