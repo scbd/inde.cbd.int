@@ -29,10 +29,11 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
             $scope.single=false;
           }
 
+          $scope.now=new Date().getTime();
+
 					$scope.loading=true;
           if($attrs.schema)
-		      $scope.schema=$attrs.schema;
-		    //  $scope.icon=schemaIcon($attrs.schema);
+		        $scope.schema=$attrs.schema;
 
 		      $scope.docs;
 
@@ -97,7 +98,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      $scope.loadList = function (){
             $scope.atCapacity=false;
             authentication.getUser().then(function (user) {
-//"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft"
+
               $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]},"document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res){
                         $scope.docs=res.data;
                 $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft","document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res2){
@@ -115,19 +116,21 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      //
 		      //=======================================================================
 		      $scope.select = function (docObj){
-            //if($scope.atCapacity  && !docObj.selected) return;
 
+            // stops double fire not sure why its happening
+            var now = new Date().getTime();
+            if((now-$scope.now)<= 100) return;
 
+            docObj.selected=!docObj.selected;
 
-              docObj.selected=!docObj.selected;
-console.log(docObj);
-                if(!_.isArray($scope.binding))$scope.binding=[];
+              if(!_.isArray($scope.binding))$scope.binding=[];
 
-                if(docObj.selected)
-                  $scope.binding.push(docObj._id);
-                else
-                  _.remove($scope.binding,function(obj){return obj===docObj._id;});
+              if(docObj.selected)
+                $scope.binding.push(docObj._id);
+              else
+                _.remove($scope.binding,function(obj){return obj===docObj._id;});
 
+              $scope.now=new Date().getTime();
 		      };// archiveOrg
 
 		}
