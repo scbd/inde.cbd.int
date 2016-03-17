@@ -22,79 +22,53 @@
 
   <form name="editForm"  style="margin-top:10px">
     <legend class="container-subheader">
-      <h2>Meeting </h2>
+      <h2>General Information</h2>
     </legend>
-    <div>Select a Meeting </div>
 
     <div class="row">
+        <div class="col-xs-12 col-lg-8">
+          <div class="row">
+              <div class="col-xs-12 col-lg-6" >
+                      <div class="km-control-group " name="meeting"  caption="Meeting" >
+                            <select class="form-control">
 
-      <div class="col-xs-12 " ng-repeat="docObj in options.confrences" style="margin:5px 8px 20px 0;  ">
-        <scbd-flat-button style="outline:none;text-align:left;height:60px;width:100%;background-color:#fff;border-style:solid;border-width:.5px;border-color:rgb(224, 224, 224);" ng-click="selectMeeting(docObj);" waves>
-            <div class="collection-item " style="height:100%;">
-              <div style="width:70px;height:50px; position:absolute;top:0px;left:0px;">
-                <div style="width:70px;height:50px; position:ralative;text-align:center;vertical-align:middle;">
-
-                  <img src="{{docObj.document.logo}}" style="clear:both;max-width:100%;height:50px;" ></img>
-                  <i ng-if="(!docObj.document.logo.length)" class="material-icons" style="position:absolute;top:13px;left:10px;color:#aaaaaa;font-size:55px;">&#xE407;</i>
-
+                              <option >Select a meeting</option>
+                              <option ng-repeat="docObj in options.confrences" value="docObj._id" >{{docObj.document.acronym | lstring}} </option>
+                            </select>
+                      </div>
+              </div>
+              <div class="col-xs-12 col-lg-6" >
+                <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
+                  <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" "/>
                 </div>
               </div>
-
-              <div style="position:absolute; top:0px;left:80px;margin-bottom:3px;">
-                  <span  style="font-weight:bold;font-size:1.1rem;">{{docObj.document.acronym | lstring}}</span>
-                    <div style="font-size:0.8rem;line-height:1.3rem;">{{docObj.document.title | lstring}}
-
+              <div class="col-xs-12 col-lg-12">
+                <div class="km-control-group nowrap" name="title"  caption="Title" >
+                  <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales" ></div>
+                </div>
               </div>
+              <div class="col-md-12 col-xs-12">
+                <div class="km-control-group" name="description" caption="Description" ng-required="!form.description.$valid">
+                  <div class="help-block" ng-if="0">Description of side event</div>
+                  <div km-textbox-ml rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
 
-              </div>
-
-              <div class="collection-action" >
-                <span class="collection-action-grp relative" ng-show="((!doc.confrence && !docObj.selected) || (doc.confrence && docObj.selected) )">
-                  <scbd-icon-button class="right" style="z-index:100;position:absolute;right:-75px;top:10px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
-                </span>
-              </div>
-            </div>
-        </scbd-flat-button>
-      </div>
-    </div>
-
-
-    <div>
-      <legend class="container-subheader">
-        <h2>Identity</h2></legend>
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="km-control-group nowrap" name="title"  caption="Title" >
-            <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales" ></div>
-          </div>
+                  </div>
+                </div>
         </div>
-
-        <div class="col-xs-12">
+      </div>
+        <div class="col-xs-12 col-lg-4" >
           <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Image (Not Org. Logo) Will be iused in icons.">
-
-
-            [ <input type="checkbox"  value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"/> No Logo, Icon Only ] [
-            <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]<span style="font-size:10px;line-height:20px;"> (Keep the system generated logo or upload an image of your own.)</span>
+            [ <input type="checkbox"  value="Catering" ng-click="toggleIcon()" style="padding-bottom:3px;cursor:pointer;"/> No Logo, Icon Only ] <br>[
+            <span ng-click="randomPic()" style="padding-bottom:3px;cursor:pointer;"><a>Randomly Generate Different Logo</a></span> ]<br><span style="font-size:11px;line-height:20px;"> (Keep the system generated logo or upload an image of your own.)</span>
             <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
-
           </div>
         </div>
 
-        <div class="col-md-12 col-xs-12">
-          <div class="km-control-group" name="exp_num_participants" caption="Expected Number of Participants *" ng-required="!form.exp_num_participants.$valid">
-            <input class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" "/>
-          </div>
-        </div>
-        <div class="col-md-12 col-xs-12">
-          <div class="km-control-group" name="description" caption="Description" ng-required="!form.description.$valid">
-            <div class="help-block" ng-if="0">Description of side event</div>
-            <div km-textbox-ml rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales"></div>
-
-          </div>
-        </div>
-      </div>
 
     </div>
+
+
+
 
     <legend class="container-subheader">
       <h2>Organization(s)</h2>
