@@ -103,7 +103,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                 $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft","document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res2){
 
                       $scope.docs = $scope.docs.concat(res2.data);
-
+                      _.each($scope.docs,function(docObj){docObj.selected=false;});
                 }).then(function(){setChips();});
               });
             });
@@ -117,10 +117,10 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      $scope.select = function (docObj){
             //if($scope.atCapacity  && !docObj.selected) return;
 
-            $timeout(function(){
+
 
               docObj.selected=!docObj.selected;
-
+console.log(docObj);
                 if(!_.isArray($scope.binding))$scope.binding=[];
 
                 if(docObj.selected)
@@ -128,7 +128,6 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                 else
                   _.remove($scope.binding,function(obj){return obj===docObj._id;});
 
-            });
 		      };// archiveOrg
 
 		}

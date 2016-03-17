@@ -1,44 +1,25 @@
-<style>
-.scbd-list-container{
-  border-width: 0.5px;
-  border-style: solid;
-  border-color: #009b48;
-position:relative;
-}
-</style>
-
-
-
-
 <div class="row" style="padding:7px 20px 5px 20px;">
+  <div class="col-xs-6">
+    <div class="form-group" ng-class="{ 'has-warning': form.email.$invalid }">
 
+      <div class="input-group" style="margin-bottom:2px; padding-left: 0px">
 
+        <input type="email" name="email" class="form-control " ng-model="document.Email" >
 
-
-
-
-  <div class="container-header" style="position:relative;margin-bottom:7px;">
-    <div class="col-xs-6">
-      <div class="form-group" ng-class="{ 'has-warning': form.email.$invalid }">
-
-        <div class="input-group" style="margin-bottom:2px; padding-left: 0px">
-
-          <input type="email" name="email" class="form-control " ng-model="document.Email" >
-
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
-          </span>
-        </div>
-
+        <span class="input-group-btn">
+          <button class="btn btn-default" type="button"><i class="fa fa-search"></i></button>
+        </span>
       </div>
+
     </div>
     <!-- <div class="pull-xs-left ">
       <button style=margin-top:2px;"" data-toggle="tooltip" title="Search" class="btn btn-default search-lbtn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
       <input  type="text" ng-model="search" placeholder="search..." class="lst-search"> </input>
 
     </div> -->
-    <div class="clearfix"></div>
+
   </div>
+</div>
   <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="(!atCapacity) || (atCapacity && doc.selected)">
     <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
     <span ng-if="doc.document.acronym">{{doc.document.acronym | lstring}}</span>
@@ -50,7 +31,7 @@ position:relative;
 
 
 
-  <section  style="overflow:auto;height:400px;">
+  <section  style="overflow:auto;max-height:400px;">
 
     <div class="col s12 collection" ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
 
@@ -75,10 +56,9 @@ position:relative;
             </div>
 
             <div class="collection-action" >
-              <span class="collection-action-grp relative " ng-show="(!atCapacity) || (atCapacity && docObj.selected)">
-                <scbd-icon-button class="right hidden-lg hidden-xl" style="z-index:100;position:absolute;right:-115px;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
-                <scbd-icon-button class="right hidden-md hidden-sm hidden-xs" style="z-index:100;position:absolute;top:7px;" type="fa" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
-
+              <span class="collection-action-grp relative ">
+                {{docObj.selected}}
+                  <input type="checkbox"  ng-model="docObj.selected"              ng-model-options="{ debounce: '500' }" value="true"/>
               </span>
             </div>
           </div>
