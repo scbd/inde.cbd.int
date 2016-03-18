@@ -31,7 +31,7 @@ define(['app', 'lodash',
       $scope.facetsO.canceled=0;
       $scope.facetsO.rejected=0;
       $scope.facetsO.archived=0;
-      var statuses=['draft','published','request','canceled','rejected','archived','deleted'];
+      var statuses=['draft','published','request','canceled','rejected','archived'];
       mongoStorage.getStatusFacits('inde-side-events',$scope.facets,statuses);
       mongoStorage.getStatusFacits('inde-orgs',$scope.facetsO,statuses)
 
