@@ -7,20 +7,11 @@
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
     <strong>{{msg}}</strong>
   </div>
-
-  <div class="alert alert-error" ng-show="hasError()">
-    <strong>Error as occured...</strong>
-    <div>{{error}}</div>
-  </div>
-
-  <div ng-show="isLoading()">
-    <i class="fa fa-spinner fa-spin"></i> Loading...
-  </div>
-
+<button type="button" class="pull-right" style="margin-bottom:10px" ng-click="alert('ssssss');hide=!hide;"><i class="fa fa-times"  ng-if="hide" ></i></button>
 
 
   <form name="editForm" class="editForm" style="margin-top:10px">
-<i class="fa fa-times pull-right" style="margin-bottom:10px"></i>
+
 
       <legend class="container-subheader text-center no-wrap" ng-if="hide">
         <h2>  Create Organization</h2>

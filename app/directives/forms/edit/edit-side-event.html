@@ -91,6 +91,7 @@ label{padding-top:5px;}
           <div class="row">
             <div class="col-md-12 col-xs-12">
               <div name="hostOrgs" caption="" style="margin-right:20px;">
+
                 <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" items="showOrgForm" ng-if="!showOrgForm"></scbd-select-list>
               </div>
             </div>
@@ -338,8 +339,9 @@ label{padding-top:5px;}
       <div class="row">
 
         <div class="col-md-12 col-xs-12">
-          <div   name="additionalInfo" caption="Message">
-            <textarea rows="4" name="additionalInfo" ng-model="doc.additionalInfo" ></textarea>
+          <div   name="additionalInfo">
+            <label>Message</label>
+            <textarea style="width:100%" class="form-control" rows="4" name="additionalInfo" ng-model="doc.additionalInfo" ></textarea>
           </div>
         </div>
 
