@@ -42,7 +42,7 @@ label{padding-top:5px;}
                             <select id="editForm.meeting" class="form-control" ng-model="doc.confrence" name="meeting" required>
 
 
-                              <option ng-repeat="docObj in options.confrences" value="{{docObj._id}}" >{{docObj.document.acronym | lstring}} </option>
+                              <option ng-repeat="docObj in options.confrences" value="{{docObj._id}}" >{{docObj.document.acronym  }} </option>
                             </select>
                               <p ng-show="editForm.meeting.$invalid  && submitted" class="help-block">A meeting is required.</p>
                       </div>

@@ -73,7 +73,7 @@ define(['app', 'lodash',
                       return $http.get("https://api.cbd.int/api/v2015/countries", {
                           cache: true
                       }).then(function(o) {
-                          return $filter("orderBy")(o.data, "name");
+                          return $filter("orderBy")(o.data, "name.en");
                       });
                   },
 

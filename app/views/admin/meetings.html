@@ -39,7 +39,7 @@
             </div>
             <div class="card-content">
               <div class="center">
-                {{doc.document.title | lstring}}
+                {{doc.document.title  }}
               </div>
             </div>
             <div class="card-action ">
@@ -63,8 +63,8 @@
           <div class="collection-item avatar ">
             <img src="{{doc.document.logo}}" style="background-color:#cccccc;" class="circle"></img>
             <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:17px;left:20px;color:#aaaaaa;font-size:30px;">&#xE0AF;</i>
-            <span class="title">{{doc.document.title | lstring}}</span>
-            <div>{{doc.document.acronym | lstring}}</div>
+            <span class="title">{{doc.document.title  }}</span>
+            <div>{{doc.document.acronym  }}</div>
             <div class="collection-action">
               <span class="collection-action-grp ">
                 <scbd-icon-button type="md" icon-name="&#xE3C9;" ng-click="edit(doc._id);" waves></scbd-icon-button>

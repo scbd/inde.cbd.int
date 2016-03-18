@@ -104,16 +104,16 @@
 
               <img ng-if="doc.document.logo.length"  src="{{doc.document.logo}}">
                 <i ng-if="!doc.document.logo.length" class="material-icons" style="position:absolute;top:5px;left:30%;color:#cccccc;font-size:100px;">&#xE0AF;</i>
-              <!-- <div ng-if="doc.document.meta.status==='draft'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons" >&#xE24D;</i> Draft</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym | lstring}}</span></div> -->
-              <div ng-if="doc.document.meta.status==='request'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons" >&#xE0C6;</i> Request</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym | lstring}}</span></div>
-              <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym | lstring}}</span></div>
-              <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym | lstring}}</span></div>
-              <div ng-if="doc.document.meta.status==='rejected'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DB;</i> Rejected</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.documentj.acronym | lstring}}</span></div>
-              <div ng-if="doc.document.meta.status==='archived'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span style="line-height:20px;"><i class="material-icons">&#xE149;</i> Archived</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym | lstring}}</span></div>
+              <!-- <div ng-if="doc.document.meta.status==='draft'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons" >&#xE24D;</i> Draft</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym  }}</span></div> -->
+              <div ng-if="doc.document.meta.status==='request'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons" >&#xE0C6;</i> Request</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym  }}</span></div>
+              <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>               <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym  }}</span></div>
+              <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym  }}</span></div>
+              <div ng-if="doc.document.meta.status==='rejected'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span  style="line-height:20px;"><i class="material-icons">&#xE8DB;</i> Rejected</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.documentj.acronym  }}</span></div>
+              <div ng-if="doc.document.meta.status==='archived'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;"><span style="line-height:20px;"><i class="material-icons">&#xE149;</i> Archived</span>               <span class="title" style="color:white;position:absolute;right:1px;top:1px;font-size:8px;font-weight:bold;">{{doc.document.acronym  }}</span></div>
             </div>
             <div class="card-content">
               <div class="center">
-                {{doc.document.title | lstring}}
+                {{doc.document.title  }}
               </div>
             </div>
             <div class="card-action ">
@@ -145,7 +145,7 @@
   </div>
 </div>
             <div  style="position:absolute; left:140px;width:100%;height:100px;">
-                  <div style="margin-bottom:25px;" class="title">{{doc.document.title | lstring}}</div>
+                  <div style="margin-bottom:25px;" class="title">{{doc.document.title  }}</div>
 
                   <div class="cir">
                     <span class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span><span> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
@@ -162,7 +162,7 @@
             <div ng-if="doc.document.meta.status==='rejected'" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:130px;"><span  ><i class="material-icons">&#xE8DB;</i> Rejected</span></div>
             <div ng-if="doc.document.meta.status==='archived'" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;"><span ><i class="material-icons">&#xE149;</i> Archived</span></div>
             <div style="height:95px;"></div>
-            <!-- <div>{{doc.document.acronym | lstring}}</div> -->
+            <!-- <div>{{doc.document.acronym  }}</div> -->
             <div class="collection-action">
               <span class="collection-action-grp ">
                 <scbd-icon-button type="md" icon-name="&#xE8DC;" ng-click="approveDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='published')" waves></scbd-icon-button>

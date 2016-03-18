@@ -1,7 +1,12 @@
 <div class="row" >
-  <div class="col-xs-12" style="padding-bottom:7px;">Select the host organization(s) and/or create a new one:
+  <div class="col-xs-12" style="padding-bottom:7px;">Select/Search for the host organization(s) and/or create a new one:
   </div>
-  <div class="col-xs-6">
+  <div class="col-xs-6  col-md-6">
+    <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus" ></i> Create Organization</button>
+
+  </div>
+
+  <div class="col-xs-10  col-md-6">
     <div class="form-group" >
 
       <div class="input-group input-group-sm"  style="margin-bottom:2px; padding-left: 0px;">
@@ -25,16 +30,13 @@
     </div> -->
 
   </div>
-  <divclass="col-xs-6 col-xs-12">
-    <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;"><i class="fa fa-plus" ></i> Create a New Organization</button>
 
-  </div>
 </div>
 <div>
   <div ng-show="!showOrgForm">
     <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="doc.selected" style="margin-left:20px;margin-bottom:10px;" >
       <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
-      <span ng-if="doc.document.acronym">{{doc.document.acronym | lstring}}</span>
+      <span ng-if="doc.document.acronym">{{doc.document.acronym  }}</span>
       <i class="fa fa-times" ng-click="select(doc)"></i>
     </div>
 </div>
@@ -53,9 +55,9 @@
                 <scbd-icon-button type="fa" style="color:#009b48;font-size:16px;margin-right:20px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected" ></scbd-icon-button>
 
                 <img src="{{docObj.document.logo}}" style="clear:both;max-width:100%;height:25px;margin-bottom:4px;"></img>
-                <span style="font-weight:bold;">{{docObj.document.acronym | lstring}} </span>
-                <span class="hidden-md hidden-sm hidden-xs">{{docObj.document.title | lstring}}</span>
-                <span class="hidden-lg hidden-xl">{{docObj.document.title | lstring | characters:26}}</span>
+                <span style="font-weight:bold;">{{docObj.document.acronym  }} </span>
+                <span class="hidden-md hidden-sm hidden-xs">{{docObj.document.title  }}</span>
+                <span class="hidden-lg hidden-xl">{{docObj.document.title   | characters:26}}</span>
           </div>
         </scbd-flat-button>
       </div>
