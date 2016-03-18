@@ -3,7 +3,7 @@
   <div class="row portal-nav-mobi portal-branding center hidden-lg hidden-xl" ng-class="portalMobiNavClass" ng-cloak>
     <div class="btn-group ">
       <button id="home-sm" class="btn btn-default  btn-sm " ng-click="goTo('/');setActivePath();">Side Events</button>
-      <button id="request-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage/events/new');setActivePath();">Register</button>
+      <button id="request-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage/events/new');setActivePath();">Register a Side Event</button>
       <button id="dash-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</button>
       <button id="admin-sm" class="btn btn-default btn-sm " ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</button>
     </div>
@@ -16,7 +16,7 @@
     <section class="lg-menu  hidden-md hidden-sm hidden-xs">
       <span class="cl-effect-14">
         <a id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
-        <a id="request" ng-click="goTo('/manage/events/new');setActivePath();">Register</a>
+        <a id="request" ng-click="goTo('/manage/events/new');setActivePath();">Register a Side Event</a>
         <a id="dash" ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
         <a id="admin" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</a>
       </span>
