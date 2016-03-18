@@ -22,7 +22,7 @@ define(['app', 'lodash',
       $scope.editURL='/manage/events/';
 
       $scope.toggle = dashMenu.toggle;
-      $scope.sections = dashMenu.getMenu('dashboard');
+      // $scope.sections = dashMenu.getMenu('dashboard');
       $scope.sectionsOptions = dashMenu.getMenu('options');
 
       var sec = _.findWhere($scope.sectionsOptions, {name:'Sort'});

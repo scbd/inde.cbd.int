@@ -89,14 +89,14 @@
 
           <div class="row">
             <div class="col-md-12 col-xs-12">
-              <div class="km-control-group" name="hostOrgs" caption="">
+              <div name="hostOrgs" caption="" style="margin-right:20px;">
                 <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" items="showOrgForm" ng-if="!showOrgForm"></scbd-select-list>
               </div>
             </div>
           </div>
       </div>
 
-      <legend class="container-subheader">
+      <legend class="container-subheader" style="margin-top:15px;">
         <h2>Contact Person </h2>
       </legend>
 
@@ -148,52 +148,58 @@
 
 
 
-            <div class="row">
-                <div class="col-sm-6">
+            <div class="row" style="margin-bottom:15px;">
+                <div class="col-lg-6 col-xs-12">
+                  <div class=" col-md-12 col-xs-12">
                   <div class="form-group">
                     <label for="address">Address</label>
                     <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
                   </div>
                 </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <div   ng-class="{'has-warning': editForm.city.$invalid  && submitted}">
-                      <label>City</label>
-                    <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
-                    <p ng-show="editForm.city.$invalid  && submitted" class="help-block">City is required.</p>
+
+                  <div class="col-xs-12 col-lg-12">
+                    <div   ng-class="{'has-warning': editForm.email.$invalid  && submitted}">
+                      <label>Email</label>
+                      <input id="editForm.email" class="form-control" name="email" type="email" ng-model="doc.contact.email" placeholder=" " required/>
+
+                      <p ng-show="editForm.email.$invalid  && submitted" class="help-block">Email is required.</p>
+                    </div>
+                  </div>
+
+
+                </div>
+              <div class="col-lg-6 col-xs-12">
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <div   ng-class="{'has-warning': editForm.city.$invalid  && submitted}">
+                        <label>City</label>
+                      <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
+                      <p ng-show="editForm.city.$invalid  && submitted" class="help-block">City is required.</p>
+                    </div>
                   </div>
                 </div>
+
+                  <div class="col-lg-6">
+                    <div class="form-group">
+                      <label for="state">State / Province / Region</label>
+                      <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
+                    </div>
+                  </div>
+                  <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                      <label for="zip">Postal / Zip code</label>
+                      <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip"/>
+                    </div>
+                  </div>
+                  <div class=" col-md-6 col-xs-12" >
+                    <div   ng-class="{'has-warning': editForm.country.$invalid  && submitted}">
+                      <div><label>Country</label></div>
+                      <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries()" required></div>
+                      <p ng-show="editForm.country.$invalid  && submitted" class="help-block">Country is required.</p>
+                    </div>
+                  </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="state">State / Province / Region</label>
-                    <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
-                  </div>
-                </div>
-                <div class="col-sm-3">
-                  <div class="form-group">
-                    <label for="zip">Postal / Zip code</label>
-                    <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip"/>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6 col-xs-12">
-                  <div   ng-class="{'has-warning': editForm.country.$invalid  && submitted}">
-                    <label>Country</label>
-                    <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries()" required></div>
-                    <p ng-show="editForm.country.$invalid  && submitted" class="help-block">Country is required.</p>
-                  </div>
-                </div>
-                <div class="col-md-6 col-xs-12">
-                  <div   ng-class="{'has-warning': editForm.email.$invalid  && submitted}">
-                    <label>Email</label>
-                    <input id="editForm.email" class="form-control" name="email" type="email" ng-model="doc.contact.email" placeholder=" " required/>
-                    <p ng-show="editForm.email.$invalid  && submitted" class="help-block">Email is required.</p>
-                  </div>
-                </div>
-              </div>
+          </div>
       <legend class="container-subheader">
         <h2>Preferred Date and Time {{prefDate}}</h2>
       </legend>
@@ -242,7 +248,7 @@
       </div>
 
       <legend class="container-subheader">
-        <h2>Requirements</h2>
+        <h2 style="display:inline;">Requirements</h2> <h5 style="display:inline;" >(optional fields)</h5>
       </legend>
       <div class="row">
 
@@ -261,10 +267,10 @@
           <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.sound" ng-click="doc.requirements.sound=!doc.requirements.sound;"></scbd-icon-button> Sound System</span>
         </div>
         <div class="col-md-4 col-xs-4">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.interpretation" ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"></scbd-icon-button>Interpretation  <span style="font-size:9px;">(at your own expense)</span></span>
+          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.interpretation" ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"></scbd-icon-button>Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
         </div>
         <div class="col-md-4 col-xs-4">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.catering" ng-click="doc.requirements.catering=!doc.requirements.catering;"></scbd-icon-button><span style="font-size:9px;">(at your own expense)</span>Catering </span>
+          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.catering" ng-click="doc.requirements.catering=!doc.requirements.catering;"></scbd-icon-button>Catering </span><span style="font-size:11px;">(at your own expense)</span>
         </div>
         <div class="col-md-4 col-xs-4">
             <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.skype" ng-click="doc.requirements.skype=!doc.requirements.skype;"></scbd-icon-button>Skype </span>
@@ -309,7 +315,7 @@
 
         </div>
       </div>
-      <div class="row">
+      <div class="row"  ng-if="false">
 
         <div class="col-md-6 col-xs-12 km-control-group">
           <div>Your Website Promoting the Side Event </div>
@@ -324,7 +330,7 @@
       </div>
 
       <legend class="container-subheader">
-        <h2>Additional Information</h2>
+        <h2 style="display:inline;">Additional Information</h2> <h5 style="display:inline;" >(optional field)</h5>
       </legend>
       <div class="row">
 
@@ -333,7 +339,7 @@
             <div km-textbox-ml rows="4" name="additionalInfo" ng-model="doc.additionalInfo" locales="doc.meta.locales"></div>
           </div>
         </div>
-  <tt>myForm.$error.required = {{!!myForm.$error.required}}</tt><br/>
+
         <div class="col-md-2 col-xs-12">
 
                   <button class="btn btn-primary" type="submit" style="width:100%;"><i class="fa fa-floppy-o" ></i> Save</button>

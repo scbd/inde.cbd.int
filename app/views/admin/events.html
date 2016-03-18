@@ -17,10 +17,13 @@
     <div class="list-container" >
 
       <div class="container-header" >
-        <div class="pull-xs-left ">
-          <button data-toggle="tooltip" title="Admin Menu"  type="button" class="btn btn-default btn-sm"  ng-click="toggle('admin')"><i class="fa fa-bars" ng-if="!mOpen"></i></button>
-          <button data-toggle="tooltip" title="Search"  class="btn btn-default search-btn btn-sm" ng-click="searchToggle()"><i class="fa fa-search" ng-if="!sOpen"></i><i class="fa fa-times" ng-if="sOpen"></i></button>
-          <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
+        <div  style="position:absolute;left:15px; width:80%;">
+          <div class="input-group input-group-sm search-bs">
+            <input type="test" class="form-control " ng-model="search">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
+            </span>
+          </div>
         </div>
         <span class="container-header-name hidden-md hidden-sm hidden-xs" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Side Events</h1></span>
         <div class=" pull-right" >
@@ -33,7 +36,7 @@
       </div>
 
       <!-- chips -->
-      <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="!search">
+      <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="!search" style="margin-top:10px;">
         <!-- ng-repeat="status in statiFacits " -->
 
         <div id="chip-all" class="chip chip-active " ng-if="(!showArchived && statusFacits.all)  || (selectedChip==='all'&& !showArchived)" ng-click="selectChip('all')">

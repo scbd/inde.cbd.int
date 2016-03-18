@@ -384,9 +384,10 @@ init();
                   // console.log('formData.meeting.$invalid',formData.meeting.$invalid);
                   // console.log('$scope.submitted',$scope.submitted);
 
-                  if(formData.meeting.$invalid && $scope.submitted)
+                  if(formData.meeting.$invalid && $scope.submitted){
                       findScrollFocus ('editForm.meeting');
-
+                      return;
+                  }
                   if(formData.exp_num_participants.$invalid && $scope.submitted)
                       findScrollFocus ('editForm.exp_num_participants');
 
@@ -403,11 +404,13 @@ init();
                   if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
                         formData.hostOrgs={};
                         formData.hostOrgs.$invalid=true;
-                        smoothScroll(document.getElementById('hostOrg-error'));
+                        if(!$scope.focused)
+                          smoothScroll(document.getElementById('hostOrg-error'));
                         $(document.getElementById('editForm.hostOrgs')).focus();
                         $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
                         $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
                         $(document.getElementById('hostOrgMsg')).css('display','block');
+                        $scope.focused=true;
                   }
 
                   if(formData.firstName.$invalid && $scope.submitted)
