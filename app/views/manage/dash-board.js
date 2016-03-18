@@ -34,7 +34,7 @@ define(['app', 'lodash',
       $scope.facetsO.archived=0;
       var statuses=['draft','published','request','canceled','rejected','archived'];
       mongoStorage.getOwnerFacits('inde-side-events',$scope.facets,statuses);
-      mongoStorage.getOwnerFacits('inde-orgs',$scope.facetsO,statuses)
+      mongoStorage.getOwnerFacits('inde-orgs',$scope.facetsO,statuses);
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;

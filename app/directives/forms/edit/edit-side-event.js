@@ -40,7 +40,6 @@ define(['app', 'lodash',
             var data = {}; //catch for profile data
 
             $scope.$watch('doc.confrence', function() {
-              console.log($scope.doc.confrence);
               if ($scope.doc.confrence) {
                 //generateEventId($scope.doc.confrence);
                 generateDates($scope.doc.confrence);

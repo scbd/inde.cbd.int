@@ -5,7 +5,7 @@ define(['app', 'lodash',
   '../../services/filters'
 ], function(app, _) {
 
-  app.controller("organizations", ['$scope', 'adminOrgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication',//"$http", "$filter", "Thesaurus",
+  app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication',//"$http", "$filter", "Thesaurus",
     function($scope, adminMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication) { //, $http, $filter, Thesaurus
 
       authentication.getUser().then(function (user) {
@@ -94,7 +94,7 @@ define(['app', 'lodash',
           });
         },2000);
       }//
-      
+
       $scope.statusFilter = function  (doc) {
         if (doc.document.meta.status === $scope.selectedChip)
         return doc;
@@ -207,7 +207,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.loadList = function (docObj){
-        mongoStorage.loadOwnerDocs($scope.schema,['draft','published','request','canceled','rejected']).then(function(response){
+        mongoStorage.loadDocs($scope.schema,['draft','published','request','canceled','rejected']).then(function(response){
            $scope.docs=response.data;
 
            _.each($scope.docs,function(doc){
@@ -222,10 +222,10 @@ define(['app', 'lodash',
                        });
                    });
 
-                  $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess (response) {
-                        doc.document.contact=response.data;
-                  });
-                  registerToolTip()
+                  // $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess (response) {
+                  //       doc.document.contact=response.data;
+                  // });
+                  registerToolTip();
            });
          });
       };// archiveOrg
