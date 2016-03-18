@@ -40,7 +40,7 @@ function(app) {
             replace: true,
             transclude: true,
             scope:{backGround:'@',color:'@'},
-            template: ' <button class="scbd-btn-flat" ><ng-transclude></ng-transclude></button>',
+            template: ' <button type="button" class="scbd-btn-flat" ><ng-transclude></ng-transclude></button>',
             //left:-1px;text-align:left;padding:0 5px 0 5px;
             link:function ($scope, $element, $attr) {
                 wavesService.init();

@@ -16,15 +16,15 @@ define(['app', 'lodash',
   './edit-organization'
 ], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', //"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll',//"$http", "$filter", "Thesaurus",
+    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll) {
       return {
         restrict: 'E',
         template: template,
         replace: true,
         transclude: false,
         scope: {},
-        link: function($scope) { //, $http, $filter, Thesaurus
+        link: function($scope,$element) { //, $http, $filter, Thesaurus
 
             $scope._id = $route.current.params.id;
             $scope.loading = false;
@@ -44,11 +44,16 @@ define(['app', 'lodash',
               if ($scope.doc.confrence) {
                 //generateEventId($scope.doc.confrence);
                 generateDates($scope.doc.confrence);
+
               }
             });
             $scope.$watch('doc.hostOrgs', function() {
-              console.log($scope.doc.hostOrgs);
-
+              if($scope.doc.hostOrgs && $scope.doc.hostOrgs.length>0){
+  //                  $(document.getElementById('editForm.hostOrgs')).removeClass('has-error');
+                    $(document.getElementById('editForm.hostOrgs')).css('border-color','#cccccc');
+                    $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
+                    $(document.getElementById('hostOrgMsg')).css('display','none');
+            }
             },true);
 
             $http.get("https://api.cbd.int/api/v2015/confrences", {
@@ -169,7 +174,7 @@ init();
             //
             //============================================================
             function generateDates() {
-console.log($scope.doc.confrence);
+
               mongoStorage.loadDoc('confrences', $scope.doc.confrence).then(function(confr) {
                 $scope.doc.confrenceObj = confr[1];
                 var diff = Number(confr[1].end) - Number(confr[1].start);
@@ -345,25 +350,107 @@ console.log($scope.doc.confrence);
 
               $location.url(url);
             };
-
+            $.fn.setCursorPosition = function(pos) {
+              this.each(function(index, elem) {
+                if (elem.setSelectionRange) {
+                  elem.setSelectionRange(pos, pos);
+                } else if (elem.createTextRange) {
+                  var range = elem.createTextRange();
+                  range.collapse(true);
+                  range.moveEnd('character', pos);
+                  range.moveStart('character', pos);
+                  range.select();
+                }
+              });
+              return this;
+            };
             //=======================================================================
   		      //
   		      //=======================================================================
   		      $scope.submitForm = function (formData){
               $scope.submitted=true;
+              var focused = false;
+
+
+              if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
+                formData.$valid =false;
+              }
+
               if(formData.$valid){
                 $scope.saveDoc();
                 $scope.publishRequestDial();
               }else {
-                  console.log('formData.meeting.$pristine',formData.meeting.$pristine);
-                  console.log('formData.meeting.$invalid',formData.meeting.$invalid);
-                  console.log('$scope.submitted',$scope.submitted);
+                  // console.log('formData.meeting.$pristine',formData.meeting.$pristine);
+                  // console.log('formData.meeting.$invalid',formData.meeting.$invalid);
+                  // console.log('$scope.submitted',$scope.submitted);
+
+                  if(formData.meeting.$invalid && $scope.submitted)
+                      findScrollFocus ('editForm.meeting');
+
+                  if(formData.exp_num_participants.$invalid && $scope.submitted)
+                      findScrollFocus ('editForm.exp_num_participants');
+
+                  if(formData.title.$invalid && $scope.submitted)
+                      findScrollFocus ('editForm.title');
+
+                  if(formData.title.$invalid && $scope.submitted)
+                          findScrollFocus ('editForm.title');
+
+                  if(formData.description.$invalid && $scope.submitted)
+                          findScrollFocus ('editForm.description');
+
+
+                  if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
+                        formData.hostOrgs={};
+                        formData.hostOrgs.$invalid=true;
+                        smoothScroll(document.getElementById('hostOrg-error'));
+                        $(document.getElementById('editForm.hostOrgs')).focus();
+                        $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
+                        $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
+                        $(document.getElementById('hostOrgMsg')).css('display','block');
+                  }
+
+                  if(formData.firstName.$invalid && $scope.submitted)
+                        findScrollFocus ('editForm.firstName');
+                  if(formData.lastName.$invalid && $scope.submitted)
+                            findScrollFocus ('editForm.lastName');
+                  if(formData.phone.$invalid && $scope.submitted)
+                            findScrollFocus ('editForm.phone');
+                  if(formData.city.$invalid && $scope.submitted)
+                            findScrollFocus ('editForm.city');
+                if(formData.country.$invalid && $scope.submitted)
+                          findScrollFocus ('editForm.country');
+                if(formData.email.$invalid && $scope.submitted)
+                          findScrollFocus ('editForm.email');
+
               }
 
-
+              $scope.focused=false;
 
   		      };// archiveOrg
+            //SET CURSOR POSITION
+            //=======================================================================
+            //
+            //=======================================================================
+            function findScrollFocus (id){
+                  var el = document.getElementById(id);
+                  if(!$scope.focused ){
 
+                    smoothScroll(el);
+                    if($(el).is("input") || $(el).is("select"))
+                      el.focus();
+                    else{
+                      if($(el).find('input').length===0)
+                          $(el).find('textarea').focus();
+                      else
+                        $(el).find('input').focus();
+
+                    }
+
+
+                    $scope.focused = true;
+                  }
+            }
             //=======================================================================
             //
             //=======================================================================

@@ -4,9 +4,9 @@
   <div class="col-xs-6">
     <div class="form-group" >
 
-      <div class="input-group" style="margin-bottom:2px; padding-left: 0px;">
+      <div class="input-group"  style="margin-bottom:2px; padding-left: 0px;">
 
-        <input type="test"  class="form-control " ng-model="search">
+        <input id="editForm.hostOrgs" type="test"  class="form-control " ng-model="search">
 
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
@@ -26,7 +26,7 @@
 
   </div>
   <divclass="col-xs-6 col-xs-12">
-    <button  class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;"><i class="fa fa-plus" ></i> Create a New Organization</button>
+    <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;"><i class="fa fa-plus" ></i> Create a New Organization</button>
 
   </div>
 </div>
