@@ -222,9 +222,9 @@ define(['app', 'lodash',
                        });
                    });
 
-                  // $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess (response) {
-                  //       doc.document.contact=response.data;
-                  // });
+                  $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess (response) {
+                        doc.document.contact=response.data;
+                  });
                   registerToolTip();
            });
          });

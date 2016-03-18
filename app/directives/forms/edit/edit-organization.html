@@ -1,4 +1,5 @@
-<div>
+
+<div ng-class="{'imbeded':hide}">
 
 
 
@@ -19,123 +20,52 @@
 
 
   <form name="editForm" class="editForm" style="margin-top:10px">
+<i class="fa fa-times pull-right" style="margin-bottom:10px"></i>
 
-    <div>
-      <legend class="container-subheader">
-        <h2>Identity</h2>
+      <legend class="container-subheader text-center no-wrap" ng-if="hide">
+        <h2>  Create Organization</h2>
       </legend>
       <div class="row">
-        <div class="col-md-9 col-xs-12">
-          <div class="km-control-group nowrap" name="organization_title" caption="Title">
-            <scbd-tooltip style="display:inline-block;top:2px;" ng-if="0">
-              <scbd-icon-button class="scbd-tt-item" type="md" icon-name="info" style="font-size:15px;" waves></scbd-icon-button>
-              <span class="scbd-tt-content scbd-tt-text clearfix" style="width:152px;">Fullname without abbreviation</span>
-            </scbd-tooltip>
-            <div km-textbox-ml name="title" ng-model="doc.title" locales="doc.meta.locales"></div>
+        <div class="col-xs-12">
+          <div >
+            <label>Name</label>
+            <input  class="form-control"  name="title" ng-model="doc.title">
           </div>
 
         </div>
 
+        <div class="col-md-4 col-xs-12">
+          <div name="acronym" caption="Acronym">
+            <label>Acronym</label>
+            <input class="form-control" name="acronym" ng-model="doc.acronym">
+          </div>
+        </div>
         <div class="col-md-3 col-xs-12">
-          <div class="km-control-group" name="acronym" caption="Acronym">
-            <div class="help-block" ng-if="0">Abbreviation for long name</div>
-            <div km-textbox-ml name="acronym" ng-model="doc.acronym" placeholder=" " locales="doc.meta.locales"></div>
-
-          </div>
-        </div>
-
-        <div class="col-md-12 col-xs-12">
-          <div class="km-control-group nowrap" name="logo" caption="Logo">
-            <span style="font-size:10px;line-height:20px;">(Keep the system generated logo or upload an image of your own.)</span>
-            <br>
-            <span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'"> [
-              <scbd-icon-button type="fa" icon-name="fa-times" to-icon-name="fa-times" ani="rubberBand" ng-click="toggleIcon();" ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'" waves></scbd-icon-button>No Logo, Icon Only ]</span>
-
-            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
-
-          </div>
-        </div>
-
-
-
-      </div>
-
-      <div class="row">
-        <!-- <div class="col-md-3">
-                <div class="km-control-group" name="type" caption="Type">
-                  <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
-                </div>
-              </div> -->
-
-        <div class="col-md-3">
-          <div class="km-control-group" name="country" caption="Country (Head Office)">
+<div>
+            <label>Country (Head Office)</label>
             <div km-select name="country" ng-model="doc.country" items="options.countries()"></div>
           </div>
         </div>
+
+        <div class="col-md-5  col-xs-12">
+
+            <label>Logo</label>
+            <br>
+            <!-- <span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'">  -->
+
+            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
+
+
+        </div>
+
+
       </div>
-    </div>
 
-    <!--
-            <legend class="container-subheader" ng-if="!shortForm"><h2>Social Media</h2></legend>
-
-            <div class="row" ng-if="!shortForm">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="website" caption="Website">
-                  <div class="help-block" ng-if="0">Please enter the organization's Website address</div>
-                  <input class="form-control" type="url" ng-model="doc.website" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="facebook" required caption="Facebook Page">
-                  <div class="help-block" ng-if="0">Please enter the organization's Facebook page</div>
-                  <input class="form-control" type="url" ng-model="doc.facebook" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="youtube" caption="Youtube Channel" required>
-                  <div class="help-block" ng-if="0">Please enter the organization's Youtube Channel</div>
-                  <input class="form-control" type="url" ng-model="doc.youtube" placeholder=" ">
-                </div>
-              </div>
-
-            </div>
-            <div class="row" ng-if="!shortForm">
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="twitter" caption="Twitter Feed">
-                  <div class="help-block" ng-if="0">Please enter the organization's Twitter feed</div>
-                  <input class="form-control" type="url" ng-model="doc.twitter" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="facebook" required caption="Instagram Feed">
-                  <div class="help-block" ng-if="0">Please enter the organization's Instagram feed</div>
-                  <input class="form-control" type="url" ng-model="doc.instagram" placeholder=" ">
-                </div>
-              </div>
-
-              <div class="col-md-4 col-xs-12">
-                <div class="km-control-group" name="contact_emails" caption="Google+ Page or Google Local Page" required>
-                  <div class="help-block" ng-if="0">Please enter the organization's Google+ page or local page.</div>
-                  <input class="form-control" type="url" ng-model="doc.google" placeholder=" ">
-                </div>
-              </div>
-
-            </div> -->
     <div class="row">
-      <!-- <div class="col-md-3">
-                <div class="km-control-group" name="type" caption="Type">
-                  <div km-select name="type" ng-model="doc.type" items="options.organizationTypes()"></div>
-                </div>
-              </div> -->
 
-      <div class="col-lg-2 col-sm-12">
+      <div class="col-lg-4 col-xs-12">
 
-        <button class="btn btn-primary" ng-click="saveDoc();publishRequestDial();" style="width:100%"><i class="fa fa-floppy-o"></i> Save </button>
+        <button class="btn btn-primary" ng-click="saveDoc();publishRequestDial();" style="width:100%;margin-top:10px;"><i class="fa fa-floppy-o"></i> Save </button>
 
       </div>
     </div>

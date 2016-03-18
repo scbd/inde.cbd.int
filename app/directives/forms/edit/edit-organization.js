@@ -20,10 +20,10 @@ define(['app', 'lodash',
         template   : template,
         replace    : true,
         transclude : false,
-        scope      : {hide:"=", selectedOrgs:"="},
+        scope      : {hide:"=?", selectedOrgs:"="},
         link : function($scope,$element,$attrs) {//, $http, $filter, Thesaurus
 
-
+            //  if(!$scope.hide)$scope.hide=0;
               $scope.loading=false;
               $scope.schema="inde-orgs";
               $scope.shortForm =($attrs.short !== undefined && $attrs.short !== null);
