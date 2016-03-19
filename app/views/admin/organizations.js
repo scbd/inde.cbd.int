@@ -63,8 +63,8 @@ define(['app', 'lodash',
       //=======================================================================
       function init(){
               $scope.loadList ();
-              mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacits,statuses);
-              mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+              mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
+              mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
               registerToolTip();
       }//init
 
