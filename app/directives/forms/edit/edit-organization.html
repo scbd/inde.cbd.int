@@ -4,10 +4,11 @@
 
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+
     <strong>{{msg}}</strong>
   </div>
-<button type="button" class="pull-right" style="margin-bottom:10px" ng-click="alert('ssssss');hide=!hide;"><i class="fa fa-times"  ng-if="hide" ></i></button>
+
+<button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"   ></i></button>
 
 
   <form name="editForm" class="editForm" style="margin-top:10px">

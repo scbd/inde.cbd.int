@@ -13,8 +13,8 @@ define(['app', 'lodash',
 ], function(app, _,template,dailogTemp) { //'scbd-services/utilities',
 
 
-  app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog', //"$http", "$filter", "Thesaurus",
-      function( $q, $http,$filter,$route,mongoStorage,$location,$window,ngDialog) {
+  app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog','history', //"$http", "$filter", "Thesaurus",
+      function( $q, $http,$filter,$route,mongoStorage,$location,$window,ngDialog,history) {
       return {
         restrict   : 'E',
         template   : template,
@@ -123,11 +123,18 @@ define(['app', 'lodash',
               $scope.toggleIcon= function() {
                       $scope.doc.logo='app/images/ic_business_black_48px.svg';
               }// initProfile()
+
+              //============================================================
+              //
+              //============================================================
+              $scope.toggleForm= function() {
+                      $scope.hide=!$scope.hide;
+              }// initProfile()
                 //=======================================================================
                 //
                 //=======================================================================
                 $scope.close = function(){
-                    $window.history.back();
+                    history.goBack();
                 };
 
               //=======================================================================

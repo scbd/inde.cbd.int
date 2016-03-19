@@ -6,8 +6,8 @@ define(['app', 'lodash',
       '../../services/filters'
 ], function(app, _) {
 
-  app.controller("events", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication',//"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication) { //, $http, $filter, Thesaurus
+  app.controller("events", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication','history',//"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication,history) { //, $http, $filter, Thesaurus
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
@@ -402,7 +402,7 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.close = function(){
 
-          $window.history.back();
+        history.goBack();
       };
       init();
       $scope.selectChip('all');

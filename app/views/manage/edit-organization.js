@@ -1,8 +1,8 @@
 define(['app',
   '../../directives/forms/edit/edit-organization',
 ], function(app) { //'scbd-services/utilities',
-  app.controller("edit-organization", ['$scope', 'authentication', '$window', '$route', //"$http", "$filter", "Thesaurus",
-    function($scope, authentication, $window, $route) { //, $http, $filter, Thesaurus
+  app.controller("edit-organization", ['$scope', 'authentication', '$window', '$route','history', //"$http", "$filter", "Thesaurus",
+    function($scope, authentication, $window, $route,history) { //, $http, $filter, Thesaurus
 
       $scope.loading = false;
       $scope.schema = "inde-orgs";
@@ -24,7 +24,7 @@ define(['app',
       //=======================================================================
       $scope.close = function() {
 
-        $window.history.back();
+        history.goBack();
       };
     }
   ]);

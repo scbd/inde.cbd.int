@@ -4,17 +4,18 @@ define(['app', 'jquery',
       'scbd-angularjs-services/authentication',
       'directives/portal/portal-nav',
       'scbd-branding/header/header',
-      'scbd-branding/footer'
+      'scbd-branding/footer',
+      'services/history'
     ], function(app, $) {
       'use strict';
 
-    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm','$q','$timeout', function($scope, $rootScope, $window, $location, authentication,  realm,$q,$timeout) {
+    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm','$q','$timeout','history', function($scope, $rootScope, $window, $location, authentication,  realm,$q,$timeout,history) {
 
 
 
         $scope.$root.pageTitle = { text: "" };
         $rootScope.placeholderRecords=[];
-          $scope.routeLoaded = false;
+        $scope.routeLoaded = false;
 
         $q.when(authentication.getUser()).then(function(u){
             $scope.user = u;

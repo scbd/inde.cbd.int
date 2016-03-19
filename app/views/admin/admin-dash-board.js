@@ -8,8 +8,8 @@ define(['app', 'lodash',
 ], function(app, _) { //'scbd-services/utilities',
 
 
-    app.controller("adminDashBoard", ['$scope','adminMenu','authentication','$location','$timeout','mongoStorage','$window', //"$http", "$filter", "Thesaurus",
-     function($scope,dashMenu,authentication,$location,$timeout,mongoStorage,$window) { //, $http, $filter, Thesaurus
+    app.controller("adminDashBoard", ['$scope','adminMenu','authentication','$location','$timeout','mongoStorage','$window','history', //"$http", "$filter", "Thesaurus",
+     function($scope,dashMenu,authentication,$location,$timeout,mongoStorage,$window,history) { //, $http, $filter, Thesaurus
       $scope.test=[];
 
 
@@ -53,7 +53,7 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.close = function(){
 
-          $window.history.back();
+          history.goBack();
       };
     }]);
 });

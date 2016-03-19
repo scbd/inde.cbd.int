@@ -16,8 +16,8 @@ define(['app', 'lodash',
   './edit-organization'
 ], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll',//"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll','history',//"$http", "$filter", "Thesaurus",
+    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll,history) {
       return {
         restrict: 'E',
         template: template,
@@ -59,10 +59,18 @@ define(['app', 'lodash',
               cache: true
             }).then(function(o) {
               $scope.options.confrences = $filter("orderBy")(o.data, "title");
-              //$timeout(function(){generateDates($scope.doc.confrence)},1000);
-            });
+              $location.search();
+              _.each($scope.options.confrences,function(conf){
+                  if(conf._id===$location.search().m)
+                    conf.selected=true;
+                  else
+                    conf.selected=false;
 
+              });
 
+            }).then(function(){$scope.doc.confrence=$location.search().m;});
+
+init();
             //============================================================
             //
             //============================================================
@@ -155,12 +163,13 @@ define(['app', 'lodash',
                     $scope.doc.logo = randomPic();
                     initProfile(true);
                     $scope.isNew = true;
+
                   }
                 );
               }
 
             } // init
-init();
+
             //=======================================================================
             //
             //=======================================================================
@@ -380,29 +389,30 @@ init();
                 $scope.publishRequestDial();
               }else {
                   // console.log('formData.meeting.$pristine',formData.meeting.$pristine);
-                  // console.log('formData.meeting.$invalid',formData.meeting.$invalid);
+                  // console.log('formData.meeting.$error.required',formData.meeting.$error.required);
                   // console.log('$scope.submitted',$scope.submitted);
 
-                  if(formData.meeting.$invalid && $scope.submitted){
+                  if(formData.meeting.$error.required && $scope.submitted){
                       findScrollFocus ('editForm.meeting');
                       return;
                   }
-                  if(formData.exp_num_participants.$invalid && $scope.submitted)
+                  if(formData.exp_num_participants.$error.required && $scope.submitted)
                       findScrollFocus ('editForm.exp_num_participants');
 
-                  if(formData.title.$invalid && $scope.submitted)
+                  if(formData.title.$error.required && $scope.submitted)
                       findScrollFocus ('editForm.title');
 
-                  if(formData.title.$invalid && $scope.submitted)
+                  if(formData.title.$error.required && $scope.submitted)
                           findScrollFocus ('editForm.title');
 
-                  if(formData.description.$invalid && $scope.submitted)
+                  if(formData.description.$error.required && $scope.submitted)
                           findScrollFocus ('editForm.description');
 
 
                   if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
                         formData.hostOrgs={};
-                        formData.hostOrgs.$invalid=true;
+                        formData.hostOrgs.$error={};
+                        formData.hostOrgs.$error.required=true;
                         if(!$scope.focused)
                           smoothScroll(document.getElementById('hostOrg-error'));
                         $(document.getElementById('editForm.hostOrgs')).focus();
@@ -412,18 +422,34 @@ init();
                         $scope.focused=true;
                   }
 
-                  if(formData.firstName.$invalid && $scope.submitted)
+                  if(formData.firstName.$error.required && $scope.submitted)
                         findScrollFocus ('editForm.firstName');
-                  if(formData.lastName.$invalid && $scope.submitted)
+                  if(formData.lastName.$error.required && $scope.submitted)
                             findScrollFocus ('editForm.lastName');
-                  if(formData.phone.$invalid && $scope.submitted)
+                  if(formData.phone.$error.required && $scope.submitted)
                             findScrollFocus ('editForm.phone');
-                  if(formData.city.$invalid && $scope.submitted)
+                  if(formData.city.$error.required && $scope.submitted)
                             findScrollFocus ('editForm.city');
-                if(formData.country.$invalid && $scope.submitted)
+                if(formData.country.$error.required && $scope.submitted)
                           findScrollFocus ('editForm.country');
-                if(formData.email.$invalid && $scope.submitted)
+                if(formData.email.$error.required && $scope.submitted)
                           findScrollFocus ('editForm.email');
+
+                if (formData.prefDateOne.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefDateOne');
+                if (formData.prefTimeOne.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefTimeOne');
+
+                if (formData.prefDateTwo.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefDateTwo');
+                if (formData.prefTimeTwo.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefTimeTwo');
+
+                if (formData.prefDateThree.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefDateThree');
+                if (formData.prefTimeThree.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.prefTimeThree');
+
 
               }
 
@@ -458,7 +484,7 @@ init();
             //=======================================================================
             $scope.close = function() {
 
-              $window.history.back();
+              history.goBack();
             };
           } //link
       }; //return

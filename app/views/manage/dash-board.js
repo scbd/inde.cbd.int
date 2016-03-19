@@ -9,8 +9,8 @@ define(['app', 'lodash',
   // If you specify less than all of the keys, it will inherit from the
   // default shades
 
-    app.controller("dashBoard", ['$scope','dashMenu','authentication','$location','$timeout','mongoStorage','$window', //"$http", "$filter", "Thesaurus",
-     function($scope,dashMenu,authentication,$location,$timeout,mongoStorage,$window) { //, $http, $filter, Thesaurus
+    app.controller("dashBoard", ['$scope','dashMenu','authentication','$location','$timeout','mongoStorage','$window','history', //"$http", "$filter", "Thesaurus",
+     function($scope,dashMenu,authentication,$location,$timeout,mongoStorage,$window,history) { //, $http, $filter, Thesaurus
       $scope.test=[];
 
 
@@ -54,7 +54,7 @@ define(['app', 'lodash',
       //=======================================================================
       $scope.close = function(){
 
-          $window.history.back();
+          history.goBack();
       };
     }]);
 });

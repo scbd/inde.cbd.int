@@ -9,8 +9,8 @@ define(['app', 'lodash',
 ], function(app, _) { //'scbd-services/utilities',
 
 
-  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout,$window) { //, $http, $filter, Thesaurus
+  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window','history', //"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout,$window,history) { //, $http, $filter, Thesaurus
 
 
       $scope.toggle = dashMenu.toggle;
@@ -34,8 +34,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.close = function(){
-
-          $window.history.back();
+          history.goBack();
       };
 
     }
