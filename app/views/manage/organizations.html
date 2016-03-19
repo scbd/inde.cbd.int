@@ -42,7 +42,7 @@
         <!-- chips -->
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="!search" style="margin-top:10px;">
 
-          <div id="chip-all" class="chip chip-active " ng-if="(!showArchived && statusFacits.all)  || (selectedChip==='all'&& !showArchived)" ng-click="selectChip('all')">
+          <div id="chip-all" class="chip chip-active " ng-if=" (selectedChip==='' && !showArchived) || (selectedChip==='all' && !showArchived)" ng-click="selectChip('all')">
             <div>
               <scbd-icon-button type="md" icon-name="&#xEB3D;"></scbd-icon-button>
             </div>All

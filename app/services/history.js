@@ -30,12 +30,21 @@ define(['app','lodash'],function(app,_) {
           $location.url(_.last(history).from);
         }
 
-
+        //============================================================
+        //
+        //============================================================
+        function getPrevPath() {
+    
+          if(_.last(history).from===$location.url())return false;
+          else
+            return _.last(history).from;
+        }
 
 
           return  {
             getHistory:getHistory,
             goBack: goBack,
+            getPrevPath:getPrevPath
           };
 
       }]);
