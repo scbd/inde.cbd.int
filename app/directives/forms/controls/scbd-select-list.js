@@ -35,20 +35,14 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
           if($attrs.schema)
 		        $scope.schema=$attrs.schema;
 
-		      $scope.docs;
+		      $scope.docs={};
 
-
-          //
           $scope.$watch('showOrgForm',function(){
 
               $scope.loadList();
 
           },true);
 
-          // $scope.$watch('items',function(){
-          //
-          //     init();
-          // });
           //==================================
 					//
 					//
@@ -101,15 +95,16 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
             $scope.atCapacity=false;
             authentication.getUser().then(function (user) {
 
-              $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]},"document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res){
+              var params = {
+                          q:{$or:[{'document.meta.status':'published','document.meta.v':{$ne:0}},
+                                  {'document.meta.createdBy':user.userID,'document.meta.status':{$in:['draft','request']},'document.meta.v':{$ne:0}}]
+                            },
+                          f:{document:1}
+                        };
+              $http.get('https://api.cbd.int/api/v2015/inde-orgs',{'params':params}).then(function(res){
                         $scope.docs=res.data;
-                $http.get('https://api.cbd.int/api/v2015/inde-orgs?q={"document.meta.createdBy":'+user.userID+',"document.meta.status":"draft","document.meta.v":{"$ne":0}}&f={"document":1}').then(function(res2){
-
-                      $scope.docs = $scope.docs.concat(res2.data);
-                      _.each($scope.docs,function(docObj){docObj.selected=false;});
                 }).then(function(){setChips();});
               });
-            });
 
           };
 
@@ -119,10 +114,6 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      //=======================================================================
 		      $scope.select = function (docObj){
 
-            // var now = new Date().getTime();
-            //
-            // if((now-$scope.now)<= 100) return;
-
             docObj.selected=!docObj.selected;
 
               if(!_.isArray($scope.binding))$scope.binding=[];
@@ -131,12 +122,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                 $scope.binding.push(docObj._id);
               else
                 _.remove($scope.binding,function(obj){return obj===docObj._id;});
-
-        //      $scope.now=new Date().getTime();
-
-		      };// archiveOrg
-
-
+		      };// select
 		}
 	};
 }]);

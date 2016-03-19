@@ -16,15 +16,15 @@ define(['app', 'lodash',
   './edit-organization'
 ], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll','history','$rootScope',//"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll,history,$rootScope) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', //"$http", "$filter", "Thesaurus",
+    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope) {
       return {
         restrict: 'E',
         template: template,
         replace: true,
         transclude: false,
         scope: {},
-        link: function($scope,$element) { //, $http, $filter, Thesaurus
+        link: function($scope, $element) { //, $http, $filter, Thesaurus
             $scope.status = "";
             $scope._id = $route.current.params.id;
             $scope.loading = false;
@@ -47,34 +47,36 @@ define(['app', 'lodash',
               }
             });
             $scope.$watch('doc.hostOrgs', function() {
-              if($scope.doc.hostOrgs && $scope.doc.hostOrgs.length>0){
-  //                  $(document.getElementById('editForm.hostOrgs')).removeClass('has-error');
-                    $(document.getElementById('editForm.hostOrgs')).css('border-color','#cccccc');
-                    $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
-                    $(document.getElementById('hostOrgMsg')).css('display','none');
-            }
-            },true);
+              if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
+                //                  $(document.getElementById('editForm.hostOrgs')).removeClass('has-error');
+                $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
+                $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
+                $(document.getElementById('hostOrgMsg')).css('display', 'none');
+              }
+            }, true);
 
             $http.get("https://api.cbd.int/api/v2015/confrences", {
               cache: true
             }).then(function(o) {
               $scope.options.confrences = $filter("orderBy")(o.data, "title");
               $location.search();
-              _.each($scope.options.confrences,function(conf){
-                  if(conf._id===$location.search().m)
-                    conf.selected=true;
-                  else
-                    conf.selected=false;
+              _.each($scope.options.confrences, function(conf) {
+                if (conf._id === $location.search().m)
+                  conf.selected = true;
+                else
+                  conf.selected = false;
 
               });
 
-            }).then($timeout(function(){if($location.search().m)$scope.doc.confrence=$location.search().m;},1000)).catch(function onerror(response) {
+            }).then($timeout(function() {
+              if ($location.search().m) $scope.doc.confrence = $location.search().m;
+            }, 1000)).catch(function onerror(response) {
 
-                $scope.onError(response);
+              $scope.onError(response);
 
             });
 
-init();
+            init();
             //============================================================
             //
             //============================================================
@@ -93,7 +95,7 @@ init();
                 if (ret.value == 'draft') $scope.close();
                 if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(function onerror(response) {
 
-						        $scope.onError(response);
+                  $scope.onError(response);
 
                 });
 
@@ -116,9 +118,7 @@ init();
                         document: conf[1]
                       }, conf[0]);
                   }).catch(function onerror(response) {
-
-  						        $scope.onError(response);
-
+                    $scope.onError(response);
                   });
                 });
               });
@@ -167,7 +167,7 @@ init();
 
                   }).catch(function onerror(response) {
 
-  						        $scope.onError(response);
+                    $scope.onError(response);
 
                   });
               } else {
@@ -183,7 +183,7 @@ init();
                   }
                 ).catch(function onerror(response) {
 
-						        $scope.onError(response);
+                  $scope.onError(response);
 
                 });
               }
@@ -217,7 +217,7 @@ init();
 
               }).catch(function onerror(response) {
 
-                  $scope.onError(response);
+                $scope.onError(response);
 
               });
               _.each($scope.options.confrences, function(conf) {
@@ -261,7 +261,7 @@ init();
 
                 }).catch(function onerror(response) {
 
-						        $scope.onError(response);
+                  $scope.onError(response);
 
                 });
               });
@@ -297,8 +297,8 @@ init();
 
               return mongoStorage.generateEventId(confId).then(function(res) {
                 return res;
-              }).then(null,function(err) {
-                        $scope.onError(err);
+              }).then(null, function(err) {
+                $scope.onError(err);
               });
             } // generateEventId
 
@@ -343,7 +343,7 @@ init();
             //=======================================================================
             $scope.saveDoc = function() {
               var tempMobile;
-            //  if (!$scope.doc.confrence) throw "Error no confrence selected";
+              //  if (!$scope.doc.confrence) throw "Error no confrence selected";
               generateEventId().then(
                 function(res) {
                   if (Number(res.data.count) === 0)
@@ -353,7 +353,7 @@ init();
                   else
                     $scope.doc.id = Number(res.data.count) + 1;
 
-                      //marks as request if it is a draft
+                  //marks as request if it is a draft
                   // _.each($scope.doc.hostOrgs, function(orgId) {
                   //   mongoStorage.loadDoc('inde-orgs', orgId).then(function(orgObj) {
                   //     if (orgObj[1].meta.status === 'draft') {
@@ -362,10 +362,11 @@ init();
                   //     }
                   //   });
                   // });
-                  mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null,function(err) {
-						                $scope.onError(err);
+                  mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
+                    $scope.onError(err);
                   }).catch(function onerror(response) {
-  						        $scope.onError(response);
+
+                    $scope.onError(response);
                   });
                 });
             };
@@ -386,67 +387,67 @@ init();
             };
 
             //=======================================================================
-  		      //
-  		      //=======================================================================
-  		      $scope.submitForm = function (formData){
-              $scope.submitted=true;
+            //
+            //=======================================================================
+            $scope.submitForm = function(formData) {
+              $scope.submitted = true;
               var focused = false;
 
 
-              if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
-                formData.$valid =false;
+              if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
+                formData.$valid = false;
               }
 
-              if(formData.$valid){
+              if (formData.$valid) {
                 $scope.saveDoc();
                 $scope.publishRequestDial();
-              }else {
-                  // console.log('formData.meeting.$pristine',formData.meeting.$pristine);
-                  // console.log('formData.meeting.$error.required',formData.meeting.$error.required);
-                  // console.log('$scope.submitted',$scope.submitted);
+              } else {
+                // console.log('formData.meeting.$pristine',formData.meeting.$pristine);
+                // console.log('formData.meeting.$error.required',formData.meeting.$error.required);
+                // console.log('$scope.submitted',$scope.submitted);
 
-                  if(formData.meeting.$error.required && $scope.submitted){
-                      findScrollFocus ('editForm.meeting');
-                      return;
-                  }
-                  if(formData.exp_num_participants.$error.required && $scope.submitted)
-                      findScrollFocus ('editForm.exp_num_participants');
+                if (formData.meeting.$error.required && $scope.submitted) {
+                  findScrollFocus('editForm.meeting');
+                  return;
+                }
+                if (formData.exp_num_participants.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.exp_num_participants');
 
-                  if(formData.title.$error.required && $scope.submitted)
-                      findScrollFocus ('editForm.title');
+                if (formData.title.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.title');
 
-                  if(formData.title.$error.required && $scope.submitted)
-                          findScrollFocus ('editForm.title');
+                if (formData.title.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.title');
 
-                  if(formData.description.$error.required && $scope.submitted)
-                          findScrollFocus ('editForm.description');
+                if (formData.description.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.description');
 
 
-                  if(!$scope.doc.hostOrgs  ||  $scope.doc.hostOrgs.length===0){
-                        formData.hostOrgs={};
-                        formData.hostOrgs.$error={};
-                        formData.hostOrgs.$error.required=true;
-                        if(!$scope.focused)
-                          smoothScroll(document.getElementById('hostOrg-error'));
-                        $(document.getElementById('editForm.hostOrgs')).focus();
-                        $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
-                        $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
-                        $(document.getElementById('hostOrgMsg')).css('display','block');
-                        $scope.focused=true;
-                  }
+                if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
+                  formData.hostOrgs = {};
+                  formData.hostOrgs.$error = {};
+                  formData.hostOrgs.$error.required = true;
+                  if (!$scope.focused)
+                    smoothScroll(document.getElementById('hostOrg-error'));
+                  $(document.getElementById('editForm.hostOrgs')).focus();
+                  $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
+                  $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
+                  $(document.getElementById('hostOrgMsg')).css('display', 'block');
+                  $scope.focused = true;
+                }
 
-                  if(formData.firstName.$error.required && $scope.submitted)
-                        findScrollFocus ('editForm.firstName');
-                  if(formData.lastName.$error.required && $scope.submitted)
-                            findScrollFocus ('editForm.lastName');
-                  if(formData.phone.$error.required && $scope.submitted)
-                            findScrollFocus ('editForm.phone');
-                  if(formData.city.$error.required && $scope.submitted)
-                            findScrollFocus ('editForm.city');
-                if(formData.country.$error.required && $scope.submitted)
-                          findScrollFocus ('editForm.country');
-                if(formData.email.$error.required && $scope.submitted)
-                          findScrollFocus ('editForm.email');
+                if (formData.firstName.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.firstName');
+                if (formData.lastName.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.lastName');
+                if (formData.phone.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.phone');
+                if (formData.city.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.city');
+                if (formData.country.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.country');
+                if (formData.email.$error.required && $scope.submitted)
+                  findScrollFocus('editForm.email');
 
                 if (formData.prefDateOne.$error.required && $scope.submitted)
                   findScrollFocus('editForm.prefDateOne');
@@ -466,75 +467,70 @@ init();
 
               }
 
-              $scope.focused=false;
+              $scope.focused = false;
 
-  		      };// archiveOrg
+            }; // archiveOrg
             //SET CURSOR POSITION
             //=======================================================================
             //
             //=======================================================================
-            function findScrollFocus (id){
-                  var el = document.getElementById(id);
-                  if(!$scope.focused ){
+            function findScrollFocus(id) {
+              var el = document.getElementById(id);
+              if (!$scope.focused) {
 
-                    smoothScroll(el);
-                    if($(el).is("input") || $(el).is("select"))
-                      el.focus();
-                    else{
-                      if($(el).find('input').length===0)
-                          $(el).find('textarea').focus();
-                      else
-                        $(el).find('input').focus();
+                smoothScroll(el);
+                if ($(el).is("input") || $(el).is("select"))
+                  el.focus();
+                else {
+                  if ($(el).find('input').length === 0)
+                    $(el).find('textarea').focus();
+                  else
+                    $(el).find('input').focus();
 
-                    }
+                }
 
 
-                    $scope.focused = true;
-                  }
+                $scope.focused = true;
+              }
             }
 
 
             //============================================================
             //
             //============================================================
-            $scope.onError = function(res)
-            {
+            $scope.onError = function(res) {
 
               $scope.status = "error";
-              if(res.status===-1){
-                  $scope.error="The URI "+res.config.url+" could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
-                  if(res.data.message)
-                    $scope.error += " Message Detail: "+res.data.message;
+              if (res.status === -1) {
+                $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
+                if (res.data.message)
+                  $scope.error += " Message Detail: " + res.data.message;
               }
               if (res.status == "notAuthorized") {
-                $scope.error  = "You are not authorized to perform this action: [Method:"+res.config.method+" URI:"+res.config.url+"]";
-                if(res.data.message)
-                  $scope.error += " Message Detail: "+res.data.message;
-              }
-              else if (res.status == 404) {
-                $scope.error  = "The server at URI: "+res.config.url+ " has responded that the record was not found.";
-                if(res.data.message)
-                  $scope.error += " Message Detail: "+res.data.message;
-              }
-              else if (res.status == 500) {
-                $scope.error  = "The server at URI: "+res.config.url+ " has responded with an internal server error message.";
-                if(res.data.message)
-                  $scope.error += " Message Detail: "+res.data.message;
-              }
-              else if (res.status == "badSchema") {
-                $scope.error  = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
-              }
-              else if (res.data.Message)
+                $scope.error = "You are not authorized to perform this action: [Method:" + res.config.method + " URI:" + res.config.url + "]";
+                if (res.data.message)
+                  $scope.error += " Message Detail: " + res.data.message;
+              } else if (res.status == 404) {
+                $scope.error = "The server at URI: " + res.config.url + " has responded that the record was not found.";
+                if (res.data.message)
+                  $scope.error += " Message Detail: " + res.data.message;
+              } else if (res.status == 500) {
+                $scope.error = "The server at URI: " + res.config.url + " has responded with an internal server error message.";
+                if (res.data.message)
+                  $scope.error += " Message Detail: " + res.data.message;
+              } else if (res.status == "badSchema") {
+                $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
+              } else if (res.data.Message)
                 $scope.error = res.data.Message;
               else
                 $scope.error = res.data;
             };
             //============================================================
-      			//
-      			//============================================================
-      			$scope.hasError = function() {
-      				return !!$scope.error;
-      			};
+            //
+            //============================================================
+            $scope.hasError = function() {
+              return !!$scope.error;
+            };
             //=======================================================================
             //
             //=======================================================================

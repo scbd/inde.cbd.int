@@ -58,14 +58,19 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
                 }  //create
         }
-
+    // $http.get("/api/v2015/user-notifications/", { params : { q : JSON.stringify(query), sk: pageNumber, l: pageLength, c:count }, cache:false})
 
         //============================================================
         //
         //============================================================
         function deleteTempRecords(schema) {
 
-            $http.get('/api/v2015/'+schema+'?q={"document.meta.v":0}&f={"_id":1}').then(function(res){
+            var params = {
+                            q:{'document.meta.v':0},
+                            f:{_id:1},
+                            cache:false
+                          };
+            $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
                   _.each(res.data,function(obj){
                         $http.delete('/api/v2015/'+schema+'/'+obj._id);
                   });
@@ -78,8 +83,12 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         function loadDoc (schema,_id){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
-            if(!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument line:34";
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"_id":{"$oid":"'+_id+'"}}&f={"document":1}'))//}&f={"document":1}'))
+            if(!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument";
+            var params = {
+                          q:{_id:{$oid:_id}},
+                          f:{document:1}
+                        };
+            return $q.when( $http.get('/api/v2015/'+schema,{'params':params}))//}&f={"document":1}'))
                    .then(
                         function(response){
                               if(response.data.length){
@@ -95,8 +104,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         function loadArchives (schema){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadArchives";
-
-            return $q.when( $http.get('/api/v2015/'+schema+'?q={"document.meta.status":"archived"}&f={"document":1}'));//}&f={"document":1}'))
+            var params = {
+                          q:{'document.meta.status':'archived'},
+                          f:{document:1}
+                        };
+            return $q.when( $http.get('/api/v2015/'+schema,{'params':params}));
 
         }
         //============================================================
@@ -104,22 +116,35 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         function loadDocs (schema,status){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
-          var qStr='';
+
+            var params={};
             if(!schema) throw "Error: failed to indicate schema loadOwnerDocs";
-            if(!status)
-              return $http.get('/api/v2015/'+schema+'?q={"document.meta.status":{"$nin":["archived","deleted"]},"document.meta.v":{"$ne":0}}&f={"document":1}');
-
-            if(!_.isArray(status))
-              return $http.get('/api/v2015/'+schema+'?q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0}}&f={"document":1}');
+            if(!status){
+              params = {
+                          q:{'document.meta.status':{$nin:['archived','deleted']},
+                             'document.meta.v':{$ne:0}
+                            },
+                          f:{document:1}
+                        };
+              return $http.get('/api/v2015/'+schema,{'params':params});
+            }
+            if(!_.isArray(status)){
+              params = {
+                          q:{'document.meta.status':status,
+                             'document.meta.v':{$ne:0}
+                            },
+                          f:{document:1}
+                        };
+              return $http.get('/api/v2015/'+schema,{'params':params});
+            }
             else {
-              _.each(status,function(stat,key){
-
-                  qStr =  qStr+'"'+stat+'"';
-                  if(status.length!==key+1)
-                    qStr =qStr+',';
-              });
-              qStr= '{"$in":['+ qStr +']}';
-              return $http.get('/api/v2015/'+schema+'?q={"document.meta.status":'+qStr+',"document.meta.v":{"$ne":0}}&f={"document":1}');
+                params = {
+                            q:{'document.meta.status':{$in:status},
+                               'document.meta.v':{$ne:0}
+                              },
+                            f:{document:1}
+                          };
+              return $http.get('/api/v2015/'+schema,{'params':params});
             }
 
 
@@ -128,17 +153,24 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //============================================================
         function loadOwnerDocs (schema){
-          //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
+
             if(!schema) throw "Error: failed to indicate schema loadDocs";
             return  $q.when( authentication.getUser().then(function(u){
                       user=u;
                     }).then( function(){
-                        return $http.get('/api/v2015/'+schema+'?q={"document.meta.status":{"$nin":["archived","deleted"]},"document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}');
+                      var params = {
+                                  q:{'document.meta.status':{$nin:['archived','deleted']},
+                                     'document.meta.v':{$ne:0},
+                                     'document.meta.createdBy':user.userID
+                                    },
+                                  f:{document:1}
+                                };
+                        return $http.get('/api/v2015/'+schema,{'params':params});
                       }));
         }
         //=======================================================================
-        // creates a doc with version  0 in order ot have a base doc for images
-        //  ugly hack running out of time;
+        // creates a doc with version  0 in order to have a base doc for images
+        //  
         //=======================================================================
         function createDoc (schema){
               var obj = {
