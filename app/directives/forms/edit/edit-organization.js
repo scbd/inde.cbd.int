@@ -13,8 +13,8 @@ define(['app', 'lodash',
 ], function(app, _,template,dailogTemp) { //'scbd-services/utilities',
 
 
-  app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog','history', //"$http", "$filter", "Thesaurus",
-      function( $q, $http,$filter,$route,mongoStorage,$location,$window,ngDialog,history) {
+  app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog','history','smoothScroll', //"$http", "$filter", "Thesaurus",
+      function( $q, $http,$filter,$route,mongoStorage,$location,$window,ngDialog,history,smoothScroll) {
       return {
         restrict   : 'E',
         template   : template,
@@ -155,7 +155,52 @@ define(['app', 'lodash',
                 mongoStorage.save($scope.schema,$scope.doc,$scope._id);
 
               };
+              //=======================================================================
+    		      //
+    		      //=======================================================================
+    		      $scope.submitForm = function (formData){
+                $scope.submitted=true;
 
+                if(formData.$valid){
+                  $scope.saveDoc();
+                  $scope.publishRequestDial();
+                }else {
+
+                    if(formData.title.$error.required && $scope.submitted){
+                        findScrollFocus ('editOrgForm.title');
+                        return;
+                    }
+                    if(formData.acronym.$error.required && $scope.submitted)
+                        findScrollFocus ('editOrgForm.acronym');
+
+                }
+
+                $scope.focused=false;
+
+    		      };// archiveOrg
+              //SET CURSOR POSITION
+              //=======================================================================
+              //
+              //=======================================================================
+              function findScrollFocus (id){
+                    var el = document.getElementById(id);
+                    if(!$scope.focused ){
+
+                      smoothScroll(el);
+                      if($(el).is("input") || $(el).is("select"))
+                        el.focus();
+                      else{
+                        if($(el).find('input').length===0)
+                            $(el).find('textarea').focus();
+                        else
+                          $(el).find('input').focus();
+
+                      }
+
+
+                      $scope.focused = true;
+                    }
+              }
               //============================================================
               //
               //============================================================

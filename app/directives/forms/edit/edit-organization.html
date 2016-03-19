@@ -11,44 +11,44 @@
 <button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"   ></i></button>
 
 
-  <form name="editForm" class="editForm" style="margin-top:10px">
+  <form name="editOrgForm" class="editForm" style="margin-top:10px" ng-submit="submitForm(editOrgForm)" novalidate>
 
 
       <legend class="container-subheader text-center no-wrap" ng-if="hide">
         <h2>  Create Organization</h2>
       </legend>
       <div class="row">
-        <div class="col-xs-12">
-          <div >
+        <div class="col-md-9 col-xs-12">
+          <div   name="title"  ng-class="{'has-warning': editOrgForm.title.$error.required && submitted}" >
             <label>Name</label>
-            <input  class="form-control"  name="title" ng-model="doc.title">
+            <input id="editOrgForm.title" class="form-control" name="title" ng-model="doc.title"  required >
+            <p ng-show="editOrgForm.title.$error.required && submitted" class="help-block">Name is required.</p>
           </div>
-
-        </div>
-
-        <div class="col-md-4 col-xs-12">
-          <div name="acronym" caption="Acronym">
-            <label>Acronym</label>
-            <input class="form-control" name="acronym" ng-model="doc.acronym">
+          <div class="col-md-4 col-xs-12" style="padding-left:0;margin-top:6px;">
+            <div name="acronym"  ng-class="{'has-warning': editOrgForm.acronym.$error.required && submitted}">
+              <label>Acronym</label>
+              <input id="editOrgForm.acronym" class="form-control" name="acronym" ng-model="doc.acronym" style="text-transform:uppercase;" required>
+            <p ng-show="editOrgForm.acronym.$error.required && submitted" class="help-block">Acronym is required. If your organization name is short and does not have or need an accronym kindly repeat the name.</p>
+            </div>
           </div>
         </div>
-        <div class="col-md-3 col-xs-12">
+        <div class="col-md-3  col-xs-12">
+            <label>Logo</label>
+            <br>
+            <!-- <span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'">  -->
+            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
+        </div>
+      </div>
+      <div class="row">
+
+        <!-- <div class="col-md-3 col-xs-12">
 <div>
             <label>Country (Head Office)</label>
             <div km-select name="country" ng-model="doc.country" items="options.countries()"></div>
           </div>
-        </div>
-
-        <div class="col-md-5  col-xs-12">
-
-            <label>Logo</label>
-            <br>
-            <!-- <span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'">  -->
-
-            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
+        </div> -->
 
 
-        </div>
 
 
       </div>
@@ -57,8 +57,8 @@
 
       <div class="col-lg-4 col-xs-12">
 
-        <button class="btn btn-primary" ng-click="saveDoc();publishRequestDial();" style="width:100%;margin-top:10px;"><i class="fa fa-floppy-o"></i> Save </button>
-
+        <button class="btn btn-primary"  type="submit" style="width:100%;margin-top:10px;"><i class="fa fa-floppy-o"></i> Save </button>
+<!-- ng-click="saveDoc();publishRequestDial();" -->
       </div>
     </div>
 
