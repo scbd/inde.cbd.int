@@ -240,7 +240,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.loadList = function (docObj){
-        mongoStorage.loadDocs($scope.schema,['draft','published','request','canceled','rejected','deleted']).then(function(response){
+        mongoStorage.loadDocs($scope.schema,['draft','published','request','canceled','rejected']).then(function(response){
            $scope.docs=response.data;
 
            _.each($scope.docs,function(doc){

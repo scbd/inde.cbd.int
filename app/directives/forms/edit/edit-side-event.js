@@ -68,7 +68,7 @@ define(['app', 'lodash',
 
               });
 
-            }).then($timeout(function(){$scope.doc.confrence=$location.search().m;},1000));
+            }).then($timeout(function(){if($location.search().m)$scope.doc.confrence=$location.search().m;},1000));
 
 init();
             //============================================================

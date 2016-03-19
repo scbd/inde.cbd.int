@@ -7,8 +7,10 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
       scope: {
         uid: '@',
       },
-      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication',
-        function($scope, $location, $window, $timeout, $element, authentication) {
+      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication','$rootScope',
+        function($scope, $location, $window, $timeout, $element, authentication,$rootScope) {
+
+
 
           //============================================================
           //
@@ -36,7 +38,7 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
 
 
 
-              if ($scope.path === '/manage/events/0' || $scope.path === '/manage/events/new'){
+              if ($scope.path === '/manage/events/0' || $scope.path === '/manage/events/new' || ($scope.path.indexOf('/manage/events/')>-1 && $scope.path.length>18)){
 
                   $element.find("#request").addClass('active');
                   $element.find("#request-sm").addClass('active');
@@ -103,7 +105,9 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
             $scope.isAdmin = (_.intersection(['Administrator', 'IndeAdministrator'], user.roles).length > 0);
           });
 
-
+          $rootScope.$on('$locationChangeSuccess', function(){
+                $scope.setActivePath();
+          });
         }
       ]
     }; //end controller

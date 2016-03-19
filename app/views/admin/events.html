@@ -230,26 +230,42 @@
             <div style="height:95px;"></div>
             <div class="hidden-lg hidden-xl" style="height:95px;"></div>
             <!-- <div>{{doc.document.acronym  }}</div> -->
-            <div class="collection-action">
+            <div class="collection-action" >
               <span class="collection-action-grp " >
                 <!-- <scbd-icon-button type="md" icon-name="&#xE8DC;" ng-click="approveDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='published')" waves></scbd-icon-button> -->
-                <div class="btn-group btn-group-vertical btn-group-xs" ng-if="doc.document.meta.status!=='archived'">
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-xs hidden-sm hidden-md" ng-if="doc.document.meta.status!=='archived'">
+                  <div class="btn-group">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      Actions <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                      <li><a ng-click="edit(doc._id);" ><i class="fa fa-pencil"></i> Edit</a></li>
+                      <li><a ng-click="archiveDoc(doc);"><i class="material-icons">&#xE149;</i> Archive</a></li>
 
+                      <li role="separator" class="divider"></li>
+                      <li><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Approve/Publish</a></li>
+                      <li><a ng-click="cancelDoc(doc);"><i class="material-icons">&#xE8DD;</i> Cancel</a></li>
+                      <li><a  ng-click="rejectDoc(doc);"><i class="material-icons">&#xE8DB;</i> Reject</a></li>
+                    </ul>
+                  </div>
               </div>
 
-                <div class="btn-group btn-group-vertical btn-group-xs" ng-if="doc.document.meta.status!=='archived'">
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.document.meta.status!=='archived'">
                   <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
                   <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
                   <!-- <button class="btn btn-default" ng-click="close()"><i class="material-icons">thumbs_up_down</i></button> -->
                 </div>
-                <div class="btn-group btn-group-vertical btn-group-xs" ng-if="doc.document.meta.status!=='archived'" ng-if="doc.document.meta.status!=='archived'">
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.document.meta.status!=='archived'" ng-if="doc.document.meta.status!=='archived'">
+
+
                   <button data-toggle="tooltip" title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='published')"><i class="material-icons">&#xE8DC;</i></button>
                   <button data-toggle="tooltip" title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='canceled')"><i class="material-icons">&#xE8DD;</i></button>
                   <button data-toggle="tooltip" title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.document.meta.status!=='archived' && doc.document.meta.status!=='rejected')"><i class="material-icons">&#xE8DB;</i></button>
+
                   <!-- <button class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button> -->
                   <!-- <button class="btn btn-default" ng-click="close()"><i class="material-icons">thumbs_up_down</i></button> -->
                 </div>
-                <div class="btn-group btn-group-vertical btn-group-xs" ng-show="doc.document.meta.status==='archived'">
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-show="doc.document.meta.status==='archived'">
 
                   <button data-toggle="tooltip" title="Unarchive" class="btn btn-default"  ng-click="unArchiveDoc(doc);"  ><i class="material-icons">&#xE169;</i></button>
                   <button data-toggle="tooltip" title="Delete" class="btn btn-default"  ng-click="deleteDial(doc);" ><i class="material-icons">&#xE872;</i></button>
