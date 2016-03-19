@@ -103,7 +103,7 @@ init();
                 _.each($scope.doc.hostOrgs, function(org) {
                   mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
 
-                    if (conf[1].meta.status !== 'request')
+                    if (conf[1].meta.status === 'draft')
                       mongoStorage.requestDoc('inde-orgs', {
                         document: conf[1]
                       }, conf[0]);
@@ -325,19 +325,15 @@ init();
                   else
                     $scope.doc.id = Number(res.data.count) + 1;
 
-                  if ($scope.doc.contact.mobile)
-                    tempMobile = _.clone($scope.doc.contact.mobile);
-
-                  _.each($scope.doc.hostOrgs, function(orgId) {
-
-                    mongoStorage.loadDoc('inde-orgs', orgId).then(function(orgObj) {
-
-                      if (orgObj[1].meta.status === 'draft') {
-                        orgObj[1].meta.status = 'request';
-                        mongoStorage.save('inde-orgs', orgObj[1], orgObj._id);
-                      }
-                    });
-                  });
+                      //marks as request if it is a draft
+                  // _.each($scope.doc.hostOrgs, function(orgId) {
+                  //   mongoStorage.loadDoc('inde-orgs', orgId).then(function(orgObj) {
+                  //     if (orgObj[1].meta.status === 'draft') {
+                  //       orgObj[1].meta.status = 'request';
+                  //       mongoStorage.save('inde-orgs', orgObj[1], orgObj._id);
+                  //     }
+                  //   });
+                  // });
                   mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
 
                   });

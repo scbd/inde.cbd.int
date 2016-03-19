@@ -1,13 +1,14 @@
 define(['app', 'lodash',
-
+'text!./delete-dialog.html',
   './menu',
-
+  'css!libs/ng-dialog/css/ngDialog.css',
+  'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   '../../services/mongo-storage',
     '../../services/filters'
-], function(app, _) {
+], function(app, _,deleteDialog) {
 
-  app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication','history',//"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication,history) { //, $http, $filter, Thesaurus
+  app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication','history','ngDialog',//"$http", "$filter", "Thesaurus",
+    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication,history,ngDialog) { //, $http, $filter, Thesaurus
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
@@ -90,7 +91,7 @@ define(['app', 'lodash',
       };
 
       function  sortOrder () {
-        console.log('here');
+
         $scope.sortReverse=!$scope.sortReverse;
 
         $scope.toggle('adminOptions');
@@ -133,7 +134,24 @@ define(['app', 'lodash',
         },2000);
       }
 
+      //============================================================
+      //
+      //============================================================
+      $scope.deleteDial = function(doc) {
 
+          var dialog = ngDialog.open({
+            template: deleteDialog,
+            className: 'ngdialog-theme-default',
+            closeByDocument: false,
+            plain: true,
+            scope: $scope
+          });
+
+          dialog.closePromise.then(function(ret) {
+            if (ret.value === 'no') $scope.close();
+            if (ret.value === 'yes') $scope.deleteDoc(doc).then($scope.close);
+          });
+      };
       //=======================================================================
       //
       //=======================================================================
@@ -302,7 +320,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.deleteDoc = function (docObj){
-          mongoStorage.deleteDoc($scope.schema,docObj,docObj._id).then(function(){
+          return mongoStorage.deleteDoc($scope.schema,docObj,docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);

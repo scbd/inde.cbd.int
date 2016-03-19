@@ -7,8 +7,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           user=u;
           if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
           {
-            // deleteTempRecords('inde-orgs');
-            // deleteTempRecords('inde-side-events');
+            deleteTempRecords('inde-orgs');
+            deleteTempRecords('inde-side-events');
           }
 
         });

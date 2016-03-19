@@ -309,8 +309,8 @@ float:right;
   color:#109e49;
   font-size: 30px;
   position:absolute;
-  top:20%;
-  right:1%;
+  top:30%;
+  right:2%;
   z-index: 20px;
 }
 /*.card-action{max-height:45px;position:absolute;bottom:0px; width:100%; display:inline-block;}

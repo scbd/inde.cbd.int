@@ -141,12 +141,12 @@
 
             <div class="card-inde-action ">
               <span class="action-grp" style="padding-top:4px;">
-                  <div class="btn-group  btn-group-sm" ng-if="doc.document.meta.status!=='archived'">
+                  <div class="btn-group  btn-group-xs" ng-if="doc.document.meta.status!=='archived'">
                     <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
                     <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
                   </div>
 
-                  <div class="btn-group  btn-group-sm" ng-if="doc.document.meta.status==='archived'">
+                  <div class="btn-group  btn-group-xs" ng-if="doc.document.meta.status==='archived'">
                     <button data-toggle="tooltip" title="Unarchive" class="btn btn-default"  ng-click="unArchiveDoc(doc);"  ><i class="material-icons">&#xE169;</i></button>
                   </div>
               </span>
@@ -231,11 +231,11 @@
 
             <div class="collection-action">
               <span class="collection-action-grp ">
-                <div class="btn-group btn-group-vertical btn-group-sm" ng-if="doc.document.meta.status!=='archived'">
-                  <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
-                  <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
+                <div class="btn-group btn-group btn-group-xs" ng-if="doc.document.meta.status!=='archived'" style="z-index:100;">
+                  <button style="z-index:100;" data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
+                  <button style="z-index:100;" data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
                 </div>
-                <div class="btn-group btn-group-vertical btn-group-sm" ng-if="doc.document.meta.status==='archived'">
+                <div class="btn-group btn-group-vertical btn-group-xs" ng-if="doc.document.meta.status==='archived'">
                   <button data-toggle="tooltip" title="Unarchive" class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button>
                 </div>
               </span>
