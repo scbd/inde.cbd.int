@@ -27,14 +27,17 @@ define(['app','lodash'],function(app,_) {
         //
         //============================================================
         function goBack() {
-          $location.url(_.last(history).from);
+          if(history.length===1)
+            $location.url('/manage/events');
+          else
+            $location.url(_.last(history).from);
         }
 
         //============================================================
         //
         //============================================================
         function getPrevPath() {
-    
+
           if(_.last(history).from===$location.url())return false;
           else
             return _.last(history).from;

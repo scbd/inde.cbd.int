@@ -17,7 +17,7 @@ label{padding-top:5px;}
     <strong>{{msg}}</strong>
   </div>
 
-  <div class="alert alert-error" ng-show="hasError()">
+  <div class="alert alert-danger" ng-show="hasError()">
     <strong>Error as occured...</strong>
     <div>{{error}}</div>
   </div>
@@ -52,7 +52,7 @@ label{padding-top:5px;}
               <div class="col-xs-12 col-lg-6" >
                 <div   name="exp_num_participants"  ng-class="{'has-warning': editForm.exp_num_participants.$error.required && submitted, 'has-warning': editForm.exp_num_participants.$error.number}">
                   <label>Expected Number of Participants</label>
-                  <input id="editForm.exp_num_participants" class="form-control" type="number" name="exp_num_participants" ng-pattern="/0-9/" ng-model="doc.expNumPart" placeholder=" " required/>
+                  <input id="editForm.exp_num_participants" class="form-control" type="number" name="exp_num_participants"  ng-model="doc.expNumPart" placeholder=" " required/>
                   <p ng-show="editForm.exp_num_participants.$error.required && submitted" class="help-block">Number of participants is required.</p>
                   <p  ng-show="editForm.exp_num_participants.$error.number" class="help-block"> Not valid number!</p>
                 </div>
@@ -60,7 +60,7 @@ label{padding-top:5px;}
               <div class="col-xs-12 col-lg-12">
                 <div   name="title"  ng-class="{'has-warning': editForm.title.$error.required && submitted}" >
                   <label>Title</label>
-                  <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" style="text-transform:capitalize;" locales="doc.meta.locales" required >
+                  <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required >
                   <p ng-show="editForm.title.$error.required && submitted" class="help-block">Title is required.</p>
                 </div>
               </div>
@@ -257,7 +257,7 @@ label{padding-top:5px;}
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
             </select>
-            <p ng-show="editForm.prefTimeThree.$error.required && submitted" class="help-block">Time choice date required.</p>
+            <p ng-show="editForm.prefTimeThree.$error.required && submitted" class="help-block">Third choice time required.</p>
           </div>
         </div>
       </div>

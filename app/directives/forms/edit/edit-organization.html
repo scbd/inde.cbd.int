@@ -4,14 +4,23 @@
 
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
-
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
     <strong>{{msg}}</strong>
+  </div>
+
+  <div class="alert alert-danger" ng-show="hasError()">
+    <strong>Error as occured...</strong>
+    <div>{{error}}</div>
+  </div>
+
+  <div ng-show="isLoading()">
+    <i class="fa fa-spinner fa-spin"></i> Loading...
   </div>
 
 <button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"   ></i></button>
 
 
-  <form name="editOrgForm" class="editForm" style="margin-top:10px" ng-submit="submitForm(editOrgForm)" novalidate>
+  <form class="editForm" style="margin-top:10px" ng-submit="submitForm(doc)" novalidate>
 
 
       <legend class="container-subheader text-center no-wrap" ng-if="hide">
@@ -19,16 +28,16 @@
       </legend>
       <div class="row">
         <div class="col-md-9 col-xs-12">
-          <div   name="title"  ng-class="{'has-warning': editOrgForm.title.$error.required && submitted}" >
+          <div   name="title"  ng-class="{'has-warning': !doc.title && submitted}" >
             <label>Name</label>
-            <input id="editOrgForm.title" class="form-control" name="title" ng-model="doc.title"  required >
-            <p ng-show="editOrgForm.title.$error.required && submitted" class="help-block">Name is required.</p>
+            <input id="editOrgForm.title" class="form-control" name="title" ng-model="doc.title"  >
+            <p ng-show="!doc.title && submitted" class="help-block">Name is required.</p>
           </div>
           <div class="col-md-4 col-xs-12" style="padding-left:0;margin-top:6px;">
-            <div name="acronym"  ng-class="{'has-warning': editOrgForm.acronym.$error.required && submitted}">
+            <div name="acronym"  ng-class="{'has-warning': !doc.acronym && submitted}">
               <label>Acronym</label>
-              <input id="editOrgForm.acronym" class="form-control" name="acronym" ng-model="doc.acronym" style="text-transform:uppercase;" required>
-            <p ng-show="editOrgForm.acronym.$error.required && submitted" class="help-block">Acronym is required. If your organization name is short and does not have or need an accronym kindly repeat the name.</p>
+              <input id="editOrgForm.acronym" class="form-control" name="acronym" ng-model="doc.acronym" style="text-transform:uppercase;" >
+            <p ng-show="!doc.acronym && submitted" class="help-block">Acronym is required. If your organization name is short and does not have or need an accronym kindly repeat the name.</p>
             </div>
           </div>
         </div>

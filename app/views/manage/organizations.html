@@ -1,6 +1,19 @@
 <div ng-controller="organizations">
 
+  <div ng-show="msg" class="alert alert-success alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+    <strong>{{msg}}</strong>
+  </div>
 
+  <div class="alert alert-danger" ng-show="hasError()">
+    <strong>Error as occured...</strong>
+    <div>{{error}}</div>
+  </div>
+
+  <div ng-show="isLoading()">
+    <i class="fa fa-spinner fa-spin"></i> Loading...
+    <div id="loading-bar-spinner"><div class="spinner-icon"></div></div>
+  </div>
   <section class="row relative">
     <!-- side menus -->
     <scbd-side-menu overlay id="dashboard" sections="sections">

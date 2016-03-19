@@ -16,8 +16,8 @@ define(['app', 'lodash',
   './edit-organization'
 ], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll','history',//"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll,history) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout','smoothScroll','history','$rootScope',//"$http", "$filter", "Thesaurus",
+    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout,smoothScroll,history,$rootScope) {
       return {
         restrict: 'E',
         template: template,
@@ -25,7 +25,7 @@ define(['app', 'lodash',
         transclude: false,
         scope: {},
         link: function($scope,$element) { //, $http, $filter, Thesaurus
-
+            $scope.status = "";
             $scope._id = $route.current.params.id;
             $scope.loading = false;
             $scope.schema = "inde-side-events";
@@ -68,7 +68,11 @@ define(['app', 'lodash',
 
               });
 
-            }).then($timeout(function(){if($location.search().m)$scope.doc.confrence=$location.search().m;},1000));
+            }).then($timeout(function(){if($location.search().m)$scope.doc.confrence=$location.search().m;},1000)).catch(function onerror(response) {
+
+                $scope.onError(response);
+
+            });
 
 init();
             //============================================================
@@ -87,7 +91,11 @@ init();
               dialog.closePromise.then(function(ret) {
 
                 if (ret.value == 'draft') $scope.close();
-                if (ret.value == 'publish') $scope.requestPublish().then($scope.close);
+                if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(function onerror(response) {
+
+						        $scope.onError(response);
+
+                });
 
               });
             };
@@ -107,6 +115,10 @@ init();
                       mongoStorage.requestDoc('inde-orgs', {
                         document: conf[1]
                       }, conf[0]);
+                  }).catch(function onerror(response) {
+
+  						        $scope.onError(response);
+
                   });
                 });
               });
@@ -153,6 +165,10 @@ init();
                     $scope.doc = document[1];
                     $scope.isNew = false;
 
+                  }).catch(function onerror(response) {
+
+  						        $scope.onError(response);
+
                   });
               } else {
                 mongoStorage.createDoc($scope.schema).then(
@@ -165,7 +181,11 @@ init();
                     $scope.isNew = true;
 
                   }
-                );
+                ).catch(function onerror(response) {
+
+						        $scope.onError(response);
+
+                });
               }
 
             } // init
@@ -194,6 +214,10 @@ init();
                   confr[1].start = confr[1].start + 86400;
                 }
 
+
+              }).catch(function onerror(response) {
+
+                  $scope.onError(response);
 
               });
               _.each($scope.options.confrences, function(conf) {
@@ -236,7 +260,9 @@ init();
                   $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
 
                 }).catch(function onerror(response) {
-                  $scope.error = response.data;
+
+						        $scope.onError(response);
+
                 });
               });
             } // initProfile()
@@ -271,6 +297,8 @@ init();
 
               return mongoStorage.generateEventId(confId).then(function(res) {
                 return res;
+              }).then(null,function(err) {
+                        $scope.onError(err);
               });
             } // generateEventId
 
@@ -334,8 +362,10 @@ init();
                   //     }
                   //   });
                   // });
-                  mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
-
+                  mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null,function(err) {
+						                $scope.onError(err);
+                  }).catch(function onerror(response) {
+  						        $scope.onError(response);
                   });
                 });
             };
@@ -354,20 +384,7 @@ init();
 
               $location.url(url);
             };
-            $.fn.setCursorPosition = function(pos) {
-              this.each(function(index, elem) {
-                if (elem.setSelectionRange) {
-                  elem.setSelectionRange(pos, pos);
-                } else if (elem.createTextRange) {
-                  var range = elem.createTextRange();
-                  range.collapse(true);
-                  range.moveEnd('character', pos);
-                  range.moveStart('character', pos);
-                  range.select();
-                }
-              });
-              return this;
-            };
+
             //=======================================================================
   		      //
   		      //=======================================================================
@@ -475,6 +492,49 @@ init();
                     $scope.focused = true;
                   }
             }
+
+
+            //============================================================
+            //
+            //============================================================
+            $scope.onError = function(res)
+            {
+
+              $scope.status = "error";
+              if(res.status===-1){
+                  $scope.error="The URI "+res.config.url+" could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
+                  if(res.data.message)
+                    $scope.error += " Message Detail: "+res.data.message;
+              }
+              if (res.status == "notAuthorized") {
+                $scope.error  = "You are not authorized to perform this action: [Method:"+res.config.method+" URI:"+res.config.url+"]";
+                if(res.data.message)
+                  $scope.error += " Message Detail: "+res.data.message;
+              }
+              else if (res.status == 404) {
+                $scope.error  = "The server at URI: "+res.config.url+ " has responded that the record was not found.";
+                if(res.data.message)
+                  $scope.error += " Message Detail: "+res.data.message;
+              }
+              else if (res.status == 500) {
+                $scope.error  = "The server at URI: "+res.config.url+ " has responded with an internal server error message.";
+                if(res.data.message)
+                  $scope.error += " Message Detail: "+res.data.message;
+              }
+              else if (res.status == "badSchema") {
+                $scope.error  = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
+              }
+              else if (res.data.Message)
+                $scope.error = res.data.Message;
+              else
+                $scope.error = res.data;
+            };
+            //============================================================
+      			//
+      			//============================================================
+      			$scope.hasError = function() {
+      				return !!$scope.error;
+      			};
             //=======================================================================
             //
             //=======================================================================

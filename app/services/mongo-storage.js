@@ -28,8 +28,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                var params     = {};
                var data       = {};
 
-
-
                 // update document
                 if(_id){
                     if(_.isEmpty(prevDoc)) throw "Error: no previous state of document detected.  Usually a result of saving a document then not reloading the values";
