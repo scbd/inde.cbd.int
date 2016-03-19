@@ -35,7 +35,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
           if($attrs.schema)
 		        $scope.schema=$attrs.schema;
 
-		      $scope.docs={};
+		      $scope.docs=[];
 
           $scope.$watch('showOrgForm',function(){
 

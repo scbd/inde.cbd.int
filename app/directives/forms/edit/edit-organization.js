@@ -64,10 +64,6 @@ define(['app', 'lodash',
                   });
               }
 
-
-
-
-
               $scope.options = {
                   countries: function() {
                       return $http.get("https://api.cbd.int/api/v2015/countries", {
@@ -76,14 +72,6 @@ define(['app', 'lodash',
                           return $filter("orderBy")(o.data, "name.en");
                       });
                   },
-
-                  // organizationTypes: function() {
-                  //     return $http.get("https://api.cbd.int/api/v2015/t_reg_org_typs", {
-                  //         cache: true
-                  //     }).then(function(o) {
-                  //         return o.data;
-                  //     });
-                  // }
               };
 
               //=======================================================================
@@ -93,30 +81,24 @@ define(['app', 'lodash',
 
                   mongoStorage.save('inde-orgs',$scope.doc,$scope._id).then(function(res){
 
-                        // if(!($scope.hide  !== undefined && $scope.hide !== null)){
-                        //         $scope._id=res.data._id;
-                        //
-                        // } else{
-                        //   $scope.hide=0;
-
                           if($scope.isInForm){
-                            if(!_.isArray($scope.selectedOrgs))$scope.selectedOrgs=[];
-                            $scope.selectedOrgs.push(res.data._id);
-                                 $scope.hide=0;
+                             if(!_.isArray($scope.selectedOrgs))$scope.selectedOrgs=[];
+                             $scope.selectedOrgs.push(res.data._id);
+                             $scope.hide=0;
+                             mongoStorage.createDoc('inde-orgs').then(
+                                     function(document){
+                                       $scope._id=document[0];
+                                       $scope.doc=document[1];
+                                       $scope.doc.logo='app/images/ic_business_black_48px.svg';
+                                       $scope.isNew=true;
+                                       $scope.hide=0;
+                                       $scope.submitted=false;
+                                     }
+                             );
                           }
-                          mongoStorage.createDoc('inde-orgs').then(
-                                  function(document){
-                                    $scope.loading=true;
-                                    $scope._id=document[0];
-                                    $scope.doc=document[1];
-                                    $scope.doc.logo='app/images/ic_business_black_48px.svg';
-                                    $scope.isNew=true;
-                                    $scope.hide=0;
-                                  }
-                          );
-                      //  }
                   });
               };
+
               //============================================================
               //
               //============================================================
@@ -152,7 +134,7 @@ define(['app', 'lodash',
                 //dialogTemplate = $compile(dialogTemplate,$scope);
 
                 $scope.doc.meta.status='request';
-                mongoStorage.save($scope.schema,$scope.doc,$scope._id);
+                return mongoStorage.save($scope.schema,$scope.doc,$scope._id);
 
               };
               //=======================================================================
@@ -179,7 +161,7 @@ define(['app', 'lodash',
                 $scope.focused=false;
 
     		      };// archiveOrg
-              //SET CURSOR POSITION
+
               //=======================================================================
               //
               //=======================================================================
@@ -198,7 +180,6 @@ define(['app', 'lodash',
 
                       }
 
-
                       $scope.focused = true;
                     }
               }
@@ -210,6 +191,30 @@ define(['app', 'lodash',
                         ngDialog.open({ template: dailogTemp, className: 'ngdialog-theme-default',plain: true ,scope:$scope,preCloseCallback:$scope.close});
 
 
+              };
+              //============================================================
+              //
+              //============================================================
+              $scope.publishRequestDial = function() {
+
+                var dialog = ngDialog.open({
+                  template: dailogTemp,
+                  className: 'ngdialog-theme-default',
+                  closeByDocument: false,
+                  plain: true,
+                  scope: $scope
+                });
+
+                dialog.closePromise.then(function(ret) {
+
+                  if (ret.value == 'draft') $scope.close();
+                  if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(function onerror(response) {
+
+                    $scope.onError(response);
+
+                  });
+
+                });
               };
 
                           //============================================================

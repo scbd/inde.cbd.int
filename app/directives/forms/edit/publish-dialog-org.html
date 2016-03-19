@@ -1,22 +1,32 @@
 <div ng-if="isNew">
-<div style="margin-bottom:17px;">
+    <p>
+        Your organization has been saved as a draft. Would you like to formaly register your organization? Once aproved your organization will be published and included as an option for others to use within thier side event submissions.
+    </p>
 
- Your organization will be reviewed for publishing and once approved it will be registered allowing it to be published with yours or other's side events.
+    <div class="text-xs-center">
+        <button class="btn btn-default" ng-click="closeThisDialog('draft');">
+            Save as draft
+        </button>
+        <button class="btn btn-primary" ng-click="closeThisDialog('publish');">
+            <i class="fa fa-floppy-o"></i>
+            Register
+        </button>
+    </div>
+
 </div>
-<button  class="btn btn-primary" style="width:100%;outline:none;" ng-click="requestPublish();closeThisDialog()">
-  <i class="fa fa-floppy-o" ></i> Register
 
-</button>
-
-</div>
 <div ng-if="!isNew">
-<div style="margin-bottom:17px;">
+    <p>
+        Your changes will be reviewed and once approved published.
+    </p>
 
-Your changes will be reviewed and once approved published.
-</div>
-<button   class="btn btn-primary" style="width:100%;outline:none;" ng-click="requestPublish();closeThisDialog()">
-   <i class="fa fa-floppy-o" ></i> Register Changes
-
-</button>
-
+    <div class="text-xs-center">
+        <button class="btn btn-default" ng-click="closeThisDialog('draft');">
+            Save as draft
+        </button>
+        <button class="btn btn-primary" ng-click="closeThisDialog('publish');">
+            <i class="fa fa-floppy-o"></i>
+            Register
+        </button>
+    </div>
 </div>
