@@ -34,7 +34,7 @@ define(['app', 'lodash','jquery',
           function init(){
                   $scope.confrences=[];
 
-                  $http.get('https://api.cbd.int/api/v2015/confrences?f={"document":1}').then(function(conf){
+                  $http.get('https://api.cbd.int/api/v2015/confrences?f={"document":1}&s={"document.start":1}').then(function(conf){
                         $scope.confrences=conf.data;
                         _.each($scope.confrences,function(c){
 
