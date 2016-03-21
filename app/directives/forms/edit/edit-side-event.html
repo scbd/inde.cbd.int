@@ -92,8 +92,10 @@ label{padding-top:5px;}
                 <p id="hostOrgMsg" ng-show="editForm.hostOrgs.$error.required && submitted" class="help-block">At least one organization is required is required.</p>
 
           <div class="row">
+
             <div class="col-md-12 col-xs-12">
               <div name="hostOrgs" caption="" style="margin-right:20px;">
+
                 <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" items="showOrgForm" ng-if="!showOrgForm"></scbd-select-list>
               </div>
             </div>
@@ -243,7 +245,7 @@ label{padding-top:5px;}
             <p ng-show="editForm.prefTimeTwo.$error.required && submitted" class="help-block">Second choice time required.</p>
           </div>
         </div>
-        <div class="col-md-4 col-xs-12" style="margin-bottom:10px;">
+        <div class="col-md-4 col-xs-12" style="margin-bottom:15px;">
           <div ng-class="{'has-warning': editForm.prefDateThree.$error.required && submitted,'has-warning': editForm.prefTimeThree.$error.required && submitted }" >
             <label>Third Choice</label>
             <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates" required>
@@ -262,7 +264,7 @@ label{padding-top:5px;}
       </div>
 
       <legend class="container-subheader">
-        <h2 style="display:inline;">Requirements</h2> <h5 style="display:inline;" >(optional)</h5>
+        <h2 >Requirements (optional)</h2>
       </legend>
       <div class="row">
 
@@ -344,7 +346,7 @@ label{padding-top:5px;}
       </div>
 
       <legend class="container-subheader">
-        <h2 style="display:inline;">Additional Information</h2> <h5 style="display:inline;" >(optional)</h5>
+        <h2>Additional Information (optional)</h2>
       </legend>
       <div class="row">
 
