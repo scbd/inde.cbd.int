@@ -291,9 +291,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function generateEventId(){
-
-
-              return  $http.get('/api/v2015/inde-side-events?c=1&q={"document.meta.v":{"$ne":0}}');
+              var params = {};
+              params.f={'id':1};
+              params.s={ 'id' : -1 };
+              params.l=1;
+              return  $http.get('/api/v2015/inde-side-events',{'params':params});
 
         }//getStatusFacits
 

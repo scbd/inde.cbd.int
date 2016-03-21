@@ -31,6 +31,7 @@ define(['app', 'lodash',
             $scope.schema = "inde-side-events";
             $scope.showOrgForm = 0;
             $scope.isNew = true;
+            $scope.registerAlert=true;
             // $scope.toggle = scbdMenuService.toggle;
             // $scope.dashboard = scbdMenuService.dashboard;
             $scope.doc = {};
@@ -324,22 +325,29 @@ define(['app', 'lodash',
             $scope.saveDoc = function() {
               var tempMobile;
 
-              generateEventId().then(
-                function(res) {
-                  if (Number(res.data.count) === 0)
-                    $scope.doc.id = 1000;
-                  else if (Number(res.data.count) < 1000)
-                    $scope.doc.id = Number(res.data.count) + 1000;
+              if(!$scope.doc.id)
+                    generateEventId().then(
+                      function(res) {
+
+                  if(res.data[0].id)
+                          $scope.doc.id = Number(res.data[0].id) + 1;
                   else
-                    $scope.doc.id = Number(res.data.count) + 1;
+                          $scope.doc.id = 1000;
 
-                  mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
-                    $scope.onError(err);
-                  }).catch(function onerror(response) {
+                        mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
+                          $scope.onError(err);
+                        }).catch(function onerror(response) {
 
-                    $scope.onError(response);
-                  });
-                });
+                          $scope.onError(response);
+                        });
+                      });
+                else
+                    mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
+                      $scope.onError(err);
+                    }).catch(function onerror(response) {
+
+                      $scope.onError(response);
+                    });
             };
 
 

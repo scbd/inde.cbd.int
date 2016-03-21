@@ -1,12 +1,15 @@
 define(['app', 'lodash',
+      'text!./delete-dialog.html',
+      'css!libs/ng-dialog/css/ngDialog.css',
+      'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   'directives/side-menu/scbd-side-menu',
   './menu-orgs',
   '../../services/mongo-storage',
   '../../services/filters'
-], function(app, _) {
+], function(app, _,deleteDialog) {
 
-  app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication','history',//"$http", "$filter", "Thesaurus",
-    function($scope, adminMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication,history) { //, $http, $filter, Thesaurus
+  app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http','$filter','$route','mongoStorage','$location','$element','$timeout','$window','authentication','history','ngDialog',//"$http", "$filter", "Thesaurus",
+    function($scope, adminMenu, $q, $http,$filter,$route,mongoStorage,$location,$element,$timeout,$window,authentication,history,ngDialog) { //, $http, $filter, Thesaurus
 
       authentication.getUser().then(function (user) {
         $scope.isAuthenticated=user.isAuthenticated;
@@ -94,6 +97,14 @@ define(['app', 'lodash',
           });
         },2000);
       }//
+      //=======================================================================
+      //
+      //=======================================================================
+      function cleanDoc(doc) {
+          var cDoc =_.cloneDeep(doc);
+          delete(cDoc.contact);
+          return cDoc;
+      } //toggleListView
 
       $scope.statusFilter = function  (doc) {
         if (doc.meta.status === $scope.selectedChip)
@@ -110,6 +121,25 @@ define(['app', 'lodash',
         $scope.toggle('orgOptions');
       };
 
+      //============================================================
+      //
+      //============================================================
+      $scope.deleteDial = function(doc) {
+
+        var dialog = ngDialog.open({
+          template: deleteDialog,
+          className: 'ngdialog-theme-default',
+          closeByDocument: false,
+          plain: true,
+          scope: $scope
+        });
+
+        dialog.closePromise.then(function(ret) {
+          if (ret.value === 'no') $scope.close();
+          if (ret.value === 'yes') $scope.deleteDoc(doc).then($scope.close);
+        });
+      };
+
       $scope.customSearch = function (doc) {
 
         if(!$scope.search || $scope.search==' ' || $scope.search.length<=2) return true;
@@ -123,7 +153,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.approveDoc = function (docObj){
-        mongoStorage.approveDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='published';
+        mongoStorage.approveDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
@@ -133,7 +164,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.cancelDoc = function (docObj){
-        mongoStorage.cancelDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='canceled';
+        mongoStorage.cancelDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
@@ -143,7 +175,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.rejectDoc = function (docObj){
-        mongoStorage.rejectDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='rejected';
+        mongoStorage.rejectDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
           mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
           //$scope.loadList ();
@@ -254,7 +287,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.archiveDoc = function (docObj){
-          mongoStorage.archiveDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='archived';
+          mongoStorage.archiveDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
 
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
@@ -268,7 +302,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.deleteDoc = function (docObj){
-          mongoStorage.deleteDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='deleted';
+          return mongoStorage.deleteDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
@@ -280,7 +315,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.unArchiveDoc = function (docObj){
-          mongoStorage.unArchiveDoc($scope.schema,docObj,docObj._id).then(function(){
+        docObj.meta.status='draft';
+          mongoStorage.unArchiveDoc($scope.schema,cleanDoc(docObj),docObj._id).then(function(){
                 _.remove($scope.docs,function(obj){return obj._id===docObj._id;});
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
                 mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);

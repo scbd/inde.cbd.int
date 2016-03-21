@@ -62,7 +62,14 @@ define(['app', 'lodash',
         sec.path = listView;
       }, 2000);
 
-
+      //=======================================================================
+      //
+      //=======================================================================
+      function cleanDoc(doc) {
+          var cDoc =_.cloneDeep(doc);
+          delete(cDoc.contact);
+          return cDoc;
+      } //toggleListView
 
       // sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Detail View'});
       // sec.path=detailView;
@@ -154,7 +161,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.approveDoc = function(docObj) {
-        mongoStorage.approveDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='published';
+        mongoStorage.approveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
           _.each(docObj.document.hostOrgs, function(org, key) {
             mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
               if (conf[1].meta.status !== 'published')
@@ -172,7 +180,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.cancelDoc = function(docObj) {
-        mongoStorage.cancelDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='Canceled';
+        mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
           mongoStorage.getOwnerFacits($scope.schema, $scope.statusFacits, statuses);
           mongoStorage.getOwnerFacits($scope.schema, $scope.statusFacitsArcView, statusesArchived);
           //$scope.loadList ();
@@ -182,7 +191,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.rejectDoc = function(docObj) {
-        mongoStorage.rejectDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='rejected';
+        mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
           mongoStorage.getOwnerFacits($scope.schema, $scope.statusFacits, statuses);
           mongoStorage.getOwnerFacits($scope.schema, $scope.statusFacitsArcView, statusesArchived);
           //$scope.loadList ();
@@ -309,7 +319,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.archiveDoc = function(docObj) {
-        mongoStorage.archiveDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='archived';
+        mongoStorage.archiveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
           _.remove($scope.docs, function(obj) {
             return obj._id === docObj._id;
           });
@@ -327,7 +338,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.deleteDoc = function(docObj) {
-        mongoStorage.deleteDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='delete';
+        mongoStorage.deleteDoc($scope.schema,cleanDoc(docObj), docObj._id).then(function() {
           _.remove($scope.docs, function(obj) {
             return obj._id === docObj._id;
           });
@@ -341,7 +353,8 @@ define(['app', 'lodash',
       //
       //=======================================================================
       $scope.unArchiveDoc = function(docObj) {
-        mongoStorage.unArchiveDoc($scope.schema, docObj, docObj._id).then(function() {
+        docObj.meta.status='draft';
+        mongoStorage.unArchiveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
           _.remove($scope.docs, function(obj) {
             return obj._id === docObj._id;
           });
