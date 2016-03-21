@@ -93,7 +93,7 @@
             <span class="sqr">{{statusFacits.rejected}}</span>
           </div>
 
-          <div id="chip-archived" class="chip chip-active" ng-if="(showArchived && statusFacitsArcView.archived) || selectedChip==='archived'" ng-click="selectChip('archived')">
+          <div id="chip-archived" class="chip chip-active" ng-if="(showArchived ) || selectedChip==='archived'" ng-click="selectChip('archived')">
             <div>
               <scbd-icon-button type="md" icon-name="&#xE149;"></scbd-icon-button>
             </div>Archived
@@ -104,51 +104,51 @@
       <!-- card-inde VIEW -->
       <section class="row" ng-if="listView">
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
-          showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
+          showing: <span class="label label-pill label-primary " >{{filtered.length}}</span>  <span>&nbsp;for '{{search}}'</span>
         </div>
         <div class="ccol-lg-4 col-md-3 col-xs-12" ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter)">
           <div class="card-inde small ">
-            <div class="card-inde-image" style="max-height: 60%;" ng-if="doc.document.logo">
+            <div class="card-inde-image" style="max-height: 60%;" ng-if="doc.logo">
 
-              <img src="{{doc.document.logo}}" style="margin-top:10px;">
-              <div ng-if="doc.document.meta.status==='draft'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <img src="{{doc.logo}}" style="margin-top:10px;">
+              <div ng-if="doc.meta.status==='draft'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE24D;</i> Draft</span>
-                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
-              <div ng-if="doc.document.meta.status==='request'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <div ng-if="doc.meta.status==='request'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE0C6;</i> Request</span>
-                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
-              <div ng-if="doc.document.meta.status==='published'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <div ng-if="doc.meta.status==='published'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>
-                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title right" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
-              <div ng-if="doc.document.meta.status==='canceled'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <div ng-if="doc.meta.status==='canceled'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE8DD;</i> Canceled</span>
-                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
-              <div ng-if="doc.document.meta.status==='rejected'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <div ng-if="doc.meta.status==='rejected'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
-              <div ng-if="doc.document.meta.status==='archived'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
+              <div ng-if="doc.meta.status==='archived'" style="vertical-align:middle;padding-left:3px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
                 <span style="line-height:20px;"><i class="material-icons">&#xE149;</i> Archived</span>
-                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.document.acronym  }}</span>
+                <span class="title" style="color:white;position:absolute;margin-right:3px;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.acronym  }}</span>
               </div>
             </div>
             <div class="card-inde-content" style="max-height: 30%;">
               <div class="center">
-                {{doc.document.title  }}
+                {{doc.title  }}
               </div>
             </div>
             <div class="card-inde-action ">
               <span class="action-grp" style="padding-top:4px;">
-                  <div class="btn-group  btn-group-xs" ng-if="doc.document.meta.status!=='archived'">
-                    <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.document.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
-                    <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
+                  <div class="btn-group  btn-group-xs" ng-if="doc.meta.status!=='archived'">
+                    <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
+                    <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
                   </div>
 
-                  <div class="btn-group  btn-group-xs" ng-if="doc.document.meta.status==='archived'">
+                  <div class="btn-group  btn-group-xs" ng-if="doc.meta.status==='archived'">
                     <button data-toggle="tooltip" title="Unarchive" class="btn btn-default"  ng-click="unArchiveDoc(doc);"  ><i class="material-icons">&#xE169;</i></button>
                   </div>
               </span>
@@ -167,15 +167,15 @@
             <div style=" position:absolute;top:0px;left:0px;">
               <div class="collection-item-img-cont">
 
-                <img ng-if="doc.document.logo.length" src="{{doc.document.logo}}" class="collection-item-img"></img>
-                <i ng-if="!doc.document.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
+                <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
+                <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
               </div>
             </div>
             <div  class="event-title-collection">
               <div style="margin-bottom:25px;width:80%;white-space: normal;">
-                <span class="hidden-md hidden-sm hidden-xs"><b>{{doc.document.acronym  }} </b>- </span> {{doc.document.title  }}</div>
+                <span class="hidden-md hidden-sm hidden-xs"><b>{{doc.acronym  }} </b>- </span> {{doc.title  }}</div>
                 <div class="cir hidden-sm hidden-md hidden-xs">
-                  <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
+                  <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
                     <span class="cir">
                       <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                       <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
@@ -183,14 +183,14 @@
                     <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
                   </span>
                   <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                  <span class="hidden-md hidden-sm hidden-xs"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
+                  <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
                 </div>
 
             </div>
             <!-- mobi orgs -->
 
             <div class="cir hidden-lg hidden-xl" style="position:absolute; left:1px;bottom:1px;">
-              <span ng-repeat="org in doc.document.orgs" style="margin:0 2px 0 0;">
+              <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
                 <span class="cir">
                   <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                   <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
@@ -198,27 +198,27 @@
                 <span style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
               </span>
               <span class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-              <span style="font-size:.8rem;"> {{doc.document.contact.FirstName}} {{doc.document.contact.LastName}}</span>
+              <span style="font-size:.8rem;"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
             </div>
             <!-- mobi title status-->
             <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
-              <span style="white-space: normal;">{{doc.document.acronym  }}</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-              <span class="pull-right" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
+              <span style="white-space: normal;">{{doc.acronym  }}</span>
+              <span class="pull-right" ng-if="doc.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
+              <span class="pull-right" ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
+              <span class="pull-right" ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
+              <span class="pull-right" ng-if="doc.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
+              <span class="pull-right" ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
+              <span class="pull-right" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
             </div>
 
             <!-- large status -->
             <div class="hidden-md hidden-sm hidden-xs" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
-              <span ng-if="doc.document.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
-              <span ng-if="doc.document.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span ng-if="doc.document.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
-              <span ng-if="doc.document.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
-              <span ng-if="doc.document.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-              <span ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
+              <span ng-if="doc.meta.status==='draft'" ><i class="material-icons">&#xE24D;</i> Draft</span>
+              <span ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
+              <span ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
+              <span ng-if="doc.meta.status==='canceled'" ><i class="material-icons">&#xE8DD;</i> Canceled</span>
+              <span ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
+              <span ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
             </div>
 
 
@@ -229,8 +229,8 @@
               <span class="collection-action-grp ">
                 <div class="btn-group btn-group-vertical btn-group-xs">
                   <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);"><i class="fa fa-pencil"></i></button>
-                  <button data-toggle="tooltip" title="Archived" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.document.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
-                  <button data-toggle="tooltip" title="Unarchived" class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.document.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button>
+                  <button data-toggle="tooltip" title="Archived" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
+                  <button data-toggle="tooltip" title="Unarchived" class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button>
                 </div>
               </span>
             </div>

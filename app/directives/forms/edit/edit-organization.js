@@ -40,9 +40,8 @@ define(['app', 'lodash',
               if(!$scope._id || $scope._id==='0' || $scope._id==='new'){
                 mongoStorage.createDoc('inde-orgs').then(
                         function(document){
-                          $scope.loading=true;
-                          $scope._id=document[0];
-                          $scope.doc=document[1];
+                          $scope._id=document._id;
+                          $scope.doc=document;
                           $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=true;
                         }
@@ -56,8 +55,8 @@ define(['app', 'lodash',
                   mongoStorage.loadDoc('inde-orgs',$scope._id).then(function(document){
 
                         $scope.loading=true;
-                        $scope._id=document[0];
-                        $scope.doc=document[1];
+                        $scope._id=document._id;
+                        $scope.doc=document;
                         if(!$scope.doc.logo)
                           $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=false;
@@ -83,12 +82,12 @@ define(['app', 'lodash',
 
                           if($scope.isInForm){
                              if(!_.isArray($scope.selectedOrgs))$scope.selectedOrgs=[];
-                             $scope.selectedOrgs.push(res.data._id);
+                             $scope.selectedOrgs.push($scope._id);
                              $scope.hide=0;
                              mongoStorage.createDoc('inde-orgs').then(
                                      function(document){
-                                       $scope._id=document[0];
-                                       $scope.doc=document[1];
+                                       $scope._id=document._id;
+                                       $scope.doc=document;
                                        $scope.doc.logo='app/images/ic_business_black_48px.svg';
                                        $scope.isNew=true;
                                        $scope.hide=0;

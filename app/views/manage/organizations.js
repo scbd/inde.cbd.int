@@ -127,7 +127,7 @@ define(['app', 'lodash',
       }
 
       $scope.statusFilter = function(doc) {
-        if (doc.document.meta.status === $scope.selectedChip)
+        if (doc.meta.status === $scope.selectedChip)
           return doc;
         else if ($scope.selectedChip === 'all' || $scope.selectedChip === '')
           return doc;
@@ -247,18 +247,18 @@ define(['app', 'lodash',
 
           _.each($scope.docs, function(doc) {
 
-            //  mongoStorage.loadDoc('confrences',doc.document.confrence).then(function(conf){
-            //     doc.document.confrenceObj=conf[1];
+            //  mongoStorage.loadDoc('confrences',doc.confrence).then(function(conf){
+            //     doc.confrenceObj=conf[1];
             //  });
-            doc.document.orgs = [];
-            _.each(doc.document.hostOrgs, function(org, key) {
-              mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
-                doc.document.orgs.push(conf[1]);
-              });
-            });
-
-            $http.get('https://api.cbd.int/api/v2013/users/' + doc.document.meta.createdBy).then(function onsuccess(response) {
-              doc.document.contact = response.data;
+            // doc.orgs = [];
+            // _.each(doc.hostOrgs, function(org, key) {
+            //   mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
+            //     doc.orgs.push(conf[1]);
+            //   });
+            // });
+            //
+            $http.get('https://api.cbd.int/api/v2013/users/' + doc.meta.createdBy).then(function onsuccess(response) {
+              doc.contact = response.data;
             });
           });
           registerToolTip();

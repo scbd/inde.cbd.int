@@ -96,10 +96,9 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
             authentication.getUser().then(function (user) {
 
               var params = {
-                          q:{$or:[{'document.meta.status':'published','document.meta.v':{$ne:0}},
-                                  {'document.meta.createdBy':user.userID,'document.meta.status':{$in:['draft','request']},'document.meta.v':{$ne:0}}]
+                          q:{$or:[{'meta.status':'published','meta.v':{$ne:0}},
+                                  {'meta.createdBy':user.userID,'meta.status':{$in:['draft','request']},'meta.v':{$ne:0}}]
                             },
-                          f:{document:1}
                         };
               $http.get('https://api.cbd.int/api/v2015/inde-orgs',{'params':params}).then(function(res){
                         $scope.docs=res.data;

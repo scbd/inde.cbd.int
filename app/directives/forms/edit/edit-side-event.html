@@ -42,7 +42,7 @@ label{padding-top:5px;}
                           <label>Meeting</label>
                             <select id="editForm.meeting" class="form-control" ng-model="doc.confrence" name="meeting"   required>
 
-                              <option ng-repeat="docObj in options.confrences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.document.acronym}} </option>
+                              <option ng-repeat="docObj in options.confrences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
                             </select>
 
                               <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
@@ -94,7 +94,6 @@ label{padding-top:5px;}
           <div class="row">
             <div class="col-md-12 col-xs-12">
               <div name="hostOrgs" caption="" style="margin-right:20px;">
-
                 <scbd-select-list ng-modal="doc.hostOrgs" schema="inde-orgs" items="showOrgForm" ng-if="!showOrgForm"></scbd-select-list>
               </div>
             </div>

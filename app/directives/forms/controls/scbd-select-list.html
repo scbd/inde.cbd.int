@@ -19,8 +19,8 @@
 <div>
   <div ng-show="!showOrgForm">
     <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="doc.selected" style="margin-left:20px;margin-bottom:10px;">
-      <img src="{{doc.document.logo}}" ng-if="doc.document.logo.length>0" />
-      <span ng-if="doc.document.acronym">{{doc.document.acronym }}</span>
+      <img src="{{doc.logo}}" ng-if="doc.logo.length>0" />
+      <span ng-if="doc.acronym">{{doc.acronym }}</span>
       <i class="fa fa-times" ng-click="select(doc)"></i>
     </div>
   </div>
@@ -34,10 +34,10 @@
       <scbd-flat-button style="position:relative;width:100%;text-align:left;height:25px;background-color:#fff;" ng-click="select(docObj);" waves>
         <div class="panel panel-default" style="height:25px; width:100%;line-height:25px;vertical-align:bottom;">
           <scbd-icon-button type="fa" style="color:#009b48;font-size:16px;margin-right:20px;" icon-name="fa-square-o" to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected"></scbd-icon-button>
-          <img src="{{docObj.document.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
-          <span style="font-weight:bold;">{{docObj.document.acronym }} </span>
-          <span class="hidden-md hidden-sm hidden-xs">{{docObj.document.title }}</span>
-          <span class="hidden-lg hidden-xl">{{docObj.document.title | characters:26}}</span>
+          <img src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
+          <span style="font-weight:bold;">{{docObj.acronym }} </span>
+          <span class="hidden-md hidden-sm hidden-xs">{{docObj.title }}</span>
+          <span class="hidden-lg hidden-xl">{{docObj.title | characters:26}}</span>
         </div>
       </scbd-flat-button>
     </div>

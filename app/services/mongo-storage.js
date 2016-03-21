@@ -5,11 +5,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         var user;
         authentication.getUser().then(function(u){
           user=u;
-          if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
-          {
-            deleteTempRecords('inde-orgs');
-            deleteTempRecords('inde-side-events');
-          }
+          // if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
+          // {
+          //   deleteTempRecords('inde-orgs');
+          //   deleteTempRecords('inde-side-events');
+          // }
 
         });
         var clientOrg = 0; // means cbd
@@ -21,62 +21,40 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //============================================================
         function save (schema,document,_id){
-
-               var prevDoc    = _.cloneDeep(document.initialState) || {};
-               var currentDoc = _.cloneDeep(document);
                var url        = '/api/v2015/'+schema;
                var params     = {};
-               var data       = {};
+               var data       = (document||{});
 
-                // update document
                 if(_id){
-                    if(_.isEmpty(prevDoc)) throw "Error: no previous state of document detected.  Usually a result of saving a document then not reloading the values";
                     params.id = _id;
-                    delete(currentDoc.initialState);
-                    return touch(currentDoc).then(function(){
-                      url=url+'/'+_id;
-                      data.document=currentDoc;
-                      data.clientOrg=clientOrg;
-                      data.$set  = {"document":currentDoc};
-                      data.$push = {"history":prevDoc};
-                      return $http.patch(url,data,params).then(function(res){
-                        //deleteTempRecords(schema);
-                        res.data._id=_id;
-                        return res;
-                      });
-                    });
-                } //update
-                else{
-                  return touch(currentDoc).then(function(){
-                    data.document=currentDoc;
-                    data.clientOrg=clientOrg;
-                    return $http.post(url,data,params).then(function(res){
-                      currentDoc.initialState=currentDoc;
-                      return res;
-                    });
-                  });
+                    url=url+'/'+_id;
+                    data.clientOrg = clientOrg;
+                    return touch(data).then(function(){return $http.put(url,data,params);});
 
+                }
+                else{
+                    data.clientOrg=clientOrg;
+                    return touch(data).then(function(){return $http.post(url,data,params);});
                 }  //create
         }
-    // $http.get("/api/v2015/user-notifications/", { params : { q : JSON.stringify(query), sk: pageNumber, l: pageLength, c:count }, cache:false})
 
-        //============================================================
+
+        // //============================================================
+        // //
+        // //============================================================
+        // function deleteTempRecords(schema) {
         //
-        //============================================================
-        function deleteTempRecords(schema) {
-
-            var params = {
-                            q:{'document.meta.v':0},
-                            f:{_id:1},
-                            cache:false
-                          };
-            $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
-                  _.each(res.data,function(obj){
-                        $http.delete('/api/v2015/'+schema+'/'+obj._id);
-                  });
-            });
-
-        }
+        //     var params = {
+        //                     q:{'meta.v':0},
+        //                     cache:false
+        //                   };
+        //     $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
+        //           _.each(res.data,function(obj){
+        //                 $http.delete('/api/v2015/'+schema+'/'+obj._id);
+        //           });
+        //     });
+        //
+        // }
 
         //============================================================
         //
@@ -85,17 +63,16 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument";
             var params = {
-                          q:{_id:{$oid:_id}},
-                          f:{document:1}
+                          q:{_id:{$oid:_id}}
                         };
             return $q.when( $http.get('/api/v2015/'+schema,{'params':params}))//}&f={"document":1}'))
                    .then(
                         function(response){
-                              if(response.data.length){
-                                 response.data[0].document.initialState=_.cloneDeep(response.data[0].document);
-                                 return [response.data[0]._id,response.data[0].document];
-                              }
-                           }
+                            if(response.data.length)
+                                return  response.data[0];
+                            else
+                              return false;
+                        }
                   );
         }
         //============================================================
@@ -105,8 +82,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadArchives";
             var params = {
-                          q:{'document.meta.status':'archived'},
-                          f:{document:1}
+                          q:{'meta.status':'archived'},
+
                         };
             return $q.when( $http.get('/api/v2015/'+schema,{'params':params}));
 
@@ -121,28 +98,28 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
             if(!schema) throw "Error: failed to indicate schema loadOwnerDocs";
             if(!status){
               params = {
-                          q:{'document.meta.status':{$nin:['archived','deleted']},
-                             'document.meta.v':{$ne:0}
+                          q:{'meta.status':{$nin:['archived','deleted']},
+                              'meta.v':{$ne:0}
                             },
-                          f:{document:1}
+
                         };
               return $http.get('/api/v2015/'+schema,{'params':params});
             }
             if(!_.isArray(status)){
               params = {
-                          q:{'document.meta.status':status,
-                             'document.meta.v':{$ne:0}
+                          q:{'meta.status':status,
+                          'meta.v':{$ne:0}
                             },
-                          f:{document:1}
+
                         };
               return $http.get('/api/v2015/'+schema,{'params':params});
             }
             else {
                 params = {
-                            q:{'document.meta.status':{$in:status},
-                               'document.meta.v':{$ne:0}
+                            q:{'meta.status':{$in:status},
+                            'meta.v':{$ne:0}
                               },
-                            f:{document:1}
+
                           };
               return $http.get('/api/v2015/'+schema,{'params':params});
             }
@@ -159,18 +136,17 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                       user=u;
                     }).then( function(){
                       var params = {
-                                  q:{'document.meta.status':{$nin:['archived','deleted']},
-                                     'document.meta.v':{$ne:0},
-                                     'document.meta.createdBy':user.userID
-                                    },
-                                  f:{document:1}
+                                  q:{'meta.status':{$nin:['archived','deleted']},
+                                     'meta.createdBy':user.userID,
+                                     'meta.v':{$ne:0}
+                                    }
                                 };
                         return $http.get('/api/v2015/'+schema,{'params':params});
                       }));
         }
         //=======================================================================
         // creates a doc with version  0 in order to have a base doc for images
-        //  
+        //
         //=======================================================================
         function createDoc (schema){
               var obj = {
@@ -182,7 +158,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                   };
 
               return save(schema,obj).then(function(res){
-
                   return loadDoc (schema,res.data.id);
               });
         }
@@ -191,58 +166,58 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function archiveDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='archived';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='archived';
+              return save(schema,docObj,_id);
         }
         //=======================================================================
         //
         //=======================================================================
         function requestDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='request';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='request';
+              return save(schema,docObj,_id);
         }
         //=======================================================================
         //
         //=======================================================================
         function approveDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='published';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='published';
+              return save(schema,docObj,_id);
         }
         //=======================================================================
         //
         //=======================================================================
         function cancelDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='canceled';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='canceled';
+              return save(schema,docObj,_id);
         }
         //=======================================================================
         //
         //=======================================================================
         function rejectDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='rejected';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='rejected';
+              return save(schema,docObj,_id);
         }
         //=======================================================================
         //
         //=======================================================================
         function deleteDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='deleted';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='deleted';
+              return save(schema,docObj,_id);
         }
 
         //=======================================================================
         //
         //=======================================================================
         function unArchiveDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
-              docObj.document.meta.status='draft';
-              return save(schema,docObj.document,_id);
+
+              docObj.meta.status='draft';
+              return save(schema,docObj,_id);
         }
 
         //=======================================================================
@@ -253,7 +228,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               if(!statArry)
                 statArry=statuses;
               if(stat){
-                $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
+                $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0}}').then(
                   function(res){
 
                     statusFacits[stat]=res.data.count;
@@ -264,7 +239,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               else
               _.each(statArry,function(status){
 
-                    $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0}}&f={"document":1}').then(
+                    $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0}}').then(
                       function(res){
                         statusFacits[status]=res.data.count;
                         statusFacits['all']+=res.data.count;
@@ -291,7 +266,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             if(!statArry)
                               statArry=statuses;
                             if(stat){
-                              $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+stat+'","document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}').then(
+                              $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                 function(res){
 
                                   statusFacits[stat]=res.data.count;
@@ -302,7 +277,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             else
                             _.each(statArry,function(status){
 
-                                  $http.get('/api/v2015/'+schema+'?c=1&q={"document.meta.status":"'+status+'","document.meta.v":{"$ne":0},"document.meta.createdBy":'+user.userID+'}&f={"document":1}').then(
+                                  $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                     function(res){
                                       statusFacits[status]=res.data.count;
                                       statusFacits['all']+=res.data.count;
@@ -344,6 +319,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                 doc.meta.modifiedOn = Date.now();
               }
               doc.meta.v=Number(doc.meta.v)+1;
+
               doc.meta.hash=sha256(JSON.stringify(doc));  //jshint ignore:line
           });
         } // touch

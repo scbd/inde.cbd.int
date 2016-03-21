@@ -58,8 +58,9 @@ define(['app', 'lodash',
             $http.get("https://api.cbd.int/api/v2015/confrences", {
               cache: true
             }).then(function(o) {
-              $scope.options.confrences = $filter("orderBy")(o.data, "title");
-              $location.search();
+
+              $scope.options.confrences = $filter("orderBy")(o.data, "start");
+            //  $location.search();
               _.each($scope.options.confrences, function(conf) {
                 if (conf._id === $location.search().m)
                   conf.selected = true;
@@ -113,10 +114,8 @@ define(['app', 'lodash',
                 _.each($scope.doc.hostOrgs, function(org) {
                   mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
 
-                    if (conf[1].meta.status === 'draft')
-                      mongoStorage.requestDoc('inde-orgs', {
-                        document: conf[1]
-                      }, conf[0]);
+                    if (conf.meta.status === 'draft')
+                      mongoStorage.requestDoc('inde-orgs',conf, conf._id);
                   }).catch(function onerror(response) {
                     $scope.onError(response);
                   });
@@ -161,8 +160,8 @@ define(['app', 'lodash',
                   mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
 
                     $scope.loading = true;
-                    $scope._id = document[0];
-                    $scope.doc = document[1];
+                    $scope._id = document._id;
+                    $scope.doc = document;
                     $scope.isNew = false;
 
                   }).catch(function onerror(response) {
@@ -173,9 +172,10 @@ define(['app', 'lodash',
               } else {
                 mongoStorage.createDoc($scope.schema).then(
                   function(document) {
+
                     $scope.loading = true;
-                    $scope._id = document[0];
-                    $scope.doc = document[1];
+                    $scope._id = document._id;
+                    $scope.doc = document;
                     $scope.doc.logo = randomPic();
                     initProfile(true);
                     $scope.isNew = true;
@@ -204,14 +204,14 @@ define(['app', 'lodash',
             function generateDates() {
 
               mongoStorage.loadDoc('confrences', $scope.doc.confrence).then(function(confr) {
-                $scope.doc.confrenceObj = confr[1];
-                var diff = Number(confr[1].end) - Number(confr[1].start);
+                $scope.doc.confrenceObj = confr;
+                var diff = Number(confr.end) - Number(confr.start);
                 var numDays = Math.ceil(diff / 86400);
                 if (!$scope.options) $scope.options = {};
                 if (!$scope.options.dates) $scope.options.dates = [];
                 for (var i = 0; i < numDays; i++) {
-                  $scope.options.dates[i] = moment.unix(Number(confr[1].start)).format("YYYY/MM/DD");
-                  confr[1].start = confr[1].start + 86400;
+                  $scope.options.dates[i] = moment.unix(Number(confr.start)).format("YYYY/MM/DD");
+                  confr.start = confr.start + 86400;
                 }
 
 
@@ -242,7 +242,7 @@ define(['app', 'lodash',
 
 
                 return $http.get('https://api.cbd.int/api/v2013/users/' + userId).then(function onsuccess(response) {
-                  data = response.data;
+                  //data = response.data;
                   if (!$scope.doc) $scope.doc = {};
                   if (!$scope.doc.contact) $scope.doc.contact = {};
 
