@@ -32,6 +32,11 @@ label{padding-top:5px;}
     <legend class="container-subheader">
       <h2>General Information</h2>
     </legend>
+<div></div>
+    <div ng-show="registerAlert" class="alert alert-success alert-dismissable">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting.  Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.</strong>
+    </div>
 
     <div class="row">
         <div class="col-xs-12 col-lg-8">
