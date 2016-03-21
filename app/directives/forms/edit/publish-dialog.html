@@ -1,11 +1,11 @@
-<div ng-if="isNew">
+<div >
     <p>
-        Your side event has been saved as a draft. Would you like to formaly register your side event? Once aproved your side event will be published and included in the meeting schedule.
+         Would you like to formaly register your side event? Once aproved your side event will be published and included in the side event schedule.
     </p>
 
     <div class="text-xs-center">
         <button class="btn btn-default" ng-click="closeThisDialog('draft');">
-            Save as draft
+            No, Save as draft
         </button>
         <button class="btn btn-primary" ng-click="closeThisDialog('publish');">
             <i class="fa fa-floppy-o"></i>
@@ -15,18 +15,4 @@
 
 </div>
 
-<div ng-if="!isNew">
-    <p>
-        Your changes will be reviewed and once approved published.
-    </p>
 
-    <div class="text-xs-center">
-        <button class="btn btn-default" ng-click="closeThisDialog('draft');">
-            Save as draft
-        </button>
-        <button class="btn btn-primary" ng-click="closeThisDialog('publish');">
-            <i class="fa fa-floppy-o"></i>
-            Register
-        </button>
-    </div>
-</div>
