@@ -58,19 +58,22 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 					//
 					//==================================
 					function setChips () {
-            if($scope.binding)
-								if($scope.binding.length>0){
-                      $scope.loading=false;
-                      _.each($scope.docs,function(doc){
-                        _.each($scope.binding,function(id){
+            $timeout(function(){
+              if($scope.binding)
+  								if($scope.binding.length>0){
+                        $scope.loading=false;
+                        _.each($scope.docs,function(doc){
+                          _.each($scope.binding,function(id){
 
-                            if(doc._id===id){
-                              doc.selected=!doc.selected;
-                              //$scope.select(doc);
-                            }
+                              if(doc._id===id){
+                                doc.selected=!doc.selected;
+
+                                //$scope.select(doc);
+                              }
+                          });
                         });
-                      });
-                }
+                  }
+            },500);
 					}// set chips
 
 
