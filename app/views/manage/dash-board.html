@@ -1,131 +1,141 @@
-<div ng-controller="dashBoard" >
-  <div ng-show="msg" class="alert alert-success alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
-    <strong>{{msg}}</strong>
-  </div>
+<div ng-controller="dashBoard">
 
+<style>
+.bs-callout-btn{cursor: pointer;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.bs-callout-btn:hover{box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+/*margin: 1px 0 8px 0;*/
+background-color: #f5f5f5;
+-webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;}
+
+
+</style>
   <div class="alert alert-danger" ng-show="hasError()">
     <strong>Error as occured...</strong>
     <div>{{error}}</div>
   </div>
 
-  <div ng-show="isLoading()">
-    <i class="fa fa-spinner fa-spin"></i> Loading...
-  </div>
-  <section class="row relative">
-    <!-- ng-if="isLocked" -->
-    <scbd-side-menu id="dashboard" sections="sections"  overlay>
-      <div class="portal-branding dash-nav-header" layout-align="center center">
-        <h1>Management Center</h1>
-      </div>
-    </scbd-side-menu>
 
-    <div class="container-header-name hidden-lg hidden-xl">Dashbord</div>
+  <section class="row relative">
+
+
+    <div class="container-header-name hidden-lg hidden-xl">Administrator's Dashbord</div>
     <div class="list-container " style="height:300px;" ng-if="isAuthenticated">
-      <div class="container-header " >
-        <div class="pull-left ">
-          <!-- <button type="button" class="btn btn-default btn-sm"  ng-click="toggle('dashboard')"><i class="fa fa-bars" ng-if="!mOpen"></i></button> -->
+      <div class="container-header ">
+        <!-- <div class="pull-left ">
+          <button type="button" class="btn btn-default btn-sm" ng-click="toggle('dashboard')"><i class="fa fa-bars" ng-if="!mOpen"></i></button>
 
           <input type="text" ng-model="search" placeholder="search..." class="search"> </input>
-        </div>
-        <span class="container-header-name hidden-md hidden-sm hidden-xs" ><h1 style="display:inline;">Dashboard</h1></span>
-        <div class=" pull-right" >
+        </div> -->
+        <span class="container-header-name hidden-md hidden-sm hidden-xs">
+          <h1 style="display:inline;">Admin Dashboard</h1>
+        </span>
+        <div class=" pull-right">
 
         </div>
         <div class="clearfix"></div>
       </div>
-  <div class="container-header-filler"></div>
-
       <div style="padding-top:10px;">
-        <div class="col-lg-offset-2  col-lg-4 col-sm-6 col-xs-12" >
+        <div class="col-lg-offset-2  col-lg-4 col-sm-6 col-xs-12">
 
-          <div class="card">
-
-              <div class="card-block">
-                 <span>Your Side Events</span>
-                <blockquote class="card-blockquote">
-                    <div class="bs-callout bs-callout-default">
-                      <span class="title">All</span>
-                      <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facets.all}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-primary">
-                      <span class="title">Drafts</span>
-                      <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facets.draft}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-success">
-                      <span class="title">Published</span>
-                      <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-warning">
-                      <span class="title">Requests</span>
-                      <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-danger-little">
-                      <span class="title">Canceled</span>
-                      <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facets.canceled}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-info">
-                      <span class="title">Archived</span>
-                      <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived}}</span>
-                    </div>
-                    <div class="bs-callout bs-callout-danger">
-                      <span class="title">Rejected</span>
-                      <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
-                    </div>
-
-
-                <button  class="btn btn-default pull-right btn-sm" style="margin-top:15px;" ng-click="goTo('/manage/events')">Go To Your Events</button>
-</blockquote>
+          <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
+            <div class="panel-heading  text-center">
+              <h2 style="color:inherit">Your Side Events</h2>
+            </div>
+            <div class="panel-body text-center" style="min-height:110px">
+              <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facets.all}" ng-click="goTo('/manage/events','chip=all',facets.all)">
+                <span class="title">All</span>
+                <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facets.all}}</span>
+              </div>
+              <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facets.draft}" ng-click="goTo('/manage/events','chip=draft',facets.draft)">
+                <span class="title">Drafts</span>
+                <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facets.draft}}</span>
+              </div>
+              <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facets.published}" ng-click="goTo('/manage/events','chip=published',facets.published)">
+                <span class="title">Published</span>
+                <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published}}</span>
+              </div>
+              <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/manage/events','chip=requests',facets.request)">
+                <span class="title">Requests</span>
+                <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request}}</span>
+              </div>
+              <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facets.canceled}" ng-click="goTo('/manage/events','chip=canceled',facets.canceled)">
+                <span class="title">Canceled</span>
+                <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facets.canceled}}</span>
+              </div>
+              <div class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facets.archived}" ng-click="goTo('/manage/events','chip=archived',facets.archived)">
+                <span class="title">Archived</span >
+                <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived}}</span>
+              </div>
+              <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/manage/events','chip=rejected',facets.rejected)">
+                <span class="title">Rejected</span>
+                <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
               </div>
 
-            <div class="card-block">
+            </div>
+            <div class="panel-footer text-right">
+              <div class="text-center">
+                <button class="btn btn-sm btn-info" ng-click="goTo('/manage/events','chip=all',1)">Go to Your Side Events </button>
+              </div>
             </div>
           </div>
+
         </div>
 
-        <div class="col-lg-4 col-sm-6 col-xs-12" >
 
-          <div class="card">
+        <div class="  col-lg-4 col-sm-6 col-xs-12">
 
-              <div class="card-block">
-                 <span>Your Organizations</span>
-                 <blockquote class="card-blockquote">
-                     <div class="bs-callout bs-callout-default">
-                       <span class="title">All</span>
-                       <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facetsO.all}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-primary">
-                       <span class="title">Drafts</span>
-                       <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facetsO.draft}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-success">
-                       <span class="title">Published</span>
-                       <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-warning">
-                       <span class="title">Requests</span>
-                       <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-danger-little">
-                       <span class="title">Canceled</span>
-                       <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facetsO.canceled}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-info">
-                       <span class="title">Archived</span>
-                       <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived}}</span>
-                     </div>
-                     <div class="bs-callout bs-callout-danger">
-                       <span class="title">Rejected</span>
-                       <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
-                     </div>
-                      <button href="#" class="btn btn-default pull-right btn-sm" style="margin-top:15px;" ng-click="goTo('/manage/organizations')">Go To Your Organizations</button>
-                 </blockquote>
+          <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
+            <div class="panel-heading  text-center">
+              <h2 style="color:inherit">Your Organizations</h2>
+            </div>
 
+            <div class="panel-body text-center" style="min-height:110px">
 
+                <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facetsO.all}" ng-click="goTo('/manage/organizations','chip=all',facetsO.all)">
+                  <span class="title">All</span>
+                  <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facetsO.all}}</span>
+                </div>
+                <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facetsO.draft}" ng-click="goTo('/manage/organizations','chip=draft',facetsO.draft)">
+                  <span class="title">Drafts</span>
+                  <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facetsO.draft}}</span>
+                </div>
+                <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facetsO.published}" ng-click="goTo('/manage/organizations','chip=published',facetsO.published)">
+                  <span class="title">Published</span>
+                  <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published}}</span>
+                </div>
+                <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/manage/organizations','chip=requests',facetsO.request)">
+                  <span class="title">Requests</span>
+                  <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request}}</span>
+                </div>
+                <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facetsO.canceled}" ng-click="goTo('/manage/organizations','chip=canceled',facetsO.canceled)">
+                  <span class="title">Canceled</span>
+                  <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facetsO.canceled}}</span>
+                </div>
+                <div class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facetsO.archived}" ng-click="goTo('/manage/organizations','chip=archived',facetsO.archived)">
+                  <span class="title">Archived</span>
+                  <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived}}</span>
+                </div>
+                <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/manage/organizations','chip=rejected',facetsO.rejected)">
+                  <span class="title">Rejected</span>
+                  <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
+                </div>
+            </div>
+            <div class="panel-footer text-right">
+              <div class="text-center">
+                <button class="btn btn-sm btn-info" ng-click="goTo('/manage/organizations','chip=all',1)">Go to Your Organizations</button>
               </div>
-            <div class="card-block">
             </div>
           </div>
+
         </div>
 
       </div>

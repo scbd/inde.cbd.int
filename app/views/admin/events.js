@@ -26,6 +26,8 @@ define(['app', 'lodash',
             $scope.sections = dashMenu.getMenu('admin');
             $scope.sectionsOptions = dashMenu.getMenu('adminOptions');
 
+
+
             var sec = _.findWhere($scope.sectionsOptions, {
               name: 'Sort'
             });
@@ -223,7 +225,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               function archiveList() {
-                mongoStorage.loadArchives($scope.schema).then(function(response) {
+                return mongoStorage.loadArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
                           mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
@@ -276,7 +278,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               $scope.loadList = function(docObj) {
-                $timeout(function(){
+            
                 mongoStorage.loadDocs($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
                     $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
@@ -292,8 +294,16 @@ define(['app', 'lodash',
                     });
                   });
 
-                });
-                });
+                }).then(function(){
+                   var srch = $location.search();
+                        if(srch)
+                           if(srch.chip==='archived'){
+                               $scope.showArchived=!$scope.showArchived;
+                               mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+                               archiveList().then(function(){selectChip(srch.chip);});
+                           }else
+                            selectChip(srch.chip);
+               });
               }; // archiveOrg
 
               //=======================================================================

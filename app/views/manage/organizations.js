@@ -210,7 +210,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       function archiveList() {
-        mongoStorage.loadArchives($scope.schema).then(function(response) {
+        return mongoStorage.loadArchives($scope.schema).then(function(response) {
           $scope.docs = response.data;
           registerToolTip();
         });
@@ -274,7 +274,16 @@ define(['app', 'lodash',
           registerToolTip();
         }).then(function() {
           $scope.status = "ready";
-        });
+        }).then(function(){
+           var srch = $location.search();
+                if(srch)
+                   if(srch.chip==='archived'){
+                       $scope.showArchived=!$scope.showArchived;
+                       mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+                       archiveList().then(function(){selectChip(srch.chip);});
+                   }else
+                    selectChip(srch.chip);
+       });
       }; // archiveOrg
 
       //=======================================================================
