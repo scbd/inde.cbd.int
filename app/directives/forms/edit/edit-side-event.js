@@ -356,8 +356,8 @@ console.log($scope.doc.meta);
             //=======================================================================
             $scope.submitForm = function(formData) {
               $scope.submitted = true;
-              var focused = false;
 
+        console.log('here form valid?',formData.$valid);
 
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
@@ -366,10 +366,13 @@ console.log($scope.doc.meta);
               if (formData.$valid) {
                 $scope.saveDoc();
                 $scope.publishRequestDial();
+              }
+              else {
+
 
                 if (formData.meeting.$error.required && $scope.submitted) {
                   findScrollFocus('editForm.meeting');
-                  return;
+                //  return;
                 }
                 if (formData.exp_num_participants.$error.required && $scope.submitted)
                   findScrollFocus('editForm.exp_num_participants');
@@ -390,7 +393,8 @@ console.log($scope.doc.meta);
                   formData.hostOrgs.$error.required = true;
                   if (!$scope.focused)
                     smoothScroll(document.getElementById('hostOrg-error'));
-                  $(document.getElementById('editForm.hostOrgs')).focus();
+                  if(!$scope.focused)
+                      $(document.getElementById('editForm.hostOrgs')).focus();
                   $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
                   $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
                   $(document.getElementById('hostOrgMsg')).css('display', 'block');
@@ -436,7 +440,9 @@ console.log($scope.doc.meta);
             //
             //=======================================================================
             function findScrollFocus(id) {
+
               var el = document.getElementById(id);
+
               if (!$scope.focused) {
 
                 smoothScroll(el);

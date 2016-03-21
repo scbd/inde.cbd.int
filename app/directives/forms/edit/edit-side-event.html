@@ -50,8 +50,8 @@ label{padding-top:5px;}
 
               </div>
               <div class="col-xs-12 col-lg-6" >
-                <div   name="exp_num_participants"  ng-class="{'has-warning': editForm.exp_num_participants.$error.required && submitted, 'has-warning': editForm.exp_num_participants.$error.number}">
-                  <label>Expected Number of Participants</label>
+                <div   name="exp_num_participants"  ng-class="{'has-warning': (editForm.exp_num_participants.$error.required && submitted) || editForm.exp_num_participants.$error.number}">
+                  <label>Expected Number of Participants {{submitted}}</label>
                   <input id="editForm.exp_num_participants" class="form-control" type="number" name="exp_num_participants"  ng-model="doc.expNumPart" placeholder=" " required/>
                   <p ng-show="editForm.exp_num_participants.$error.required && submitted" class="help-block">Number of participants is required.</p>
                   <p  ng-show="editForm.exp_num_participants.$error.number" class="help-block"> Not valid number!</p>
