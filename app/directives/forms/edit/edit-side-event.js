@@ -40,12 +40,11 @@ define(['app', 'lodash',
             var data = {}; //catch for profile data
 
             $scope.$watch('doc.confrence', function() {
-              if ($scope.doc.confrence) {
-                //generateEventId($scope.doc.confrence);
+              if ($scope.doc.confrence)
                 generateDates($scope.doc.confrence);
 
-              }
             });
+
             $scope.$watch('doc.hostOrgs', function() {
               if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
                 //                  $(document.getElementById('editForm.hostOrgs')).removeClass('has-error');
@@ -66,7 +65,6 @@ define(['app', 'lodash',
                   conf.selected = true;
                 else
                   conf.selected = false;
-
               });
 
             }).then($timeout(function() {
@@ -90,7 +88,7 @@ define(['app', 'lodash',
                 plain: true,
                 scope: $scope
               });
-
+console.log($scope.doc.meta);
               dialog.closePromise.then(function(ret) {
 
                 if (ret.value == 'draft') $scope.close();
@@ -114,7 +112,7 @@ define(['app', 'lodash',
                 _.each($scope.doc.hostOrgs, function(org) {
                   mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
 
-                    if (conf.meta.status === 'draft')
+                    if (conf.meta.status !== 'published')
                       mongoStorage.requestDoc('inde-orgs',conf, conf._id);
                   }).catch(function onerror(response) {
                     $scope.onError(response);
@@ -163,7 +161,6 @@ define(['app', 'lodash',
                     $scope._id = document._id;
                     $scope.doc = document;
                     $scope.isNew = false;
-
                   }).catch(function onerror(response) {
 
                     $scope.onError(response);
@@ -190,21 +187,13 @@ define(['app', 'lodash',
 
             } // init
 
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.toTitleCase = function(str) {
-              return str.replace(/\w+/g, function(txt) {
-                return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-              });
-            };
             //============================================================
             //
             //============================================================
             function generateDates() {
 
               mongoStorage.loadDoc('confrences', $scope.doc.confrence).then(function(confr) {
-                $scope.doc.confrenceObj = confr;
+
                 var diff = Number(confr.end) - Number(confr.start);
                 var numDays = Math.ceil(diff / 86400);
                 if (!$scope.options) $scope.options = {};
@@ -213,8 +202,6 @@ define(['app', 'lodash',
                   $scope.options.dates[i] = moment.unix(Number(confr.start)).format("YYYY/MM/DD");
                   confr.start = confr.start + 86400;
                 }
-
-
               }).catch(function onerror(response) {
 
                 $scope.onError(response);
@@ -294,7 +281,6 @@ define(['app', 'lodash',
             //
             //============================================================
             function generateEventId(confId) {
-
               return mongoStorage.generateEventId(confId).then(function(res) {
                 return res;
               }).then(null, function(err) {
@@ -302,14 +288,10 @@ define(['app', 'lodash',
               });
             } // generateEventId
 
-
-
-
             //============================================================
             //
             //============================================================
             $scope.options = {
-
               countries: function() {
                 return $http.get("https://api.cbd.int/api/v2015/countries", {
                   cache: true
@@ -336,14 +318,12 @@ define(['app', 'lodash',
 
             };
 
-
-
             //=======================================================================
             //
             //=======================================================================
             $scope.saveDoc = function() {
               var tempMobile;
-              //  if (!$scope.doc.confrence) throw "Error no confrence selected";
+
               generateEventId().then(
                 function(res) {
                   if (Number(res.data.count) === 0)
@@ -353,15 +333,6 @@ define(['app', 'lodash',
                   else
                     $scope.doc.id = Number(res.data.count) + 1;
 
-                  //marks as request if it is a draft
-                  // _.each($scope.doc.hostOrgs, function(orgId) {
-                  //   mongoStorage.loadDoc('inde-orgs', orgId).then(function(orgObj) {
-                  //     if (orgObj[1].meta.status === 'draft') {
-                  //       orgObj[1].meta.status = 'request';
-                  //       mongoStorage.save('inde-orgs', orgObj[1], orgObj._id);
-                  //     }
-                  //   });
-                  // });
                   mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                     $scope.onError(err);
                   }).catch(function onerror(response) {
@@ -370,13 +341,7 @@ define(['app', 'lodash',
                   });
                 });
             };
-            //=======================================================================
-            //
-            //=======================================================================
-            //  function toTimestamp(dateString){
-            //     var newDate = dateString.split("-");
-            //     return new Date(newDate[0],newDate[1],newDate[2]).getTime();
-            //   }
+
 
             //=======================================================================
             //
@@ -401,10 +366,6 @@ define(['app', 'lodash',
               if (formData.$valid) {
                 $scope.saveDoc();
                 $scope.publishRequestDial();
-              } else {
-                // console.log('formData.meeting.$pristine',formData.meeting.$pristine);
-                // console.log('formData.meeting.$error.required',formData.meeting.$error.required);
-                // console.log('$scope.submitted',$scope.submitted);
 
                 if (formData.meeting.$error.required && $scope.submitted) {
                   findScrollFocus('editForm.meeting');
@@ -469,8 +430,8 @@ define(['app', 'lodash',
 
               $scope.focused = false;
 
-            }; // archiveOrg
-            //SET CURSOR POSITION
+            }; //
+
             //=======================================================================
             //
             //=======================================================================
@@ -488,8 +449,6 @@ define(['app', 'lodash',
                     $(el).find('input').focus();
 
                 }
-
-
                 $scope.focused = true;
               }
             }
