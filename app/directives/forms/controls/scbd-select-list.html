@@ -21,7 +21,7 @@
     <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="doc.selected" style="margin-left:20px;margin-bottom:10px;">
       <img src="{{doc.logo}}" ng-if="doc.logo.length>0" />
       <span ng-if="doc.acronym">{{doc.acronym }}</span>
-      <i class="fa fa-times" ng-click="select(doc)"></i>
+      <i class="fa fa-times" ng-click="select(doc,true)"></i>
     </div>
   </div>
   <div style="margin-left:20px;padding-bottom :3px;" ng-show="!showOrgForm">Showing:

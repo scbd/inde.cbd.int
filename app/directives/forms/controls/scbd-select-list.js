@@ -13,13 +13,15 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		restrict   : 'E',
 		template   : template,
 		//replace    : true,
+    priority:600,
 		transclude : false,
 		scope      : {binding:"=ngModal",
-    items:"=?"
+    showOrgForm:"=?",doc:"=doc"
   },
 		link: function($scope, $element, $attrs) {
 
-          $scope.showOrgForm = false;
+          if(typeof $scope.showOrgForm === 'undefined')
+            $scope.showOrgForm = 0;
 
 					$scope.name = $attrs.name;
 
@@ -39,10 +41,15 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 
           $scope.$watch('showOrgForm',function(){
 
-              $scope.loadList();
+              if(typeof $scope.doc !== 'undefined')
+                $scope.loadList();
 
           },true);
+          $scope.$watch('doc',function(){
+              if(typeof $scope.doc !== 'undefined')
+                $scope.loadList();
 
+          });
           //==================================
 					//
 					//
@@ -96,15 +103,21 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		      //=======================================================================
 		      $scope.loadList = function (){
             $scope.atCapacity=false;
+            var createdByParams ={'meta.status':'published','meta.v':{$ne:0}};
             authentication.getUser().then(function (user) {
 
+              if($scope.doc.meta && $scope.doc.meta.createdBy)
+                createdByParams = {'meta.createdBy':$scope.doc.meta.createdBy,'meta.status':{$in:['draft','request']},'meta.v':{$ne:0}};
               var params = {
                           q:{$or:[{'meta.status':'published','meta.v':{$ne:0}},
-                                  {'meta.createdBy':user.userID,'meta.status':{$in:['draft','request']},'meta.v':{$ne:0}}]
+                                  {'meta.createdBy':user.userID,'meta.status':{$in:['draft','request']},'meta.v':{$ne:0}},
+                                  createdByParams
+                                ]
                             },
                         };
               $http.get('https://api.cbd.int/api/v2015/inde-orgs',{'params':params}).then(function(res){
                         $scope.docs=res.data;
+
                 }).then(function(){setChips();});
               });
 
@@ -114,7 +127,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 					//=======================================================================
 		      //
 		      //=======================================================================
-		      $scope.select = function (docObj){
+		      $scope.select = function (docObj,reload){
 
             docObj.selected=!docObj.selected;
 
@@ -124,6 +137,9 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                 $scope.binding.push(docObj._id);
               else
                 _.remove($scope.binding,function(obj){return obj===docObj._id;});
+
+              if(reload)
+                $scope.loadList();
 		      };// select
 		}
 	};

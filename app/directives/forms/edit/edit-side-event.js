@@ -88,7 +88,7 @@ define(['app', 'lodash',
                 plain: true,
                 scope: $scope
               });
-console.log($scope.doc.meta);
+
               dialog.closePromise.then(function(ret) {
 
                 if (ret.value == 'draft') $scope.close();
@@ -357,7 +357,7 @@ console.log($scope.doc.meta);
             $scope.submitForm = function(formData) {
               $scope.submitted = true;
 
-        console.log('here form valid?',formData.$valid);
+
 
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
