@@ -31,8 +31,10 @@ define(['app','lodash'],function(app,_) {
           if(history.length===1)
             $location.url('/manage');
           else{
-            console.log(_.last(history).from);
-            $location.url(_.last(history).from);
+            if(_.last(history).from.indexOf('/side-events')>-1)
+                $location.url(_.last(history).from.replace('/side-events',''));
+            else
+                $location.url(_.last(history).from);
           }
         }
 
