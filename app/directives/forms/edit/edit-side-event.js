@@ -325,14 +325,14 @@ define(['app', 'lodash',
             $scope.saveDoc = function() {
               var tempMobile;
 
-              if(!$scope.doc.id)
-                    generateEventId().then(
-                      function(res) {
-
-                  if(res.data[0].id)
-                          $scope.doc.id = Number(res.data[0].id) + 1;
-                  else
-                          $scope.doc.id = 1000;
+               if(!$scope.doc.id)
+              //       generateEventId().then(
+              //         function(res) {
+              //
+              //     if(res.data[0].id)
+              //             $scope.doc.id = Number(res.data[0].id) + 1;
+              //     else
+              //             $scope.doc.id = 1000;
 
                         mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                           $scope.onError(err);
@@ -340,7 +340,7 @@ define(['app', 'lodash',
 
                           $scope.onError(response);
                         });
-                      });
+                      // });
                 else
                     mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                       $scope.onError(err);

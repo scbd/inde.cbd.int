@@ -5,11 +5,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         var user;
         authentication.getUser().then(function(u){
           user=u;
-          // if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
-          // {
-          //   deleteTempRecords('inde-orgs');
-          //   deleteTempRecords('inde-side-events');
-          // }
+          if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
+          {
+            deleteTempRecords('inde-orgs');
+          //  deleteTempRecords('inde-side-events');
+          }
 
         });
         var clientOrg = 0; // means cbd
@@ -22,39 +22,60 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         function save (schema,document,_id){
                var url        = '/api/v2015/'+schema;
-               var params     = {};
-               var data       = (document||{});
+               var prevDoc    = _.cloneDeep(document.initialState) || {};
+               var currentDoc = _.cloneDeep(document);
+               var data={};
 
+               var params     = {};
+
+               delete(prevDoc.history);
+               delete(currentDoc.initialState);
                 if(_id){
                     params.id = _id;
                     url=url+'/'+_id;
-                    data.clientOrg = clientOrg;
-                    return touch(data).then(function(){return $http.put(url,data,params);});
+
+
+
+                    return touch(currentDoc).then(function(){
+                      //data=_.cloneDeep(currentDoc);
+                      delete(currentDoc._id);
+                      delete(currentDoc.history);
+                      data=_.cloneDeep(currentDoc);
+                      data.$set  = currentDoc;
+                      data.$push = {"history":prevDoc};
+                      return $http.patch(url,data,params);});
 
                 }
                 else{
-                    data.clientOrg=clientOrg;
-                    return touch(data).then(function(){return $http.post(url,data,params);});
+
+                    return touch(currentDoc).then(function(){
+                      return $http.post(url,currentDoc,params).then(function(res){
+                        currentDoc.initialState=data;
+                        delete(currentDoc.initialState.history);
+                        return res;
+                      });
+                    });
+
                 }  //create
         }
 
 
-        // //============================================================
-        // //
-        // //============================================================
-        // function deleteTempRecords(schema) {
+        //============================================================
         //
-        //     var params = {
-        //                     q:{'meta.v':0},
-        //                     cache:false
-        //                   };
-        //     $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
-        //           _.each(res.data,function(obj){
-        //                 $http.delete('/api/v2015/'+schema+'/'+obj._id);
-        //           });
-        //     });
-        //
-        // }
+        //============================================================
+        function deleteTempRecords(schema) {
+
+            var params = {
+                            q:{'meta.v':0},
+                            cache:false
+                          };
+            $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
+                  _.each(res.data,function(obj){
+                        $http.delete('/api/v2015/'+schema+'/'+obj._id);
+                  });
+            });
+
+        }
 
         //============================================================
         //
@@ -69,8 +90,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                    .then(
 
                         function(response){
-                            if(!_.isEmpty(response.data))
+                            if(!_.isEmpty(response.data)){
+                                response.data.initialState=_.cloneDeep(response.data);
+                                delete(response.data.initialState.history);
                                 return  response.data;
+                            }
                             else
                               return false;
                         }
@@ -155,7 +179,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                         locales:[_.clone(locale)],
                         v:-1,
                         status: 'draft'
-                      }
+                      },
+                      clientOrg:clientOrg
                   };
 
               return save(schema,obj).then(function(res){
@@ -167,7 +192,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function archiveDoc(schema,docObj,_id){
-
+              docObj.document.initialState=_.cloneDeep(docObj.document);
               docObj.meta.status='archived';
               return save(schema,docObj,_id);
         }
@@ -175,7 +200,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function requestDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='request';
               return save(schema,docObj,_id);
         }
@@ -183,7 +209,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function approveDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='published';
               return save(schema,docObj,_id);
         }
@@ -191,7 +218,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function cancelDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='canceled';
               return save(schema,docObj,_id);
         }
@@ -199,7 +227,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function rejectDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='rejected';
               return save(schema,docObj,_id);
         }
@@ -207,7 +236,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function deleteDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='deleted';
               return save(schema,docObj,_id);
         }
@@ -216,7 +246,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function unArchiveDoc(schema,docObj,_id){
-
+              docObj.initialState=_.cloneDeep(docObj.document);
+              delete(docObj.initialState.history);
               docObj.meta.status='draft';
               return save(schema,docObj,_id);
         }
@@ -311,7 +342,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
               if(!user.userID) throw "Error no userID to touch record";
               if(!doc.meta) throw "Error mongo document contains no meta data";
-
+              if(!doc.clinetOrg)doc.clientOrg=clientOrg;
               if(!doc.meta.status) doc.meta.status='draft';
 
               if(!doc.meta.createdBy && !doc.meta.createdOn){

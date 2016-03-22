@@ -56,7 +56,7 @@ label{padding-top:5px;}
               </div>
               <div class="col-xs-12 col-lg-6" >
                 <div   name="exp_num_participants"  ng-class="{'has-warning': (editForm.exp_num_participants.$error.required && submitted) || editForm.exp_num_participants.$error.number}">
-                  <label>Expected Number of Participants {{submitted}}</label>
+                  <label>Expected Number of Participants</label>
                   <input id="editForm.exp_num_participants" class="form-control" type="number" name="exp_num_participants"  ng-model="doc.expNumPart" placeholder=" " required/>
                   <p ng-show="editForm.exp_num_participants.$error.required && submitted" class="help-block">Number of participants is required.</p>
                   <p  ng-show="editForm.exp_num_participants.$error.number" class="help-block"> Not valid number!</p>
@@ -162,56 +162,63 @@ label{padding-top:5px;}
 
 
             <div class="row" style="margin-bottom:15px;">
-                <div class="col-lg-6 col-xs-12">
-                  <div class=" col-md-12 col-xs-12">
+
+                  <div class=" col-md-6 col-xs-12">
                   <div >
                     <label for="address">Address</label>
                     <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
                   </div>
                 </div>
 
-                  <div class="col-xs-12 col-lg-12">
-                    <div   ng-class="{'has-warning': editForm.email.$error.required && submitted}">
-                      <label>Email</label>
-                      <input id="editForm.email" class="form-control" name="email" type="email" ng-model="doc.contact.email" placeholder=" " required/>
-
-                      <p ng-show="editForm.email.$error.required && submitted" class="help-block">Email is required.</p>
-                    </div>
+                <div class="col-lg-3 col-xs-12">
+                  <div class="form-group">
+                    <div   ng-class="{'has-warning': editForm.city.$error.required && submitted}">
+                      <label>City</label>
+                    <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
+                    <p ng-show="editForm.city.$error.required && submitted" class="help-block">City is required.</p>
                   </div>
+                </div>
+              </div>
+
+
+              <div class="col-lg-3 col-xs-12">
+                <div class="form-group">
+                  <label for="state">State / Province / Region</label>
+                  <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
+                </div>
+              </div>
+
 
 
                 </div>
-              <div class="col-lg-6 col-xs-12">
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <div   ng-class="{'has-warning': editForm.city.$error.required && submitted}">
-                        <label>City</label>
-                      <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
-                      <p ng-show="editForm.city.$error.required && submitted" class="help-block">City is required.</p>
-                    </div>
-                  </div>
-                </div>
+<div class="row">
 
-                  <div class="col-lg-6">
-                    <div class="form-group">
-                      <label for="state">State / Province / Region</label>
-                      <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
-                    </div>
-                  </div>
-                  <div class="col-xs-12 col-md-6">
+  <div class="col-xs-12 col-lg-6">
+    <div   ng-class="{'has-warning': editForm.email.$error.required && submitted}">
+      <label>Email</label>
+      <input id="editForm.email" class="form-control" name="email" type="email" ng-model="doc.contact.email" placeholder=" " required/>
+
+      <p ng-show="editForm.email.$error.required && submitted" class="help-block">Email is required.</p>
+    </div>
+  </div>
+
+
+
+
+                  <div class="col-xs-12 col-lg-3">
                     <div class="form-group">
                       <label for="zip">Postal / Zip code</label>
                       <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip"/>
                     </div>
                   </div>
-                  <div class=" col-md-6 col-xs-12" >
+                  <div class=" col-lg-3 col-xs-12" >
                     <div   ng-class="{'has-warning': editForm.country.$error.required && submitted}">
                       <div><label>Country</label></div>
                       <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries()" required></div>
                       <p ng-show="editForm.country.$error.required && submitted" class="help-block">Country is required.</p>
                     </div>
                   </div>
-              </div>
+
           </div>
       <legend class="container-subheader">
         <h2>Preferred Date and Time {{prefDate}}</h2>
