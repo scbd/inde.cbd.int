@@ -278,13 +278,18 @@ define(['app', 'lodash',
                   });
                 }).then(function(){
                    var srch = $location.search();
-                        if(srch)
+
+                        if(!_.isEmpty(srch)){
                            if(srch.chip==='archived'){
                                $scope.showArchived=!$scope.showArchived;
                                mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
                                archiveList().then(function(){selectChip(srch.chip);});
                            }else
                             selectChip(srch.chip);
+                        }else {
+
+                          selectChip('all');
+                        }
                });
               }; // archiveOrg
 

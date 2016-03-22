@@ -27,8 +27,9 @@ define(['app','lodash'],function(app,_) {
         //
         //============================================================
         function goBack() {
+
           if(history.length===1)
-            $location.url('/manage/events');
+            $location.url('/manage');
           else
             $location.url(_.last(history).from);
         }

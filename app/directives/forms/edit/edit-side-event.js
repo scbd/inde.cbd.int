@@ -211,7 +211,7 @@ define(['app', 'lodash',
               _.each($scope.options.confrences, function(conf) {
                 if (conf._id === $scope.doc.confrence)
                   conf.selected = true;
-              })
+              });
 
             } // init
 
