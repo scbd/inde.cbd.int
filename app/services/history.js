@@ -30,8 +30,10 @@ define(['app','lodash'],function(app,_) {
 
           if(history.length===1)
             $location.url('/manage');
-          else
+          else{
+            console.log(_.last(history).from);
             $location.url(_.last(history).from);
+          }
         }
 
         //============================================================
