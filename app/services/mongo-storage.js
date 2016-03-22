@@ -62,14 +62,15 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         function loadDoc (schema,_id){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument";
-            var params = {
-                          q:{_id:{$oid:_id}}
-                        };
-            return $q.when( $http.get('/api/v2015/'+schema,{'params':params}))//}&f={"document":1}'))
+            // var params = {
+            //               q:{_id:{$oid:_id}}
+            //             };
+            return $q.when( $http.get('/api/v2015/'+schema+'/'+_id))//}&f={"document":1}'))
                    .then(
+
                         function(response){
-                            if(response.data.length)
-                                return  response.data[0];
+                            if(!_.isEmpty(response.data))
+                                return  response.data;
                             else
                               return false;
                         }
