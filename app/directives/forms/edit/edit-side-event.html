@@ -255,12 +255,12 @@
         <div class="col-md-4 col-xs-12">
           <div ng-class="{'has-warning': editForm.prefDateTwo.$error.required && submitted,'has-warning': editForm.prefTimeTwo.$error.required && submitted }">
             <label>Second Choice</label>
-            <select ng-show="doc.prefDate.two" id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
+            <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Date</option>
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
             <p ng-show="editForm.prefDateTwo.$error.required && submitted" class="help-block">Second choice date required.</p>
-            <select ng-show="doc.prefDate.three" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
+            <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
@@ -276,7 +276,7 @@
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
             <p ng-show="editForm.prefDateThree.$error.required && submitted" class="help-block">Third choice date required.</p>
-            <select id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates" required>
+            <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
