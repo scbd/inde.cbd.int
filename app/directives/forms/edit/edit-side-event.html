@@ -1,15 +1,16 @@
-
 <div>
 
-<style>
-.has-warning-div{
+  <style>
+    .has-warning-div {
+      border-style: solid;
+      border-width: 1px;
+      border-color: #8a6d3b;
+    }
 
-  border-style: solid;
-  border-width: 1px;
-  border-color:#8a6d3b;
-}
-label{padding-top:5px;}
-</style>
+    label {
+      padding-top: 5px;
+    }
+  </style>
 
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
@@ -28,14 +29,14 @@ label{padding-top:5px;}
 
 
 
-  <form name="editForm"  style="margin-top:10px" ng-submit="submitForm(editForm)" novalidate>
+  <form name="editForm" style="margin-top:10px" ng-submit="submitForm(editForm)" novalidate>
     <legend class="container-subheader">
       <h2>General Information</h2>
     </legend>
-<div></div>
+    <div></div>
     <div ng-show="registerAlert" class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
-      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting.  Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.</strong>
+      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.</strong>
     </div>
 
     <div class="row">
@@ -77,11 +78,11 @@ label{padding-top:5px;}
                   </div>
                 </div>
 
-{{doc.subjects}}
                 <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
-                  <div    name="subjects"  ng-class="{'has-warning': editForm.subjects.$error.required && submitted}">
+                  <div    id="editForm.subjects" name="subjects"  ng-class="{'has-warning': editForm.subjects.$error.required && submitted}">
                     					<div class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
                 									<div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]"></div>
+                      <p ng-show="editForm.subjects.$error.required && submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
                                 </div>
                             </div>
                     </div>
@@ -99,12 +100,12 @@ label{padding-top:5px;}
 
 
 
-      <div id="hostOrg-error" ng-class="{'has-warning': editForm.hostOrgs.$error.required && submitted}">
+      <div id="hostOrg-error" ng-class="{'has-warning': editForm.hostOrgs.error.required && submitted}">
           <legend class="container-subheader">
             <h2>Organization(s)</h2>
           </legend>
 
-                <p id="hostOrgMsg" ng-show="editForm.hostOrgs.$error.required && submitted" class="help-block">At least one organization is required is required.</p>
+                <p id="hostOrgMsg" ng-show="editForm.hostOrgs.error.required && submitted" class="help-block">At least one organization is required is required.</p>
 
           <div class="row">
 
@@ -243,7 +244,7 @@ label{padding-top:5px;}
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
             <p ng-show="editForm.prefDateOne.$error.required && submitted" class="help-block">First Choice Date required.</p>
-            <select id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates" required>
+            <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
@@ -254,12 +255,12 @@ label{padding-top:5px;}
         <div class="col-md-4 col-xs-12">
           <div ng-class="{'has-warning': editForm.prefDateTwo.$error.required && submitted,'has-warning': editForm.prefTimeTwo.$error.required && submitted }">
             <label>Second Choice</label>
-            <select id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
+            <select ng-show="doc.prefDate.two" id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Date</option>
               <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
             </select>
             <p ng-show="editForm.prefDateTwo.$error.required && submitted" class="help-block">Second choice date required.</p>
-            <select id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
+            <select ng-show="doc.prefDate.three" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
               <option value="" selected>Select a Time</option>
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>

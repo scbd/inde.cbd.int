@@ -2,9 +2,7 @@
   <div class="col-xs-12" ng-show="!showOrgForm">
     <label>Select/Search for the host organization(s) and/or create a new one:</label>
   </div>
-  <div class="col-xs-6  col-md-6" ng-show="!showOrgForm">
-    <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus"></i> Create Organization</button>
-  </div>
+
   <div class="col-xs-10  col-md-6" ng-show="!showOrgForm">
     <div class="form-group">
       <div class="input-group input-group-sm" style="margin-bottom:2px; padding-left: 0px;">
@@ -15,12 +13,16 @@
       </div>
     </div>
   </div>
+
+  <div class="col-xs-6  col-md-6" ng-show="!showOrgForm">
+    <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus"></i> Create Organization</button>
+  </div>
 </div>
 <div>
   <div ng-show="!showOrgForm">
     <div class="chip" ng-repeat="doc in docs | filter:{selected:true}" ng-show="doc.selected" style="margin-left:20px;margin-bottom:10px;">
       <img src="{{doc.logo}}" ng-if="doc.logo.length>0" />
-      <span ng-if="doc.acronym">{{doc.acronym }}</span>
+      <span ng-if="doc.acronym">{{doc.acronym}}</span>
       <i class="fa fa-times" ng-click="select(doc,true)"></i>
     </div>
   </div>

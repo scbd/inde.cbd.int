@@ -40,7 +40,7 @@ define(['app', 'lodash',
             $scope.doc = {};
             $scope.doc.hostOrgs = [];
             $scope.updateProfile = 'No';
-            $scope.cloaseWithoutSaving=false;
+            $scope.ignoreDirtyCheck=false;
             var data = {}; //catch for profile data
 
             $scope.$watch('doc.confrence', function() {
@@ -55,6 +55,8 @@ define(['app', 'lodash',
                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
                 $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
+                //$timeout(function () {if()$scope.editForm.hostOrgs.$error.required = false;});
+
               }
             }, true);
 
@@ -83,12 +85,12 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            $scope.$on('$locationChangeStart', function( event ) { console.log(' ');
-                    // if($scope.editForm.$dirty){
-                    // var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
-                    //    if (!answer)
-                    //       event.preventDefault();
-                    // }
+            $scope.$on('$locationChangeStart', function( event ) {
+                    if($scope.editForm.$dirty && !$scope.ignoreDirtyCheck){
+                    var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
+                       if (!answer)
+                          event.preventDefault();
+                    }
               // if($scope.editForm.$dirty && !$scope.cloaseWithoutSaving){
               //
               //   var dialog = ngDialog.open({
@@ -122,7 +124,7 @@ define(['app', 'lodash',
                 plain: true,
                 scope: $scope
               });
-
+              $scope.ignoreDirtyCheck=true;
               dialog.closePromise.then(function(ret) {
 
                 if (ret.value == 'draft') $scope.close();
@@ -140,7 +142,7 @@ define(['app', 'lodash',
             //============================================================
             $scope.requestPublish = function() {
               //dialogTemplate = $compile(dialogTemplate,$scope);
-
+              $scope.ignoreDirtyCheck=true;
               $scope.doc.meta.status = 'request';
               return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                 _.each($scope.doc.hostOrgs, function(org) {
@@ -399,7 +401,7 @@ define(['app', 'lodash',
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
               }
-
+console.log('formData.$valid',formData.$valid);
               if (formData.$valid) {
                 $scope.saveDoc();
                 $scope.publishRequestDial();
@@ -423,11 +425,13 @@ define(['app', 'lodash',
                 if (formData.description.$error.required && $scope.submitted)
                   findScrollFocus('editForm.description');
 
+                  if (formData.subjects.$error.required && $scope.submitted)
+                    findScrollFocus('editForm.subjects');
 
                 if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                   formData.hostOrgs = {};
-                  formData.hostOrgs.$error = {};
-                  formData.hostOrgs.$error.required = true;
+                  formData.hostOrgs.error = {};
+                  formData.hostOrgs.error.required = true;
                   if (!$scope.focused)
                     smoothScroll(document.getElementById('hostOrg-error'));
                   if(!$scope.focused)
