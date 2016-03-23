@@ -8,7 +8,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
           {
             deleteTempRecords('inde-orgs');
-          //  deleteTempRecords('inde-side-events');
+            deleteTempRecords('inde-side-events');
           }
 
         });
@@ -116,6 +116,22 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //============================================================
         //
         //============================================================
+        function loadOwnerArchives (schema){
+          //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
+            if(!schema) throw "Error: failed to indicate schema loadArchives";
+            $q.when( authentication.getUser().then(function(u){
+                      user=u;
+                    }).then( function(){
+                        var params = {
+                                      q:{'meta.status':'archived', 'meta.createdBy':user.userID,},
+
+                                    };
+                        return $q.when( $http.get('/api/v2015/'+schema,{'params':params}));
+                    }));
+        }
+        //============================================================
+        //
+        //============================================================
         function loadDocs (schema,status){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
 
@@ -192,7 +208,9 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //=======================================================================
         function archiveDoc(schema,docObj,_id){
-              docObj.document.initialState=_.cloneDeep(docObj.document);
+              docObj.initialState=_.cloneDeep(docObj.document);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='archived';
               return save(schema,docObj,_id);
         }
@@ -201,7 +219,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function requestDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='request';
               return save(schema,docObj,_id);
         }
@@ -210,7 +229,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function approveDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='published';
               return save(schema,docObj,_id);
         }
@@ -219,7 +239,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function cancelDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='canceled';
               return save(schema,docObj,_id);
         }
@@ -228,7 +249,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function rejectDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='rejected';
               return save(schema,docObj,_id);
         }
@@ -237,7 +259,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function deleteDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='deleted';
               return save(schema,docObj,_id);
         }
@@ -247,7 +270,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //=======================================================================
         function unArchiveDoc(schema,docObj,_id){
               docObj.initialState=_.cloneDeep(docObj.document);
-              delete(docObj.initialState.history);
+              if(docObj.initialState)
+                delete(docObj.initialState.history);
               docObj.meta.status='draft';
               return save(schema,docObj,_id);
         }
