@@ -83,12 +83,12 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            $scope.$on('$locationChangeStart', function( event ) {
-                    if($scope.editForm.$dirty){
-                    var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
-                       if (!answer)
-                          event.preventDefault();
-                    }
+            $scope.$on('$locationChangeStart', function( event ) { console.log(' ');
+                    // if($scope.editForm.$dirty){
+                    // var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
+                    //    if (!answer)
+                    //       event.preventDefault();
+                    // }
               // if($scope.editForm.$dirty && !$scope.cloaseWithoutSaving){
               //
               //   var dialog = ngDialog.open({

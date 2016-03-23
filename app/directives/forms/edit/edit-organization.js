@@ -74,7 +74,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               $scope.saveDoc = function(){
-                  scope.doc.meta.status='draft';
+                  $scope.doc.meta.status='draft';
                   mongoStorage.save('inde-orgs',$scope.doc,$scope._id).then(function(res){
 
                           if($scope.isInForm){
