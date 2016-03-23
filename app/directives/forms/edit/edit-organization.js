@@ -1,13 +1,10 @@
 define(['app', 'lodash',
     'text!./edit-organization.html',
     'text!directives/forms/edit/publish-dialog-org.html',
-    'scbd-angularjs-controls/km-inputtext-ml',
+
     'scbd-angularjs-controls/km-control-group',
     'css!libs/ng-dialog/css/ngDialog.css',
     'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
-    'scbd-angularjs-controls/km-select',
-    'scbd-angularjs-controls/km-form-languages',
-    'scbd-angularjs-controls/km-inputtext-list',
     '../../../services/mongo-storage',
     '../controls/scbd-file-upload'
 ], function(app, _,template,dailogTemp) { //'scbd-services/utilities',
@@ -77,7 +74,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               $scope.saveDoc = function(){
-
+                  scope.doc.meta.status='draft';
                   mongoStorage.save('inde-orgs',$scope.doc,$scope._id).then(function(res){
 
                           if($scope.isInForm){

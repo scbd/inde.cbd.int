@@ -76,7 +76,17 @@ label{padding-top:5px;}
                   <p ng-show="editForm.description.$error.required && submitted" class="help-block">Description is required.</p>
                   </div>
                 </div>
-        </div>
+
+{{doc.subjects}}
+                <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
+                  <div    name="subjects"  ng-class="{'has-warning': editForm.subjects.$error.required && submitted}">
+                    					<div class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
+                									<div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]"></div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
       </div>
         <div class="col-xs-12 col-lg-4" >
           <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon (Not Org. Logo)">
@@ -115,7 +125,7 @@ label{padding-top:5px;}
 
         <div class="col-md-4 col-xs-12">
           <div   name="personalTitle" caption="Personal Title">
-            <label>Personal Title</label>
+            <label>Salutation</label>
             <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" "/>
           </div>
         </div>

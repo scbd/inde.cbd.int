@@ -5,19 +5,21 @@ define(['app', 'lodash',
   'css!libs/ng-dialog/css/ngDialog.css',
   'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   '../../side-menu/scbd-side-menu',
-  'scbd-angularjs-controls/km-inputtext-ml',
-  'scbd-angularjs-controls/km-control-group',
-  'scbd-angularjs-controls/km-date',
+  // 'scbd-angularjs-controls/km-inputtext-ml',
+  // 'scbd-angularjs-controls/km-control-group',
+  // 'scbd-angularjs-controls/km-date',
 
-  'scbd-angularjs-controls/km-inputtext-list',
+'directives/km-select',
+  // 'scbd-angularjs-controls/km-inputtext-list',
   '../controls/scbd-select-list',
   '../../../services/mongo-storage',
   '../controls/scbd-file-upload',
-  './edit-organization'
+  './edit-organization',
+  'app/services/theasarus.js'
 ], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
 
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', //"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus', //"$http", "$filter", "Thesaurus",
+    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
       return {
         restrict: 'E',
         template: template,
@@ -293,6 +295,7 @@ define(['app', 'lodash',
             //
             //============================================================
             $scope.options = {
+              subjects		: $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms",								{ cache: true }).then(function(o){ return Thesaurus.buildTree(o.data); }),
               countries: function() {
                 return $http.get("https://api.cbd.int/api/v2015/countries", {
                   cache: true
@@ -324,15 +327,9 @@ define(['app', 'lodash',
             //=======================================================================
             $scope.saveDoc = function() {
               var tempMobile;
+                $scope.doc.meta.status='draft';
+               if(!$scope.doc.id){
 
-               if(!$scope.doc.id)
-              //       generateEventId().then(
-              //         function(res) {
-              //
-              //     if(res.data[0].id)
-              //             $scope.doc.id = Number(res.data[0].id) + 1;
-              //     else
-              //             $scope.doc.id = 1000;
 
                         mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                           $scope.onError(err);
@@ -341,6 +338,7 @@ define(['app', 'lodash',
                           $scope.onError(response);
                         });
                       // });
+                }
                 else
                     mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                       $scope.onError(err);
