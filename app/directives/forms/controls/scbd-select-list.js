@@ -97,7 +97,14 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
             $scope.sOpen=!$scope.sOpen;
             $scope.search='';
           };// archiveOrg
-
+          //=======================================================================
+          //
+          //=======================================================================
+          $scope.noEnter= function (event){
+            if(event.keyCode === 13) {   // '13' is the key code for enter
+                event.preventDefault();
+            }
+          };// archiveOrg
           //=======================================================================
 		      //
 		      //=======================================================================
