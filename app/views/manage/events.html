@@ -24,7 +24,7 @@
         <h1>Options</h1>
       </div>
     </scbd-side-menu>
-    <div class="container-header-name hidden-lg hidden-xl">Your <span ng-if="showArchived">Archived</span> Side Events</h1></span></div>
+    <div class="container-header-name visible-xs">Your <span ng-if="showArchived">Archived</span> Side Events</h1></span></div>
     <div class="list-container" >
 
         <div class="container-header">
@@ -38,7 +38,9 @@
           </div>
 
 
-        <span class="container-header-name hidden-md hidden-sm hidden-xs" ><h1 style="display:inline;">Your <span ng-if="showArchived">Archived</span> Side Events</h1></span>
+        <span class="container-header-name  hidden-xs" ><h1 style="display:inline;">Your <span ng-if="showArchived">Archived</span> Side Events</h1></span>
+        <!-- <span class="container-header-name  vissible-xs" ><h2 style="display:inline;background-color:#fff;">Your <span ng-if="showArchived">Archived</span> Side Events</h2></span> -->
+
         <div class=" pull-right" >
           <button data-toggle="tooltip" title="Options"  class="btn btn-default btn-sm" ng-click="toggle('options');"><i class="fa fa-ellipsis-h"></i></button>
         </div>

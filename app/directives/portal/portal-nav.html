@@ -1,6 +1,6 @@
 <div ng-cloak>
   <!-- mobil menu -->
-  <div class="row portal-nav-mobi portal-branding center hidden-lg hidden-xl" ng-class="portalMobiNavClass" ng-cloak>
+  <div class="row portal-nav-mobi portal-branding center visible-xs" ng-class="portalMobiNavClass" ng-cloak>
     <div class="btn-group ">
       <button id="home-sm" class="btn btn-default  btn-sm " ng-click="goTo('/');setActivePath();">Side Events</button>
       <button id="request-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage/events/new');setActivePath();">Register a S.E.</button>
@@ -8,12 +8,12 @@
       <button id="admin-sm" class="btn btn-default btn-sm " ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</button>
     </div>
   </div>
-  <div class="row portal-nav-mobi-filler hidden-lg hidden-xl" ng-cloak>
+  <div class="row portal-nav-mobi-filler visible-xs" ng-cloak>
   </div>
 
   <!-- large menu -->
   <div ng-cloak>
-    <section class="lg-menu  hidden-md hidden-sm hidden-xs">
+    <section class="lg-menu  hidden-xs">
       <span class="cl-effect-14">
         <a id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
         <a id="request" ng-click="goTo('/manage/events/new');setActivePath();">Register a Side Event</a>
