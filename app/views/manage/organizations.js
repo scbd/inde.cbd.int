@@ -210,7 +210,7 @@ define(['app', 'lodash',
       //
       //=======================================================================
       function archiveList() {
-        return mongoStorage.loadArchives($scope.schema).then(function(response) {
+        return mongoStorage.loadOwnerArchives($scope.schema).then(function(response) {
           $scope.docs = response.data;
           registerToolTip();
         });

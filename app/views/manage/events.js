@@ -206,7 +206,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               function archiveList() {
-                return mongoStorage.loadArchives($scope.schema).then(function(response) {
+                return mongoStorage.loadOwnerArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
                           mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
