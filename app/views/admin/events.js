@@ -171,7 +171,7 @@ define(['app', 'lodash',
 
               dialog.closePromise.then(function(ret) {
                 if (ret.value === 'no') $scope.close();
-                if (ret.value === 'yes') $scope.deleteDoc(doc).then($scope.close);
+                if (ret.value === 'yes') $scope.deleteDoc(doc);
               });
             };
             //=======================================================================
