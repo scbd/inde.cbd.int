@@ -90,7 +90,7 @@
   <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none" onload="(event.target || event.srcElement).ready = true"></iframe>
 
     <!-- HEADER (MOBILE) -->
-    <header class="mobile navbar visible-xs" role="banner">
+    <header class="mobile navbar visible-xs " role="banner">
         <div class="container">
 
             <div class="navbar-header">
@@ -139,7 +139,7 @@
     </header>
 
     <!-- HEADER (LARGE) -->
-    <header class="large hidden-xs">
+    <header class="large hidden-xs  ">
         <div class="container whitebg">
             <div>
 
@@ -250,6 +250,18 @@
     </footer>
 
     <div growl></div>
+
+
+    <!-- Slaask. need to be placed just before require.JS script tag -->
+    <script src="https://cdn.slaask.com/chat.js"></script>
+    <script>
+        //patch slaask to works with requireJS
+        window._slaask.createScriptTag = function (url) {
+            var t = {};
+            require([url], function() { t.onload(); });
+            return t;
+        };
+    </script>
 
     <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
