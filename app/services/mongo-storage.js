@@ -434,7 +434,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           archiveDoc:archiveDoc,
           loadArchives:loadArchives,
           loadDocs:loadDocs,
-          unArchiveDoc:unArchiveDoc
+          unArchiveDoc:unArchiveDoc,
+          loadOwnerArchives:loadOwnerArchives
         };
 }]);
 
