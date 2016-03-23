@@ -51,11 +51,11 @@ define(['app', 'lodash',
 
             $scope.$watch('doc.hostOrgs', function() {
               if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
-                //                  $(document.getElementById('editForm.hostOrgs')).removeClass('has-error');
+
                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
                 $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
-                //$timeout(function () {if()$scope.editForm.hostOrgs.$error.required = false;});
+
 
               }
             }, true);
@@ -401,7 +401,7 @@ define(['app', 'lodash',
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
               }
-console.log('formData.$valid',formData.$valid);
+
               if (formData.$valid) {
                 $scope.saveDoc();
                 $scope.publishRequestDial();
@@ -429,9 +429,7 @@ console.log('formData.$valid',formData.$valid);
                     findScrollFocus('editForm.subjects');
 
                 if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
-                  formData.hostOrgs = {};
-                  formData.hostOrgs.error = {};
-                  formData.hostOrgs.error.required = true;
+
                   if (!$scope.focused)
                     smoothScroll(document.getElementById('hostOrg-error'));
                   if(!$scope.focused)
