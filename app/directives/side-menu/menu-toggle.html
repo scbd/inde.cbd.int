@@ -5,7 +5,7 @@
   <i class="material-icons" ng-if="section.mdIcon"  style="font-size:1rem;">{{section.mdIcon}}</i>
   <img ng-src="{{section.imgSrc}}" style="height:26px;padding-top:3px;" ng-if="section.imgSrc"></img>
   <span style="padding-left:10px;position:absolute;left:25px;bottom:-1px;" >{{section.name}}</span>
-  <scbd-icon-button class="right" style="position:absolute;right:8px;top:2px;font-size:1rem;" type="fa" icon-name="fa-plus"  to-icon-name="fa-times" ani="tada" active="section.open" ></scbd-icon-button>
+  <scbd-icon-button class="right" style="position:absolute;right:8px;top:2px;font-size:1rem;" type="fa" icon-name="fa-plus"  to-icon-name="fa-times" ani="tada" active="!section.open" ></scbd-icon-button>
 </button>
 
 <div id="side-menu-{{section.name}}" ng-repeat="page in section.pages" style="color:{{childrenColor}};background-color:{{childrenBackGround}};padding-left:20px;" class="menu-toggle-list" ng-show="section.open">
