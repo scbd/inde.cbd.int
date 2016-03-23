@@ -63,7 +63,7 @@ background-color: #f5f5f5;
                 <span class="title">Published</span>
                 <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published}}</span>
               </div>
-              <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/admin/events','chip=requests',facets.request)">
+              <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/admin/events','chip=request',facets.request)">
                 <span class="title">Requests</span>
                 <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request}}</span>
               </div>
@@ -112,7 +112,7 @@ background-color: #f5f5f5;
                   <span class="title">Published</span>
                   <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published}}</span>
                 </div>
-                <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/admin/organizations','chip=requests',facetsO.request)">
+                <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/admin/organizations','chip=request',facetsO.request)">
                   <span class="title">Requests</span>
                   <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request}}</span>
                 </div>
