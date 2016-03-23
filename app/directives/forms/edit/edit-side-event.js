@@ -2,6 +2,7 @@ define(['app', 'lodash',
   'text!./edit-side-event.html',
   'moment',
   'text!directives/forms/edit/publish-dialog.html',
+  'text!directives/forms/edit/dirty-form.html',
   'css!libs/ng-dialog/css/ngDialog.css',
   'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   '../../side-menu/scbd-side-menu',
@@ -16,7 +17,7 @@ define(['app', 'lodash',
   '../controls/scbd-file-upload',
   './edit-organization',
   'app/services/theasarus.js'
-], function(app, _, template, moment, dialogTemplate) { //'scbd-services/utilities',
+], function(app, _, template, moment, dialogTemplate,dirtyDialog) { //'scbd-services/utilities',
 
   app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus', //"$http", "$filter", "Thesaurus",
     function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
@@ -39,7 +40,7 @@ define(['app', 'lodash',
             $scope.doc = {};
             $scope.doc.hostOrgs = [];
             $scope.updateProfile = 'No';
-
+            $scope.cloaseWithoutSaving=false;
             var data = {}; //catch for profile data
 
             $scope.$watch('doc.confrence', function() {
@@ -79,6 +80,36 @@ define(['app', 'lodash',
             });
 
             init();
+            //============================================================
+            //
+            //============================================================
+            $scope.$on('$locationChangeStart', function( event ) {
+                    if($scope.editForm.$dirty){
+                    var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
+                       if (!answer)
+                          event.preventDefault();
+                    }
+              // if($scope.editForm.$dirty && !$scope.cloaseWithoutSaving){
+              //
+              //   var dialog = ngDialog.open({
+              //     template: dirtyDialog,
+              //     className: 'ngdialog-theme-default',
+              //     closeByDocument: false,
+              //     plain: true,
+              //     scope: $scope
+              //   });
+              //
+              //   dialog.closePromise.then(function(ret) {
+              //
+              //     if (ret.value == 'close') {$scope.cloaseWithoutSaving=true;$scope.close();}
+              //     if (ret.value == 'save') $scope.saveDoc().then($scope.close).catch(function onerror(response) {
+              //       $scope.onError(response);
+              //     });
+              //
+              //   });
+              // }
+
+            });
             //============================================================
             //
             //============================================================
