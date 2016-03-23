@@ -1,0 +1,59 @@
+<span>
+<style>
+.notifications table, th, td {
+    border-bottom: none;
+}
+</style>
+	<script type="text/ng-template"  id="select-tree-renderer.html">
+		<a ng-click="clicked(item)" href="">{{item.title||item.name | lstring:locale | truncate:120:'...'}}</a>
+		<i class="fa fa-check" ng-show="item.selected" style="position:absolute;top:5px;left:-19px;"></i>
+		<ul class="dropdown-inline-submenu">
+			<li ng:repeat="item in item.children" ng-include="'select-tree-renderer.html'" style="position:relative">
+		</ul>
+	</script>
+
+
+	<div ng-show="error">
+		<div class="alert alert-warning">
+			{{error}}
+		</div>
+	</div>
+
+	<span>
+		<div class="btn-group" >
+			<button type="button" class="btn btn-info dropdown-toggle" ng-click="autoInit()" ng-class="{'btn-default' : !selectedItems.length }" data-toggle="dropdown">
+				{{getTitle(displayCount, true)}} {{selectedItems.length }}
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" style="list-style-type:none;decoration:none;max-height:400px;overflow-y:auto;text-align:left">
+				<li ng-hide="!!rootItems">
+					<a href><em>Loading...</em></a>
+				</li>
+				<li ng-show="rootItems.length==0">
+					<a href><em>Nothing to select...</em></a>
+				</li>
+				<li ng-show="!!rootItems && (getMinimum()==0 || allowOther == 'true')" style="padding:2px 20px">
+					<button class="btn btn-xs btn-default" ng-show="getMinimum()==0 && (selectedItems.length || rootItems.length!=0)"      type ="button" ng-click="clearSelection()" ng-disabled="!selectedItems.length">Clear selection</button>
+					<button class="btn btn-xs btn-default" ng-show="allowOther == 'true'" type="button" ng-click="chooseOther()"    ng-show="allowOther">Specify another value</button>
+				</li>
+				<li ng:repeat="item in rootItems" ng-class="{disabled:!itemEnabled(item)}" ng-include="'select-tree-renderer.html'" style="position:relative">
+				</li>
+			</ul>
+		</div>
+
+	</span>
+
+	<ul class="list-group" ng-if="selectedItems.length && list" style="margin-top:10px">
+		<li class="list-group-item" ng-repeat="item in selectedItems">
+			<table style="width:100%">
+				<tr>
+					<td>{{item.title | lstring}}</td>
+					<td style="white-space:nowrap;text-align:right;vertical-align:top">
+						<button type="button" class="btn btn-default" ng-click="clicked(item)"><i class="fa fa-trash-o"></i></button>
+					</td>
+				</tr>
+			</table>
+		</li>
+	</ul>
+
+</span>

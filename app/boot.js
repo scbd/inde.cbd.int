@@ -48,7 +48,7 @@ require.config({
         'ng-file-upload'            : { deps:[ 'angular']},
         'ngSmoothScroll'            : { deps:[ 'angular']},
         'scroll-directive'          : { deps:[ 'angular']},
-
+      'linqjs'                   : { deps: [], exports : 'Enumerable' },
         // 'text-angular'                  : { 'deps': ['text-angular-sanitize', 'angular'] },
         // 'text-angular-sanitize'         : { 'deps': ['angular', 'angular-sanitize']},
     },
