@@ -134,7 +134,7 @@
             </div>
             <div class="card-inde-content">
               <div class="center" style="height:50%;">
-                {{doc.title   | characters:60 }}
+            <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);">     {{doc.title   | characters:60 }} </a>
               </div>
               <div>
                 <div  style="border-top-width:.5px;border-top-style:solid;border-top-color:#eee;padding-top:3px;">
@@ -183,10 +183,10 @@
             </div>
             <div  class="event-title-collection">
               <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;">
-                <strong>{{doc.confrenceObj.acronym  }}/#{{doc.id }} </strong> - {{doc.title   | characters:261 }}
+              <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);">   <strong>{{doc.confrenceObj.acronym  }}/#{{doc.id }} </strong> - {{doc.title   | characters:261 }}</a>
               </div>
               <div class="hidden-lg hidden-xl" style="width:65%;white-space: normal;">
-                  <strong>{{doc.confrenceObj.acronym  }}/#{{doc.id }} </strong> -  {{doc.title   | characters:100 }}
+              <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);">     <strong>{{doc.confrenceObj.acronym  }}/#{{doc.id }} </strong> -  {{doc.title   | characters:100 }} </a>
               </div>
 
 

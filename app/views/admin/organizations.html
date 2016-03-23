@@ -132,7 +132,7 @@
             </div>
             <div class="card-inde-content" style="max-height: 30%;">
               <div class="center">
-                {{doc.title  }}
+            <a style="cursor:pointer;" ng-click="goTo('/manage/organizations/'+doc._id);">    {{doc.title  }} </a>
               </div>
             </div>
             <div class="card-inde-action ">
@@ -172,14 +172,14 @@
             </div>
             <div  class="event-title-collection">
               <div style="margin-bottom:25px;width:80%;white-space: normal;">
-                <span class="hidden-md hidden-sm hidden-xs"><b>{{doc.acronym  }} </b>- </span> {{doc.title   | characters:100}}</div>
+                <a style="cursor:pointer;" ng-click="goTo('/manage/organizations/'+doc._id);"><span class="hidden-md hidden-sm hidden-xs"><b>{{doc.acronym  }} </b>- </span> {{doc.title   | characters:100}}</div></a>
                 <div class="cir hidden-sm hidden-md hidden-xs">
                   <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
                     <span class="cir">
                       <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                       <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
                     </span>
-                    <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
+                    <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym}} |</span>
                   </span>
                   <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
                   <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
