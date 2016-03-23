@@ -36,7 +36,7 @@
     <div></div>
     <div ng-show="registerAlert" class="alert alert-success alert-dismissable">
       <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
-      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.</strong>
+      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.  It is also required that any attendees to your side event are registered for the meeting (including organizers or speakers).</strong>
     </div>
 
     <div class="row">
@@ -100,12 +100,12 @@
 
 
 
-      <div id="hostOrg-error" ng-class="{'has-warning': editForm.hostOrgs.error.required && submitted}">
+      <div id="hostOrg-error" ng-class="{'has-warning': hostOrgs.length && submitted}">
           <legend class="container-subheader">
             <h2>Organization(s)</h2>
           </legend>
 
-                <p id="hostOrgMsg" ng-show="editForm.hostOrgs.error.required && submitted" class="help-block">At least one organization is required is required.</p>
+                <p id="hostOrgMsg" ng-show="hostOrgs.length && submitted" class="help-block">At least one organization is required is required.</p>
 
           <div class="row">
 
@@ -236,7 +236,7 @@
       </legend>
       <div class="row">
 
-        <div class="col-md-4 col-xs-12">
+        <div class="col-md-4 col-xs-12" style="margin-bottom:15px;">
           <div ng-class="{'has-warning': editForm.prefDateOne.$error.required && submitted,'has-warning': editForm.prefTimeOne.$error.required && submitted }">
             <label>First Choice</label>
             <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates" required>
@@ -249,10 +249,10 @@
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
             </select>
-            <p ng-show="editForm.prefTimeOne.$error.required && submitted" class="help-block">First choice time required.</p>
+            <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one &&submitted" class="help-block">First choice time required.</p>
           </div>
         </div>
-        <div class="col-md-4 col-xs-12">
+        <div class="col-md-4 col-xs-12" style="margin-bottom:15px;">
           <div ng-class="{'has-warning': editForm.prefDateTwo.$error.required && submitted,'has-warning': editForm.prefTimeTwo.$error.required && submitted }">
             <label>Second Choice</label>
             <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
@@ -265,7 +265,7 @@
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
             </select>
-            <p ng-show="editForm.prefTimeTwo.$error.required && submitted" class="help-block">Second choice time required.</p>
+            <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && submitted" class="help-block">Second choice time required.</p>
           </div>
         </div>
         <div class="col-md-4 col-xs-12" style="margin-bottom:15px;">
@@ -281,7 +281,7 @@
               <option value="lunch">Lunch: 13:15 - 14:45</option>
               <option value="evening">Evening: 18:15 - 19:45</option>
             </select>
-            <p ng-show="editForm.prefTimeThree.$error.required && submitted" class="help-block">Third choice time required.</p>
+            <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && submitted" class="help-block">Third choice time required.</p>
           </div>
         </div>
       </div>
