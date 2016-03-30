@@ -42,10 +42,10 @@ define(['app', 'lodash','jquery',
                                       c.venueObj=v.data[0];
                                 });
 
-                                $http.get('https://api.cbd.int/api/v2015/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}').then(function(res){
-                                      c.events=res.data;
-
-                                });
+                                // $http.get('https://api.cbd.int/api/v2015/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}').then(function(res){
+                                //       c.events=res.data;
+                                //
+                                // });
                         });
 
 

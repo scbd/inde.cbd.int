@@ -7,8 +7,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           user=u;
           if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
           {
-            deleteTempRecords('inde-orgs');
-            deleteTempRecords('inde-side-events');
+            // deleteTempRecords('inde-orgs');
+            // deleteTempRecords('inde-side-events');
           }
 
         });
@@ -64,9 +64,9 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //============================================================
         function deleteTempRecords(schema) {
-
+            var oneDay = Math.round(new Date().getTime()/1000)+86400;
             var params = {
-                            q:{'meta.v':0},
+                            q:{'meta.v':0,'meta.createdOn':{'$gt':oneDay}},
                             cache:false
                           };
             $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
