@@ -206,6 +206,7 @@ define(['app', 'lodash',
               //
               //=======================================================================
               function archiveList() {
+                $location.search('chip', null);
                 return mongoStorage.loadOwnerArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
