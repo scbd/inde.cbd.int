@@ -9,6 +9,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           {
             // deleteTempRecords('inde-orgs');
             // deleteTempRecords('inde-side-events');
+            //
           }
 
         });
