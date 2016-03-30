@@ -9,7 +9,7 @@ define(['app', 'lodash',
   // 'scbd-angularjs-controls/km-inputtext-ml',
   // 'scbd-angularjs-controls/km-control-group',
   // 'scbd-angularjs-controls/km-date',
-
+'scbd-filters/l-string',
 'directives/km-select',
   // 'scbd-angularjs-controls/km-inputtext-list',
   '../controls/scbd-select-list',

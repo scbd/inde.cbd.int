@@ -3,8 +3,6 @@ define(['app', 'jquery',
       'css!app-css',
       'scbd-angularjs-services/authentication',
       'directives/portal/portal-nav',
-      'scbd-branding/header/header',
-      'scbd-branding/footer',
       'services/history'
     ], function(app, $) {
       'use strict';

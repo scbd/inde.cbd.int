@@ -2,7 +2,7 @@ define(['app', 'lodash',
     'text!./edit-organization.html',
     'text!directives/forms/edit/publish-dialog-org.html',
 
-    'scbd-angularjs-controls/km-control-group',
+//    'scbd-angularjs-controls/km-control-group',
     'css!libs/ng-dialog/css/ngDialog.css',
     'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
     '../../../services/mongo-storage',
