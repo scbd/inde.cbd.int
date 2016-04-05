@@ -189,14 +189,14 @@ app.factory("adminMenu", ['scbdMenuService', function(scbdMenuService) {
               mdIcon: 'view_list',
               roles:['Administrator','IndeAdministrator'],
             },
-          //   {
-          //   name: 'Detail View',
-          //   type: 'link',
-          //   path: '/admin/events/detail-view',
-          //   mdIcon: 'view_headline',
-          //   roles:['Administrator','IndeAdministrator'],
-          //
-          // }
+            {
+            name: 'Detail View',
+            type: 'link',
+            path: '/admin/events/detail-view',
+            mdIcon: 'view_headline',
+            roles:['Administrator','IndeAdministrator'],
+
+          }
         ],
         });
 
