@@ -12,6 +12,7 @@ define(['app', 'lodash',
             authentication.getUser().then(function(user) {
               $scope.isAuthenticated = user.isAuthenticated;
             }).then(function() {
+
               if (!$scope.isAuthenticated)
                 $window.location.href = 'https://accounts.cbd.int/signin?returnUrl=';
             });
@@ -210,10 +211,11 @@ define(['app', 'lodash',
                 return mongoStorage.loadOwnerArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
-                          mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
+                          mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
                             doc.confrenceObj = conf;
                           });
                           doc.orgs = [];
+                
                           _.each(doc.hostOrgs, function(org, key) {
                             mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
                               doc.orgs.push(conf);
@@ -228,7 +230,7 @@ define(['app', 'lodash',
               //=======================================================================
               function selectChip(chip) {
                 $element.find('.chip').removeClass('chip-active');
-                $element.find('#chip-' + chip).addClass('chip-active');
+                $element.find('div#chip-' + chip).addClass('chip-active');
 
                 if (chip === 'all')
                   $scope.selectedChip = '';
@@ -263,7 +265,7 @@ define(['app', 'lodash',
 
                   _.each($scope.docs, function(doc) {
 
-                    mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
+                    mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
                       doc.confrenceObj = conf;
                     });
                     doc.orgs = [];
@@ -286,10 +288,10 @@ define(['app', 'lodash',
                                mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
                                archiveList().then(function(){selectChip(srch.chip);});
                            }else
-                            selectChip(srch.chip);
+                            $timeout(function(){selectChip(srch.chip);},1000);
                         }else {
 
-                          selectChip('all');
+                          $timeout(function(){selectChip('all');},1000);
                         }
                });
               }; // archiveOrg
