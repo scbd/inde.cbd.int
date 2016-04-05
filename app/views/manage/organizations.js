@@ -257,7 +257,7 @@ define(['app', 'lodash',
 
           _.each($scope.docs, function(doc) {
 
-            //  mongoStorage.loadDoc('confrences',doc.confrence).then(function(conf){
+            //  mongoStorage.loadDoc('conferences',doc.confrence).then(function(conf){
             //     doc.confrenceObj=conf[1];
             //  });
             // doc.orgs = [];
@@ -282,9 +282,9 @@ define(['app', 'lodash',
                        mongoStorage.getOwnerFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
                        archiveList().then(function(){selectChip(srch.chip);});
                    }else
-                    selectChip(srch.chip);
+                    $timeout(function(){selectChip(srch.chip);},1000);
                 } else{
-                  selectChip('all');
+                  $timeout(function(){selectChip('all');},1000);
                 }
        });
       }; // archiveOrg
