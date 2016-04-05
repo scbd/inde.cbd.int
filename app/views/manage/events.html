@@ -49,7 +49,7 @@
 
 
 
-      <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="!search" style="margin-top:10px;">
+      <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-show="!search" style="margin-top:10px;">
         <!-- ng-repeat="status in statiFacits " -->
 
         <div id="chip-all" class="chip chip-active " ng-if="(!showArchived )  || (selectedChip==='all'&& !showArchived)" ng-click="selectChip('all')">
