@@ -7,8 +7,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           user=u;
           if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
           {
-            // deleteTempRecords('inde-orgs');
-            // deleteTempRecords('inde-side-events');
+            deleteTempRecords('inde-orgs');
+            deleteTempRecords('inde-side-events');
             //
           }
 
@@ -120,9 +120,10 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         function loadOwnerArchives (schema){
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
             if(!schema) throw "Error: failed to indicate schema loadArchives";
-            $q.when( authentication.getUser().then(function(u){
+            return $q.when( authentication.getUser().then(function(u){
                       user=u;
                     }).then( function(){
+
                         var params = {
                                       q:{'meta.status':'archived', 'meta.createdBy':user.userID,},
 
