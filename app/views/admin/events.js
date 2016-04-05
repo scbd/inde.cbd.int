@@ -7,8 +7,8 @@ define(['app', 'lodash',
       '../../services/filters'
     ], function(app, _, deleteDialog) {
 
-      app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog', //"$http", "$filter", "Thesaurus",
-          function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog) { //, $http, $filter, Thesaurus
+      app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog','Excel', //"$http", "$filter", "Thesaurus",
+          function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog,Excel) { //, $http, $filter, Thesaurus
 
             authentication.getUser().then(function(user) {
               $scope.isAuthenticated = user.isAuthenticated;
@@ -68,6 +68,10 @@ define(['app', 'lodash',
               name: 'List View'
             });
             sec.path = listView;
+            sec = _.findWhere($scope.sectionsOptions[6].pages, {
+              name: 'Detail View'
+            });
+            sec.path = detailView;
             // sec = _.findWhere($scope.sectionsOptions[5].pages, {name:'Detail View'});
             // sec.path=detailView;
 
@@ -228,7 +232,7 @@ define(['app', 'lodash',
                 return mongoStorage.loadArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
-                          mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
+                          mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
                             doc.confrenceObj = conf;
                           });
                           doc.orgs = [];
@@ -283,7 +287,7 @@ define(['app', 'lodash',
                     $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
 
-                    mongoStorage.loadDoc('confrences', doc.confrence).then(function(conf) {
+                    mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
                       doc.confrenceObj = conf;
                     });
                     doc.orgs = [];
@@ -302,9 +306,9 @@ define(['app', 'lodash',
                                mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
                                archiveList().then(function(){selectChip(srch.chip);});
                            }else
-                            selectChip(srch.chip);
+                            $timeout(function(){selectChip(srch.chip);},1000);
                         }else{
-                          selectChip('all');
+                          $timeout(function(){selectChip('all');},1000);
                         }
                });
               }; // archiveOrg
@@ -350,6 +354,8 @@ define(['app', 'lodash',
                 $scope.toggle('adminOptions');
                 registerToolTip();
               }; //toggleListView
+
+
               //=======================================================================
               //
               //=======================================================================
@@ -536,8 +542,37 @@ define(['app', 'lodash',
 
                 history.goBack();
               };
+
+              $scope.exportToExcel=function(tableId){ // ex: '#my-table'
+                    $scope.exportHref=Excel.tableToExcel(tableId,'sheet name');
+                    $timeout(function(){location.href=$scope.exportHref;},100); // trigger download
+                }
               init();
               $scope.selectChip('all');
             }
           ]);
+
+          app.factory('Excel', ['$window', function($window) {
+            var uri = 'data:application/vnd.ms-excel;base64,',
+              template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>',
+              base64 = function(s) {
+                return $window.btoa(unescape(encodeURIComponent(s)));
+              },
+              format = function(s, c) {
+                return s.replace(/{(\w+)}/g, function(m, p) {
+                  return c[p];
+                });
+              };
+            return {
+              tableToExcel: function(tableId, worksheetName) {
+                var table = $(tableId),
+                  ctx = {
+                    worksheet: worksheetName,
+                    table: table.html()
+                  },
+                  href = uri + base64(format(template, ctx));
+                return href;
+              }
+            };
+          }]);
       });

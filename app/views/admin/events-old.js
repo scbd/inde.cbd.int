@@ -137,7 +137,7 @@ define(['app', 'lodash',
            $scope.docs=response.data;
            _.each($scope.docs,function(doc){
 
-                   mongoStorage.loadDoc('confrences',doc.document.confrence).then(function(conf){
+                   mongoStorage.loadDoc('conferences',doc.document.confrence).then(function(conf){
                       doc.document.confrenceObj=conf[1];
                    });
                    doc.document.orgs=[];

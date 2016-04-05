@@ -39,7 +39,7 @@ app.filter('schemaName', [function() {
             return schema;
           if(schema.toLowerCase()=='inde-orgs') return 'Organizations';
           if(schema.toLowerCase()=='inde-side-events') return 'Side Events';
-          if(schema.toLowerCase()=='confrences') return 'Confrences';
+          if(schema.toLowerCase()=='conferences') return 'conferences';
           if(schema.toLowerCase()=='venue') return 'Venues';
         };
   }]);
@@ -55,7 +55,7 @@ app.filter('schemaName', [function() {
               return schema;
             if(schema.toLowerCase()=='inde-orgs') return 'Organization';
             if(schema.toLowerCase()=='inde-side-events') return 'Side Event';
-            if(schema.toLowerCase()=='confrences') return 'Confrence';
+            if(schema.toLowerCase()=='conferences') return 'Confrence';
             if(schema.toLowerCase()=='venue') return 'Venue';
           };
     }]);
@@ -70,7 +70,7 @@ app.filter('schemaName', [function() {
               return schema;
             if(schema.toLowerCase()=='inde-orgs') return 'md';
             if(schema.toLowerCase()=='inde-side-events') return 'md';
-            if(schema.toLowerCase()=='confrences') return 'md';
+            if(schema.toLowerCase()=='conferences') return 'md';
             if(schema.toLowerCase()=='venue') return 'md';
           };
     }]);
@@ -86,7 +86,7 @@ app.filter('schemaName', [function() {
 
               if(schema.toLowerCase()=='inde-orgs') return '&#xE0AF;';
               if(schema.toLowerCase()=='inde-side-events') return '&#xE878;';
-              if(schema.toLowerCase()=='confrences') return '&#xE407;';
+              if(schema.toLowerCase()=='conferences') return '&#xE407;';
               if(schema.toLowerCase()=='venue') return '&#xE84F;';
             };
       }]);

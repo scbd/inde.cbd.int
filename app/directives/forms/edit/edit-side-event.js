@@ -60,13 +60,13 @@ define(['app', 'lodash',
               }
             }, true);
 
-            $http.get("https://api.cbd.int/api/v2015/confrences", {
+            $http.get("/api/v2015/conferences", {
               cache: true
             }).then(function(o) {
 
-              $scope.options.confrences = $filter("orderBy")(o.data, "start");
+              $scope.options.conferences = $filter("orderBy")(o.data, "start");
             //  $location.search();
-              _.each($scope.options.confrences, function(conf) {
+              _.each($scope.options.conferences, function(conf) {
                 if (conf._id === $location.search().m)
                   conf.selected = true;
                 else
@@ -165,7 +165,7 @@ define(['app', 'lodash',
             //=======================================================================
             $scope.selectMeeting = function(docObj) {
               $timeout(function() {
-                _.each($scope.options.confrences, function(meeting) {
+                _.each($scope.options.conferences, function(meeting) {
                   meeting.selected = false;
                 });
 
@@ -228,10 +228,12 @@ define(['app', 'lodash',
             //============================================================
             function generateDates() {
 
-              mongoStorage.loadDoc('confrences', $scope.doc.confrence).then(function(confr) {
-
+              mongoStorage.loadDoc('conferences', $scope.doc.confrence).then(function(confr) {
+                $scope.options.dates=[];
                 var diff = Number(confr.end) - Number(confr.start);
-                var numDays = Math.ceil(diff / 86400);
+
+                var numDays = Math.ceil(diff / 86400)+1;
+
                 if (!$scope.options) $scope.options = {};
                 if (!$scope.options.dates) $scope.options.dates = [];
                 for (var i = 0; i < numDays; i++) {
@@ -243,7 +245,7 @@ define(['app', 'lodash',
                 $scope.onError(response);
 
               });
-              _.each($scope.options.confrences, function(conf) {
+              _.each($scope.options.conferences, function(conf) {
                 if (conf._id === $scope.doc.confrence)
                   conf.selected = true;
               });
@@ -397,7 +399,7 @@ define(['app', 'lodash',
               $scope.submitted = true;
 
 
-
+console.log('test');
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
               }

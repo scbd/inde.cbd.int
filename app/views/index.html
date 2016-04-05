@@ -25,8 +25,12 @@
     </div>
   </div>
 
+  <div class="alert alert-danger" ng-show="hasError()">
+    <strong>Error as occured...</strong>
+    <div>{{error}}</div>
+  </div>
     <div class="row">
-        <div class="col-lg-4 col-sm-6 col-xs-12" ng-class="{ 'col-lg-12': (confrences.length===1),'col-lg-4': (confrences.length===2), 'col-lg-4': (confrences.length===3),'col-lg-3': (confrences.length>=4) }" ng-repeat="con in filCon = (confrences | filter:newMeetingFilter)" >
+        <div class="col-lg-4 col-sm-6 col-xs-12" ng-class="{ 'col-lg-12': (conferences.length===1),'col-lg-4': (conferences.length===2), 'col-lg-4': (conferences.length===3),'col-lg-3': (conferences.length>=4) }" ng-repeat="con in filCon = (conferences | filter:newMeetingFilter)" >
             <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }" >
                 <div class="panel-heading  text-center">
                   <h2 style="color:inherit">{{con.acronym }}</h2>
@@ -48,7 +52,7 @@
 
 
   <!-- venue-->
-  <section ng-repeat="con in confrences | filter:newMeetingFilter ">
+  <section ng-repeat="con in conferences | filter:newMeetingFilter ">
 
     <div class="row">
 
