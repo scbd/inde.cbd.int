@@ -1,7 +1,7 @@
 define(['app','lodash','linqjs'], function (app,_,Enumerable) {
-    	console.log(Enumerable);
+
   app.factory('Enumerable', [function() {
-    	console.log(Enumerable);
+
   	return Enumerable;
   }]);
 app.factory('Thesaurus', ["Enumerable", function() {
