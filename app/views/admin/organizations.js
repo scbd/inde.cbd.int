@@ -270,12 +270,12 @@ define(['app', 'lodash',
               $scope.showArchived = !$scope.showArchived;
               mongoStorage.getStatusFacits($scope.schema, $scope.statusFacitsArcView, statusesArchived);
               archiveList().then(function() {
-                selectChip(srch.chip);
+                $timeout(function(){selectChip(srch.chip);},1000);
               });
             } else
-              selectChip(srch.chip);
+              $timeout(function(){selectChip(srch.chip);},1000);
           } else {
-            selectChip('all');
+            $timeout(function(){selectChip('all');},1000);
           }
         });
       }; // loadList
