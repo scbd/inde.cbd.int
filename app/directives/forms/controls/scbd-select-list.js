@@ -122,7 +122,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                                 ]
                             },
                         };
-              $http.get('https://api.cbd.int/api/v2015/inde-orgs',{'params':params}).then(function(res){
+              $http.get('/api/v2016/inde-orgs',{'params':params}).then(function(res){
                         $scope.docs=res.data;
 
                 }).then(function(){setChips();});
