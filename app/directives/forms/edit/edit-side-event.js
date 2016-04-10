@@ -60,7 +60,7 @@ define(['app', 'lodash',
               }
             }, true);
 
-            $http.get("/api/v2015/conferences", {
+            $http.get("/api/v2016/conferences", {
               cache: true
             }).then(function(o) {
 
@@ -266,7 +266,7 @@ define(['app', 'lodash',
                 }
 
 
-                return $http.get('https://api.cbd.int/api/v2013/users/' + userId).then(function onsuccess(response) {
+                return $http.get('/api/v2013/users/' + userId).then(function onsuccess(response) {
                   //data = response.data;
                   if (!$scope.doc) $scope.doc = {};
                   if (!$scope.doc.contact) $scope.doc.contact = {};
