@@ -37,16 +37,16 @@ init();
           function init(){
                   $scope.conferences=[];
 
-                  $http.get('/api/v2015/conferences?s={"start":1}').then(function(conf){
+                  $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf){
                         $scope.conferences=conf.data;
                         _.each($scope.conferences,function(c){
 
-                                $http.get('https://api.cbd.int/api/v2015/venues?q={"_id":{"$oid":"'+c._id+'"}}').then(function(v){
+                                $http.get('https://api.cbd.int/api/v2016/venues?q={"_id":{"$oid":"'+c._id+'"}}').then(function(v){
                                       c.venueObj=v.data[0];
 
                                 });
 
-                                // $http.get('https://api.cbd.int/api/v2015/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}').then(function(res){
+                                // $http.get('https://api.cbd.int/api/v2016/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}').then(function(res){
                                 //       c.events=res.data;
                                 //
                                 // });
