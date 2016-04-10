@@ -267,7 +267,7 @@ define(['app', 'lodash',
             //   });
             // });
             //
-            $http.get('https://api.cbd.int/api/v2013/users/' + doc.meta.createdBy).then(function onsuccess(response) {
+            $http.get('/api/v2013/users/' + doc.meta.createdBy).then(function onsuccess(response) {
               doc.contact = response.data;
             });
           });
