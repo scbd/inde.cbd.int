@@ -22,7 +22,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         //
         //============================================================
         function save (schema,document,_id){
-               var url        = '/api/v2015/'+schema;
+               var url        = '/api/v2016/'+schema;
                var prevDoc    = _.cloneDeep(document.initialState) || {};
                var currentDoc = _.cloneDeep(document);
                var data={};
@@ -35,27 +35,30 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                     params.id = _id;
                     url=url+'/'+_id;
 
-
-
-                    return touch(currentDoc).then(function(){
-                      //data=_.cloneDeep(currentDoc);
                       delete(currentDoc._id);
                       delete(currentDoc.history);
+                      if(currentDoc.meta && currentDoc.meta.v ===0)currentDoc.meta.v=1;
+                      if(currentDoc.meta && (typeof currentDoc.meta.createdOn ==='number'))currentDoc.meta.createdOn=new Date(currentDoc.meta.createdOn).toUTCString();
+                      if(currentDoc.meta && (typeof currentDoc.meta.modifiedOn ==='number'))currentDoc.meta.modifiedOn=new Date(currentDoc.meta.modifiedOn).toUTCString();
+                      if(!currentDoc.clientOrg)currentDoc.clientOrg=clientOrg;
                       data=_.cloneDeep(currentDoc);
                       data.$set  = currentDoc;
                       data.$push = {"history":prevDoc};
-                      return $http.patch(url,data,params);});
+
+                      return $http.patch(url,data,params);
 
                 }
                 else{
+                      currentDoc.meta={};
+                      currentDoc.meta.v=0;
+                      if(!currentDoc.clientOrg)currentDoc.clientOrg=clientOrg;
 
-                    return touch(currentDoc).then(function(){
                       return $http.post(url,currentDoc,params).then(function(res){
                         currentDoc.initialState=data;
                         delete(currentDoc.initialState.history);
                         return res;
                       });
-                    });
+
 
                 }  //create
         }
@@ -70,9 +73,9 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             q:{'meta.v':0,'meta.createdOn':{'$gt':oneDay}},
                             cache:false
                           };
-            $http.get('/api/v2015/'+schema,{'params':params}).then(function(res){
+            $http.get('/api/v2016/'+schema,{'params':params}).then(function(res){
                   _.each(res.data,function(obj){
-                        $http.delete('/api/v2015/'+schema+'/'+obj._id);
+                        $http.delete('/api/v2016/'+schema+'/'+obj._id);
                   });
             });
 
@@ -87,7 +90,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
             // var params = {
             //               q:{_id:{$oid:_id}}
             //             };
-            return $q.when( $http.get('/api/v2015/'+schema+'/'+_id))//}&f={"document":1}'))
+            return $q.when( $http.get('/api/v2016/'+schema+'/'+_id))//}&f={"document":1}'))
                    .then(
 
                         function(response){
@@ -111,7 +114,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                           q:{'meta.status':'archived'},
 
                         };
-            return $q.when( $http.get('/api/v2015/'+schema,{'params':params}));
+            return $q.when( $http.get('/api/v2016/'+schema,{'params':params}));
 
         }
         //============================================================
@@ -128,7 +131,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                                       q:{'meta.status':'archived', 'meta.createdBy':user.userID,},
 
                                     };
-                        return $q.when( $http.get('/api/v2015/'+schema,{'params':params}));
+                        return $q.when( $http.get('/api/v2016/'+schema,{'params':params}));
                     }));
         }
         //============================================================
@@ -146,7 +149,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             },
 
                         };
-              return $http.get('/api/v2015/'+schema,{'params':params});
+              return $http.get('/api/v2016/'+schema,{'params':params});
             }
             if(!_.isArray(status)){
               params = {
@@ -155,7 +158,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             },
 
                         };
-              return $http.get('/api/v2015/'+schema,{'params':params});
+              return $http.get('/api/v2016/'+schema,{'params':params});
             }
             else {
                 params = {
@@ -164,7 +167,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                               },
 
                           };
-              return $http.get('/api/v2015/'+schema,{'params':params});
+              return $http.get('/api/v2016/'+schema,{'params':params});
             }
 
 
@@ -184,7 +187,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                                      'meta.v':{$ne:0}
                                     }
                                 };
-                        return $http.get('/api/v2015/'+schema,{'params':params});
+                        return $http.get('/api/v2016/'+schema,{'params':params});
                       }));
         }
         //=======================================================================
@@ -286,7 +289,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               if(!statArry)
                 statArry=statuses;
               if(stat){
-                $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0}}').then(
+                $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0}}').then(
                   function(res){
 
                     statusFacits[stat]=res.data.count;
@@ -297,7 +300,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               else
               _.each(statArry,function(status){
 
-                    $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0}}').then(
+                    $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0}}').then(
                       function(res){
                         statusFacits[status]=res.data.count;
                         statusFacits['all']+=res.data.count;
@@ -324,7 +327,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             if(!statArry)
                               statArry=statuses;
                             if(stat){
-                              $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
+                              $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                 function(res){
 
                                   statusFacits[stat]=res.data.count;
@@ -335,7 +338,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             else
                             _.each(statArry,function(status){
 
-                                  $http.get('/api/v2015/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
+                                  $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                     function(res){
                                       statusFacits[status]=res.data.count;
                                       statusFacits['all']+=res.data.count;
@@ -353,36 +356,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               params.f={'id':1};
               params.s={ 'id' : -1 };
               params.l=1;
-              return  $http.get('/api/v2015/inde-side-events',{'params':params});
+              return  $http.get('/api/v2016/inde-side-events',{'params':params});
 
         }//getStatusFacits
 
 
-
-        //=======================================================================
-        //
-        //=======================================================================
-        function touch(doc){
-          return authentication.getUser().then(function(u){
-            user=u;
-
-              if(!user.userID) throw "Error no userID to touch record";
-              if(!doc.meta) throw "Error mongo document contains no meta data";
-              if(!doc.clinetOrg)doc.clientOrg=clientOrg;
-              if(!doc.meta.status) doc.meta.status='draft';
-
-              if(!doc.meta.createdBy && !doc.meta.createdOn){
-                doc.meta.createdBy = doc.meta.modifiedBy = user.userID;
-                doc.meta.createdOn  = doc.meta.modifiedOn = Date.now();
-              }else if (doc.meta.createdBy && doc.meta.createdOn){
-                doc.meta.modifiedBy = user.userID;
-                doc.meta.modifiedOn = Date.now();
-              }
-              doc.meta.v=Number(doc.meta.v)+1;
-
-              doc.meta.hash=sha256(JSON.stringify(doc));  //jshint ignore:line
-          });
-        } // touch
 
         //=======================================================================
         //
@@ -414,7 +392,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                     }
                   }).then(function() {
                     // move temp file form temp to its proper home schema/is/filename
-                    return $http.get("/api/v2015/mongo-document-attachment/"+target.uid, { });
+                    return $http.get("/api/v2016/mongo-document-attachment/"+target.uid, { });
                   });
               });
         } // touch
