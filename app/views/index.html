@@ -38,7 +38,7 @@
         <div class="panel-body text-center" style="min-height:110px">
           <div class="btn-group-vertical">
             <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
-            <button class="btn btn-sm btn-info disabled" >Register a Side Event (now closed)</button>
+            <button class="btn btn-sm btn-info disabled">Register a Side Event (now closed)</button>
             <!-- ng-click="goTo(con._id);" -->
           </div>
         </div>
@@ -71,249 +71,109 @@
         <div class="clearfix"></div>
 
       </div>
-      <div class="col-xs-10 col-xs-offset-1" style="margin-top:20px; margin-bottom:20px;">
-        <!-- <div class="bs-callout bs-callout-info">
-          <h4>Announcement:</h4>
-              The side event schedule will be posted for the first week of April 2016.
-      </div> -->
-        <div class="row">
 
 
-          <div class="  col-lg-12 col-xs-12">
-            <!-- <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
-          <div class="panel-heading  text-center">
-            <h2 style="color:inherit">Schedules</h2>
+
+      <div>
+      </div>
+      <style>
+        @-moz-document url-prefix() {
+          fieldset {
+            display: table-cell;
+          }
+        }
+      </style>
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="table-responsive">
             <div>
-              <div    >
-                  <label>Select a Meeting</label>
-                    <select id="editForm.meeting" class="form-control" ng-model="conference" name="Select a Meeting"  ng-change="loadSides(conference)" >
 
-                      <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
-                    </select>
+              <select id="editForm.meeting" class="form-control" ng-model="con.day">
+                <option value="" selected>Day</option>
+                <option ng-repeat="docObj in con.days | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
+              </select>
 
-                      <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
-              </div>
-            </div>
-          </div> -->
-            <div class="panel-body" style="min-height:110px;background-color:white;">
-
-              <div>
-              </div>
-              <style>
-                @-moz-document url-prefix() {
-                  fieldset {
-                    display: table-cell;
-                  }
-                }
-              </style>
-              <div class="row">
-                <div class="col-lg-3">
-                  <div class="table-responsive">
-                    <div>
-
-                      <select id="editForm.meeting" class="form-control" ng-model="con.day">
-                        <option value="" selected>Day</option>
-                        <option ng-repeat="docObj in con.days | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
-                      </select>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3">
-                  <div class="table-responsive">
-                    <div>
-
-                      <select id="editForm.meeting" class="form-control" ng-model="con.time">
-                        <option value="" selected> Time</option>
-                        <option ng-repeat="docObj in con.times | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
-                      </select>
-
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3">
-                  <div class="table-responsive">
-                    <div>
-
-                      <!-- <select  class="form-control" ng-model="showDescriptions" >
-                        <option ng-value="1" selected> Show Descriptions</option>
-                        <option ng-value="0"> Hide Descriptions</option>
-                      </select> -->
-                      <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;"><span ng-show="showDescriptions">Hide Descriptions</span><span ng-show="!showDescriptions">Show Descriptions</span></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <table class="table table-hover table-striped" style="margin-top:10px;">
-                <thead>
-                  <tr class="info">
-                    <th>ID</th>
-                    <th>Date</th>
-                    <th>Location</th>
-                    <th>Title / Host Organizations</th>
-                    <!-- <th>Description</th> -->
-                    <!-- <th>Status</th>                   -->
-                  </tr>
-                </thead>
-                <tbody>
-
-                  <tr ng-repeat-start="doc in filtered = (con.reservations |filter:dayFilter |filter:timeFilter |orderBy:'startSeconds')" ng-click=" doc.showDes=!doc.showDes;" style="cursor:pointer;">
-                    <td>{{doc.title}}</td>
-                    <td>{{doc.dayOfWeek}}
-                      <br>{{doc.tier.title}}
-                      <br>
-                      <hr style="margin: 5px 0 5px 0;">{{doc.day}}
-                      <br>{{doc.time}}</td>
-                    <td><strong>{{doc.room.title}}</strong>
-                      <br>{{doc.room.location}}</td>
-                    <td><span ng-show="doc.sideEvent.meta.status==='published'">{{doc.sideEvent.title}}</span>
-                      <br>
-                      <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
-                        <h4>Under Editing Review:</h4>
-                            Please note the owner of this side event has requested changes to the published information. Once approved the published information will be restored.
-                    </div>
-                      <hr >
-                      <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
-                        <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
-                          <span class="cir" style="position:relative;">
-                            <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                            <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
-                          </span>
-                          <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr></tr>
-                  <tr  ng-show="showDescriptions && (doc.sideEvent.meta.status==='published')" ng-repeat-end>
-
-                    <td colspan="4">
-                      <strong >Description:</strong>
-                      <br >{{doc.sideEvent.description}}</td>
-                  </tr>
-
-                </tbody>
-              </table>
             </div>
           </div>
-          <div class="panel-footer text-right">
+        </div>
+        <div class="col-lg-3">
+          <div class="table-responsive">
+            <div>
 
+              <select id="editForm.meeting" class="form-control" ng-model="con.time">
+                <option value="" selected> Time</option>
+                <option ng-repeat="docObj in con.times | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
+              </select>
+
+            </div>
           </div>
         </div>
-
-      </div>
-    </div>
-</div>
-</div>
-</div>
-
-<div class="row" ng-if="filtered.length">
-  <!-- Side events -->
-  <div class="col-xs-10 col-xs-offset-1">
-    <div id="events{{$index}}" class="ind-container-header relative" style="margin-top:8px;">
-      <div style="position:absolute;left:10px;top:12px;">
-        <button id="search-btn{{$index}}" data-toggle="tooltip" title="Search" class="btn btn-default search-btn btn-sm" ng-click="searchToggle($index);search='';sO=!sO;"><i class="fa fa-search" ng-if="!sO"></i><i class="fa fa-times" ng-if="sO"></i></button>
-        <input id="ind-search{{$index}}" type="text" ng-model="search" placeholder="search..." class="ind-search"> </input>
-      </div>
-      <span class="container-header-name hidden-md hiddensm hidden-xs">
-        <h1 style="display:inline;">Side Events</h1>
-        <h6> ({{con.acronym }})</h6>
-      </span>
-      <span class="ind-container-header-name hidden-lg hidden-xl">Side Events </span>
-      <div class="hidden-lg hidden-xl">({{con.acronym }})</div>
-
-      <div class="btn-group" style="position:absolute;right:10px;top:12px;">
-        <button id="search-btn{{$index}}" data-toggle="tooltip" title="Register Side Event" class="btn btn-default search-btn btn-sm" ng-click="goTo(con._id);"><i class="fa fa-plus"></i></button>
-      </div>
-      <div class="clearfix"></div>
-    </div>
-
-    <!-- LIST VIEW -->
-    <div style="padding: 0 5px; 0 5px;">
-      <section>
-        <div class="row chips-row hidden-md hidden-sm hidden-sx">
-          showing:
-          <span class="label label-pill label-primary ">{{filtered.length}} </span>
-          <span ng-if="search">for '{{search}}'</span>
+        <div class="col-lg-3">
+          <div class="table-responsive">
+            <div>
+              <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;">
+                <span ng-show="showDescriptions">Hide Descriptions</span>
+                <span ng-show="!showDescriptions">Show Descriptions</span>
+              </button>
+            </div>
+          </div>
         </div>
-        <div style="margin-top:5px;max-height:100px;overflow:auto;">
-          <div class="row collection " ng-repeat="doc in filtered = (con.events |filter:search)" style="margin-bottom:8px;">
-            <div class="collection-item ">
-              <div style=" position:absolute;top:0px;left:0px;">
-                <div class="collection-item-img-cont">
+      </div>
 
-                  <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
-                  <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
-                </div>
+      <table class="table table-hover table-striped" style="margin-top:10px;">
+        <thead>
+          <tr class="info">
+            <th>ID</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Title / Host Organizations</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:dayFilter |filter:timeFilter |orderBy:'startSeconds')" ng-click=" doc.showDes=!doc.showDes;" style="cursor:pointer;">
+            <td>{{doc.title}}</td>
+            <td>{{doc.dayOfWeek}}
+              <br>{{doc.tier.title}}
+              <br>
+              <hr style="margin: 5px 0 5px 0;">{{doc.day}}
+              <br>{{doc.time}}</td>
+            <td>
+              <strong>{{doc.room.title}}</strong>
+              <br>{{doc.room.location}}</td>
+            <td>
+              <span ng-show="doc.sideEvent.meta.status==='published'">{{doc.sideEvent.title}}</span>
+              <br>
+              <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
+                <h4>Under Editing Review:</h4>
+                Please note the owner of this side event has requested changes to the published information. Once approved the published information will be restored.
               </div>
-              <div class="event-title-collection">
-                <div class="hidden-md hiddensm hidden-xs" style="width:80%;white-space: normal;    text-transform: uppercase;">
-                  <strong>#{{doc.id }}</strong> - {{doc.title | characters:261 }}
-                </div>
-                <div class="hidden-lg hidden-lx" style="width:80%;white-space: normal;    text-transform: uppercase;">
-                  <strong>#{{doc.id }}</strong> - {{doc.title | characters:80 }}
-                </div>
-
-
-                <div class="cir hidden-sm hidden-md hidden-xs">
-                  <span class="hidden-md hiddensm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                    <span class="cir">
-                      <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                      <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
-                    </span>
-                    <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
-                  </span>
-                  <span class="hidden-md hiddensm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                  <span class="hidden-md hiddensm hidden-xs"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
-                </div>
-
-              </div>
-              <!-- mobi orgs -->
-
-              <div class="cir hidden-lg hidden-lx" style="position:absolute; left:1px;bottom:1px;">
-                <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                  <span class="cir">
+              <hr>
+              <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
+                <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
+                  <span class="cir" style="position:relative;">
                     <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                     <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
                   </span>
-                  <span style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
-                </span>
-                <span class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                <span style="font-size:.8rem;"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
-              </div>
-              <!-- mobi title status-->
-              <div class="hidden-lg hidden-lx" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;height:width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
-                <span style="white-space: normal;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
-                <span class="pull-right" ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
-
-              </div>
-
-              <!-- large status -->
-              <div ng-if="doc.meta.status==='canceled'" class="hidden-md hiddensm hidden-xs" style=" height:100%; color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;border-style:solid;border-color:red;">
-                <span style="position:absolute;left:23%;top:30%;"><i class="material-icons">&#xE8DD;</i>
-                  <div>Canceled</div>
-                </span>
-
-              </div>
-
-              <div style="height:95px;"></div>
-
-              <div class="collection-action">
-                <span class="collection-action-grp ">
-                  <!-- <div class="btn-group btn-group-vertical btn-group-xs" ng-if="doc.meta.status!=='archived'"> -->
-                    <!-- <button data-toggle="tooltip" title="More Information" class="btn btn-default" ng-click="" ng-if="doc.meta.status!=='archived'"><i class="fa fa-info-circle"></i></button> -->
-
-                  </div>
+                  <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
                 </span>
               </div>
-            </div>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr ng-show="showDescriptions && (doc.sideEvent.meta.status==='published')" ng-repeat-end>
 
-          </div>
-        </div>
-      </section>
+            <td colspan="4">
+              <strong>Description:</strong>
+              <br>{{doc.sideEvent.description}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
 
     </div>
-  </div>
-  </section>
+    </section>
 
 </div>
