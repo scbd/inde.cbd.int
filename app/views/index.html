@@ -166,10 +166,14 @@
                       <br>{{doc.time}}</td>
                     <td><strong>{{doc.room.title}}</strong>
                       <br>{{doc.room.location}}</td>
-                    <td>{{doc.sideEvent.title}}
+                    <td><span ng-show="doc.sideEvent.meta.status==='published'">{{doc.sideEvent.title}}</span>
                       <br>
-                      <hr>
-                      <div class="relative">
+                      <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
+                        <h4>Under Editing Review:</h4>
+                            Please note the owner of this side event has requested changes to the published information. Once approved the published information will be restored.
+                    </div>
+                      <hr >
+                      <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
                         <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
                           <span class="cir" style="position:relative;">
                             <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
@@ -177,11 +181,11 @@
                           </span>
                           <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
                         </span>
-                      </div> 
+                      </div>
                     </td>
                   </tr>
                   <tr></tr>
-                  <tr  ng-show="showDescriptions" ng-repeat-end>
+                  <tr  ng-show="showDescriptions && (doc.sideEvent.meta.status==='published')" ng-repeat-end>
 
                     <td colspan="4">
                       <strong >Description:</strong>
