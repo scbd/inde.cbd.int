@@ -18,7 +18,7 @@ define(['app', 'lodash', 'jquery', 'moment',
       $scope.statusFacits = {};
       $scope.statusFacitsArcView = {};
       $scope.statusFacitsArcView.all = 0;
-
+  $scope.preLoadImages=[];
       // var statuses=['published','request','canceled','rejected'];
       // var statusesArchived=['deleted','archived'];
       $scope.docs = [];
@@ -35,47 +35,49 @@ define(['app', 'lodash', 'jquery', 'moment',
       //
       //=======================================================================
       function init() {
+          var allOrgs;
         $scope.conferences = [];
         $scope.options = {};
+        mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
+          allOrgs = orgs.data;
+          _.each(allOrgs,function(org){
+            var image = new Image();
+            image.src= org.logo;
+                $scope.preLoadImages.push(image);
+          });
+        }).then(
         $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
           $scope.conferences = $scope.options.conferences = conf.data;
           $http.get("/api/v2016/venue-rooms", {
             cache: true
           }).then(function(res2) {
-            $scope.rooms = res2.data;
-            //console.log('rooms',res2.data);
+                $scope.rooms = res2.data;
+                //console.log('rooms',res2.data);
 
-          _.each($scope.conferences, function(c) {
-
-
-            loadReservations(c.start, c.end, c.venue, 'Side Event', c._id).then(function(res) {
-              var allOrgs;
-              c.reservations = res;
-              mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
-                allOrgs = orgs.data;
-
-              }).then(function() {
-
-                  _.each(c.reservations, function(res) {
-                    res.sideEvent.orgs = [];
-                    _.each(res.sideEvent.hostOrgs, function(org) {
-                      res.sideEvent.orgs.push(_.findWhere(allOrgs, {
-                        '_id': org
-                      }));
-                    });
-                  }); // each
-
-              });
-            });
-
-          });
-        });
+              _.each($scope.conferences, function(c) {
+                    loadReservations(c.start, c.end, c.venue, 'Side Event', c._id).then(function(res) {
+                        c.reservations = res;
+                        var cancelOrgLoad = setInterval(function(){
+                           if(allOrgs && length >0 ){
+                                 clearInterval(cancelOrgLoad);
+                                  _.each(c.reservations, function(res) {
+                                    res.sideEvent.orgs = [];
+                                    _.each(res.sideEvent.hostOrgs, function(org) {
+                                      res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                        '_id': org
+                                      })); // findWhere
+                                    });// each
+                                  }); // each
+                            }
+                        },1000);//interval
+                    }); // loadReservations
+              });//each conference
+            });// then on load venues
 
         }).catch(function onerror(response) {
-
           $scope.onError(response);
-        });
-
+        })
+      );// then on load org
       } //init
 
       //============================================================
