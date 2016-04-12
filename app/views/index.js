@@ -53,13 +53,12 @@ define(['app', 'lodash', 'jquery', 'moment',
           }).then(function(res2) {
                 $scope.rooms = res2.data;
                 //console.log('rooms',res2.data);
-
+                var countCyc=0;
               _.each($scope.conferences, function(c) {
                     loadReservations(c.start, c.end, c.venue, 'Side Event', c._id).then(function(res) {
                         c.reservations = res;
                         var cancelOrgLoad = setInterval(function(){
                            if(allOrgs && length >0 ){
-                                 clearInterval(cancelOrgLoad);
                                   _.each(c.reservations, function(res) {
                                     res.sideEvent.orgs = [];
                                     _.each(res.sideEvent.hostOrgs, function(org) {
@@ -68,8 +67,12 @@ define(['app', 'lodash', 'jquery', 'moment',
                                       })); // findWhere
                                     });// each
                                   }); // each
+                                  countCyc++;
                             }
+                            if(countCyc===5)// hack
+                              clearInterval(cancelOrgLoad);
                         },1000);//interval
+
                     }); // loadReservations
               });//each conference
             });// then on load venues
