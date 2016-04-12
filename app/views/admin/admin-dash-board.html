@@ -142,7 +142,142 @@ background-color: #f5f5f5;
         </div>
 
       </div>
+
+        <div class="row">
+
+
+        <div class="  col-lg-12 col-xs-12">
+          <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
+            <div class="panel-heading  text-center">
+              <h2 style="color:inherit">Schedules</h2>
+              <div>
+                <div    >
+                    <label>Select a Meeting</label>
+                      <select id="editForm.meeting" class="form-control" ng-model="conference" name="Select a Meeting"  ng-change="loadSides(conference)" >
+
+                        <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
+                      </select>
+
+                        <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
+                </div>
+              </div>
+            </div>
+            <div class="panel-body" style="min-height:110px">
+
+              <div>
+              </div>
+<style>
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}
+</style>
+<div class="row">
+
+
+<div class="  col-lg-12 col-xs-12">
+  <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
+    <div class="panel-heading  text-center">
+      <h2 style="color:inherit">Schedules</h2>
+      <div>
+        <div    >
+            <label>Select a Meeting</label>
+              <select id="editForm.meeting" class="form-control" ng-model="conference" name="Select a Meeting"  ng-change="loadSides(conference)" >
+
+                <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
+              </select>
+
+                <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
+        </div>
+      </div>
     </div>
+    <div class="panel-body" style="min-height:110px">
+
+      <div>
+      </div>
+<style>
+@-moz-document url-prefix() {
+fieldset { display: table-cell; }
+}
+</style>
+<div class="row">
+<div class="col-lg-3">
+      <div class="table-responsive">
+        <div    >
+
+              <select id="editForm.meeting" class="form-control" ng-model="day" >
+                <option value="" selected>Day</option>
+                <option ng-repeat="docObj in options.days | orderBy:'value'" value="{{docObj.value}}"  >{{docObj.title}} </option>
+              </select>
+
+        </div>
+      </div>
+</div>
+<div class="col-lg-3">
+      <div class="table-responsive">
+        <div    >
+
+              <select id="editForm.meeting" class="form-control" ng-model="day" >
+                <option value="" selected> Time</option>
+                <option ng-repeat="docObj in options.times | orderBy:'value'" value="{{docObj.value}}"  >{{docObj.title}} </option>
+              </select>
+
+        </div>
+      </div>
+</div>
+</div>
+<table class="table table-hover table-striped">
+<thead>
+<tr >
+  <th>ID</th>
+  <th>Date</th>
+  <th>Location</th>
+  <th>Title</th>
+  <!-- <th>Description</th> -->
+  <!-- <th>Status</th>                   -->
+</tr>
+</thead>
+<tbody>
+
+<tr ng-repeat-start="doc in filtered = (sides |orderBy:'startSeconds')">
+  <td>{{doc.title}}</td>
+  <td >{{doc.dayOfWeek}}<br>{{doc.tier.title}}<br><hr style="margin: 5px 0 5px 0;">{{doc.day}}<br>{{doc.time}}</td>
+  <td>{{doc.room.title}}<br>{{doc.room.location}}</td>
+  <td>{{doc.sideEvent.title}} <a><i class="fa fa-arrow-down" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;" ng-show="!doc.showDes" ></i><i class="fa fa-arrow-up" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;"  ng-show="doc.showDes" ></i></a>
+    <br><hr>
+    <div class="relative">
+    <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
+      <span class="cir" style="position:relative;">
+        <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
+        <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+      </span>
+      <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
+    </span>
+  </div>
+  </td>
+</tr>
+<tr></tr>
+<tr  ng-show="doc.showDes" ng-repeat-end>
+  <td><img src="{{doc.sideEvent.logo}}"></img></td>
+  <td colspan="3"><strong>Description:</strong><br>{{doc.sideEvent.description}}</td>
+</tr>
+
+</tbody>
+</table>
+</div>
+    </div>
+    <div class="panel-footer text-right">
+      <div class="text-center">
+        <button class="btn btn-sm btn-info" ng-click="goTo('/admin/events','chip=all',1)">Go to Admin Side Event Management</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+</div>
+        </div>
+      </div>
+
 
   </section>
 </div>

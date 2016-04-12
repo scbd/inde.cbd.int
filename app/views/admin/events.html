@@ -174,7 +174,7 @@
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
-        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
+        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.id':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
           <div class="collection-item ">
             <div style=" position:absolute;top:0px;left:0px;">
               <div class="collection-item-img-cont">

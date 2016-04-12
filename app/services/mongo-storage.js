@@ -63,7 +63,23 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                 }  //create
         }
 
+        //============================================================
+        //
+        //============================================================
+        function loadOrgs (){
 
+
+
+              var params = {
+                          q:{'meta.status':'published'}
+
+
+                        };
+
+
+              return $http.get('/api/v2016/inde-orgs',{'params':params, 'cache':true});
+
+        }// loadDocs
         //============================================================
         //
         //============================================================
@@ -398,6 +414,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          loadOrgs:loadOrgs,
           getOwnerFacits:getOwnerFacits,
           requestDoc:requestDoc,
           rejectDoc:rejectDoc,
