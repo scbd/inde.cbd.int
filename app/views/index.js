@@ -49,7 +49,23 @@ define(['app', 'lodash', 'jquery', 'moment',
 
 
             loadReservations(c.start, c.end, c.venue, 'Side Event', c._id).then(function(res) {
+              var allOrgs;
               c.reservations = res;
+              mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
+                allOrgs = orgs.data;
+
+              }).then(function() {
+
+                  _.each(c.reservations, function(res) {
+                    res.sideEvent.orgs = [];
+                    _.each(res.sideEvent.hostOrgs, function(org) {
+                      res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                        '_id': org
+                      }));
+                    });
+                  }); // each
+
+              });
             });
 
           });
@@ -136,19 +152,7 @@ define(['app', 'lodash', 'jquery', 'moment',
 
             $scope.day = '';
           });
-          mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
-            allOrgs = orgs.data;
 
-          }).then(function() {
-            _.each(responce.data, function(res) {
-              res.sideEvent.orgs = [];
-              _.each(res.sideEvent.hostOrgs, function(org) {
-                res.sideEvent.orgs.push(_.findWhere(allOrgs, {
-                  '_id': org
-                }));
-              });
-            }); // each
-          });
           return responce.data;
         });
 
