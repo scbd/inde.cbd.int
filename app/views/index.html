@@ -131,6 +131,18 @@
                     </div>
                   </div>
                 </div>
+                <div class="col-lg-3">
+                  <div class="table-responsive">
+                    <div>
+
+                      <!-- <select  class="form-control" ng-model="showDescriptions" >
+                        <option ng-value="1" selected> Show Descriptions</option>
+                        <option ng-value="0"> Hide Descriptions</option>
+                      </select> -->
+                      <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;"><span ng-show="showDescriptions">Hide Descriptions</span><span ng-show="!showDescriptions">Show Descriptions</span></button>
+                    </div>
+                  </div>
+                </div>
               </div>
               <table class="table table-hover table-striped" style="margin-top:10px;">
                 <thead>
@@ -152,9 +164,9 @@
                       <br>
                       <hr style="margin: 5px 0 5px 0;">{{doc.day}}
                       <br>{{doc.time}}</td>
-                    <td>{{doc.room.title}}
+                    <td><strong>{{doc.room.title}}</strong>
                       <br>{{doc.room.location}}</td>
-                    <td>{{doc.sideEvent.title}} <a><i class="fa fa-arrow-down" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;" ng-show="!doc.showDes" ></i><i class="fa fa-arrow-up" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;"  ng-show="doc.showDes" ></i></a>
+                    <td>{{doc.sideEvent.title}}
                       <br>
                       <hr>
                       <div class="relative">
@@ -165,15 +177,15 @@
                           </span>
                           <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
                         </span>
-                      </div>
+                      </div> 
                     </td>
                   </tr>
                   <tr></tr>
-                  <tr ng-click=" doc.showDes=!doc.showDes;" ng-show="!doc.showDes" ng-repeat-end >
+                  <tr  ng-show="showDescriptions" ng-repeat-end>
 
                     <td colspan="4">
-                      <strong>Description:</strong>
-                      <br>{{doc.sideEvent.description}}</td>
+                      <strong >Description:</strong>
+                      <br >{{doc.sideEvent.description}}</td>
                   </tr>
 
                 </tbody>

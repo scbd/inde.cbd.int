@@ -19,6 +19,7 @@ define(['app', 'lodash', 'jquery', 'moment',
       $scope.statusFacitsArcView = {};
       $scope.statusFacitsArcView.all = 0;
   $scope.preLoadImages=[];
+    $scope.showDescriptions=0;
       // var statuses=['published','request','canceled','rejected'];
       // var statusesArchived=['deleted','archived'];
       $scope.docs = [];
@@ -48,6 +49,19 @@ define(['app', 'lodash', 'jquery', 'moment',
         }).then(
         $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
           $scope.conferences = $scope.options.conferences = conf.data;
+          _.each($scope.conferences,function(conf,key){
+                // conf.showDescriptions = 0;
+                // $scope.$watch('conferences['+key+'].showDescriptions',function(newValue, oldValue){
+                //         console.log('newValue',newValue);
+                //         if(newValue!==oldValue)
+                //         $timeout(function(){
+                //             _.each(conf.reservations,function(res){
+                //                   res.showDes = newValue;
+                //             });
+                //         });
+                //             console.log(conf.reservations);
+                // });
+          });
           $http.get("/api/v2016/venue-rooms", {
             cache: true
           }).then(function(res2) {
@@ -167,7 +181,9 @@ define(['app', 'lodash', 'jquery', 'moment',
         if (doc.start > timestamp || $scope.hasRole(['IndeAdministrator', 'Administrator']))
           return doc;
       };
-
+      $scope.updateDesc = function(showDesc) {
+            $timeout(function(){$scope.showDescriptions = showDesc;});
+      };
       $scope.dayFilter = function(doc) {
 
         if (doc.daySeconds === doc.conf.day || !doc.conf.day) return true;
