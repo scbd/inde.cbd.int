@@ -44,7 +44,7 @@ define(['app', 'lodash', 'jquery', 'moment',
           }).then(function(res2) {
             $scope.rooms = res2.data;
             //console.log('rooms',res2.data);
-          });
+
           _.each($scope.conferences, function(c) {
 
 
@@ -52,21 +52,14 @@ define(['app', 'lodash', 'jquery', 'moment',
               c.reservations = res;
             });
 
-
-            // $http.get('https://api.cbd.int/api/v2016/inde-side-events?q={"document.confrence":"'+c._id+'","document.meta.status":{"$nin":["archived","deleted","request","draft","rejected"]}}').then(function(res){
-            //       c.events=res.data;
-            //
-            // });
           });
-
+        });
 
         }).catch(function onerror(response) {
 
           $scope.onError(response);
         });
-        //$scope.loadList ();
-        //mongoStorage.getStatusFacits($scope.schema,$scope.statusFacits,statuses);
-        //mongoStorage.getStatusFacits($scope.schema,$scope.statusFacitsArcView,statusesArchived);
+
       } //init
 
       //============================================================
@@ -112,9 +105,7 @@ define(['app', 'lodash', 'jquery', 'moment',
             res.time = moment.utc(res.start).format('LT');
             res.startSeconds = moment.utc(res.start).format('X');
             res.daySeconds = moment.utc(res.day).format('X');
-            //var seconds = moment(res.day).format('X');
-            //var diff = Math.abs(moment(res.day).diff(moment(res.start).hour(13).minute(15).second(0), 'seconds'));
-            //var diff2 = Math.abs(moment(res.day).diff(moment(res.start).hour(18).minute(15).second(0), 'seconds'));
+
             var diff = moment.utc(res.start).format('X') - moment.utc(res.day).format('X');
 
             res.tier = _.find(conf.seTiers, {
@@ -122,8 +113,11 @@ define(['app', 'lodash', 'jquery', 'moment',
             });
             res.timeSeconds = diff;
             res.conf = conf;
-            //console.log('conf',$scope.conferenceId);
-            ///console.log(conf);
+            mongoStorage.loadDoc('inde-side-events',res.sideEvent._id).then(function(se){
+                  res.sideEvent=se;
+            });
+
+
             if (!_.findWhere(conf.times, {
                 'value': diff
               }))
