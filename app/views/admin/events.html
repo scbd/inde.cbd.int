@@ -100,7 +100,7 @@
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
-        <div class="ccol-lg-4 col-md-3 col-xs-12" ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:search | filter:statusFilter)">
+        <div class="ccol-lg-4 col-md-3 col-xs-12" ng-repeat="doc in filtered = (docs |orderBy:'id':sortReverse | filter:search | filter:statusFilter)">
           <div class="card-inde small ">
             <div class="card-inde-image" ng-if="doc.logo">
 
@@ -174,7 +174,7 @@
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
-        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.id':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
+        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'id':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
           <div class="collection-item ">
             <div style=" position:absolute;top:0px;left:0px;">
               <div class="collection-item-img-cont">
@@ -317,7 +317,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter)">
+              <tr ng-repeat="doc in filtered = (docs |orderBy:'id':sortReverse | filter:customSearch | filter:statusFilter)">
                 <td>{{doc.confrenceObj.acronym}}</td>
                 <td>{{doc.id}}</td>
                 <td>{{doc.expNumPart}}</td>
