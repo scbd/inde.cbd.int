@@ -169,11 +169,9 @@
                     </td>
                   </tr>
                   <tr></tr>
-                  <tr ng-click=" doc.showDes=!doc.showDes;" ng-show="doc.showDes" ng-repeat-end >
-                    <td>
-                      <img src="{{doc.sideEvent.logo}}"></img>
-                    </td>
-                    <td colspan="3">
+                  <tr ng-click=" doc.showDes=!doc.showDes;" ng-show="!doc.showDes" ng-repeat-end >
+
+                    <td colspan="4">
                       <strong>Description:</strong>
                       <br>{{doc.sideEvent.description}}</td>
                   </tr>
