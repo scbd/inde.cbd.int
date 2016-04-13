@@ -43,8 +43,8 @@
           </div>
         </div>
         <div class="panel-footer text-right">
-          <div class="text-center">{{con.start * 1000 | date:'yyyy-MM-dd' }}
-            <span style=""> to </span> {{con.end * 1000 | date:'yyyy-MM-dd'}}</div>
+          <div class="text-center">{{con.start * 1000 | date:'yyyy-MM-dd': 'UTC' }}
+            <span style=""> to </span> {{con.end * 1000 | date:'yyyy-MM-dd' }}</div>
         </div>
       </div>
     </div>
