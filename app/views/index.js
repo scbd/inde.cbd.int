@@ -69,7 +69,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                 //console.log('rooms',res2.data);
                 var countCyc=0;
               _.each($scope.conferences, function(c) {
-                    loadReservations(c.start, c.end, c.venue, 'Side Event', c._id).then(function(res) {
+                    loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
                         c.reservations = res;
                         var cancelOrgLoad = setInterval(function(){
                            if(allOrgs && length >0 ){
@@ -117,7 +117,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                 '$date': end * 1000
               }
             },
-            'type': type
+            'type': {'$oid':type}
           }
         };
         return $http.get('/api/v2016/reservations', {
