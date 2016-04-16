@@ -157,7 +157,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
           //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
 
             var params={};
-            if(!schema) throw "Error: failed to indicate schema loadOwnerDocs";
+            if(!schema) throw "Error: failed to indicate schema loadDocs";
             if(!status){
               params = {
                           q:{'meta.status':{$nin:['archived','deleted']},
