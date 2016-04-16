@@ -49,18 +49,12 @@
       </div>
     </div>
   </div>
-
-
-
   <!-- venue-->
   <section ng-repeat="con in conferences | filter:newMeetingFilter ">
-
     <div class="row">
-
       <!-- side event schedule -->
       <div id="schedule{{$index}}" class="ind-container-header relative" style="height:60px;">
         <div class="pull-left ">
-
         </div>
         <span class="container-header-name hidden-md hiddensm hidden-xs">
           <h1 style="display:inline;">Side Event Schedule</h1>
@@ -69,11 +63,7 @@
         <span class="ind-container-header-name hidden-lg hidden-lx"> Side Event Schedule </span>
         <div class="hidden-lg hidden-lx">({{con.acronym }})</div>
         <div class="clearfix"></div>
-
       </div>
-
-
-
       <div>
       </div>
       <style>
@@ -84,37 +74,31 @@
         }
       </style>
       <div class="row">
-        <div class="col-lg-3">
-          <div class="table-responsive">
+        <div style="padding: 10px 20px 0px 20px;">
+          <div class="col-lg-3">
             <div>
-
               <select id="editForm.meeting" class="form-control" ng-model="con.day">
                 <option value="" selected>Day</option>
                 <option ng-repeat="docObj in con.days | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
               </select>
-
             </div>
           </div>
-        </div>
-        <div class="col-lg-3">
-          <div class="table-responsive">
+          <div class="col-lg-3">
             <div>
-
               <select id="editForm.meeting" class="form-control" ng-model="con.time">
                 <option value="" selected> Time</option>
                 <option ng-repeat="docObj in con.times | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
               </select>
-
             </div>
           </div>
-        </div>
-        <div class="col-lg-3">
-          <div class="table-responsive">
+          <div class="col-lg-3">
             <div>
+
               <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;">
                 <span ng-show="showDescriptions">Hide Descriptions</span>
                 <span ng-show="!showDescriptions">Show Descriptions</span>
               </button>
+
             </div>
           </div>
         </div>
@@ -169,11 +153,6 @@
 
         </tbody>
       </table>
-
-
-
-
     </div>
-    </section>
-
+  </section>
 </div>
