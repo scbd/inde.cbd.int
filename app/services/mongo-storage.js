@@ -37,7 +37,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
 
                       delete(currentDoc._id);
                       delete(currentDoc.history);
-                      if(currentDoc.meta && currentDoc.meta.v ===0)currentDoc.meta.v=1;
+                      if(currentDoc.meta && currentDoc.meta.version ===0)currentDoc.meta.version=1;
                       if(currentDoc.meta && (typeof currentDoc.meta.createdOn ==='number'))currentDoc.meta.createdOn=new Date(currentDoc.meta.createdOn).toUTCString();
                       if(currentDoc.meta && (typeof currentDoc.meta.modifiedOn ==='number'))currentDoc.meta.modifiedOn=new Date(currentDoc.meta.modifiedOn).toUTCString();
                       if(!currentDoc.clientOrg)currentDoc.clientOrg=clientOrg;
@@ -50,7 +50,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                 }
                 else{
                       currentDoc.meta={};
-                      currentDoc.meta.v=0;
+                      currentDoc.meta.version=0;
+
                       if(!currentDoc.clientOrg)currentDoc.clientOrg=clientOrg;
 
                       return $http.post(url,currentDoc,params).then(function(res){
@@ -86,7 +87,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         function deleteTempRecords(schema) {
             var oneDay = Math.round(new Date().getTime()/1000)+86400;
             var params = {
-                            q:{'meta.v':0,'meta.createdOn':{'$gt':oneDay}},
+                            q:{'meta.version':0,'meta.createdOn':{'$gt':oneDay}},
                             cache:false
                           };
             $http.get('/api/v2016/'+schema,{'params':params}).then(function(res){
@@ -161,7 +162,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
             if(!status){
               params = {
                           q:{'meta.status':{$nin:['archived','deleted']},
-                              'meta.v':{$ne:0}
+                              'meta.version':{$ne:0}
                             },
 
                         };
@@ -170,7 +171,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
             if(!_.isArray(status)){
               params = {
                           q:{'meta.status':status,
-                          'meta.v':{$ne:0}
+                          'meta.version':{$ne:0}
                             },
 
                         };
@@ -179,7 +180,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
             else {
                 params = {
                             q:{'meta.status':{$in:status},
-                            'meta.v':{$ne:0}
+                            'meta.version':{$ne:0}
                               },
 
                           };
@@ -200,7 +201,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                       var params = {
                                   q:{'meta.status':{$nin:['archived','deleted']},
                                      'meta.createdBy':user.userID,
-                                     'meta.v':{$ne:0}
+                                     'meta.version':{$ne:0}
                                     }
                                 };
                         return $http.get('/api/v2016/'+schema,{'params':params});
@@ -305,7 +306,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               if(!statArry)
                 statArry=statuses;
               if(stat){
-                $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0}}').then(
+                $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.version":{"$ne":0}}').then(
                   function(res){
 
                     statusFacits[stat]=res.data.count;
@@ -316,7 +317,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               else
               _.each(statArry,function(status){
 
-                    $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0}}').then(
+                    $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.version":{"$ne":0}}').then(
                       function(res){
                         statusFacits[status]=res.data.count;
                         statusFacits['all']+=res.data.count;
@@ -343,7 +344,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             if(!statArry)
                               statArry=statuses;
                             if(stat){
-                              $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
+                              $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+stat+'","meta.version":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                 function(res){
 
                                   statusFacits[stat]=res.data.count;
@@ -354,7 +355,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                             else
                             _.each(statArry,function(status){
 
-                                  $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.v":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
+                                  $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.version":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                     function(res){
                                       statusFacits[status]=res.data.count;
                                       statusFacits['all']+=res.data.count;
