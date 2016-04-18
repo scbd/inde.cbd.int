@@ -117,7 +117,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                 '$date': end * 1000
               }
             },
-            'type': {'$oid':type}
+            'type': type
           }
         };
         return $http.get('/api/v2016/reservations', {
