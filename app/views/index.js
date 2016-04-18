@@ -148,7 +148,7 @@ define(['app', 'lodash', 'jquery', 'moment',
             });
             res.timeSeconds = diff;
             res.conf = conf;
-            mongoStorage.loadDoc('inde-side-events',res.sideEvent._id).then(function(se){
+            mongoStorage.loadDoc('inde-side-events',res.link._id).then(function(se){
                   res.sideEvent=se;
             });
 
