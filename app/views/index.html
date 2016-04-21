@@ -114,7 +114,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:dayFilter |filter:timeFilter |orderBy:'startSeconds')" ng-click=" doc.showDes=!doc.showDes;" style="cursor:pointer;">
+          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:dayFilter |filter:timeFilter |orderBy:'startSeconds')" ng-click=" doc.showDes=!doc.showDes;" style="cursor:pointer;" ng-show="doc.sideEvent.meta.status==='published'">
             <td>{{doc.title}}</td>
             <td>{{doc.dayOfWeek}}
               <br>{{doc.tier.title}}
