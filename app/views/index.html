@@ -127,10 +127,10 @@
             <td>
               <span ng-show="doc.sideEvent.meta.status==='published'">{{doc.sideEvent.title}}</span>
               <br>
-              <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
+              <!-- <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
                 <h4>Under Editing Review:</h4>
                 Please note the owner of this side event has requested changes to the published information. Once approved the published information will be restored.
-              </div>
+              </div> -->
               <hr>
               <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
                 <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
