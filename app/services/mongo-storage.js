@@ -78,7 +78,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                         };
 
 
-              return $http.get('/api/v2016/inde-orgs',{'params':params, 'cache':true});
+              return $http.get('/api/v2016/inde-orgs',{'params':params, 'cache':false});
 
         }// loadDocs
         //============================================================
