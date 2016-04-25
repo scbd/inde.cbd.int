@@ -18,17 +18,13 @@ define(['app', 'lodash', 'jquery', 'moment',
       $scope.statusFacits = {};
       $scope.statusFacitsArcView = {};
       $scope.statusFacitsArcView.all = 0;
-  $scope.preLoadImages=[];
-    $scope.showDescriptions=0;
-      // var statuses=['published','request','canceled','rejected'];
-      // var statusesArchived=['deleted','archived'];
+      $scope.preLoadImages=[];
+      $scope.showDescriptions=0;
+
       $scope.docs = [];
       auth.getUser().then(function(user) {
-
         $scope.user = user;
-        //              console.log($scope.user);
       }).catch(function onerror(response) {
-
         $scope.onError(response);
       });
       init();
@@ -49,24 +45,11 @@ define(['app', 'lodash', 'jquery', 'moment',
         }).then(
         $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
           $scope.conferences = $scope.options.conferences = conf.data;
-          _.each($scope.conferences,function(conf,key){
-                // conf.showDescriptions = 0;
-                // $scope.$watch('conferences['+key+'].showDescriptions',function(newValue, oldValue){
-                //         console.log('newValue',newValue);
-                //         if(newValue!==oldValue)
-                //         $timeout(function(){
-                //             _.each(conf.reservations,function(res){
-                //                   res.showDes = newValue;
-                //             });
-                //         });
-                //             console.log(conf.reservations);
-                // });
-          });
+
           $http.get("/api/v2016/venue-rooms", {
             cache: true
           }).then(function(res2) {
                 $scope.rooms = res2.data;
-                //console.log('rooms',res2.data);
                 var countCyc=0;
               _.each($scope.conferences, function(c) {
                     loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
@@ -74,6 +57,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                         var cancelOrgLoad = setInterval(function(){
                            if(allOrgs && length >0 ){
                                   _.each(c.reservations, function(res) {
+
                                     res.sideEvent.orgs = [];
                                     _.each(res.sideEvent.hostOrgs, function(org) {
                                       res.sideEvent.orgs.push(_.findWhere(allOrgs, {
@@ -90,7 +74,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                     }); // loadReservations
               });//each conference
             });// then on load venues
-
+console.log('$scope.conferences',$scope.conferences);
         }).catch(function onerror(response) {
           $scope.onError(response);
         })
