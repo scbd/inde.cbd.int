@@ -30,7 +30,7 @@
     <div>{{error}}</div>
   </div>
   <div class="row">
-    <div class="col-lg-4 col-sm-6 col-xs-12"  ng-repeat="con in filCon = (conferences )">
+    <div class="col-lg-4 col-sm-6 col-xs-12"  ng-repeat="con in filCon = (conferences | filter:newMeetingFilter)">
 
       <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
         <div class="panel-heading  text-center">

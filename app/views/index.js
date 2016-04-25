@@ -162,7 +162,7 @@ console.log('$scope.conferences',$scope.conferences);
       } // loadDocs
       $scope.newMeetingFilter = function(doc) {
         var timestamp = Math.round((new Date()).getTime() / 1000);
-        if (doc.start > timestamp || $scope.hasRole(['IndeAdministrator', 'Administrator']))
+        if (doc.end > timestamp )
           return doc;
       };
       $scope.updateDesc = function(showDesc) {
