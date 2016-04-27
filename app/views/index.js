@@ -35,6 +35,7 @@ define(['app', 'lodash', 'jquery', 'moment',
           var allOrgs;
         $scope.conferences = [];
         $scope.options = {};
+
         mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
           allOrgs = orgs.data;
           _.each(allOrgs,function(org){
@@ -45,42 +46,66 @@ define(['app', 'lodash', 'jquery', 'moment',
         }).then(
         $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
           $scope.conferences = $scope.options.conferences = conf.data;
+          loadSideEventTypes().then(function(){
+                  $http.get("/api/v2016/venue-rooms", {
+                    cache: true
+                  }).then(function(res2) {
+                        $scope.rooms = res2.data;
+                        var countCyc=0;
+                      _.each($scope.conferences, function(c) {
+                          loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
+                                c.reservations = res;
+                                var cancelOrgLoad = setInterval(function(){
+                                   if(allOrgs && length >0 ){
+                                          _.each(c.reservations, function(res) {
+                                            res.showDes=false;
+                                            res.sideEvent.orgs = [];
+                                            _.each(res.sideEvent.hostOrgs, function(org) {
+                                              res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                                '_id': org
+                                              })); // findWhere
+                                            });// each
+                                          }); // each
+                                          countCyc++;
+                                    }
+                                    if(countCyc===5)// hack
+                                      clearInterval(cancelOrgLoad);
+                                },1000);//interval
 
-          $http.get("/api/v2016/venue-rooms", {
-            cache: true
-          }).then(function(res2) {
-                $scope.rooms = res2.data;
-                var countCyc=0;
-              _.each($scope.conferences, function(c) {
-                    loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
-                        c.reservations = res;
-                        var cancelOrgLoad = setInterval(function(){
-                           if(allOrgs && length >0 ){
-                                  _.each(c.reservations, function(res) {
+                            }); // loadReservations
 
-                                    res.sideEvent.orgs = [];
-                                    _.each(res.sideEvent.hostOrgs, function(org) {
-                                      res.sideEvent.orgs.push(_.findWhere(allOrgs, {
-                                        '_id': org
-                                      })); // findWhere
-                                    });// each
-                                  }); // each
-                                  countCyc++;
-                            }
-                            if(countCyc===5)// hack
-                              clearInterval(cancelOrgLoad);
-                        },1000);//interval
+                      });//each conference
+                    });// then on load venues
+          });
 
-                    }); // loadReservations
-              });//each conference
-            });// then on load venues
-console.log('$scope.conferences',$scope.conferences);
         }).catch(function onerror(response) {
           $scope.onError(response);
         })
       );// then on load org
       } //init
 
+
+            //============================================================
+            //
+            //============================================================
+            function loadSideEventTypes() {
+
+                  var     params = {
+                        q: {
+                          'parent': '570fd0a52e3fa5cfa61d90ee'
+                        }
+                      };
+                      return $http.get('/api/v2016/reservation-types', {
+                        'params': params
+                      }).then(function(responce) {
+                        $scope.seTypes=[];
+                        $scope.seTypes.push('570fd0a52e3fa5cfa61d90ee');
+                        _.each(responce.data,function(type){
+                              $scope.seTypes.push(type._id);
+                        });
+                      });
+
+            }//loadSideEventTypes
       //============================================================
       //
       //============================================================
@@ -98,10 +123,10 @@ console.log('$scope.conferences',$scope.conferences);
             },
             'end': {
               '$lt': {
-                '$date': end * 1000
+                '$date': (end * 1000)
               }
             },
-            'type': type
+            'type': {'$in':$scope.seTypes}
           }
         };
         return $http.get('/api/v2016/reservations', {
@@ -132,27 +157,26 @@ console.log('$scope.conferences',$scope.conferences);
             });
             res.timeSeconds = diff;
             res.conf = conf;
-            mongoStorage.loadDoc('inde-side-events',res.link._id).then(function(se){
-                  res.sideEvent=se;
-            });
+           if (res.link && res.link._id && res.sideEvent && res.sideEvent.meta.status==='published') {
+                mongoStorage.loadDoc('inde-side-events', res.link._id).then(function(se) {
+                    res.sideEvent = se;
+                });
+                if (!_.findWhere(conf.times, {
+                        'value': diff
+                    }))
+                    conf.times.push({
+                        'value': diff,
+                        'title': res.tier.title
+                    });
 
-
-            if (!_.findWhere(conf.times, {
-                'value': diff
-              }))
-              conf.times.push({
-                'value': diff,
-                'title': res.tier.title
-              });
-
-            if (!_.findWhere(conf.days, {
-                'value': res.daySeconds
-              }))
-              conf.days.push({
-                'value': res.daySeconds,
-                'title': res.day + '  ' + res.dayOfWeek
-              });
-
+                if (!_.findWhere(conf.days, {
+                        'value': res.daySeconds
+                    }))
+                    conf.days.push({
+                        'value': res.daySeconds,
+                        'title': res.day + '  ' + res.dayOfWeek
+                    });
+            }
             $scope.day = '';
           });
 
@@ -160,6 +184,13 @@ console.log('$scope.conferences',$scope.conferences);
         });
 
       } // loadDocs
+
+      $scope.showDesc = function(doc){
+          //$timeout(function(){
+            doc.showDes=!doc.showDes;
+          //});
+      };
+
       $scope.newMeetingFilter = function(doc) {
         var timestamp = Math.round((new Date()).getTime() / 1000);
         if (doc.end > timestamp )
@@ -171,6 +202,15 @@ console.log('$scope.conferences',$scope.conferences);
       $scope.dayFilter = function(doc) {
 
         if (doc.daySeconds === doc.conf.day || !doc.conf.day) return true;
+        else return false;
+
+      };
+      $scope.futureFilter = function(doc) {
+
+        if(doc.conf.day || doc.conf.time)
+            return true;
+
+        if (moment(doc.end).format('X') > moment.utc().subtract(4,'hours').format('X')) return true;
         else return false;
 
       };
@@ -188,21 +228,7 @@ console.log('$scope.conferences',$scope.conferences);
           return doc;
 
       };
-      //=======================================================================
-      //
-      //=======================================================================
-      $scope.searchToggle = function(i) {
 
-        var serEl = $element.find('#ind-search' + i);
-        serEl.toggleClass('ind-search-expanded');
-        serEl.focus();
-        var serElb = $element.find('#search-btn' + i);
-
-        serElb.toggleClass('search-btn-expanded');
-
-        $scope.sOpen = !$scope.sOpen;
-
-      }; // archiveOrg
 
       //============================================================
       //
@@ -215,11 +241,18 @@ console.log('$scope.conferences',$scope.conferences);
 
 
       }; //hasRole
-      $scope.customSearch = function(doc) {
+      $scope.customSearch = function(docc) {
 
+        var doc = _.clone(docc);
+        delete(doc.conf);
         if (!$scope.search || $scope.search == ' ' || $scope.search.length <= 2) return true;
         var temp = JSON.stringify(doc);
-        return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
+
+        if(_.isString(temp))
+            return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
+        else
+            return false;
+
 
       };
 
