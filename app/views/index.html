@@ -136,15 +136,15 @@
         </thead>
         <tbody>
           <tr ng-repeat-start="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')"  ng-show="doc.sideEvent.meta.status==='published'">
-            <td  style="cursor:pointer;">#{{doc.sideEvent.id}}
+            <td  style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>
-            <td width="10%" style="cursor:pointer;">{{doc.dayOfWeek}}
+            <td style="cursor:pointer;" nowrap>{{doc.dayOfWeek}}
               <br>{{doc.tier.title}}
               <br>
               <hr style="margin: 5px 0 5px 0;">{{doc.day}}
               <br>{{doc.time}}</td>
-            <td style="cursor:pointer;">
+            <td style="cursor:pointer;" nowrap>
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>
             <td >
