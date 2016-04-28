@@ -115,20 +115,15 @@ define(['app', 'lodash', 'jquery', 'moment',
 
         params = {
           q: {
-            'location.venue': venue,
-            'start': {
-              '$gt': {
-                '$date': (start * 1000)
-              }
-            },
-            'end': {
-              '$lt': {
-                '$date': (end * 1000)
-              }
-            },
-            'type': {'$in':$scope.seTypes}
-          }
+                'location.venue':venue,
+                "$and"                   :[{'start':{'$gt':{'$date':(start*1000)}}},
+                                           {'end'  :{'$lt':{'$date':end*1000}}}],
+                'meta.status'            :{$nin:['archived','deleted']},
+                'sideEvent.meta.status'  :{$nin:['archived','deleted']},
+                'type'                   :{'$in':$scope.seTypes}
+            }
         };
+
         return $http.get('/api/v2016/reservations', {
           'params': params
         }).then(function(responce) {
