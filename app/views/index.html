@@ -29,7 +29,7 @@
     <div>{{error}}</div>
   </div>
   <div class="row">
-    <div class="col-lg-4 col-sm-6 col-xs-12"  ng-repeat="con in filCon = (conferences | filter:newMeetingFilter)">
+    <div class="col-lg-4 col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences | filter:newMeetingFilter)">
 
       <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
         <div class="panel-heading  text-center">
@@ -94,37 +94,32 @@
           </div>
           <div class="col-lg-3">
             <div>
-
               <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;">
                 <span ng-show="showDescriptions">Hide Descriptions</span>
                 <span ng-show="!showDescriptions">Show Descriptions</span>
               </button>
-
             </div>
-
-
           </div>
           <div class="col-lg-3">
-                      <div class="input-group input-group-sm search-bs" style="width:100%">
-                        <input type="test" class="form-control " ng-model="$parent.search">
-                        <span class="input-group-btn">
-                          <button class="btn btn-default" type="button" ng-click="$parent.search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
-                        </span>
-                      </div>
+            <div class="input-group input-group-sm search-bs" style="width:100%">
+              <input type="test" class="form-control " ng-model="$parent.search">
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="button" ng-click="$parent.search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
+              </span>
             </div>
-
-
+          </div>
         </div>
-
       </div>
-<div class="row" style="margin-top:6px;">
-  <div class="col-lg-6" >
-    <span style="padding-left:17px;">Showing <span class="badge">{{filtered.length}}</span> Side Events</span>
-  </div>
-  <div class="col-lg-6 text-right" style="padding-right:17px;">
-    <span class="text-right" style="padding-right:17px;"><span class="badge">{{con.reservations.length}}</span> Side Events in Total</span>
-  </div>
-</div>
+      <div class="row" style="margin-top:6px;">
+        <div class="col-lg-6">
+          <span style="padding-left:17px;">Showing
+            <span class="badge">{{filtered.length}}</span> Side Events</span>
+        </div>
+        <div class="col-lg-6 text-right" style="padding-right:17px;">
+          <span class="text-right" style="padding-right:17px;">
+            <span class="badge">{{con.reservations.length}}</span> Side Events in Total</span>
+        </div>
+      </div>
       <table class="table table-hover table-striped" style="margin-top:10px;">
         <thead>
           <tr class="info">
@@ -135,8 +130,8 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')"  ng-show="doc.sideEvent.meta.status==='published'">
-            <td  style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
+          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" ng-show="doc.sideEvent.meta.status==='published'">
+            <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>
             <td style="cursor:pointer;" nowrap>{{doc.dayOfWeek}}
@@ -147,8 +142,8 @@
             <td style="cursor:pointer;" nowrap>
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>
-            <td >
-              <span  ng-click="showDesc(doc);" ng-show="doc.sideEvent.meta.status==='published'"  style="cursor:pointer;">{{doc.sideEvent.title}}</span>
+            <td>
+              <span ng-click="showDesc(doc);" ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;">{{doc.sideEvent.title}}</span>
               <br>
               <!-- <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
                 <h4>Under Editing Review:</h4>

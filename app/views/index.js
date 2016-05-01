@@ -28,84 +28,86 @@ define(['app', 'lodash', 'jquery', 'moment',
         $scope.onError(response);
       });
       init();
+
       //=======================================================================
       //
       //=======================================================================
       function init() {
           var allOrgs;
-        $scope.conferences = [];
-        $scope.options = {};
+          $scope.conferences = [];
+          $scope.options = {};
 
-        mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
-          allOrgs = orgs.data;
-          _.each(allOrgs,function(org){
-            var image = new Image();
-            image.src= org.logo;
-                $scope.preLoadImages.push(image);
-          });
-        }).then(
-        $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
-          $scope.conferences = $scope.options.conferences = conf.data;
-          loadSideEventTypes().then(function(){
-                  $http.get("/api/v2016/venue-rooms", {
-                    cache: true
-                  }).then(function(res2) {
-                        $scope.rooms = res2.data;
-                        var countCyc=0;
-                      _.each($scope.conferences, function(c) {
-                          loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
-                                c.reservations = res;
-                                var cancelOrgLoad = setInterval(function(){
-                                   if(allOrgs && length >0 ){
+          mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
+              allOrgs = orgs.data;
+              _.each(allOrgs, function(org) {
+                  var image = new Image();
+                  image.src = org.logo;
+                  $scope.preLoadImages.push(image);
+              });
+          }).then(
+              $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
+                  $scope.conferences = $scope.options.conferences = conf.data;
+                  loadSideEventTypes().then(function() {
+                      $http.get("/api/v2016/venue-rooms", {
+                          cache: true
+                      }).then(function(res2) {
+                          $scope.rooms = res2.data;
+                          var countCyc = 0;
+                          _.each($scope.conferences, function(c) {
+                              loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
+                                  c.reservations = res;
+                                  var cancelOrgLoad = setInterval(function() {
+                                      if (allOrgs && length > 0) {
                                           _.each(c.reservations, function(res) {
-                                            res.showDes=false;
-                                            res.sideEvent.orgs = [];
-                                            _.each(res.sideEvent.hostOrgs, function(org) {
-                                              res.sideEvent.orgs.push(_.findWhere(allOrgs, {
-                                                '_id': org
-                                              })); // findWhere
-                                            });// each
+                                              res.showDes = false;
+                                              res.sideEvent.orgs = [];
+                                              _.each(res.sideEvent.hostOrgs, function(org) {
+                                                  res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                                      '_id': org
+                                                  })); // findWhere
+                                              }); // each
                                           }); // each
                                           countCyc++;
-                                    }
-                                    if(countCyc===5)// hack
-                                      clearInterval(cancelOrgLoad);
-                                },1000);//interval
+                                      }
+                                      if (countCyc === 5) // hack
+                                          clearInterval(cancelOrgLoad);
+                                  }, 1000); //interval
 
-                            }); // loadReservations
+                              }); // loadReservations
 
-                      });//each conference
-                    });// then on load venues
-          });
+                          }); //each conference
+                      }); // then on load venues
+                  });
 
-        }).catch(function onerror(response) {
-          $scope.onError(response);
-        })
-      );// then on load org
+              }).catch(function onerror(response) {
+                  $scope.onError(response);
+              })
+          ); // then on load org
       } //init
 
+      //============================================================
+      //
+      //============================================================
+      function loadSideEventTypes() {
 
-            //============================================================
-            //
-            //============================================================
-            function loadSideEventTypes() {
+            var     params = {
+                  q: {
+                    'parent': '570fd0a52e3fa5cfa61d90ee'
+                  }
+                };
+                return $http.get('/api/v2016/reservation-types', {
+                  'params': params
+                }).then(function(responce) {
+                  $scope.seTypes=[];
+                  $scope.seTypes.push('570fd0a52e3fa5cfa61d90ee');
+                  _.each(responce.data,function(type){
+                        $scope.seTypes.push(type._id);
+                  });
+                });
 
-                  var     params = {
-                        q: {
-                          'parent': '570fd0a52e3fa5cfa61d90ee'
-                        }
-                      };
-                      return $http.get('/api/v2016/reservation-types', {
-                        'params': params
-                      }).then(function(responce) {
-                        $scope.seTypes=[];
-                        $scope.seTypes.push('570fd0a52e3fa5cfa61d90ee');
-                        _.each(responce.data,function(type){
-                              $scope.seTypes.push(type._id);
-                        });
-                      });
+      }//loadSideEventTypes
 
-            }//loadSideEventTypes
+
       //============================================================
       //
       //============================================================
@@ -180,26 +182,44 @@ define(['app', 'lodash', 'jquery', 'moment',
 
       } // loadDocs
 
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.showDesc = function(doc){
           //$timeout(function(){
             doc.showDes=!doc.showDes;
           //});
       };
 
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.newMeetingFilter = function(doc) {
         var timestamp = Math.round((new Date()).getTime() / 1000);
         if (doc.end > timestamp )
           return doc;
       };
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.updateDesc = function(showDesc) {
             $timeout(function(){$scope.showDescriptions = showDesc;});
       };
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.dayFilter = function(doc) {
 
         if (doc.daySeconds === doc.conf.day || !doc.conf.day) return true;
         else return false;
 
       };
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.futureFilter = function(doc) {
 
         if(doc.conf.day || doc.conf.time)
@@ -209,13 +229,19 @@ define(['app', 'lodash', 'jquery', 'moment',
         else return false;
 
       };
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.timeFilter = function(doc) {
-
-
         if (Number(doc.timeSeconds) === Number(doc.conf.time) || !doc.conf.time) return true;
         else return false;
 
       };
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.statusFilter = function(doc) {
         if (doc.meta.status === $scope.selectedChip)
           return doc;
@@ -236,6 +262,10 @@ define(['app', 'lodash', 'jquery', 'moment',
 
 
       }; //hasRole
+
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.customSearch = function(docc) {
 
         var doc = _.clone(docc);
@@ -247,10 +277,11 @@ define(['app', 'lodash', 'jquery', 'moment',
             return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
         else
             return false;
-
-
       };
 
+      //=======================================================================
+      //
+      //=======================================================================
       $scope.gotoAnchor = function(x) {
         $anchorScroll(x);
       };
@@ -261,9 +292,10 @@ define(['app', 'lodash', 'jquery', 'moment',
       $scope.goTo = function(id) {
           $location.url('/manage/events/new?m=' + id);
         } // archiveOrg
-        //============================================================
-        //
-        //============================================================
+
+      //============================================================
+      //
+      //============================================================
       $scope.hasError = function() {
         return !!$scope.error;
       };
