@@ -51,7 +51,7 @@
   </div>
   <!-- venue-->
 
-  <section ng-repeat="con in conferences ">
+  <section ng-repeat="con in conferences | filter:newMeetingFilter">
     <div class="row">
       <!-- side event schedule -->
       <div id="schedule{{$index}}" class="ind-container-header relative" style="height:60px;">
