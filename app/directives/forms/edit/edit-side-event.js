@@ -6,20 +6,15 @@ define(['app', 'lodash',
   'css!libs/ng-dialog/css/ngDialog.css',
   'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   '../../side-menu/scbd-side-menu',
-  // 'scbd-angularjs-controls/km-inputtext-ml',
-  // 'scbd-angularjs-controls/km-control-group',
-  // 'scbd-angularjs-controls/km-date',
-'scbd-filters/l-string',
-'directives/km-select',
-  // 'scbd-angularjs-controls/km-inputtext-list',
+  'scbd-filters/l-string',
+  'directives/km-select',
   '../controls/scbd-select-list',
   '../../../services/mongo-storage',
   '../controls/scbd-file-upload',
   './edit-organization',
   'app/services/theasarus.js'
-], function(app, _, template, moment, dialogTemplate,dirtyDialog) { //'scbd-services/utilities',
-
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus', //"$http", "$filter", "Thesaurus",
+], function(app, _, template, moment, dialogTemplate) {
+  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus',//"$http", "$filter", "Thesaurus",
     function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
       return {
         restrict: 'E',
@@ -27,7 +22,7 @@ define(['app', 'lodash',
         replace: true,
         transclude: false,
         scope: {},
-        link: function($scope, $element) { //, $http, $filter, Thesaurus
+        link: function($scope) {
             $scope.status = "";
             $scope._id = $route.current.params.id;
             $scope.loading = false;
@@ -35,28 +30,22 @@ define(['app', 'lodash',
             $scope.showOrgForm = 0;
             $scope.isNew = true;
             $scope.registerAlert=true;
-            // $scope.toggle = scbdMenuService.toggle;
-            // $scope.dashboard = scbdMenuService.dashboard;
             $scope.doc = {};
             $scope.doc.hostOrgs = [];
             $scope.updateProfile = 'No';
             $scope.ignoreDirtyCheck=false;
-            var data = {}; //catch for profile data
+
 
             $scope.$watch('doc.confrence', function() {
               if ($scope.doc.confrence)
                 generateDates($scope.doc.confrence);
-
             });
 
             $scope.$watch('doc.hostOrgs', function() {
               if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
-
                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
-                $(document.getElementById('hostOrg-error')).removeClass('has-warning-div');
+                $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
-
-
               }
             }, true);
 
@@ -65,7 +54,6 @@ define(['app', 'lodash',
             }).then(function(o) {
 
               $scope.options.conferences = $filter("orderBy")(o.data, "start");
-            //  $location.search();
               _.each($scope.options.conferences, function(conf) {
                 if (conf._id === $location.search().m)
                   conf.selected = true;
@@ -74,11 +62,9 @@ define(['app', 'lodash',
               });
 
             }).then($timeout(function() {
-              if ($location.search().m) $scope.doc.confrence = $location.search().m;
+                if ($location.search().m) $scope.doc.confrence = $location.search().m;
             }, 1000)).catch(function onerror(response) {
-
-              $scope.onError(response);
-
+                $scope.onError(response);
             });
 
             init();
@@ -136,6 +122,8 @@ define(['app', 'lodash',
 
               });
             };
+
+
 
             //============================================================
             //
@@ -303,7 +291,7 @@ define(['app', 'lodash',
 
             $scope.randomPic = function() {
               $scope.doc.logo = randomPic();
-            }
+            };
 
             //============================================================
             //
@@ -313,18 +301,18 @@ define(['app', 'lodash',
                 $scope.doc.logo = randomPic();
               else
                 $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
-            }
+            };
 
             //============================================================
             //
             //============================================================
-            function generateEventId(confId) {
-              return mongoStorage.generateEventId(confId).then(function(res) {
-                return res;
-              }).then(null, function(err) {
-                $scope.onError(err);
-              });
-            } // generateEventId
+            // function generateEventId(confId) {
+            //   return mongoStorage.generateEventId(confId).then(function(res) {
+            //     return res;
+            //   }).then(null, function(err) {
+            //     $scope.onError(err);
+            //   });
+            // } // generateEventId
 
             //============================================================
             //
@@ -352,27 +340,22 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            $scope.orgCallback = function(newOrgId) {
+            $scope.orgCallback = function() {
               $scope.showOrgForm = 0;
-
             };
 
             //=======================================================================
             //
             //=======================================================================
             $scope.saveDoc = function() {
-              var tempMobile;
                 $scope.doc.meta.status='draft';
                if(!$scope.doc.id){
-
-
                         mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                           $scope.onError(err);
                         }).catch(function onerror(response) {
 
                           $scope.onError(response);
                         });
-                      // });
                 }
                 else
                     mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
@@ -398,8 +381,6 @@ define(['app', 'lodash',
             $scope.submitForm = function(formData) {
               $scope.submitted = true;
 
-
-console.log('test');
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
               }
@@ -436,8 +417,8 @@ console.log('test');
                     smoothScroll(document.getElementById('hostOrg-error'));
                   if(!$scope.focused)
                       $(document.getElementById('editForm.hostOrgs')).focus();
-                  $(document.getElementById('editForm.hostOrgs')).addClass('has-warning');
-                  $(document.getElementById('hostOrg-error')).addClass('has-warning-div');
+                  $(document.getElementById('editForm.hostOrgs')).addClass('has-error');
+                  $(document.getElementById('hostOrg-error')).addClass('has-error-div');
                   $(document.getElementById('hostOrgMsg')).css('display', 'block');
                   $scope.focused = true;
                 }

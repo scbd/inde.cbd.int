@@ -1,12 +1,10 @@
-define(['app', 'lodash',
-
+define(['app', 
   '../../directives/side-menu/scbd-side-menu',
   '../../directives/scbd-button',
   './menu',
   '../../directives/forms/edit/edit-side-event',
     '../../services/mongo-storage'
-
-], function(app, _) { //'scbd-services/utilities',
+], function(app) {
 
 
   app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window','history', //"$http", "$filter", "Thesaurus",
