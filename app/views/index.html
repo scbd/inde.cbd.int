@@ -143,7 +143,7 @@
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>
             <td>
-              <span ng-click="showDesc(doc);" ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="/{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
+              <span ng-click="showDesc(doc);" ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="/side-events/{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
               <br>
               <!-- <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
                 <h4>Under Editing Review:</h4>
