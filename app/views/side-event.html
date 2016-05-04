@@ -1,0 +1,81 @@
+<div class="alert alert-danger" ng-show="hasError()">
+  <strong>Error as occured...</strong>
+  <div>{{error}}</div>
+</div>
+
+<div class="row">
+  <div class="container-header col-xs-12" style="height:100%;margin-bottom:10px;">
+    <span style="white-space: normal;">
+      <h4>Side Event #{{sideEventCtrl.doc.id}}</h4>
+    </span>
+    <div class="clearfix"></div>
+  </div>
+</div>
+
+<div class="col-xs-12">
+  <table class="table table-striped">
+    <tbody>
+      <tr class="hidden-xs">
+        <th scope="row">ID</th>
+        <td>{{sideEventCtrl.doc.id}}</td>
+        <td width="50%" rowspan="5" align="center">
+          <img src="{{sideEventCtrl.doc.logo}}" style="height:100%;" class="img-responsive" alt="Responsive image">
+        </td>
+      </tr>
+      <tr class="hidden-sm hidden-md hidden-lg hidden-xl" align="center">
+        <td colspan="2"><img src="{{sideEventCtrl.doc.logo}}" style="height:100%;" class="img-responsive" alt="Responsive image"></td>
+      </tr>
+      <tr class="hidden-sm hidden-md hidden-lg hidden-xl">
+        <th scope="row">ID</th>
+        <td>{{sideEventCtrl.doc.id}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Meeting</th>
+        <td><strong>{{sideEventCtrl.doc.conferenceObj.acronym}}</strong> <br><span class="small">{{sideEventCtrl.doc.conferenceObj.title}}</span></td>
+      </tr>
+      <tr>
+        <th scope="row">Title</th>
+        <td>{{sideEventCtrl.doc.title}}</td>
+      </tr>
+      <tr>
+        <th scope="row">Hosts</th>
+        <td>
+          <div class="relative">
+            <span class="relative" ng-repeat="org in sideEventCtrl.doc.orgs track by $index" style="margin:0 2px 0 0;">
+              <span class="cir" style="position:relative;">
+                <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
+                <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+              </span>
+              <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+            </span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Topics</th>
+        <td>
+          <div ng-repeat="subj in sideEventCtrl.doc.subjectObjs">{{subj.name}}</div>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Description</th>
+        <td colspan="2">{{sideEventCtrl.doc.description}}</td>
+      </tr>
+      <tr ng-show="sideEventCtrl.doc.documents.length">
+        <th scope="row">Documents</th>
+        <td colspan="2">
+          <table class="table table-striped">
+            <tbody>
+              <tr ng-repeat="item in sideEventCtrl.doc.documents track by $index">
+                <th scope="row" width="5%"><i class="fa fa-file-o" aria-hidden="true"></i></th>
+                <td> <a href="{{trustSrc(item.src)}}">{{item.name}}</a>&nbsp;&nbsp;&nbsp;
+                  <strong>{{item.size |fileSize}}</strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
