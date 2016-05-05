@@ -130,7 +130,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" ng-show="doc.sideEvent.meta.status==='published'">
+          <tr ng-repeat="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" >
             <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>
@@ -144,6 +144,7 @@
               <br>{{doc.room.location}}</td>
             <td>
               <span  ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
+              <span  ng-show="doc.type==='572bcfa4240149400a234903'" style="cursor:pointer;">{{doc.title}}</span>
               <br>
               <hr>
               <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">

@@ -60,12 +60,15 @@ define(['app', 'lodash', 'jquery', 'moment',
                                       if (allOrgs && length > 0) {
                                           _.each(c.reservations, function(res) {
                                               res.showDes = false;
-                                              res.sideEvent.orgs = [];
-                                              _.each(res.sideEvent.hostOrgs, function(org) {
-                                                  res.sideEvent.orgs.push(_.findWhere(allOrgs, {
-                                                      '_id': org
-                                                  })); // findWhere
-                                              }); // each
+                                              if(res.sideEvent){
+                                                  res.sideEvent.orgs = [];
+                                                  _.each(res.sideEvent.hostOrgs, function(org) {
+                                                      res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                                          '_id': org
+                                                      })); // findWhere
+
+                                                    }); // each
+                                              }
                                           }); // each
                                           countCyc++;
                                       }
@@ -103,6 +106,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                   _.each(responce.data,function(type){
                         $scope.seTypes.push(type._id);
                   });
+                  $scope.seTypes.push('572bcfa4240149400a234903');
                 });
 
       }//loadSideEventTypes
