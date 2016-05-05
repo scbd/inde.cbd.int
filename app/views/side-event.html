@@ -47,7 +47,7 @@
                 <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                 <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
               </span>
-              <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+              <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} <span ng-hide="$last">|</span></span>
             </span>
           </div>
         </td>

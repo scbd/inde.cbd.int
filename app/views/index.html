@@ -143,7 +143,7 @@
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>
             <td>
-              <span  ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="/side-events/{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
+              <span  ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
               <br>
               <hr>
               <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
@@ -152,7 +152,7 @@
                     <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
                     <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
                   </span>
-                  <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                  <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} <span ng-hide="$last">|</span></span>
                 </span>
               </div>
             </td>
