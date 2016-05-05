@@ -130,7 +130,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat-start="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" ng-show="doc.sideEvent.meta.status==='published'">
+          <tr ng-repeat="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" ng-show="doc.sideEvent.meta.status==='published'">
             <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>
@@ -143,12 +143,8 @@
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>
             <td>
-              <span ng-click="showDesc(doc);" ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="/side-events/{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
+              <span  ng-show="doc.sideEvent.meta.status==='published'" style="cursor:pointer;"><a href="/side-events/{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
               <br>
-              <!-- <div class="bs-callout bs-callout-danger" ng-show="doc.sideEvent.meta.status!=='published'">
-                <h4>Under Editing Review:</h4>
-                Please note the owner of this side event has requested changes to the published information. Once approved the published information will be restored.
-              </div> -->
               <hr>
               <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
                 <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
@@ -158,22 +154,8 @@
                   </span>
                   <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
                 </span>
-                <div class="pull-right">
-                  <button class="btn btn-xs btn-default " ng-click="showDesc(doc);" ng-show="!showDescriptions">
-                    <span ng-show="doc.showDes">Hide Description</span>
-                    <span ng-show="!doc.showDes">Show Description</span>
-                  </button>
-                </div>
               </div>
             </td>
-          </tr>
-          <tr></tr>
-          <tr ng-show="showDescriptions || doc.showDes" ng-repeat-end>
-
-            <td colspan="4">
-
-              <strong>Description:</strong>
-              <br>{{doc.sideEvent.description}}</td>
           </tr>
 
         </tbody>

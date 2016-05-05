@@ -56,7 +56,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                           _.each($scope.conferences, function(c) {
                               loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
                                   c.reservations = res;
-                                  var cancelOrgLoad = setInterval(function() {
+                                 var cancelOrgLoad = setInterval(function() {
                                       if (allOrgs && length > 0) {
                                           _.each(c.reservations, function(res) {
                                               res.showDes = false;
@@ -69,9 +69,9 @@ define(['app', 'lodash', 'jquery', 'moment',
                                           }); // each
                                           countCyc++;
                                       }
-                                      if (countCyc === 5) // hack
-                                          clearInterval(cancelOrgLoad);
-                                  }, 1000); //interval
+                                     if (countCyc === 5) // hack
+                                         clearInterval(cancelOrgLoad);
+                                 }, 10); //interval
 
                               }); // loadReservations
 
