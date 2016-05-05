@@ -10,10 +10,11 @@ define(['app', 'lodash'], function(app, _) {
         };
     });
 
-    return ['mongoStorage', '$route', '$http', function(mongoStorage, $route, $http) {
+    return ['mongoStorage', '$route', '$http','$sce', function(mongoStorage, $route, $http,$sce) {
 
         var _ctrl = this;
         _ctrl.hasError = hasError;
+        _ctrl.trustSrc =trustSrc;
         load();
         return this;
 
@@ -64,7 +65,12 @@ define(['app', 'lodash'], function(app, _) {
         function hasError() {
             return !!_ctrl.error;
         }
-
+        //============================================================
+        //
+        //============================================================
+        function trustSrc (src) {
+            return $sce.trustAsResourceUrl(src);
+        };
         //============================================================
         //
         //============================================================
