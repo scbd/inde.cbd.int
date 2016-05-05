@@ -7,10 +7,13 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
       scope: {
         uid: '@',
       },
-      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication','$rootScope',
-        function($scope, $location, $window, $timeout, $element, authentication,$rootScope) {
+      controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication','$rootScope','mongoStorage',
+        function($scope, $location, $window, $timeout, $element, authentication,$rootScope,mongoStorage) {
 
-
+          mongoStorage.getLatestConfrences().then(function(res){
+              if(_.isEmpty(res.data))
+                $scope.hideNavs=true;
+          });
 
           //============================================================
           //
@@ -66,36 +69,11 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
                   $element.find("#admin-sm").removeClass('active');
               }
 
-            } //isActivePath
+            }; //isActivePath
 
-          $timeout(function(){$scope.setActivePath()},1000);
+          $timeout(function(){$scope.setActivePath();},1000);
 
-          // $scope.isOpen = false;
-          //  $scope.demo = {
-          //    isOpen: false,
-          //    count: 0,
-          //    selectedDirection: 'left'
-          //  };
 
-          var lastScrolY = 0;
-          //hiding mobi menu needs work
-          // angular.element($window).bind(
-          // 	"scroll", function(e) {
-          //          //console.log('window.pageYOffset',e.originalEvent);
-          //          if(window.pageYOffset > lastScrolY) {
-          //            $scope.portalMobiNavClass = 'portal-nav-mobi-small';
-          //            $scope.spaceFillClass='space-filler-small';
-          //          } else {
-          //            $scope.portalMobiNavClass = 'portal-nav-mobi-big ';
-          //            $scope.spaceFillClass='space-filler-big';
-          //          }
-          //          //console.log('lastScrolY',lastScrolY);
-          //          lastScrolY=window.pageYOffset;
-          //
-          //          $scope.$apply();
-          //    });
-
-          //$scope.$root.pageTitle = { text: "" };
           $scope.goTo = function(path) {
             return $location.url(path);
           };

@@ -11,7 +11,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
             when('/home',                      { redirectTo: '/' }).
             when('/',                          { templateUrl: 'views/index.html',                       resolveController: true, resolveUser: true }).
 
-            when('/help',                      { templateUrl: 'views/help.html',                        resolveUser: true }).
+            when('/past',                      { templateUrl: 'views/past.html',  controllerAs:'pastCtrl',                      resolveController: true, resolveUser: true }).
 
             when('/admin',                     { templateUrl: 'views/admin/admin-dash-board.html',      resolveController: true, resolveUser: true}).
             when('/admin/events',              { templateUrl: 'views/admin/events.html',                resolveController: true, resolveUser: true,resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).

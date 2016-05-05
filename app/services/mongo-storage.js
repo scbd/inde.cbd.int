@@ -1,6 +1,6 @@
 define(['app','lodash','libs/js-sha256/build/sha256.min','scbd-angularjs-services/locale'], function (app,_) {
 
-app.factory("mongoStorage", ['$http','authentication','$q','locale','$location', function($http,authentication,$q,locale,$location) {
+app.factory("mongoStorage", ['$http','authentication','$q','locale', function($http,authentication,$q,locale) {
 
         var user;
         authentication.getUser().then(function(u){
@@ -15,7 +15,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         });
         var clientOrg = 0; // means cbd
 
-        var statuses=['draft','published','request','deleted','archived','canceled','rejected'];
 
 
         //============================================================
@@ -266,6 +265,135 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
               docObj.meta.status='canceled';
               return save(schema,docObj,_id);
         }
+
+        //============================================================
+      //                    sk: pageNumber,
+                          // l: pageLength,
+                          // c: count
+      //============================================================
+      function getReservations(start, end, location, type,page,text) {
+
+          var params = {};
+          params = {
+              q: {
+
+                  'meta.status': {
+                      $nin: ['archived', 'deleted']
+                  },
+                  'sideEvent.meta.status': {
+                      $nin: ['archived', 'deleted']
+                  }
+              }
+          };
+          if(text)
+            params.q.$text={'$serch':text};
+
+          if(page){
+            params.sk=page.pageNumber;
+            params.l=page.pageLength;
+            params.c=page.count;
+          }
+          if(location){
+            params.q.location={};
+            params.q.location.venue=location.venue;
+            params.q.location.room=location.room;
+          }
+          if(start && end){
+              params.q.$and= [{
+                  'start': {
+                      '$gt': {
+                          '$date': start
+                      }
+                  }
+              }, {
+                  'end': {
+                      '$lt': {
+                          '$date': end
+                      }
+                  }
+              }];
+          } else if(start){
+            params.q.start={
+                '$gt': {
+                    '$date': start
+                }
+            };
+          }else if(end){
+            params.q.start={
+                '$lt': {
+                    '$date': end
+                }
+            };
+          }
+
+          //TODO search if parent and if yes search for parent or children
+          if (type && _.isString(type)) {
+              return getChildrenTypes(type).then(function(typeArr) {
+                 if(!params.q.$and)params.q.$and=[];
+                  params.q.$and.push({
+                      'type': {
+                          '$in': typeArr
+                      }
+                  });
+                  return $http.get('/api/v2016/reservations', {
+                      'params': params
+                  });
+              });
+          } else
+              return $http.get('/api/v2016/reservations', {
+                  'params': params
+              });
+      } // getDocs
+
+      //============================================================
+    //                    sk: pageNumber,
+                        // l: pageLength,
+                        // c: count
+    //============================================================
+    function getLatestConfrences () {
+
+        var params = {};
+        params = {
+            q: {
+
+            }
+        };
+
+          params.q.end={
+              '$lt': {
+                  '$date': new Date().toISOString()
+              }
+          };
+
+
+
+        return $http.get('/api/v2016/conferences', {
+            'params': params
+        });
+    } // getDocs
+
+      //============================================================
+      //
+      //============================================================
+      function getChildrenTypes(type) {
+          var types = [];
+          types.push(type);
+          var params = {
+              q: {
+                  'parent': type
+              }
+          };
+          return $http.get('/api/v2016/reservation-types', {
+              'params': params
+          }).then(function(responce) {
+              _.each(responce.data, function(t) {
+                  types.push(t._id);
+              });
+              return types;
+          });
+
+      } //loadSideEventTypes
+
         //=======================================================================
         //
         //=======================================================================
@@ -310,7 +438,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                   function(res){
 
                     statusFacits[stat]=res.data.count;
-                    statusFacits['all']+=res.data.count;
+                    statusFacits.all+=res.data.count;
                   }
                 );
               }
@@ -320,7 +448,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                     $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.version":{"$ne":0}}').then(
                       function(res){
                         statusFacits[status]=res.data.count;
-                        statusFacits['all']+=res.data.count;
+                        statusFacits.all+=res.data.count;
                       }
                     );
 
@@ -348,7 +476,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                                 function(res){
 
                                   statusFacits[stat]=res.data.count;
-                                  statusFacits['all']+=res.data.count;
+                                  statusFacits.all+=res.data.count;
                                 }
                               );
                             }
@@ -358,7 +486,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
                                   $http.get('/api/v2016/'+schema+'?c=1&q={"meta.status":"'+status+'","meta.version":{"$ne":0},"meta.createdBy":'+user.userID+'}').then(
                                     function(res){
                                       statusFacits[status]=res.data.count;
-                                      statusFacits['all']+=res.data.count;
+                                      statusFacits.all+=res.data.count;
                                     }
                                   );
                             });
@@ -415,6 +543,8 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$location',
         } // touch
 
         return{
+          getLatestConfrences:getLatestConfrences,
+          getReservations:getReservations,
           loadOrgs:loadOrgs,
           getOwnerFacits:getOwnerFacits,
           requestDoc:requestDoc,
