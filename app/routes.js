@@ -10,7 +10,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
             when('/',                          { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home',                      { redirectTo: '/' }).
             when('/',                          { templateUrl: 'views/index.html',                       resolveController: true, resolveUser: true }).
-
+            when('/home',                      { redirectTo: '/past' }).
             when('/past',                      { templateUrl: 'views/past.html',  controllerAs:'pastCtrl',                      resolveController: true, resolveUser: true }).
 
             when('/admin',                     { templateUrl: 'views/admin/admin-dash-board.html',      resolveController: true, resolveUser: true}).
