@@ -9,7 +9,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
         $routeProvider.
             when('/',                          { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home',                      { redirectTo: '/' }).
-            when('/',                          { templateUrl: 'views/past.html',                       resolveController: true, resolveUser: true }).
+            when('/',                          { templateUrl: 'views/past.html', controllerAs:'pastCtrl',                       resolveController: true, resolveUser: true }).
 
             when('/past',                      { templateUrl: 'views/past.html',  controllerAs:'pastCtrl',                      resolveController: true, resolveUser: true }).
 
