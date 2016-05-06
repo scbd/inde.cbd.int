@@ -7,10 +7,10 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'scbd-angularjs
         $locationProvider.hashPrefix('!');
 
         $routeProvider.
-            when('/',                          { template:    rootTemplate,  label:'Home',  resolveController: 'views/past', reloadOnSearch : false }).
+            when('/',                          { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
             when('/home',                      { redirectTo: '/' }).
-            when('/',                          { templateUrl: 'views/index.html',                       resolveController: true, resolveUser: true }).
-            when('/home',                      { redirectTo: '/past' }).
+            when('/',                          { templateUrl: 'views/past.html',                       resolveController: true, resolveUser: true }).
+
             when('/past',                      { templateUrl: 'views/past.html',  controllerAs:'pastCtrl',                      resolveController: true, resolveUser: true }).
 
             when('/admin',                     { templateUrl: 'views/admin/admin-dash-board.html',      resolveController: true, resolveUser: true}).
