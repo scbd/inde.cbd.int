@@ -156,6 +156,19 @@ define(['app', 'lodash', 'jquery', 'moment',
             res.tier = _.find(conf.seTiers, {
               'seconds': diff
             });
+
+            _.each(conf.seTiers,function(tier,key){
+                if(diff >= tier.seconds){
+                    if(conf.seTiers[key+1])
+                      if( diff < conf.seTiers[key+1].seconds)
+                          res.tier=tier;
+                    else
+                        res.tier=tier;
+
+
+                }
+            });
+
             res.timeSeconds = diff;
             res.conf = conf;
            if (res.link && res.link._id && res.sideEvent && res.sideEvent.meta.status==='published') {
