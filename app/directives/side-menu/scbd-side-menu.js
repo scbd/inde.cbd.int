@@ -5,7 +5,6 @@ define(['app',
     './menu-toggle',
     './menu-link',
     './scbd-menu-service',
-    '../scbd-icon-button'
   ],
   function(app, template, _) {
     //============================================================
@@ -58,11 +57,7 @@ define(['app',
 
           $scope.navId=$attr.id;
 
-
           $element.find('.site-overlay').attr('id','site-overlay-'+$attr.id);
-
-
-
 
           $scope.$watch('sections',function(){
               if($scope.sections && $scope.sections.length>=2){

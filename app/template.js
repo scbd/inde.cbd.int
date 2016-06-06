@@ -1,13 +1,12 @@
 define(['app', 'jquery',
-      'css!font-awsome-css',
-      'css!app-css',
-      'scbd-angularjs-services/authentication',
+      'lodash',
+      'services/authentication',
       'directives/portal/portal-nav',
       'services/history'
-    ], function(app, $) {
+    ], function(app, $,_) {
       'use strict';
 
-    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm','$q','$timeout','history', function($scope, $rootScope, $window, $location, authentication,  realm,$q,$timeout,history) {
+    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication',  'realm','$q','$timeout',function($scope, $rootScope, $window, $location, authentication,  realm,$q,$timeout) {
 
 
 
@@ -16,9 +15,9 @@ define(['app', 'jquery',
         $scope.routeLoaded = false;
 
         $q.when(authentication.getUser()).then(function(u){
-            $scope.user = u;
+            $rootScope.user = u;
         });
-        $scope.$on('$viewContentLoaded', function(event) {
+        $scope.$on('$viewContentLoaded', function() {
           $timeout(function(){$scope.routeLoaded = true;},1000);
 
         });
@@ -32,34 +31,34 @@ define(['app', 'jquery',
         });
 
         //============================================================
-    //
-    //
-    //============================================================
-    $rootScope.$watch('user', _.debounce(function(user) {
+        //
+        //
+        //============================================================
+        $rootScope.$watch('user', _.debounce(function(user) {
 
-        if (!user)
-            return;
+            if (!user)
+                return;
 
-        require(["_slaask"], function(_slaask) {
+            require(["_slaask"], function(_slaask) {
 
-            if (user.isAuthenticated) {
-                _slaask.identify(user.name, {
-                    'user-id' : user.userID,
-                    'name' : user.name,
-                    'email' : user.email,
-                });
+                if (user.isAuthenticated) {
+                    _slaask.identify(user.name, {
+                        'user-id' : user.userID,
+                        'name' : user.name,
+                        'email' : user.email,
+                    });
 
-                if(_slaask.initialized) {
-                    _slaask.slaaskSendUserInfos();
+                    if(_slaask.initialized) {
+                        _slaask.slaaskSendUserInfos();
+                    }
                 }
-            }
 
-            if(!_slaask.initialized) {
-                _slaask.init('ae83e21f01860758210a799872e12ac4');
-                _slaask.initialized = true;
-            }
-        });
-    }, 1000));
+                if(!_slaask.initialized) {
+                    _slaask.init('ae83e21f01860758210a799872e12ac4');
+                    _slaask.initialized = true;
+                }
+            });
+        }, 1000));
 
 
         $scope.goHome               = function() { $location.path('/'); };

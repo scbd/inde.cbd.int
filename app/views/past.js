@@ -25,7 +25,7 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
                 cache: true
             });
             mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
-                allOrgs = orgs.data;
+                allOrgs = orgs;
                 _.each(allOrgs, function(org) {
                     var image = new Image();
                     image.src = org.logo;

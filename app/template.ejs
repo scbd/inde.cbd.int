@@ -11,6 +11,11 @@
 
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="app/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <!-- <link href="app/libs/angular-toastr/dist/angular-toastr.min.css" rel="stylesheet"> -->
+  <link href="app/libs/ng-dialog/css/ngDialog.css" rel="stylesheet">
+  <link href="app/libs/ng-dialog/css/ngDialog-theme-default.min.css" rel="stylesheet">
+  <link href="app/css/main.css" rel="stylesheet">
     <style>
 
     [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
@@ -76,13 +81,13 @@
 </head>
 <body class="ltr" id="top">
   <!-- used by authentication service as work around for cross domain storage of token -->
-  <!-- <iframe ng-if="!ACCOUNTS_URL" id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe> -->
-  <iframe   id="authenticationFrame" style="display:none"></iframe>
-  <script>
+  <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>
+  <!-- <iframe   id="authenticationFrame" style="display:none"></iframe> -->
+  <!-- <script>
       var domain = document.location.hostname.replace(/[^\.]+\./, '');
       if(domain=='localhost') domain = 'cbddev.xyz';
       document.getElementById('authenticationFrame').src = 'https://accounts.'+domain+'/app/authorize.html';
-  </script>
+  </script> -->
     <!-- HEADER (MOBILE) -->
     <header class="mobile navbar visible-xs " role="banner">
         <div class="container">

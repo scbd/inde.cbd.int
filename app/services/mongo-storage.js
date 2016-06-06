@@ -1,4 +1,4 @@
-define(['app','lodash','libs/js-sha256/build/sha256.min','scbd-angularjs-services/locale'], function (app,_) {
+define(['app','lodash','services/locale'], function (app,_) {
 
 app.factory("mongoStorage", ['$http','authentication','$q','locale', function($http,authentication,$q,locale) {
 
@@ -68,16 +68,17 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale', function($h
         //============================================================
         function loadOrgs (){
 
+              var params = {q:{'meta.status':'published'}};
 
+              if(!localStorage.getItem('allOrgs'))
+                    return $http.get('/api/v2016/inde-orgs',{params:params, cache:false}).then(function(res){
+                            localStorage.setItem('allOrgs',JSON.stringify(res.data));
+                    });
+              else
+                return $q(function(resolve) {
+                      return resolve(JSON.parse(localStorage.getItem('allOrgs')));
+                  });
 
-              var params = {
-                          q:{'meta.status':'published'}
-
-
-                        };
-
-
-              return $http.get('/api/v2016/inde-orgs',{'params':params, 'cache':false});
 
         }// loadDocs
         //============================================================
@@ -504,7 +505,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale', function($h
               return  $http.get('/api/v2016/inde-side-events',{'params':params});
 
         }//getStatusFacits
-
 
 
         //=======================================================================

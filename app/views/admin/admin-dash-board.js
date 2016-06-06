@@ -1,22 +1,14 @@
-define(['app', 'lodash', 'moment',
-
-  './menu',
-
-  'scbd-angularjs-controls',
-  '../../services/mongo-storage'
-
-], function(app, _, moment) { //'scbd-services/utilities',
+define(['app', 'lodash', 'moment','../../services/mongo-storage'], function(app, _, moment) { //'scbd-services/utilities',
 
 
-  app.controller("adminDashBoard", ['$scope', 'adminMenu', 'authentication', '$location', '$timeout', 'mongoStorage', '$window', 'history', '$http', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, authentication, $location, $timeout, mongoStorage, $window, history, $http) { //, $http, $filter, Thesaurus
-      $scope.test = [];
+  app.controller("adminDashBoard", ['$scope',  'authentication', '$location', '$timeout', 'mongoStorage', '$window', 'history', '$http', //"$http", "$filter", "Thesaurus",
+    function($scope,  authentication, $location, $timeout, mongoStorage, $window, history, $http) { //, $http, $filter, Thesaurus
+
 
       $scope.conference = '';
-      $scope.toggle = dashMenu.toggle;
+
       $scope.options = {};
       $scope.options.days = [];
-      $scope.sections = dashMenu.getMenu('admin');
       $scope.facets = {};
       $scope.facets.all = 0;
       $scope.facets.drafts = 0;
@@ -35,7 +27,7 @@ define(['app', 'lodash', 'moment',
       $scope.facetsO.archived = 0;
       var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
       mongoStorage.getStatusFacits('inde-side-events', $scope.facets, statuses);
-      mongoStorage.getStatusFacits('inde-orgs', $scope.facetsO, statuses)
+      mongoStorage.getStatusFacits('inde-orgs', $scope.facetsO, statuses);
 
       authentication.getUser().then(function(user) {
         $scope.isAuthenticated = user.isAuthenticated;
@@ -50,13 +42,12 @@ define(['app', 'lodash', 'moment',
       $scope.goTo = function(path, search, count) {
           if (count)
             $location.path(path).search(search);
-        } // archiveOrg
+        }; // archiveOrg
 
       //=======================================================================
       //
       //=======================================================================
       $scope.close = function() {
-
         history.goBack();
       };
 
