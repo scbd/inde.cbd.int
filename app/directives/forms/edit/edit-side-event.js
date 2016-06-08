@@ -6,13 +6,13 @@ define(['app', 'lodash',
   'css!libs/ng-dialog/css/ngDialog.css',
   'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   '../../side-menu/scbd-side-menu',
-  'scbd-filters/l-string',
+  //'scbd-filters/l-string',
   'directives/km-select',
   '../controls/scbd-select-list',
   '../../../services/mongo-storage',
   '../controls/scbd-file-upload',
   './edit-organization',
-  'app/services/theasarus.js'
+  'app/services/theasarus.js','ngDialog','ngSmoothScroll',
 ], function(app, _, template, moment, dialogTemplate) {
   app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus',//"$http", "$filter", "Thesaurus",
     function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
