@@ -43,7 +43,9 @@ define(['app','lodash'],function(app,_) {
         //============================================================
         function getPrevPath() {
 
-          if(_.last(history).from===$location.url())return false;
+          if(_.isEmpty(history)) return $location.url();
+
+          if(  (_.last(history).from===$location.url()) )return false;
           else
             return _.last(history).from;
         }
