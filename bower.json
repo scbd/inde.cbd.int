@@ -17,8 +17,7 @@
     "require-css": "0.1.8",
     "requirejs-plugins": "1.0.3",
     "requirejs-text": "2.0.14",
-    "scbd-angularjs-controls": "https://github.com/scbd/scbd-angularjs-controls.git#7b3f62ecee4c7eb57747c8d981829354cf779890",
-    "scbd-angularjs-services": "~v1.1.17",
+
     "scbd-filters": "1.0.0",
     "ng-file-upload": "12.0.1",
     "ng-dialog": "0.5.8",

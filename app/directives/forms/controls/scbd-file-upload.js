@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./scbd-file-upload.html'], function(app, _, template) {
+define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string'], function(app, _, template) {
     'use strict';
     app.directive('scbdFileUpload', ["$http", "Upload", "$timeout", 'mongoStorage','$sce', function($http, Upload, $timeout, mongoStorage,$sce) {
         return {
@@ -27,7 +27,6 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html'], function(app, _, templ
                         if ($scope.file)
                             $scope.files = [$scope.file];
                     });
-
                 }; // init
 
                 //============================================================

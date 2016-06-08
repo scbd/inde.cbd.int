@@ -2,8 +2,6 @@ define(['app',
     'text!./scbd-side-menu.html',
     'lodash',
     'css!./scbd-side-menu',
-    './menu-toggle',
-    './menu-link',
     './scbd-menu-service',
   ],
   function(app, template, _) {
