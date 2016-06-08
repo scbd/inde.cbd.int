@@ -1,12 +1,32 @@
+<style>
+  .list-group-item a {
+    text-decoration: none !important
+  }
+  .list-group-item.active,
+  .list-group-item:hover,
+  .list-group-item:focus {
+    background-color: #e8e8e8;
+    background-image: -webkit-linear-gradient(top, #f5f5f5 0, #e8e8e8 100%);
+    background-image: -o-linear-gradient(top, #f5f5f5 0, #e8e8e8 100%);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e8e8e8));
+    background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5', endColorstr='#ffe8e8e8', GradientType=0);
+    background-repeat: repeat-x;
+  }
+</style>
 <div class="site-overlay" ng-click="toggle()"></div>
-<nav class="pushy" >
-  <!-- ng-show="isOpen" -->
-  <section></section>
-  <div ng-repeat="section in sections" ng-class="{'parentActive' : vm.isSectionSelected(section)}">
-    <h2 ng-if="section.type === 'heading'" id="heading_{{section.name }}">
-      {{ section.name }}
-    </h2>
-    <menu-link section="section" ng-if="section.type === 'link'" user="user"></menu-link>
-    <menu-toggle section="section" ng-if="section.type === 'toggle'" user="user"></menu-toggle>
+<nav class="pushy">
+  <div class="list-group">
+
+    <li class="list-group-item" ng-repeat="section in sections" ng-if="section.type === 'link'" style="text-decoration:none;color:#333;">
+      <a href="#" style="text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{section.mdIcon}}</i> {{section.name}}</a>
+    </li>
+    <li class="list-group-item" ng-repeat-start="section in sections" ng-if="section.type === 'toggle'" style="text-decoration:none;color:#333;" ng-click="section.show=!section.show;">
+      <a href="#" style="text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{section.mdIcon}}</i> {{section.name}}</a>
+      <i class="fa fa-plus pull-right" style="font-size:1.5rem;cursor: pointer;" ng-click="section.show=true;" ng-if="!section.show"></i><i class="fa fa-times pull-right" style="font-size:1.5rem;cursor: pointer;" ng-click="section.show=false;" ng-if="section.show"></i>
+    </li>
+    <li class="list-group-item" ng-if="section.show" ng-repeat="page in section.pages" style="text-decoration:none;color:#333;" ng-repeat-end>
+      <a href="#" style="padding-left:20px;text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{page.mdIcon}}</i> {{page.name}}</a>
+    </li>
   </div>
 </nav>
