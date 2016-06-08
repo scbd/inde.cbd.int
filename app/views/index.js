@@ -38,7 +38,9 @@ define(['app', 'lodash', 'jquery', 'moment',
           $scope.options = {};
 
           mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
-              allOrgs = orgs.data;
+              allOrgs = orgs;
+              console.log(allOrgs);
+              console.log('test',allOrgs[0]);
               _.each(allOrgs, function(org) {
                   var image = new Image();
                   image.src = org.logo;
@@ -52,11 +54,11 @@ define(['app', 'lodash', 'jquery', 'moment',
                           cache: true
                       }).then(function(res2) {
                           $scope.rooms = res2.data;
-                          var countCyc = 0;
+      //                    var countCyc = 0;
                           _.each($scope.conferences, function(c) {
                               loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
                                   c.reservations = res;
-                                 var cancelOrgLoad = setInterval(function() {
+                            //     var cancelOrgLoad = setInterval(function() {
                                       if (allOrgs && length > 0) {
                                           _.each(c.reservations, function(res) {
                                               res.showDes = false;
@@ -70,11 +72,11 @@ define(['app', 'lodash', 'jquery', 'moment',
                                                     }); // each
                                               }
                                           }); // each
-                                          countCyc++;
+                                //          countCyc++;
                                       }
-                                     if (countCyc === 5) // hack
-                                         clearInterval(cancelOrgLoad);
-                                 }, 10); //interval
+                              //       if (countCyc === 5) // hack
+                              //           clearInterval(cancelOrgLoad);
+                              //   }, 10); //interval
 
                               }); // loadReservations
 
@@ -172,9 +174,9 @@ define(['app', 'lodash', 'jquery', 'moment',
             res.timeSeconds = diff;
             res.conf = conf;
            if (res.link && res.link._id && res.sideEvent && res.sideEvent.meta.status==='published') {
-                mongoStorage.loadDoc('inde-side-events', res.link._id).then(function(se) {
-                    res.sideEvent = se;
-                });
+                // mongoStorage.loadDoc('inde-side-events', res.link._id).then(function(se) {
+                //     res.sideEvent = se;
+                // });
                 if (!_.findWhere(conf.times, {
                         'value': diff
                     }))

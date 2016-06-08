@@ -152,9 +152,7 @@ define(['app', 'angular'], function (app, ng) { 'use strict';
 				return anonymous();
 
 			}).then(function(user){
-console.log('user in progress',user);
 				setUser(user);
-
 				return user;
 			});
 		}

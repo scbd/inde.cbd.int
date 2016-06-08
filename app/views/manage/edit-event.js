@@ -1,6 +1,5 @@
-define(['app', 
+define(['app',
   '../../directives/side-menu/scbd-side-menu',
-  '../../directives/scbd-button',
   './menu',
   '../../directives/forms/edit/edit-side-event',
     '../../services/mongo-storage'

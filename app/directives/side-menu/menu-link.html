@@ -1,7 +1,0 @@
-<scbd-flat-button active="active" active-path="{{section.path}}" ng-click="goTo();" ng-disabled="section.disabled" style="width:100%;text-align:left;outline: none;border-top-style: solid;border-top-color: #eee;border-top-width: .5px;" ng-show="hasRole()" >
-  <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i>
-  <i class="material-icons" ng-if="section.mdIcon" style="font-size:1rem;">{{section.mdIcon}}</i>
-  <img ng-src="{{section.imgSrc}}" style="height:26px;padding-top:5px;" ng-if="section.imgSrc"></img>
-  <span style="line-height:36px;padding-left:6px;bottom:0px;position:absolute;">{{section.name}}</span>
-  <!-- {{color}}{{backGround}} -->
-</scbd-flat-button>
