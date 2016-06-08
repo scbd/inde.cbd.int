@@ -12,6 +12,7 @@ require.config({
         'app-css'                  : 'css/main',
         'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',
         'css'                      : 'libs/require-css/css.min',
+        'dragula'                  : 'libs/angular-dragula/dist/angular-dragula',
         'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
         'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',
         'jquery'                   : 'libs/jquery/dist/jquery',
@@ -39,12 +40,10 @@ require.config({
         'ngFileUpload'            : { deps:[ 'angular']},
         'ngSmoothScroll'            : { deps:[ 'angular']},
         'scroll-directive'          : { deps:[ 'angular']},
+        'dragula'                   : { deps: ['angular','jquery'] },
         'linqjs'                   : { deps: [], exports : 'Enumerable' },
-    },
-    packages: [
-      { name: 'scbd-filters',  location : 'libs/scbd-filters/filters' },
-      { name: 'scbd-angularjs-controls', location : 'libs/scbd-angularjs-controls/form-control-directives' },
-    ]
+    }
+
 });
 define("_slaask", window._slaask);
 // BOOT

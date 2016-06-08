@@ -1,12 +1,10 @@
 define(['app', 'lodash', 'text!./scbd-select-list.html',
       'css!./scbd-select-list.css',
       '../../../services/filters',
-      '../../../services/mongo-storage'
+      '../../../services/mongo-storage',
+        'css!libs/angular-dragula/dist/dragula.css',
     ], function(app, _, template) {
       'use strict';
-
-
-
 app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','authentication',function ($location,$timeout,mongoStorage,$http,authentication) {
 
 	return {
@@ -18,33 +16,33 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 		scope      : {binding:"=ngModal",
     showOrgForm:"=?",doc:"=doc"
   },
-		link: function($scope, $element, $attrs) {
+		link: function($scope, $element) {
 
           if(typeof $scope.showOrgForm === 'undefined')
             $scope.showOrgForm = 0;
 
-					$scope.name = $attrs.name;
-
-          if($attrs.hasOwnProperty('single'))
-            $scope.single=true;
-          else {
-            $scope.single=false;
-          }
-
-          $scope.now=0;
-
-					$scope.loading=true;
-          if($attrs.schema)
-		        $scope.schema=$attrs.schema;
 
 		      $scope.docs=[];
 
+          //==================================
+					//
+					//==================================
           $scope.$watch('showOrgForm',function(){
-
               if(typeof $scope.doc !== 'undefined')
                 $scope.loadList();
-
           },true);
+
+          //==================================
+          //
+          //==================================
+          $scope.$watch('binding',function(){
+              if(typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs))
+                buldBindingMirror();
+          },true);
+
+          //==================================
+          //
+          //==================================
           $scope.$watch('doc',function(){
               if(typeof $scope.doc !== 'undefined')
                 $scope.loadList();
@@ -54,10 +52,11 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
 					//
 					//
 					//==================================
-					function init () {
-
-					     //$scope.loadList();
-
+					function buldBindingMirror() {
+              $scope.mirror=[];
+              _.each($scope.binding,function(val,key){
+                  $scope.mirror[key]=_.find($scope.docs,{'_id':val});
+              });
 					}// init
 
           //==================================
@@ -79,6 +78,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                               }
                           });
                         });
+                        buldBindingMirror();
                   }
             },500);
 					}// set chips
@@ -124,7 +124,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
                         };
               $http.get('/api/v2016/inde-orgs',{'params':params}).then(function(res){
                         $scope.docs=res.data;
-
+                        $scope.binding=_.clone($scope.binding);
                 }).then(function(){setChips();});
               });
 
@@ -145,6 +145,7 @@ app.directive('scbdSelectList', ["$location","$timeout",'mongoStorage','$http','
               else
                 _.remove($scope.binding,function(obj){return obj===docObj._id;});
 
+buldBindingMirror();
               if(reload)
                 $scope.loadList();
 		      };// select

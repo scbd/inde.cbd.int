@@ -3,6 +3,7 @@
   "dependencies": {
     "angular": "1.4.8",
     "angular-animate": "1.4.8",
+    "angular-dragula": "https://github.com/scbd/angular-dragula.git#1dce13cd4fb9c53ded111e5ebfb5f18e5fa95117",
     "angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
     "angular-loading-bar": "https://github.com/chieffancypants/angular-loading-bar.git",
     "angular-route": "1.4.8",
