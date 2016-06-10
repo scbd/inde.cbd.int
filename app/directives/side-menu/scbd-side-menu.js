@@ -67,12 +67,8 @@ define(['app',
         },
 
 
-
-
-
-
-        controller: ['$scope', '$element',  '$timeout', '$log', '$transclude','$window',
-          function($scope, $element, $timeout, $log, $transclude,$window) {
+        controller: ['$scope', '$element',  '$timeout', '$log', '$transclude','$window','$location',
+          function($scope, $element, $timeout, $log, $transclude,$window,$location) {
                 var pushy = $element.find('.pushy');
                 $scope.isOpen=false;
                 var isOpen=false;
@@ -325,6 +321,70 @@ var mRight = container.css('margin-right');
             } // closeAllToggles
 
 
+
+            //============================================================
+            // returns true if the browser locaiton matches the links target locaiton
+            //============================================================
+            function isActivePath (section){
+                return (section.path===$location.url());
+            }//isActivePath
+
+            //============================================================
+            //
+            //============================================================
+            function deactivate(){
+                $element.find('button').removeClass(colorClass);
+                $element.find('button').removeClass(activeClass);
+                $element.find('button').addClass(colorClass);
+                $element.find('i').removeClass(iconClass);
+                $element.find('img').removeClass(iconClass);
+                $scope.section.active=false;
+            }// deactive
+
+            //============================================================
+            //
+            //============================================================
+            function activate(){
+
+              $element.parent().parent().find('button').removeClass(activeClass);
+                $element.find('button').addClass(activeClass);
+                $element.find('i').addClass(iconClass);
+                $element.find('img').addClass(iconClass);
+                $scope.section.active=true;
+
+            }//activate
+
+            //============================================================
+            //
+            //============================================================
+            function toggleActive(){
+               if($element.find('button').hasClass(activeClass))
+                  deactivate();
+               else
+                  activate();
+            }//toggleactivate
+            //============================================================
+            //   go to url, uri or clal function
+            //============================================================
+            $scope.goTo = function (section){
+                    // if path is a function call it
+                  //if(isActivePath()){deactivate();activate();return;}
+                  scbdMenuService.closeAllActive(section.config.selfMenu);
+                  //$timeout(function(){activate();},200);
+
+                  if(section.path && _.isFunction(section.path))
+                    section.path();
+                  // if it is an external uri
+                  else if(section.path && _.isString(section.path) && section.path.indexOf('http')>=0){
+                    $window.location.href =section.path;
+                  }
+                  else {
+                    // if internal to the SPA
+                    $location.url(section.path);
+
+                    return;
+                  }
+            };
             //============================================================
             //   API
             //============================================================
