@@ -1,4 +1,51 @@
+<style>
+.lst-search {
+ width: 5px;
+ height:30px;
+ border-radius: 20px;
+ outline:none !important;
+ border-top-color:#eee !important;
+ border-left-color:#eee !important;
+ border-bottom-color:#eee !important;
+ background-color: #fff;
+ padding-left: 5px;
+ position:absolute;
+ top:6px;
+ left:20px;
+ opacity:0;
+ -webkit-transition: all .5s ease;
+ -moz-transition: all .5s ease;
+ transition: all .5s ease;
+}
+.lst-search:focus {outline:none;}
+.lst-search-expanded {
+ width: 200px;
+ left:20px;
+ opacity:1;
+}
+.search-lbtn {
+
+  position: relative !important;
+	z-index:10;
+}
+.search-lbtn-expanded {
+
+animation: lslide .5s;
+animation-fill-mode: forwards;
+}
+@keyframes lslide {
+  0% {
+    left: 0;
+    top: 0;
+  }
+  100% {
+    left: 190px;
+  }
+}
+</style>
+
 <div class="row">
+
   <div class="col-xs-12" ng-show="!showOrgForm">
     <label>Search for the host organization(s):</label>
   </div>
@@ -14,49 +61,52 @@
     </div>
   </div>
 
-
 </div>
+
 <div class="row" ng-show="!showOrgForm">
 
-
-
-  <section class="col-sm-12 col-m-12 col-lg-6"  >
+  <section class="col-sm-12 col-m-12 col-lg-6">
     <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Showing:
       <span class="label label-pill label-primary">{{filtered.length}}</span>
       <span ng-show="search">for '{{search}}'</span>
     </div>
     <div style="height:150px;overflow:auto;border-style:solid;border-width:1px;border-color:#009B48;">
-    <div   ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
-      <div style="padding:10px;position:relative;width:100%;text-align:left;height:28px;background-color:#fff;" ng-click="select(docObj);" waves>
-        <div class="panel panel-default" style="height:25px; width:100%;line-height:25px;vertical-align:bottom;padding-left:5px;padding-right:5px;white-space: nowrap; overflow:hidden;">
-          <i class="fa fa-check-square-o" ng-show="docObj.selected"></i><i class="fa fa-square-o" ng-show="!docObj.selected"></i>
-          <scbd-icon-button type="fa" style="color:#009b48;font-size:16px;margin-right:20px;" icon-name="fa-square-o" to-icon-name="fa-check-square-o" ani="tada" active="docObj.selected"></scbd-icon-button>
-          <img src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
-          <span style="font-weight:bold;">{{docObj.acronym }} </span>
-          <span class="hidden-md hidden-sm hidden-xs">{{docObj.title }}</span>
-          <span class="hidden-lg hidden-xl">{{docObj.title | characters:26}}</span>
+      <div ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
+        <div style="padding:10px;position:relative;width:100%;text-align:left;height:28px;background-color:#fff;" ng-click="select(docObj);" waves>
+          <div class="panel panel-default" style="height:25px; width:100%;line-height:25px;vertical-align:bottom;padding-left:5px;padding-right:5px;white-space: nowrap; overflow:hidden;">
+            <i class="fa fa-check-square-o" ng-show="docObj.selected"></i><i class="fa fa-square-o" ng-show="!docObj.selected"></i>
+            <img ng-if="docObj.logo" src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
+            <span ng-if="docObj.identifier.length===2" class="flag-icon flag-icon-{{docObj.identifier}}" ></span>
+            <span style="font-weight:bold;">{{docObj.acronym }} </span>
+            <span class="hidden-md hidden-sm hidden-xs">{{docObj.title }}</span>
+            <span class="hidden-lg hidden-xl">{{docObj.title | characters:26}}</span>
+          </div>
         </div>
       </div>
+      <div class="text-center" style="padding:15px;" ng-show="!showOrgForm && search && (filtered.length===0)">
+        Sorry but we are unable to locate an entry for your organization.
+        <br>
+        <br>
+        <strong>Would you like to create an entry?</strong>
+        <br>
+        <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus"></i> Create Organization</button>
+      </div>
     </div>
-    <div class="text-center" style="padding:15px;" ng-show="!showOrgForm && search && (filtered.length===0)">
-      Sorry but we are unable to locate an entry for your organization.<br><br>  <strong>Would you like to create an entry?</strong><br>
-      <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus"></i> Create Organization</button>
-    </div>
-  </div>
   </section>
+
   <section class="col-sm-12 col-m-12 col-lg-6">
-    <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Selected:
-      <span class="label label-pill label-primary">{{filteredOrgs.length}}</span>
+    <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Selected and the Display Order:
+      <span class="label label-pill label-primary">{{binding.length}}</span>
     </div>
     <div dragula='"se-bag"' dragula-model='binding' style="padding:10px;min-height:150px;border-style:solid;border-width:1px;border-color:#009B48;">
-    <div class="chip" ng-repeat="doc in binding track by $index"  style="margin-left:20px;margin-bottom:10px;">
-      <span >#{{$index+1}} </span>
-      <img src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
-      <span > {{mirror[$index].acronym}}</span>
-      <i class="fa fa-times" ng-click="select(mirror[$index],true)"></i>
+      <div class="chip" ng-repeat="doc in binding track by $index" style="margin-left:20px;margin-bottom:10px;">
+        <span>#{{$index+1}} </span>
+        <img src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
+        <span ng-if="mirror.identifier.length===2" class="flag-icon flag-icon-{{mirror.identifier}}" ></span>
+        <span> {{mirror[$index].acronym | limitTo : 40}}</span>
+        <i class="fa fa-times" ng-click="select(mirror[$index],true)"></i>
+      </div>
     </div>
-  </div>
-
   </section>
 
 </div>
