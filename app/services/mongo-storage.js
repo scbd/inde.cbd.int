@@ -78,9 +78,32 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
                 return $q(function(resolve) {
                       return resolve(JSON.parse(localStorage.getItem('allOrgs')));
                   });
-
-
         }// loadDocs
+
+        //============================================================
+        //
+        //============================================================
+        function countries (){
+            if(!localStorage.getItem('countries'))
+                  return $http.get("https://api.cbd.int/api/v2015/countries", {
+                    cache: true
+                  }).then(function(o) {
+                    var countries = $filter("orderBy")(o.data, "name.en");
+
+                    _.each(countries, function(c) {
+                      c.title = c.name.en;
+                      c.identifier = c.code.toLowerCase();
+                      c._id=c.identifier;
+                    });
+                    localStorage.setItem('countries',JSON.stringify(countries));
+                    return  countries;
+                  });
+            else
+              return $q(function(resolve) {
+                  return resolve(JSON.parse(localStorage.getItem('countries')));
+              });
+
+        }
         //============================================================
         //
         //============================================================
@@ -543,6 +566,7 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
         } // touch
 
         return{
+          getCountries:countries,
           getLatestConfrences:getLatestConfrences,
           getReservations:getReservations,
           loadOrgs:loadOrgs,
