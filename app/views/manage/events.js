@@ -1,7 +1,6 @@
 define(['app',
     'lodash',
     './menu',
-    'directives/scbd-icon-button',
     '../../services/mongo-storage',
     '../../services/filters'
 ], function(app, _) {

@@ -22,7 +22,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/exten
             when('/admin/meetings/:id',        { templateUrl: 'views/admin/edit-meetings.html',         resolveController: true, resolveUser: true, reloadOnSearch : false, resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
 
             when('/manage/events',             { templateUrl: 'views/manage/events.html',                resolveController: true, resolveUser: true }).
-            when('/manage/events/:id',         { templateUrl: 'views/manage/edit-event.html',             resolveController: true, resolve : { eventGroup : currentEventGroup(), user : securize(['User','Administrator','IndeAdministrator']) }}).
+            when('/manage/events/:id',         { templateUrl: 'views/manage/edit-event.html',             resolveController: true, resolve : {user : securize(['User','Administrator','IndeAdministrator']) }}).
             when('/manage/organizations',      { templateUrl: 'views/manage/organizations.html',         resolveController: true, resolveUser: true,reloadOnSearch : false  }).
             when('/manage/organizations/:id',  { templateUrl: 'views/manage/edit-organization.html',     resolveController: true, resolveUser: true,reloadOnSearch : false  }).
             when('/manage',                    { templateUrl: 'views/manage/dash-board.html',            resolveController: true, resolveUser: true}).

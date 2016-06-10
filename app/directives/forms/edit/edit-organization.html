@@ -1,7 +1,4 @@
-
 <div ng-class="{'imbeded':hide}">
-
-
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
@@ -17,61 +14,43 @@
     <i class="fa fa-spinner fa-spin"></i> Loading...
   </div>
 
-<button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"   ></i></button>
-
+  <button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"></i></button>
 
   <form class="editForm" style="margin-top:10px" ng-submit="submitForm(doc)" novalidate>
-
-
-      <legend class="container-subheader text-center no-wrap" ng-if="hide">
-        <h2>  Create Organization</h2>
-      </legend>
-      <div class="row">
-        <div class="col-md-9 col-xs-12">
-          <div   name="title"  ng-class="{'has-warning': !doc.title && submitted}" >
-            <label>Name</label>
-            <input id="editOrgForm.title" class="form-control" name="title" ng-model="doc.title"  >
-            <p ng-show="!doc.title && submitted" class="help-block">Name is required.</p>
-          </div>
-          <div class="col-md-4 col-xs-12" style="padding-left:0;margin-top:6px;">
-            <div name="acronym"  ng-class="{'has-warning': !doc.acronym && submitted}">
-              <label>Acronym</label>
-              <input id="editOrgForm.acronym" class="form-control" name="acronym" ng-model="doc.acronym" style="text-transform:uppercase;" >
-            <p ng-show="!doc.acronym && submitted" class="help-block">Acronym is required. If your organization name is short and does not have or need an accronym kindly repeat the name.</p>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3  col-xs-12">
-            <label>Logo</label>
-            <br>
-            <!-- <span ng-if="doc.logo!=='app/images/ic_business_black_48px.svg'">  -->
-            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
-        </div>
-      </div>
-      <div class="row">
-
-        <!-- <div class="col-md-3 col-xs-12">
-<div>
-            <label>Country (Head Office)</label>
-            <div km-select name="country" ng-model="doc.country" items="options.countries()"></div>
-          </div>
-        </div> -->
-
-
-
-
-      </div>
+    <legend class="container-subheader text-center no-wrap" ng-if="hide">
+      <h2> Create Organization</h2>
+    </legend>
 
     <div class="row">
-
-      <div class="col-lg-4 col-xs-12">
-
-        <button class="btn btn-primary"  type="submit" style="width:100%;margin-top:10px;"><i class="fa fa-floppy-o"></i> Save </button>
-<!-- ng-click="saveDoc();publishRequestDial();" -->
+      <div class="col-md-9 col-xs-12">
+        <div name="title" ng-class="{'has-warning': !doc.title && submitted}">
+          <label>Name</label>
+          <input id="editOrgForm.title" class="form-control" name="title" ng-model="doc.title">
+          <p ng-show="!doc.title && submitted" class="help-block">Name is required.</p>
+        </div>
+        <div class="col-md-4 col-xs-12" style="padding-left:0;margin-top:6px;">
+          <div name="acronym" ng-class="{'has-warning': !doc.acronym && submitted}">
+            <label>Acronym</label>
+            <input id="editOrgForm.acronym" class="form-control" name="acronym" ng-model="doc.acronym" style="text-transform:uppercase;">
+            <p ng-show="!doc.acronym && submitted" class="help-block">Acronym is required. If your organization name is short and does not have or need an accronym kindly repeat the name.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3  col-xs-12">
+        <label>Logo</label>
+        <br>
+        <scbd-file-upload is-image="true" ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
       </div>
     </div>
 
+    <div class="row">
+    </div>
 
+    <div class="row">
+      <div class="col-lg-4 col-xs-12">
+        <button class="btn btn-primary" type="submit" style="width:100%;margin-top:10px;"><i class="fa fa-floppy-o"></i> Save </button>
+      </div>
+    </div>
   </form>
 
 </div>

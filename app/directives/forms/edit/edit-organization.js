@@ -1,13 +1,10 @@
 define(['app', 'lodash',
     'text!./edit-organization.html',
     'text!directives/forms/edit/publish-dialog-org.html',
-
-//    'scbd-angularjs-controls/km-control-group',
-    'css!libs/ng-dialog/css/ngDialog.css',
-    'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
-    '../../../services/mongo-storage',
-    '../controls/scbd-file-upload'
-], function(app, _,template,dailogTemp) { //'scbd-services/utilities',
+    'services/mongo-storage',
+    'directives/forms/controls/scbd-file-upload',
+    'ngDialog','ngSmoothScroll',
+], function(app, _,template,dailogTemp) {
 
 
   app.directive("editOrganization", [ '$q', '$http','$filter','$route','mongoStorage','$location','$window','ngDialog','history','smoothScroll', //"$http", "$filter", "Thesaurus",
@@ -20,15 +17,13 @@ define(['app', 'lodash',
         scope      : {hide:"=?", selectedOrgs:"="},
         link : function($scope,$element,$attrs) {//, $http, $filter, Thesaurus
 
-            //  if(!$scope.hide)$scope.hide=0;
               $scope.loading=false;
               $scope.schema="inde-orgs";
               $scope.shortForm =($attrs.short !== undefined && $attrs.short !== null);
               $scope.isNew=true;
               if(!$scope.shortForm)
                 $scope._id = $route.current.params.id;
-              // $scope.toggle = scbdMenuService.toggle;
-              // $scope.dashboard = scbdMenuService.dashboard;
+
               $scope.doc={};
 
               if($attrs.selectedOrgs)

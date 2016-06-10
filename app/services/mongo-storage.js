@@ -1,6 +1,6 @@
 define(['app','lodash','services/locale'], function (app,_) {
 
-app.factory("mongoStorage", ['$http','authentication','$q','locale', function($http,authentication,$q,locale) {
+app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', function($http,authentication,$q,locale,$filter) {
 
         var user;
         authentication.getUser().then(function(u){

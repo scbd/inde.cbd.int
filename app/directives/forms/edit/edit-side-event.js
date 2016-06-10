@@ -3,16 +3,13 @@ define(['app', 'lodash',
   'moment',
   'text!directives/forms/edit/publish-dialog.html',
   'text!directives/forms/edit/dirty-form.html',
-  'css!libs/ng-dialog/css/ngDialog.css',
-  'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
-  '../../side-menu/scbd-side-menu',
-  //'scbd-filters/l-string',
+  'directives/side-menu/scbd-side-menu',
   'directives/km-select',
-  '../controls/scbd-select-list',
-  '../../../services/mongo-storage',
-  '../controls/scbd-file-upload',
+  'directives/forms/controls/scbd-select-list',
+  'services/mongo-storage',
+  'directives/forms/controls/scbd-file-upload',
   './edit-organization',
-  'app/services/theasarus.js','ngDialog','ngSmoothScroll',
+  'services/theasarus','ngDialog','ngSmoothScroll',
 ], function(app, _, template, moment, dialogTemplate) {
   app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus',//"$http", "$filter", "Thesaurus",
     function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
@@ -334,7 +331,6 @@ define(['app', 'lodash',
                   return $scope.countries;
                 });
               },
-
             };
 
             //=======================================================================

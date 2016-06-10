@@ -1,10 +1,8 @@
 define(['app', 'lodash',
       'text!./delete-dialog.html',
       './menu',
-      // 'css!libs/ng-dialog/css/ngDialog.css',
-      // 'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
-      '../../services/mongo-storage',
-      '../../services/filters',
+      'services/mongo-storage',
+      'services/filters',
       'ngDialog'
     ], function(app, _, deleteDialog) {
 

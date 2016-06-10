@@ -1,11 +1,10 @@
 define(['app', 'lodash',
   'text!./delete-dialog.html',
-  'css!libs/ng-dialog/css/ngDialog.css',
-  'css!libs/ng-dialog/css/ngDialog-theme-default.min.css',
   'directives/side-menu/scbd-side-menu',
   './menu-orgs',
-  '../../services/mongo-storage',
-  '../../services/filters'
+  'services/mongo-storage',
+  'services/filters',
+        'ngDialog'
 ], function(app, _, deleteDialog) {
 
   app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog', //"$http", "$filter", "Thesaurus",
