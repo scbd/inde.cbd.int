@@ -35,7 +35,8 @@
         <span ng-show="binding.length">{{binding.length}} File Uploaded</span>
   </label>
 </div>
-<ul ng-show="!isImage && binding.length"  class="list-group" style="margin-top: 10px;">
+
+<ul ng-show="!isImage"  class="list-group" style="margin-top: 10px;">
 	<li class="list-group-item" ng-repeat="item in binding track by $index">
 			<table style="width:100%">
 				<tbody><tr>
