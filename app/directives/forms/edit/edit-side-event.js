@@ -112,6 +112,7 @@ define(['app', 'lodash',
               $scope.doc.meta.status = 'request';
               return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                 _.each($scope.doc.hostOrgs, function(org) {
+                  if (org.length>2)
                   mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
 
                     if (conf.meta.status !== 'published')
