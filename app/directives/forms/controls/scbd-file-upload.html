@@ -20,38 +20,43 @@
     border: 5px dashed blue;
   }
 </style>
-  <form name="uploadForm" style="margin-top:10px"  novalidate>
-    <div  ng-class="{'has-error-div':uploadForm.logo.$error.maxSize}">
-<div ng-show="isImage" name="logo" ngf-max-size="1MB" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"  style="position:relative;width:100%;">
+<form name="uploadForm" novalidate>
+  <span ng-class="{'has-error-div':uploadForm.logo.$error.maxSize}">
+    <div ng-show="isImage" name="logo" ngf-max-size="1MB" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" style="position:relative;width:100%;">
 
-  <i class="fa fa-camera" style="position:absolute;right:5px;color:#bbbbbb;font-size:30px;"></i>
-  <div>
-    <img style="max-height:120px;margin-bottom:50px;" src="{{binding}}" ng-if="binding && isImage">
-  </div>
-  <span style="position:absolute;top:1px;left:5px;color:#bbbbbb;width:120px;;text-align:left;">Upload a file by clicking here or draging and droping.</span>
-</div>
-<div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
-<div ng-show="!isImage" ngf-drop ngf-select ng-model="files"  ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="*"  >
-  <label class="btn" ng-class="{'btn-info':binding.length,'btn-default':!binding.length}">
-      <span ng-show="!binding.length">Upload Document(s) <span class="hidden-xs">(click or drag and drop onto this button)</span></span>
+      <i class="fa fa-camera" style="position:absolute;right:5px;color:#bbbbbb;font-size:30px;"></i>
+      <div>
+        <img style="max-height:120px;margin-bottom:50px;" src="{{binding}}" ng-if="binding && isImage">
+      </div>
+      <span style="position:absolute;top:1px;left:5px;color:#bbbbbb;width:120px;;text-align:left;">Upload a file by clicking here or draging and droping.</span>
+    </div>
+    <div ngf-no-file-drop>File Drag/Drop is not supported for this browser</div>
+    <div ng-show="!isImage" ngf-drop ngf-select ng-model="files" ngf-drag-over-class="'dragover'" ngf-multiple="true" ngf-allow-dir="true" accept="*">
+      <label class="btn" ng-class="{'btn-info':binding.length,'btn-default':!binding.length}">
+        <span ng-show="!binding.length">Upload Document(s)
+          <span class="hidden-xs">(click or drag and drop onto this button)</span>
+        </span>
         <span ng-show="binding.length">{{binding.length}} File Uploaded</span>
-  </label>
-</div>
+      </label>
+    </div>
 
-<ul ng-show="!isImage"  name="files" class="list-group" style="margin-top: 10px;">
-	<li class="list-group-item" ng-repeat="item in binding track by $index">
-			<table style="width:100%">
-				<tbody><tr>
-					<td ><i class="fa fa-file-o" aria-hidden="true"></i> <a href="{{trustSrc(item.src)}}">{{item.name}}</a>&nbsp;&nbsp;&nbsp; <strong>{{item.size |fileSize}}</strong></td>
-					<td style="white-space:nowrap;text-align:right;vertical-align:top">
-						<button type="button" class="btn btn-default" ng-click="delete($index)"><i class="fa fa-trash-o"></i></button>
-					</td>
-				</tr>
-			</tbody>
-    </table>
-		</li>
-</ul>
+    <ul ng-show="!isImage" name="files" class="list-group" style="margin-top: 10px;">
+      <li class="list-group-item" ng-repeat="item in binding track by $index">
+        <table style="width:100%">
+          <tbody>
+            <tr>
+              <td><i class="fa fa-file-o" aria-hidden="true"></i> <a href="{{trustSrc(item.src)}}">{{item.name}}</a>&nbsp;&nbsp;&nbsp;
+                <strong>{{item.size |fileSize}}</strong>
+              </td>
+              <td style="white-space:nowrap;text-align:right;vertical-align:top">
+                <button type="button" class="btn btn-default" ng-click="delete($index)"><i class="fa fa-trash-o"></i></button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+    </ul>
 
-  <p ng-show="uploadForm.logo.$error.maxSize"  style="color:#a94442">Error: your image must be less then 2MB</p>
-</div>
+    <p ng-show="uploadForm.logo.$error.maxSize" style="color:#a94442">Error: your image must be less then 2MB</p>
+  </span>
 </form>
