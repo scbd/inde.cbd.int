@@ -280,23 +280,25 @@ define(['app', 'lodash',
               //=======================================================================
               //
               //=======================================================================
-              $scope.loadList = function(docObj) {
+              $scope.loadList = function() {
 
+                mongoStorage.loadOrgs().then(function(orgs){
+                      $scope.orgs=orgs;
                 mongoStorage.loadDocs($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
                     $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
-
                     mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
                       doc.confrenceObj = conf;
                     });
                     doc.orgs = [];
-                    _.each(doc.hostOrgs, function(org, key) {
-                      mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
-                        doc.orgs.push(conf);
+                                var foundOrg;
+                                _.each(doc.hostOrgs, function(org) {
+                                    foundOrg = _.find(orgs,{_id:org});
+                                    if(foundOrg)
+                                     doc.orgs.push(foundOrg);
                       });
                     });
                   });
-
                 }).then(function(){
                    var srch = $location.search();
                         if(!_.isEmpty(srch)){
