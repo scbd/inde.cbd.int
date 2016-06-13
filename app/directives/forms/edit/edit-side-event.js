@@ -92,7 +92,7 @@ define(['app', 'lodash',
               dialog.closePromise.then(function(ret) {
 
                 if (ret.value == 'draft') $scope.close();
-                if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(function onerror(response) {
+                if (ret.value == 'publish') $scope.requestPublish().then($scope.close()).catch(function onerror(response) {
 
                   $scope.onError(response);
 
@@ -113,13 +113,13 @@ define(['app', 'lodash',
               return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                 _.each($scope.doc.hostOrgs, function(org) {
                   if (org.length>2)
-                  mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
+                      mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
 
-                    if (conf.meta.status !== 'published')
-                      mongoStorage.requestDoc('inde-orgs',conf, conf._id);
-                  }).catch(function onerror(response) {
-                    $scope.onError(response);
-                  });
+                        if (conf.meta.status !== 'published')
+                          mongoStorage.requestDoc('inde-orgs',conf, conf._id);
+                      }).catch(function onerror(response) {
+                        $scope.onError(response);
+                      });
                 });
               });
             };
