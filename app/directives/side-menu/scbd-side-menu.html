@@ -17,16 +17,18 @@
 <div class="site-overlay" ng-click="toggle()"></div>
 <nav class="pushy">
   <div class="list-group">
-
+    <!-- single link -->
     <li class="list-group-item" ng-repeat="section in sections" ng-if="section.type === 'link'" style="text-decoration:none;color:#333;cursor:pointer;">
       <a ng-click="goTo(section);" style="text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{section.mdIcon}}</i> {{section.name}}</a>
     </li>
+
+    <!-- nested links -->
     <li class="list-group-item" ng-repeat-start="section in sections" ng-if="section.type === 'toggle'" style="text-decoration:none;color:#333;cursor:pointer;" ng-click="section.show=!section.show;">
       <a ng-click="goTo(section);" style="text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{section.mdIcon}}</i> {{section.name}}</a>
       <i class="fa fa-plus pull-right" style="font-size:1.5rem;cursor: pointer;"  ng-click="section.show=true;$event.stopPropagation();" ng-show="!section.show"></i><i class="fa fa-times pull-right" style="font-size:1.5rem;cursor: pointer;" ng-click="section.show=false;$event.stopPropagation();" ng-show="section.show"></i>
     </li>
     <li class="list-group-item" ng-if="section.show" ng-repeat="page in section.pages" style="text-decoration:none;color:#333;cursor:pointer;" ng-repeat-end>
-      <a ng-click="goTo(section);" style="padding-left:20px;text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{page.mdIcon}}</i> {{page.name}}</a>
+      <a ng-click="goTo(page);" style="padding-left:20px;text-decoration:none;color:#333;font-size:1.5rem;"> <i ng-class="['fa', section.faIcon, section.faIconSize]" ng-if="section.faIcon"></i><i class="material-icons" ng-if="section.mdIcon" style="font-size:1.5rem;">{{page.mdIcon}}</i> {{page.name}}</a>
     </li>
   </div>
 </nav>
