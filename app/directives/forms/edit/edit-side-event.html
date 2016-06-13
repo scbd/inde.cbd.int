@@ -4,6 +4,7 @@
       border-style: solid;
       border-width: 1px;
       border-color: #a94442;
+      padding-left: 10px;
     }
 
     label {
@@ -78,7 +79,8 @@
             <label>Event Icon (Not Org. Logo)</label>
             <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
             <button type="button" class="btn btn-default btn-sm" ng-click="randomPic()" style="margin-bottom:10px;">Generate Random BIO Related Icon</button>
-            <scbd-file-upload ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
+            <scbd-file-upload  ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
+
           </div>
         </div>
       </div>
@@ -102,12 +104,12 @@
         </div>
       </div>
 
-      <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && submitted)}">
+      <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && submitted)}" >
           <legend class="container-subheader">
             <h2>Organization(s)</h2>
           </legend>
 
-                <p id="hostOrgMsg"  ng-show="!doc.hostOrgs.length && submitted" style="color:#a94442">At least one organization is required is required.</p>
+                <p id="hostOrgMsg"  ng-show="!doc.hostOrgs.length && submitted" style="color:#a94442">At least one organization is required.</p>
 
           <div class="row">
 
@@ -295,34 +297,35 @@
       <div class="row">
 
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.lcd" ng-click="doc.requirements.lcd=!doc.requirements.lcd;"></scbd-icon-button>Internet Connection </span>
+          <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.pc" ng-click="doc.requirements.pc=!doc.requirements.pc;"></scbd-icon-button> PC</span>
+          <span ng-click="doc.requirements.pc=!doc.requirements.pc;"><i class="fa fa-check-square-o" ng-show="doc.requirements.pc"></i><i class="fa fa-square-o" ng-show="!doc.requirements.pc"></i> PC</span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.overhead" ng-click="doc.requirements.overhead=!doc.requirements.overhead;"></scbd-icon-button> LCD Projector</span>
+          <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
         </div>
       </div>
       <div class="row">
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.sound" ng-click="doc.requirements.sound=!doc.requirements.sound;"></scbd-icon-button> Sound System</span>
+          <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.interpretation" ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"></scbd-icon-button>Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
+          <span ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.catering" ng-click="doc.requirements.catering=!doc.requirements.catering;"></scbd-icon-button>Catering </span><span style="font-size:11px;">(at your own expense)</span>
+            <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span><span style="font-size:11px;">(at your own expense)</span>
         </div>
         <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-            <span ><scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o"  to-icon-name="fa-check-square-o" ani="tada" active="doc.requirements.skype" ng-click="doc.requirements.skype=!doc.requirements.skype;"></scbd-icon-button>Skype </span>
+            <span ng-click="doc.requirements.skype=!doc.requirements.skype;"><i class="fa fa-check-square-o" ng-show="doc.requirements.skype"></i><i class="fa fa-square-o" ng-show="!doc.requirements.skype"></i><span > Skype </span>
         </div>
       </div>
 
       <div class="row" style="margin-bottom:10px;">
         <div class="col-xs-12">
+          <br>
           <div>Other
-            <span style="font-size:9px;">(Please indicate any other requirements you may need)</span>
+            <span style="font-size:10px;">(Please indicate any other requirements you may need)</span>
           </div>
           <input class="form-control" type="text" ng-model="doc.requirements.other"/>
         </div>
@@ -390,4 +393,6 @@
           </div>
       </div>
   </form>
+
+
 </div>
