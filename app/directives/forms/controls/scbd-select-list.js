@@ -7,7 +7,7 @@ define(['app',
         'css!libs/angular-dragula/dist/dragula.css',
 ], function(app, _, template) {
     'use strict';
-    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$http', 'authentication', function($location, $timeout, mongoStorage, $http, authentication) {
+    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$http',  function($location, $timeout, mongoStorage, $http) {
 
         return {
             restrict: 'E',
@@ -69,20 +69,18 @@ define(['app',
                 //
                 //==================================
                 function setChips() {
-                  console.log($scope.binding);
                     $timeout(function() {
                         if ($scope.binding)
                             if ($scope.binding.length > 0) {
                                 $scope.loading = false;
-                                mongoStorage.getCountries().then(function(data){
-                                  _.each(_.union($scope.docs,data), function(doc) {
+
+                                  _.each($scope.docs, function(doc) {
                                       _.each($scope.binding, function(id) {
                                           if (doc._id === id)
                                               doc.selected = !doc.selected;
                                       });
                                   });
                                   buldBindingMirror();
-                                });
                             }
                     }, 500);
                 } // set chips
@@ -117,59 +115,11 @@ define(['app',
                 //
                 //=======================================================================
                 $scope.loadList = function() {
-                  if(!$scope.doc ) return;
-                    $scope.atCapacity = false;
-                    var createdByParams = {
-                        'meta.status': 'published',
-                        'meta.v': {
-                            $ne: 0
-                        }
-                    };
-                    authentication.getUser().then(function(user) {
 
-                        if ($scope.doc.meta && $scope.doc.meta.createdBy)
-                            createdByParams = {
-                                'meta.createdBy': $scope.doc.meta.createdBy,
-                                'meta.status': {
-                                    $in: ['draft', 'request']
-                                },
-                                'meta.v': {
-                                    $ne: 0
-                                }
-                            };
-                        var params = {
-                            q: {
-                                $or: [{
-                                        'meta.status': 'published',
-                                        'meta.v': {
-                                            $ne: 0
-                                        }
-                                    }, {
-                                        'meta.createdBy': user.userID,
-                                        'meta.status': {
-                                            $in: ['draft', 'request']
-                                        },
-                                        'meta.v': {
-                                            $ne: 0
-                                        }
-                                    },
-                                    createdByParams
-                                ]
-                            },
-                        };
-                        $http.get('/api/v2016/inde-orgs', {
-                            'params': params
-                        }).then(function(res) {
-                            $scope.docs = res.data;
-                            $scope.binding = _.clone($scope.binding);
-                            mongoStorage.getCountries().then(function(data){
-                              $scope.docs=_.union($scope.docs,data);
-                            });
-                        }).then(function() {
+                    mongoStorage.loadOrgs().then(function(res) {
+                      $scope.docs = res;
                             setChips();
                         });
-                    });
-
                 };
 
 
@@ -192,6 +142,7 @@ define(['app',
                     buldBindingMirror();
                     if (reload)
                         $scope.loadList();
+
                 }; // select
             }
         };
