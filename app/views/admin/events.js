@@ -194,6 +194,7 @@ define(['app', 'lodash',
                     });
                   });
               }; // archiveOrg
+
               //=======================================================================
               //
               //=======================================================================
@@ -205,6 +206,7 @@ define(['app', 'lodash',
                   //$scope.loadList ();
                 });
               }; // archiveOrg
+
               //=======================================================================
               //
               //=======================================================================
@@ -260,9 +262,6 @@ define(['app', 'lodash',
               }; // archiveOrg
               $scope.selectChip = selectChip;
 
-
-
-
               //=======================================================================
               //
               //=======================================================================
@@ -284,22 +283,22 @@ define(['app', 'lodash',
 
                 mongoStorage.loadOrgs().then(function(orgs){
                       $scope.orgs=orgs;
-                mongoStorage.loadDocs($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
-                    $scope.docs = response.data;
-                  _.each($scope.docs, function(doc) {
-                    mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
-                      doc.confrenceObj = conf;
-                    });
-                    doc.orgs = [];
+                      mongoStorage.loadDocs($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
+                          $scope.docs = response.data;
+                        _.each($scope.docs, function(doc) {
+                                mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
+                                  doc.confrenceObj = conf;
+                                });
+                                doc.orgs = [];
                                 var foundOrg;
                                 _.each(doc.hostOrgs, function(org) {
                                     foundOrg = _.find(orgs,{_id:org});
                                     if(foundOrg)
                                      doc.orgs.push(foundOrg);
+                                });
+                        });
                       });
-                    });
-                  });
-                }).then(function(){
+              }).then(function(){
                    var srch = $location.search();
                         if(!_.isEmpty(srch)){
                            if(srch.chip==='archived'){
@@ -311,7 +310,7 @@ define(['app', 'lodash',
                         }else{
                           $timeout(function(){selectChip('all');},1000);
                         }
-               });
+                });
               }; // archiveOrg
 
               //=======================================================================
@@ -355,7 +354,6 @@ define(['app', 'lodash',
                 $scope.toggle('adminOptions');
                 registerToolTip();
               }; //toggleListView
-
 
               //=======================================================================
               //
