@@ -300,16 +300,6 @@ define(['app', 'lodash',
                 $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
             };
 
-            //============================================================
-            //
-            //============================================================
-            // function generateEventId(confId) {
-            //   return mongoStorage.generateEventId(confId).then(function(res) {
-            //     return res;
-            //   }).then(null, function(err) {
-            //     $scope.onError(err);
-            //   });
-            // } // generateEventId
 
             //============================================================
             //
@@ -317,9 +307,7 @@ define(['app', 'lodash',
             $scope.options = {
               subjects		: $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms",								{ cache: true }).then(function(o){ return Thesaurus.buildTree(o.data); }),
               countries: function() {
-                return $http.get("https://api.cbd.int/api/v2015/countries", {
-                  cache: true
-                }).then(function(o) {
+                return mongoStorage.getCountries().then(function(o) {
                   $scope.countries = $filter("orderBy")(o.data, "name.en");
 
                   _.each($scope.countries, function(c) {
@@ -379,6 +367,8 @@ define(['app', 'lodash',
 
               if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                 formData.$valid = false;
+              }else{
+                formData.$valid = true;
               }
 
               if (formData.$valid) {
