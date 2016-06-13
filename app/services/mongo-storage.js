@@ -68,15 +68,68 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
         //============================================================
         function loadOrgs (){
 
-              var params = {q:{'meta.status':'published'}};
-
               if(!localStorage.getItem('allOrgs'))
-                    return $http.get('/api/v2016/inde-orgs',{params:params, cache:false}).then(function(res){
-                            localStorage.setItem('allOrgs',JSON.stringify(res.data));
+                    return authentication.getUser().then(function(user) {
+
+                        var params = {
+                            q: {
+
+                                    'meta.status': 'published',
+                                    'meta.v': {
+                                        $ne: 0
+                                      }
+
+                            }
+
+                        };
+                        return $http.get('/api/v2016/inde-orgs', {
+                            'params': params
+                        }).then(function(res) {
+                            return countries().then(function(data){
+                              var orgsAndParties=_.union(res.data,data);
+                              localStorage.setItem('allOrgs',JSON.stringify(orgsAndParties));
+                                      var params = {
+                                          q: {
+
+                                                'meta.createdBy': user.userID,
+                                                'meta.status': {
+                                                    $in: ['draft', 'request']
+                                                },
+                                                'meta.v': {
+                                                    $ne: 0
+                                                }
+                                              }
+                                      };
+                                    return $http.get('/api/v2016/inde-orgs', {
+                                        'params': params
+                                    }).then(function(res) {
+                                      orgsAndParties=_.union(res.data,orgsAndParties);
+                                      return orgsAndParties;
+                                    });
+                        });
                     });
+                  });
               else
                 return $q(function(resolve) {
-                      return resolve(JSON.parse(localStorage.getItem('allOrgs')));
+      console.log('retrieving orgs from local storage');
+                          var params = {
+                              q: {
+
+                                    'meta.createdBy': user.userID,
+                                    'meta.status': {
+                                        $in: ['draft', 'request']
+                                    },
+                                    'meta.v': {
+                                        $ne: 0
+                                    }
+                                  }
+                          };
+                          return $http.get('/api/v2016/inde-orgs', {
+                            'params': params
+                        }).then(function(res) {
+                          var orgsAndParties=_.union(res.data,JSON.parse(localStorage.getItem('allOrgs')));
+                          return resolve(orgsAndParties);
+                        });
                   });
         }// loadDocs
 
@@ -118,7 +171,6 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
                         $http.delete('/api/v2016/'+schema+'/'+obj._id);
                   });
             });
-
         }
 
         //============================================================
