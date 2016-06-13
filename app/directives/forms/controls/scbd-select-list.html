@@ -102,8 +102,9 @@ animation-fill-mode: forwards;
       <div class="chip" ng-repeat="doc in binding track by $index" style="margin-left:20px;margin-bottom:10px;">
         <span>#{{$index+1}} </span>
         <img src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
-        <span ng-if="mirror.identifier.length===2" class="flag-icon flag-icon-{{mirror.identifier}}" ></span>
-        <span> {{mirror[$index].acronym | limitTo : 40}}</span>
+        <img ng-if="mirror[$index]._id.length===2" class="flag-icon flag-icon-{{mirror[$index].identifier}}" ></img>
+        <span ng-if="mirror[$index].acronym"> {{mirror[$index].acronym | limitTo : 40}}</span>
+        <span ng-if="!mirror[$index].acronym"> {{mirror[$index].title | limitTo : 40}}</span>
         <i class="fa fa-times" ng-click="select(mirror[$index],true)"></i>
       </div>
     </div>
