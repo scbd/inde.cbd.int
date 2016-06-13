@@ -74,25 +74,6 @@ define(['app', 'lodash',
                        if (!answer)
                           event.preventDefault();
                     }
-              // if($scope.editForm.$dirty && !$scope.cloaseWithoutSaving){
-              //
-              //   var dialog = ngDialog.open({
-              //     template: dirtyDialog,
-              //     className: 'ngdialog-theme-default',
-              //     closeByDocument: false,
-              //     plain: true,
-              //     scope: $scope
-              //   });
-              //
-              //   dialog.closePromise.then(function(ret) {
-              //
-              //     if (ret.value == 'close') {$scope.cloaseWithoutSaving=true;$scope.close();}
-              //     if (ret.value == 'save') $scope.saveDoc().then($scope.close).catch(function onerror(response) {
-              //       $scope.onError(response);
-              //     });
-              //
-              //   });
-              // }
 
             });
             //============================================================
@@ -143,8 +124,6 @@ define(['app', 'lodash',
             };
 
 
-
-
             //=======================================================================
             //
             //=======================================================================
@@ -190,22 +169,17 @@ define(['app', 'lodash',
               } else {
                 mongoStorage.createDoc($scope.schema).then(
                   function(document) {
-
                     $scope.loading = true;
                     $scope._id = document._id;
                     $scope.doc = document;
                     $scope.doc.logo = randomPic();
                     initProfile(true);
                     $scope.isNew = true;
-
                   }
                 ).catch(function onerror(response) {
-
                   $scope.onError(response);
-
                 });
               }
-
             } // init
 
             //============================================================
@@ -226,9 +200,7 @@ define(['app', 'lodash',
                   confr.start = confr.start + 86400;
                 }
               }).catch(function onerror(response) {
-
                 $scope.onError(response);
-
               });
               _.each($scope.options.conferences, function(conf) {
                 if (conf._id === $scope.doc.confrence)
@@ -270,9 +242,7 @@ define(['app', 'lodash',
                   $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
 
                 }).catch(function onerror(response) {
-
                   $scope.onError(response);
-
                 });
               });
             } // initProfile()
@@ -309,13 +279,6 @@ define(['app', 'lodash',
               countries: function() {
                 return mongoStorage.getCountries().then(function(o) {
                   $scope.countries = $filter("orderBy")(o.data, "name.en");
-
-                  _.each($scope.countries, function(c) {
-                    c.title = c.name;
-
-                    c.identifier = c.code.toLowerCase();
-
-                  });
                   return $scope.countries;
                 });
               },
@@ -332,12 +295,11 @@ define(['app', 'lodash',
             //
             //=======================================================================
             $scope.saveDoc = function() {
-                $scope.doc.meta.status='draft';
+               $scope.doc.meta.status='draft';
                if(!$scope.doc.id){
                         mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                           $scope.onError(err);
                         }).catch(function onerror(response) {
-
                           $scope.onError(response);
                         });
                 }
@@ -345,11 +307,9 @@ define(['app', 'lodash',
                     mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
                       $scope.onError(err);
                     }).catch(function onerror(response) {
-
                       $scope.onError(response);
                     });
             };
-
 
             //=======================================================================
             //
@@ -508,7 +468,6 @@ define(['app', 'lodash',
             //
             //=======================================================================
             $scope.close = function() {
-
               history.goBack();
             };
           } //link
