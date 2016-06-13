@@ -20,7 +20,9 @@
     border: 5px dashed blue;
   }
 </style>
-<div ng-show="isImage" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"  style="position:relative;width:100%;">
+  <form name="uploadForm" style="margin-top:10px"  novalidate>
+    <div  ng-class="{'has-error-div':uploadForm.logo.$error.maxSize}">
+<div ng-show="isImage" name="logo" ngf-max-size="1MB" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true"  style="position:relative;width:100%;">
 
   <i class="fa fa-camera" style="position:absolute;right:5px;color:#bbbbbb;font-size:30px;"></i>
   <div>
@@ -36,7 +38,7 @@
   </label>
 </div>
 
-<ul ng-show="!isImage"  class="list-group" style="margin-top: 10px;">
+<ul ng-show="!isImage"  name="files" class="list-group" style="margin-top: 10px;">
 	<li class="list-group-item" ng-repeat="item in binding track by $index">
 			<table style="width:100%">
 				<tbody><tr>
@@ -49,3 +51,7 @@
     </table>
 		</li>
 </ul>
+
+  <p ng-show="uploadForm.logo.$error.maxSize"  style="color:#a94442">Error: your image must be less then 2MB</p>
+</div>
+</form>
