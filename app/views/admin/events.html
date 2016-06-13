@@ -25,7 +25,7 @@
         <h1>Options</h1>
       </div>
     </scbd-side-menu>
-    <div class="container-header-name visible-xs">All
+    <div class="container-header-name visible-xs">
       <span ng-if="showArchived">Archived</span> Side Events</h1>
       </span>
     </div>
@@ -41,7 +41,7 @@
           </div>
         </div>
         <span class="container-header-name hidden-xs">
-          <h1 style="display:inline;">All
+          <h1 style="display:inline;">
             <span ng-if="showArchived">Archived</span> Side Events</h1>
         </span>
         <div class=" pull-right">
@@ -57,45 +57,45 @@
 
         <div id="chip-all" class="chip chip-active " ng-if="(!showArchived )  || (selectedChip==='all'&& !showArchived)" ng-click="selectChip('all')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xEB3D;"></scbd-icon-button>
+            <i class="material-icons">&#xEB3D;</i>
           </div>All
           <span class="sqr">{{statusFacits.all}}</span>
         </div>
 
         <div id="chip-draft" class="chip" ng-if="(!showArchived && statusFacits.draft) || selectedChip==='draft'" ng-click="selectChip('draft')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE24D;"></scbd-icon-button>
+            <i class="material-icons">&#xE24D;</i>
           </div>Drafts
           <span class="sqr">{{statusFacits.draft}}</span>
         </div>
         <div id="chip-request" class="chip" ng-if="(!showArchived && statusFacits.request) || selectedChip==='request'" ng-click="selectChip('request')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE0C6;"></scbd-icon-button>
+            <i class="material-icons">&#xE0C6;</i>
           </div>Requests
           <span class="sqr">{{statusFacits.request}}</span>
         </div>
         <div id="chip-published" class="chip" ng-if="(!showArchived && statusFacits.published) || selectedChip==='published'" ng-click="selectChip('published')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE8DC;"></scbd-icon-button>
-          </div>Approved
+            <i class="material-icons">&#xE8DC;</i>
+          </div>Under Review
           <span class="sqr">{{statusFacits.published}}</span>
         </div>
         <div id="chip-canceled" class="chip" ng-if="(!showArchived && statusFacits.canceled) || selectedChip==='canceled'" ng-click="selectChip('canceled')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE8DD;"></scbd-icon-button>
+            <i class="material-icons">&#xE8DD;</i>
           </div>Canceled
           <span class="sqr">{{statusFacits.canceled}}</span>
         </div>
         <div id="chip-rejected" class="chip" ng-if="(!showArchived && statusFacits.rejected) || selectedChip==='rejected'" ng-click="selectChip('rejected')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE8DB;"></scbd-icon-button>
+            <i class="material-icons">&#xE8DB;</i>
           </div>Rejected
           <span class="sqr">{{statusFacits.rejected}}</span>
         </div>
 
         <div id="chip-archived" class="chip chip-active" ng-if="(showArchived ) || selectedChip==='archived'" ng-click="selectChip('archived')">
           <div>
-            <scbd-icon-button type="md" icon-name="&#xE149;"></scbd-icon-button>
+            <i class="material-icons">&#xE149;</i>
           </div>Archived
           <span class="sqr">{{statusFacitsArcView.archived}}</span>
         </div>
@@ -121,7 +121,7 @@
                 <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
               </div>
               <div ng-if="doc.meta.status==='published'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
-                <span style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Approved</span>
+                <span style="line-height:20px;"><i class="material-icons">&#xE8DC;</i> Under Review</span>
                 <span class="title right" style="color:white;position:absolute;right:1px;top:1px;font-size:11pxfont-weight:bold;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
               </div>
               <div ng-if="doc.meta.status==='canceled'" style="vertical-align:middle;padding-left:2px;color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;top:0px;width:100%;">
@@ -184,54 +184,69 @@
         </div>
         <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'id':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
           <div class="collection-item ">
-            <div style=" position:absolute;top:0px;left:0px;">
-              <div class="collection-item-img-cont">
 
-                <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
-                <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
-              </div>
+            <div class="collection-item-img-cont pull-right hidden-lg hidden-xl" style="position:relative;right:30px;top:20px;">
+              <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
+              <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
             </div>
+
+            <div style=" position:absolute;top:0px;left:0px;">
+             <div class="collection-item-img-cont hidden-sm hidden-md hidden-xs">
+               <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
+               <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
+             </div>
+           </div>
+
             <div class="event-title-collection">
-              <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;">
+              <!-- big title -->
+              <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;layout:inline;">
                 <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);">
                   <span><b>{{doc.confrenceObj.acronym  }}/#{{doc.id}} </b>- </span> {{doc.title | characters:225 }} </a>
               </div>
-              <div class="hidden-lg hidden-xl" style="width:65%;white-space: normal;">
-                <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);">
-                  <span><b>{{doc.confrenceObj.acronym  }}/#{{doc.id}} </b>- </span> {{doc.title | characters:100 }} </a>
+
+              <!-- little title -->
+              <div class="hidden-lg hidden-xl" style="width:80%;white-space: normal;position:relative;top:20px;left:-50px;">
+                <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);"> {{doc.title | characters:100 }} </a>
               </div>
-              <div class="cir hidden-sm hidden-md hidden-xs">
+
+              <!-- orgs large listview -->
+              <div class="cir hidden-sm hidden-md hidden-xs" style="width:75%;">
                 <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                  <span class="cir">
-                    <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                    <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+                  <span class="text-nowrap">
+                    <span class="cir">
+                      <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                      <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
+                    </span>
+                    <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                    <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
                   </span>
-                  <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
                 </span>
                 <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
+                <span class="hidden-md hidden-sm hidden-xs text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
               </div>
-
             </div>
-            <!-- mobi orgs -->
 
-            <div class="cir hidden-lg hidden-xl" style="position:absolute; left:1px;bottom:1px;">
+            <!-- mobi orgs -->
+            <div class="cir hidden-lg hidden-xl" style="position:absolute; left:1px;bottom:1px;width:75%;">
               <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                <span class="cir">
-                  <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                  <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+                <span class="text-nowrap">
+                  <span class="cir">
+                    <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                    <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
+                  </span>
+                  <span ng-if="org._id.length>2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                  <span ng-if="org._id.length===2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
                 </span>
-                <span style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
               </span>
               <span class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-              <span style="font-size:.8rem;"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
+              <span style="font-size:.8rem;" class="text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
             </div>
             <!-- mobi title status-->
-            <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
-              <span style="white-space: normal;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
+            <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 10px 5px 5px 5px;line-height:1.5rem;">
+              <span style="white-space: normal;padding-top:5px;font-size:1.5rem;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
               <span class="pull-right" ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
               <span class="pull-right" ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span class="pull-right" ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
+              <span class="pull-right" ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
               <span class="pull-right" ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
               <span class="pull-right" ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
               <span class="pull-right" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
@@ -241,7 +256,7 @@
             <div class="hidden-md hidden-sm hidden-xs" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
               <span ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
               <span ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Approved</span>
+              <span ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
               <span ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
               <span ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
               <span ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
@@ -266,21 +281,18 @@
                       <li><a ng-click="archiveDoc(doc);"><i class="material-icons">&#xE149;</i> Archive</a></li>
 
                       <li role="separator" class="divider"></li>
-                      <li><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Approve/Publish</a></li>
+                      <li><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Under Review</a></li>
                       <li><a ng-click="cancelDoc(doc);"><i class="material-icons">&#xE8DD;</i> Cancel</a></li>
                       <li><a ng-click="rejectDoc(doc);"><i class="material-icons">&#xE8DB;</i> Reject</a></li>
                     </ul>
                   </div>
                 </div>
 
-                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'">
+
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'"  style="position:relative;top:-30px;">
+
                   <button data-toggle="tooltip" title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
                   <button data-toggle="tooltip" title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
-                  <!-- <button class="btn btn-default" ng-click="close()"><i class="material-icons">thumbs_up_down</i></button> -->
-                </div>
-                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'" ng-if="doc.meta.status!=='archived'">
-
-
                   <button data-toggle="tooltip" title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='published')"><i class="material-icons">&#xE8DC;</i></button>
                   <button data-toggle="tooltip" title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='canceled')"><i class="material-icons">&#xE8DD;</i></button>
                   <button data-toggle="tooltip" title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='rejected')"><i class="material-icons">&#xE8DB;</i></button>
@@ -324,37 +336,41 @@
                       <span class="glyphicon glyphicon-share"></span> Export to Excel
                   </button></th> -->
               <th>Requirements</th>
-                <th>Pre. Dates</th>
+              <th>Pre. Dates</th>
             </tr>
           </thead>
           <tbody>
             <tr ng-repeat="doc in filtered = (docs |orderBy:'id':sortReverse | filter:customSearch | filter:statusFilter)">
               <td>{{doc.confrenceObj.acronym}}</td>
               <td>{{doc.id}}</td>
-            <td>{{doc.expNumPart}}</td>
-                <td>{{doc.title}}</td>
+              <td>{{doc.expNumPart}}</td>
+              <td>{{doc.title}}</td>
               <td class="relative">
                 <!-- <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span> -->
                 <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.email}}</span>
               </td>
 
-              <td class="relative">                  <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                                    <span class="cir relative">
-                                      <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                                      <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
-                                    </span>
-                                    <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
-                                  </span></td>
+              <td class="relative">
+                <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
+                  <span class="cir relative">
+                    <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
+                    <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+                  </span>
+                  <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                </span>
+              </td>
 
               <td>{{doc.prefDate.one}} {{doc.prefDateTime.one}}</td>
-                <td>{{doc.prefDate.two}} {{doc.prefDateTime.two}}</td>
-                <td>{{doc.prefDate.three}} {{doc.prefDateTime.three}}</td>
-                <td><span ng-repeat="(key, value) in doc.requirements">{{key}}, </span></td>
+              <td>{{doc.prefDate.two}} {{doc.prefDateTime.two}}</td>
+              <td>{{doc.prefDate.three}} {{doc.prefDateTime.three}}</td>
+              <td>
+                <span ng-repeat="(key, value) in doc.requirements">{{key}}, </span>
+              </td>
 
-                <td>{{doc.requirements.other}}</td>
-                    <td>{{doc.additionalInfo}}</td>
-                    <th>{{doc.meta.createdOn   | date:'yyyy-MM-dd'}}</th>
-                              <th>{{doc.description}}</th> -->
+              <td>{{doc.requirements.other}}</td>
+              <td>{{doc.additionalInfo}}</td>
+              <th>{{doc.meta.createdOn | date:'yyyy-MM-dd'}}</th>
+              <th>{{doc.description}}</th> -->
               <!-- <td>john@example.com</td>
             </tr>
 
