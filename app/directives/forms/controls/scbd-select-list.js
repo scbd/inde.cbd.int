@@ -27,6 +27,7 @@ define(['app',
 
                 $scope.docs = [];
 
+                var numOrgs = 0;
                 // //==================================
                 // //
                 // //==================================
@@ -39,8 +40,10 @@ define(['app',
                 //
                 //==================================
                 $scope.$watch('binding', function() {
-                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs))
-                        buldBindingMirror();
+                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && $scope.docs.length!==numOrgs){
+                        numOrgs = $scope.docs.length;
+                        $scope.loadList();
+                      }
                 }, true);
 
                 //==================================
