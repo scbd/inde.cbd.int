@@ -3,16 +3,7 @@ define(['app','lodash','services/locale'], function (app,_) {
 app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', function($http,authentication,$q,locale,$filter) {
 
         var user;
-        authentication.getUser().then(function(u){
-          user=u;
-          if( _.intersection(['Administrator','IndeAdministrator'], user.roles).length>0)
-          {
-            deleteTempRecords('inde-orgs');
-            deleteTempRecords('inde-side-events');
-            //
-          }
 
-        });
         var clientOrg = 0; // means cbd
 
 
@@ -73,14 +64,11 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
 
                         var params = {
                             q: {
-
                                     'meta.status': 'published',
                                     'meta.v': {
                                         $ne: 0
                                       }
-
                             }
-
                         };
                         return $http.get('/api/v2016/inde-orgs', {
                             'params': params
@@ -117,29 +105,28 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
         }// loadDocs
 
 function getLocalOrgs(user){
-                return $q(function(resolve) {
+  return $q(function(resolve) {
 
-                          var params = {
-                              q: {
+            var params = {
+                q: {
 
-                                    'meta.createdBy': user.userID,
-                                    'meta.status': {
-                                        $in: ['draft', 'request']
-                                    },
-                                    'meta.v': {
-                                        $ne: 0
-                                    }
-                                  }
-                          };
-                          return $http.get('/api/v2016/inde-orgs', {
-                            'params': params
-                        }).then(function(res) {
-                          var orgsAndParties=_.union(res.data,JSON.parse(localStorage.getItem('allOrgs')));
-                          return resolve(orgsAndParties);
-                        });
-                  });
-        }// loadDocs
-
+                      'meta.createdBy': user.userID,
+                      'meta.status': {
+                          $in: ['draft', 'request']
+                      },
+                      'meta.v': {
+                          $ne: 0
+                      }
+                    }
+            };
+            return $http.get('/api/v2016/inde-orgs', {
+              'params': params
+          }).then(function(res) {
+            var orgsAndParties=_.union(res.data,JSON.parse(localStorage.getItem('allOrgs')));
+            return resolve(orgsAndParties);
+          });
+    });
+}
         //============================================================
         //
         //============================================================
