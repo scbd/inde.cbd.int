@@ -17,9 +17,10 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
         //==============================
         function load() {
 
+            $("head > title").text("Past Side Events");
+
             $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
                 _ctrl.conferences = conf.data;
-
             });
             _ctrl.subjects = $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
                 cache: true
