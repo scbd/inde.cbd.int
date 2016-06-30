@@ -10,13 +10,22 @@ define(['app', 'lodash'], function(app, _) {
         };
     });
 
-    return ['mongoStorage', '$route', '$http','$sce', function(mongoStorage, $route, $http,$sce) {
+    return ['mongoStorage', '$route', '$http', '$sce', '$location', function(mongoStorage, $route, $http, $sce, $location) {
 
         var _ctrl = this;
+        var allOrgs;
+
         _ctrl.hasError = hasError;
-        _ctrl.trustSrc =trustSrc;
+        _ctrl.trustSrc = trustSrc;
+        _ctrl.goTo = goTo;
         load();
         return this;
+
+        function loadAllOrgsAndImages() {
+            return mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
+                allOrgs = orgs;
+            });
+        }
 
         //==============================
         //
@@ -37,13 +46,19 @@ define(['app', 'lodash'], function(app, _) {
                 _ctrl.doc.conferenceObj = _.find(_ctrl.conferences, {
                     '_id': _ctrl.doc.confrence
                 });
+                loadAllOrgsAndImages().then(function() {
 
-                _.each(_ctrl.doc.hostOrgs, function(org) {
-                    mongoStorage.loadDoc('inde-orgs', org).then(function(res) {
-                        _ctrl.doc.orgs.push(res);
-                    }).catch(onError);
+                    if (allOrgs && allOrgs.length > 0) {
+                        _.each(_ctrl.doc.hostOrgs, function(org) {
+                            _ctrl.doc.orgs.push(_.findWhere(allOrgs, {
+                                '_id': org
+                            })); // findWhere
+                        }); // each
+                        console.log('_ctrl.doc.orgs', _ctrl.doc.orgs);
+                    }
 
                 });
+
                 _ctrl.doc.subjectObjs = [];
                 _ctrl.subjects.then(function(res) {
                     _.each(_ctrl.doc.subjects, function(subj) {
@@ -58,6 +73,17 @@ define(['app', 'lodash'], function(app, _) {
 
             }).catch(onError);
         }
+        //============================================================
+        //
+        //============================================================
+        function goTo(url, code) {
+            console.log(url + code);
+            if (code)
+                $location.url(url + code);
+            else
+                $location.url(url);
+
+        }
 
         //============================================================
         //
@@ -68,9 +94,9 @@ define(['app', 'lodash'], function(app, _) {
         //============================================================
         //
         //============================================================
-        function trustSrc (src) {
+        function trustSrc(src) {
             return $sce.trustAsResourceUrl(src);
-        };
+        }
         //============================================================
         //
         //============================================================
