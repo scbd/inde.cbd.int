@@ -81,14 +81,6 @@
     </style>
 </head>
 <body class="ltr" id="top">
-  <!-- used by authentication service as work around for cross domain storage of token -->
-  <iframe id="authenticationFrame" src="https://accounts.cbd.int/app/authorize.html" style="display:none"></iframe>
-  <!-- <iframe   id="authenticationFrame" style="display:none"></iframe> -->
-  <!-- <script>
-      var domain = document.location.hostname.replace(/[^\.]+\./, '');
-      if(domain=='localhost') domain = 'cbddev.xyz';
-      document.getElementById('authenticationFrame').src = 'https://accounts.'+domain+'/app/authorize.html';
-  </script> -->
     <!-- HEADER (MOBILE) -->
     <header class="mobile navbar visible-xs " role="banner">
         <div class="container">
@@ -145,7 +137,7 @@
 
                 <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
 
-                    <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+                    <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="#" ng-click="auth.goToSignIn()" style="color: black">
                         <i  class="fa fa-power-off"></i> Sign in
                     </a>
 
@@ -154,9 +146,9 @@
                           <span class="caret"></span> {{user.name}}
                         </button>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
-                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+                            <li ng-click="auth.editProfile()"><a href="#" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+                            <li ng-click="auth.passwordReset()"><a href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+                            <li ng-click="auth.goToSignOut()"><a href="#" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
                         </ul>
                     </div>
 
