@@ -110,8 +110,15 @@ app.factory("mongoStorage", ['$http','authentication','$q','locale','$filter', f
                     });
                   });
               else
+                return authentication.getUser().then(function(user) {
+                    return getLocalOrgs(user);
+                });
+
+        }// loadDocs
+
+function getLocalOrgs(user){
                 return $q(function(resolve) {
-      console.log('retrieving orgs from local storage');
+
                           var params = {
                               q: {
 
