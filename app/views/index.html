@@ -29,11 +29,11 @@
     <div>{{error}}</div>
   </div>
   <div class="row">
-    <div class="col-lg-4 col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences | filter:newMeetingFilter)">
+    <div class="col-lg-6 col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences )">
 
       <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
-        <div class="panel-heading  text-center">
-          <h2 style="color:inherit">{{con.acronym }}</h2>
+        <div class="panel-heading  text-center text-nowrap">
+          <h2 style="color:inherit;">{{con.Title.en}}</h2>
         </div>
         <div class="panel-body text-center" style="min-height:110px">
           <div class="btn-group-vertical">
@@ -43,15 +43,15 @@
           </div>
         </div>
         <div class="panel-footer text-right">
-          <div class="text-center">{{con.start * 1000 | date:'yyyy-MM-dd': 'UTC' }}
-            <span style=""> to </span> {{con.end * 1000 | date:'yyyy-MM-dd' }}</div>
+          <div class="text-center">{{con.StartDate | date:'yyyy-MM-dd': 'UTC' }}
+            <span style=""> to </span> {{con.EndDate | date:'yyyy-MM-dd' }}</div>
         </div>
       </div>
     </div>
   </div>
   <!-- venue-->
 
-  <section ng-repeat="con in conferences | filter:newMeetingFilter">
+  <section ng-repeat="con in conferences ">
     <div class="row">
       <!-- side event schedule -->
       <div id="schedule{{$index}}" class="ind-container-header relative" style="height:60px;">
@@ -59,10 +59,10 @@
         </div>
         <span class="container-header-name hidden-md hidden-sm hidden-xs">
           <h1 style="display:inline;">Side Event Schedule</h1>
-          <h6> ({{con.acronym }})</h6>
+          <h6> ({{con.Title.en}})</h6>
         </span>
         <span class="ind-container-header-name hidden-lg hidden-lx"> Side Event Schedule </span>
-        <div class="hidden-lg hidden-lx">({{con.acronym}})</div>
+        <div class="hidden-lg hidden-lx">({{con.Title.en}})</div>
         <div class="clearfix"></div>
       </div>
       <div>
@@ -88,16 +88,13 @@
             <div>
               <select id="editForm.meeting" class="form-control" ng-model="con.time">
                 <option value="" selected> Time</option>
-                <option ng-repeat="docObj in con.times | orderBy:'value'" value="{{docObj.value}}">{{docObj.title}} </option>
+                <option ng-repeat="docObj in con.times | orderBy:'seconds'" value="{{docObj.value}}">{{docObj.title}} </option>
               </select>
             </div>
           </div>
           <div class="col-lg-3">
             <div>
-              <button class="btn btn-sm btn-default " ng-click="showDescriptions=!showDescriptions;">
-                <span ng-show="showDescriptions">Hide Descriptions</span>
-                <span ng-show="!showDescriptions">Show Descriptions</span>
-              </button>
+
             </div>
           </div>
           <div class="col-lg-3">
@@ -130,7 +127,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="doc in filtered = (con.reservations |filter:futureFilter |filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" >
+          <tr ng-repeat="doc in filtered = (con.reservations | filter:dayFilter |filter:timeFilter |filter:customSearch |orderBy:'startSeconds')" >
             <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>

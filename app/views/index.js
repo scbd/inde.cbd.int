@@ -36,20 +36,25 @@ define(['app', 'lodash', 'jquery', 'moment',
 
                 $scope.conferences = [];
                 $scope.options = {};
-
+                var query = {
+                    timezone: { $exists: true },
+                    venueId:  { $exists: true }, // TMP for compatibility with coference collection;
+                    StartDate: {'$gt':{'$date':moment.utc().subtract(1,'year')}}
+                };
                 loadAllOrgsAndImages().then(
-                    $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
+                    $http.get('/api/v2016/event-groups', { params : { q : query, s : { StartDate : -1 } } }).then(function(conf) {
                         $scope.conferences = $scope.options.conferences = conf.data;
                         loadSideEventTypes().then(function() {
+
                             $http.get("/api/v2016/venue-rooms", {
                                 cache: true
                             }).then(function(res2) {
+
                                 $scope.rooms = res2.data;
                                 //                    var countCyc = 0;
                                 _.each($scope.conferences, function(c) {
-                                    loadReservations(c.start, c.end, c.venue, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
+                                    loadReservations(c.StartDate, c.EndDate, c.venueId, '570fd0a52e3fa5cfa61d90ee', c._id).then(function(res) {
                                         c.reservations = res;
-                                        //     var cancelOrgLoad = setInterval(function() {
                                         if (allOrgs && allOrgs.length > 0) {
                                             _.each(c.reservations, function(res) {
                                                 res.showDes = false;
@@ -119,22 +124,20 @@ define(['app', 'lodash', 'jquery', 'moment',
             //
             //============================================================
             function loadReservations(start, end, venue, type, conferenceId) {
-                var allOrgs;
-                var params = {};
 
-                params = {
+                var params = {
                     q: {
                         'location.venue': venue,
                         "$and": [{
                             'start': {
                                 '$gt': {
-                                    '$date': (start * 1000)
+                                    '$date': start
                                 }
                             }
                         }, {
                             'end': {
                                 '$lt': {
-                                    '$date': end * 1000
+                                    '$date': end
                                 }
                             }
                         }],
@@ -183,23 +186,21 @@ define(['app', 'lodash', 'jquery', 'moment',
                                     if (diff < conf.seTiers[key + 1].seconds)
                                         res.tier = tier;
                                     else
-                                        res.tier = tier;
-
-
+                                        res.tier = conf.seTiers[key + 1];
                             }
                         });
 
                         res.timeSeconds = diff;
                         res.conf = conf;
                         if (res.link && res.link._id && res.sideEvent && res.sideEvent.meta.status === 'published') {
-                            // mongoStorage.loadDoc('inde-side-events', res.link._id).then(function(se) {
-                            //     res.sideEvent = se;
-                            // });
+
                             if (!_.findWhere(conf.times, {
-                                    'value': diff
+                                    'title': res.tier.title
                                 }))
+
                                 conf.times.push({
-                                    'value': diff,
+                                    'seconds':diff,
+                                    'value': res.tier.title,
                                     'title': res.tier.title
                                 });
 
@@ -273,7 +274,7 @@ define(['app', 'lodash', 'jquery', 'moment',
             //
             //=======================================================================
             $scope.timeFilter = function(doc) {
-                if (Number(doc.timeSeconds) === Number(doc.conf.time) || !doc.conf.time) return true;
+                if (doc.tier.title === doc.conf.time || !doc.conf.time) return true;
                 else return false;
 
             };
@@ -328,8 +329,8 @@ define(['app', 'lodash', 'jquery', 'moment',
             //=======================================================================
             //
             //=======================================================================
-            $scope.goTo = function(id) {
-                    $location.url('/manage/events/new?m=' + id);
+            $scope.registerNew = function(id) {
+                    $location.url('/manage/events/new?c=' + id);
                 } // archiveOrg
 
             //============================================================
