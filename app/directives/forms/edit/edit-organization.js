@@ -36,6 +36,7 @@ define(['app', 'lodash',
                           $scope.doc=document;
                           $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=true;
+                          $scope.doc.hostOrgs=[];
                         }
                 );
 
@@ -52,6 +53,8 @@ define(['app', 'lodash',
                         if(!$scope.doc.logo)
                           $scope.doc.logo='app/images/ic_business_black_48px.svg';
                           $scope.isNew=false;
+
+                        if(!$scope.doc.hostOrgs)$scope.doc.hostOrgs=[];
                   });
               }
 
