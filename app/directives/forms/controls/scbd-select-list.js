@@ -28,6 +28,7 @@ define(['app',
                 $scope.docs = [];
 
                 var numOrgs = 0;
+
                 // //==================================
                 // //
                 // //==================================
@@ -40,19 +41,25 @@ define(['app',
                 //
                 //==================================
                 $scope.$watch('binding', function() {
-                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && $scope.docs.length!==numOrgs){
-                        numOrgs = $scope.docs.length;
-                        $scope.loadList();
-                      }
+                  
+                    if($scope.binding && !_.isEmpty($scope.binding))
+                      buldBindingMirror();
+                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && ($scope.binding && $scope.binding.length!==numOrgs)){
+                        numOrgs = $scope.binding.length;
+                        $scope.loadList(true);
+                    }
                 }, true);
 
                 //==================================
                 //
                 //==================================
                 $scope.$watch('doc', function() {
-                    if ((_.isArray($scope.doc.hostOrgs) && $scope.doc.hostOrgs.length!==0))
+                    if ($scope.doc && (_.isArray($scope.doc.hostOrgs) && $scope.doc.hostOrgs.length!==0))
                         $scope.loadList();
-
+                    else {
+                      $scope.doc.hostOrgs=[];
+                      $scope.loadList();
+                    }
                 });
 
                 //==================================
@@ -117,12 +124,13 @@ define(['app',
                 //=======================================================================
                 //
                 //=======================================================================
-                $scope.loadList = function() {
+                $scope.loadList = function(force) {
 
+                    if(force || (!force && _.isEmpty($scope.docs)))
                     mongoStorage.loadOrgs().then(function(res) {
                       $scope.docs = res;
-                            setChips();
-                        });
+                      setChips();
+                    });
                 };
 
 
