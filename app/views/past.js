@@ -19,12 +19,10 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
 
             $("head > title").text("Past Side Events");
 
-            $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
-                _ctrl.conferences = conf.data;
-            });
             _ctrl.subjects = $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
                 cache: true
             });
+            
             mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
                 allOrgs = orgs;
                 _.each(allOrgs, function(org) {
