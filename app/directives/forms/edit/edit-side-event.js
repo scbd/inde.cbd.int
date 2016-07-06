@@ -1,475 +1,775 @@
 define(['app', 'lodash',
-  'text!./edit-side-event.html',
-  'moment',
-  'text!directives/forms/edit/publish-dialog.html',
-  'text!directives/forms/edit/dirty-form.html',
-  'directives/side-menu/scbd-side-menu',
-  'directives/km-select',
-  'directives/forms/controls/scbd-select-list',
-  'services/mongo-storage',
-  'directives/forms/controls/scbd-file-upload',
-  './edit-organization',
-  'services/theasarus','ngDialog','ngSmoothScroll',
-], function(app, _, template, moment, dialogTemplate) {
-  app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope','Thesaurus',//"$http", "$filter", "Thesaurus",
-    function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope,Thesaurus) {
-      return {
-        restrict: 'E',
-        template: template,
-        replace: true,
-        transclude: false,
-        scope: {},
-        link: function($scope) {
-            $scope.status = "";
-            $scope._id = $route.current.params.id;
-            $scope.loading = false;
-            $scope.schema = "inde-side-events";
-            $scope.showOrgForm = 0;
-            $scope.isNew = true;
-            $scope.registerAlert=true;
-            $scope.doc = {};
-            $scope.doc.hostOrgs = [];
-            $scope.updateProfile = 'No';
-            $scope.ignoreDirtyCheck=false;
+    'text!./edit-side-event.html',
+    'moment',
+    'text!directives/forms/edit/publish-dialog.html',
+    'rangy-core',
+    'text!directives/forms/edit/dirty-form.html',
+    'directives/side-menu/scbd-side-menu',
+    'directives/km-select',
+    'directives/forms/controls/scbd-select-list',
+    'services/mongo-storage',
+    'directives/forms/controls/scbd-file-upload',
+    './edit-organization',
+    './edit-link',
+    'directives/link-list',
+    'services/theasarus', 'ngDialog', 'ngSmoothScroll',
+], function(app, _, template, moment, dialogTemplate, rangy) {
+    app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
+        function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
+            return {
+                restrict: 'E',
+                template: template,
+                replace: true,
+                transclude: false,
+                scope: {},
+                link: function($scope) {
+                        $scope.status = "";
+                        $scope._id = $route.current.params.id;
+
+                        $scope.loading = false;
+                        $scope.schema = "inde-side-events";
+                        $scope.showOrgForm = 0;
+                        $scope.isNew = true;
+                        $scope.registerAlert = true;
+                        $scope.doc = {};
+                        $scope.doc.hostOrgs = [];
+                        $scope.updateProfile = 'No';
+                        $scope.ignoreDirtyCheck = false;
+                        $scope.tab = 'general';
+                        $scope.document = {};
+
+                        $scope.patterns = {
+                            facebook: /^http[s]?:\/\/(www.)?facebook.com\/.+/i,
+                            twitter: /^http[s]?:\/\/twitter.com\/.+/i,
+                            youtube: /^http[s]?:\/\/(www.)?youtube.com\/user\/.+/i,
+                            phone: /^\+\d+(\d|\s|-|ext|#|\*)+$/i,
+                            time: /^([0-1][0-9]|2[0-3]|[0-9]):[0-5][0-9]$/,
+                            email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
+                        };
+                        $('#general-tab').tab('show');
 
 
-            $scope.$watch('doc.confrence', function() {
-              if ($scope.doc.confrence)
-                generateDates($scope.doc.confrence);
-            });
+                        $scope.$watch('doc.conference', function() {
+                            if ($scope.doc.conference) {
 
-            $scope.$watch('doc.hostOrgs', function() {
-              if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
-                $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
-                $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
-                $(document.getElementById('hostOrgMsg')).css('display', 'none');
-              }
-            }, true);
+                                generateDates($scope.doc.conference);
 
-            $http.get("/api/v2016/conferences", {
-              cache: true
-            }).then(function(o) {
+                            }
 
-              $scope.options.conferences = $filter("orderBy")(o.data, "start");
-              _.each($scope.options.conferences, function(conf) {
-                if (conf._id === $location.search().m)
-                  conf.selected = true;
-                else
-                  conf.selected = false;
-              });
-
-            }).then($timeout(function() {
-                if ($location.search().m) $scope.doc.confrence = $location.search().m;
-            }, 1000)).catch(function onerror(response) {
-                $scope.onError(response);
-            });
-
-            init();
-            //============================================================
-            //
-            //============================================================
-            $scope.$on('$locationChangeStart', function( event ) {
-                    if($scope.editForm.$dirty && !$scope.ignoreDirtyCheck){
-                    var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
-                       if (!answer)
-                          event.preventDefault();
-                    }
-
-            });
-            //============================================================
-            //
-            //============================================================
-            $scope.publishRequestDial = function() {
-
-              var dialog = ngDialog.open({
-                template: dialogTemplate,
-                className: 'ngdialog-theme-default',
-                closeByDocument: false,
-                plain: true,
-                scope: $scope
-              });
-              $scope.ignoreDirtyCheck=true;
-              dialog.closePromise.then(function(ret) {
-
-                if (ret.value == 'draft') $scope.close();
-                if (ret.value == 'publish') $scope.requestPublish().then($scope.close()).catch(function onerror(response) {
-
-                  $scope.onError(response);
-
-                });
-
-              });
-            };
-
-            //============================================================
-            //
-            //============================================================
-            $scope.requestPublish = function() {
-              //dialogTemplate = $compile(dialogTemplate,$scope);
-              $scope.ignoreDirtyCheck=true;
-              $scope.doc.meta.status = 'request';
-              return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
-                _.each($scope.doc.hostOrgs, function(org) {
-                  if (org.length>2)
-                      mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
-
-                        if (conf.meta.status !== 'published')
-                          mongoStorage.requestDoc('inde-orgs',conf, conf._id);
-                      }).catch(function onerror(response) {
-                        $scope.onError(response);
-                      });
-                });
-              });
-            };
-
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.selectMeeting = function(docObj) {
-              $timeout(function() {
-                _.each($scope.options.conferences, function(meeting) {
-                  meeting.selected = false;
-                });
-
-                docObj.selected = !docObj.selected;
-                if (true) {
-                  if (docObj.selected) {
-                    $scope.doc.confrence = docObj._id;
-                  } else {
-                    $scope.doc.confrence = '';
-                    $scope.search = '';
-                  }
-                }
-              });
-            }; // archiveOrg
-
-            //============================================================
-            //
-            //============================================================
-            function init() {
-
-              if ($scope._id !== '0' && $scope._id !== 'new') {
-
-                if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
-                  $location.url('/404');
-                else
-                  mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
-
-                    $scope.loading = true;
-                    $scope._id = document._id;
-                    $scope.doc = document;
-                    $scope.isNew = false;
-                  }).catch(function onerror(response) {
-
-                    $scope.onError(response);
-
-                  });
-              } else {
-                mongoStorage.createDoc($scope.schema).then(
-                  function(document) {
-                    $scope.loading = true;
-                    $scope._id = document._id;
-                    $scope.doc = document;
-                    $scope.doc.logo = randomPic();
-                    initProfile(true);
-                    $scope.isNew = true;
-                  }
-                ).catch(function onerror(response) {
-                  $scope.onError(response);
-                });
-              }
-            } // init
-
-            //============================================================
-            //
-            //============================================================
-            function generateDates() {
-
-              mongoStorage.loadDoc('conferences', $scope.doc.confrence).then(function(confr) {
-                $scope.options.dates=[];
-                var diff = Number(confr.end) - Number(confr.start);
-
-                var numDays = Math.ceil(diff / 86400)+1;
-
-                if (!$scope.options) $scope.options = {};
-                if (!$scope.options.dates) $scope.options.dates = [];
-                for (var i = 0; i < numDays; i++) {
-                  $scope.options.dates[i] = moment.unix(Number(confr.start)).format("YYYY/MM/DD");
-                  confr.start = confr.start + 86400;
-                }
-              }).catch(function onerror(response) {
-                $scope.onError(response);
-              });
-              _.each($scope.options.conferences, function(conf) {
-                if (conf._id === $scope.doc.confrence)
-                  conf.selected = true;
-              });
-
-            } // init
-
-            //============================================================
-            //
-            //============================================================
-            function initProfile(newDoc) {
-              var userId;
-              auth.getUser().then(function(user) {
-                if (newDoc) {
-                  $scope.user = user;
-                  userId = $scope.user.userID;
-                } else {
-                  userId = $scope.doc.meta.createdBy;
-                }
-
-
-                return $http.get('/api/v2013/users/' + userId).then(function onsuccess(response) {
-                  //data = response.data;
-                  if (!$scope.doc) $scope.doc = {};
-                  if (!$scope.doc.contact) $scope.doc.contact = {};
-
-
-                  $scope.doc.contact.email = _.clone(response.data.Email);
-                  $scope.doc.contact.address = _.clone(response.data.Address);
-                  $scope.doc.contact.city = _.clone(response.data.City);
-                  $scope.doc.contact.country = _.clone(response.data.Country);
-                  $scope.doc.contact.personalTitle = _.clone(response.data.Title);
-                  $scope.doc.contact.state = _.clone(response.data.State);
-                  $scope.doc.contact.zip = _.clone(response.data.Zip);
-                  $scope.doc.contact.phone = _.clone(response.data.Phone);
-                  $scope.doc.contact.firstName = _.clone(response.data.FirstName);
-                  $scope.doc.contact.lastName = _.clone(response.data.LastName);
-                  $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
-
-                }).catch(function onerror(response) {
-                  $scope.onError(response);
-                });
-              });
-            } // initProfile()
-
-            //============================================================
-            //  app/images/ic_event_black_48px.svg
-            //============================================================
-            function randomPic() {
-              var num = Math.floor((Math.random() * 12) + 1);
-              return 'https://s3.amazonaws.com/mongo.document.attachments/inde-config/56c4863bc0e5501192caa152/Avatar' + num + '.svg';
-
-            }
-
-            $scope.randomPic = function() {
-              $scope.doc.logo = randomPic();
-            };
-
-            //============================================================
-            //
-            //============================================================
-            $scope.toggleIcon = function() {
-              if ($scope.doc.logo === 'app/images/ic_event_black_48px.svg')
-                $scope.doc.logo = randomPic();
-              else
-                $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
-            };
-
-
-            //============================================================
-            //
-            //============================================================
-            $scope.options = {
-              subjects		: $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms",								{ cache: true }).then(function(o){ return Thesaurus.buildTree(o.data); }),
-              countries: function() {
-                return mongoStorage.getCountries().then(function(o) {
-                  $scope.countries = $filter("orderBy")(o.data, "name.en");
-                  return $scope.countries;
-                });
-              },
-            };
-
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.orgCallback = function() {
-              $scope.showOrgForm = 0;
-            };
-
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.saveDoc = function() {
-               $scope.doc.meta.status='draft';
-               if(!$scope.doc.id){
-                        mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
-                          $scope.onError(err);
-                        }).catch(function onerror(response) {
-                          $scope.onError(response);
                         });
-                }
-                else
-                    mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(null, function(err) {
-                      $scope.onError(err);
-                    }).catch(function onerror(response) {
-                      $scope.onError(response);
-                    });
-            };
 
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.goTo = function(url) {
+                        $scope.$watch('doc.hostOrgs', function() {
+                            if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
+                                $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
+                                $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
+                                $(document.getElementById('hostOrgMsg')).css('display', 'none');
+                            }
+                        }, true);
 
-              $location.url(url);
-            };
+                        var query = {
+                            timezone: {
+                                $exists: true
+                            },
+                            venueId: {
+                                $exists: true
+                            }, // TMP for compatibility with coference collection;
+                            StartDate: {
+                                '$gt': {
+                                    '$date': moment.utc().subtract(1, 'year')
+                                }
+                            }
+                        };
 
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.submitForm = function(formData) {
-              $scope.submitted = true;
+                        $http.get("/api/v2016/event-groups", {
+                            params: {
+                                q: query,
+                                s: {
+                                    StartDate: -1
+                                }
+                            }
+                        }, {
+                            cache: true
+                        }).then(function(o) {
 
-              if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
-                formData.$valid = false;
-              }else{
-                formData.$valid = true;
-              }
+                            $scope.options.conferences = $filter("orderBy")(o.data, "StartDate");
 
-              if (formData.$valid) {
-                $scope.saveDoc();
-                $scope.publishRequestDial();
-              }
-              else {
+                            _.each($scope.options.conferences, function(conf, key) {
+                                if (conf._id === $location.search().m)
+                                    conf.selected = true;
+                                else
+                                    conf.selected = false;
+
+                                var oidArray = [];
+                                _.each(conf.MajorEventIDs, function(id) {
+                                    oidArray.push({
+                                        '$oid': id
+                                    });
+                                });
+
+                                $http.get("/api/v2016/meetings", {
+                                    params: {
+                                        q: {
+                                            _id: {
+                                                $in: oidArray
+                                            }
+                                        }
+                                    }
+                                }, {
+                                    cache: true
+                                }).then(function(m) {
+                                    $scope.options.conferences[key].meetings = m.data;
+                                });
+
+                            });
+
+                        }).then($timeout(function() {
+                            if ($location.search().m) $scope.doc.confrence = $location.search().m;
+                        }, 1000)).catch(function onerror(response) {
+                            $scope.onError(response);
+                        });
+
+                        init();
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.$on('$locationChangeStart', function(event) {
+                            if ($scope.editForm.$dirty && !$scope.ignoreDirtyCheck) {
+                                var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
+                                if (!answer)
+                                    event.preventDefault();
+                            }
+
+                        });
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.publishRequestDial = function() {
+
+                            var dialog = ngDialog.open({
+                                template: dialogTemplate,
+                                className: 'ngdialog-theme-default',
+                                closeByDocument: false,
+                                plain: true,
+                                scope: $scope
+                            });
+                            $scope.ignoreDirtyCheck = true;
+                            dialog.closePromise.then(function(ret) {
+
+                                if (ret.value == 'draft') $scope.close();
+                                if (ret.value == 'publish') $scope.requestPublish().then($scope.close()).catch(function onerror(response) {
+
+                                    $scope.onError(response);
+
+                                });
+
+                            });
+                        };
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.requestPublish = function() {
+                            //dialogTemplate = $compile(dialogTemplate,$scope);
+                            $scope.ignoreDirtyCheck = true;
+                            $scope.doc.meta.status = 'request';
+                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+                                _.each($scope.doc.hostOrgs, function(org) {
+                                    if (org.length > 2)
+                                        mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
+
+                                            if (conf.meta.status !== 'published')
+                                                mongoStorage.requestDoc('inde-orgs', conf, conf._id);
+                                        }).catch(function onerror(response) {
+                                            $scope.onError(response);
+                                        });
+                                });
+                            });
+                        };
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function showEdit() {
+
+                            if ((_.isBoolean($scope.editIndex) && $scope.editIndex) || _.isNumber($scope.editIndex))
+                                return true;
+                            else
+                                return false;
+                        }
+                        $scope.showEdit = showEdit;
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.selectMeeting = function(docObj) {
+                            $timeout(function() {
+                                _.each($scope.options.conferences, function(meeting) {
+                                    meeting.selected = false;
+                                });
+
+                                docObj.selected = !docObj.selected;
+                                if (true) {
+                                    if (docObj.selected) {
+                                        $scope.doc.confrence = docObj._id;
+                                    } else {
+                                        $scope.doc.confrence = '';
+                                        $scope.search = '';
+                                    }
+                                }
+                            });
+                        }; // archiveOrg
+
+                        //============================================================
+                        //
+                        //============================================================
+                        function init() {
+                            rangy.init();
+                            window.rangy = rangy;
+
+                            $scope.editIndex = false;
+
+                            $q.when(loadOrgs(), loadCountries()).then(function() {
+                                if ($scope._id !== '0' && $scope._id !== 'new') {
+
+                                    if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
+                                        $location.url('/404');
+                                    else
+                                        mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
+
+                                            $scope.loading = true;
+                                            $scope._id = document._id;
+                                            $scope.doc = document;
+                                            $scope.isNew = false;
+                                            if (!$scope.doc.hostOrgs)
+                                                $scope.doc.hostOrgs = [];
+                                            if (!document.validTabs)
+                                                $scope.doc.validTabs = {
+                                                    'general': false,
+                                                    'logistics': false,
+                                                    'orgs': false,
+                                                    'contact': false
+                                                };
+                                            if (!$scope.doc.publications) $scope.doc.publications = [];
+                                            if (!$scope.doc.images) $scope.doc.images = [];
+                                            if (!$scope.doc.links) $scope.doc.links = [];
+                                            if (!$scope.doc.videos) $scope.doc.videos = [];
+                                        }).catch(function onerror(response) {
+
+                                            $scope.onError(response);
+
+                                        });
+                                } else {
+                                    mongoStorage.createDoc($scope.schema).then(
+                                        function(document) {
+                                            $scope.conferenceId = $route.current.params.c;
+                                            $scope.loading = true;
+                                            $scope._id = document._id;
+                                            $scope.id = document.id;
+                                            $scope.doc = document;
+                                            $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
+                                            initProfile(true);
+                                            $scope.doc.conference = $scope.conferenceId;
+                                            $scope.doc.validTabs = {
+                                                'general': false,
+                                                'logistics': false,
+                                                'orgs': false,
+                                                'contact': false
+                                            };
+                                            $scope.isNew = true;
+                                            if (!$scope.doc.hostOrgs) $scope.doc.hostOrgs = [];
+                                            if (!$scope.doc.publications) $scope.doc.publications = [];
+                                            if (!$scope.doc.images) $scope.doc.images = [];
+                                            if (!$scope.doc.links) $scope.doc.links = [];
+                                            if (!$scope.doc.videos) $scope.doc.videos = [];
+                                            $scope.$emit('showSuccess', 'Side Event ' + $scope.id + ' Created and Saved as Draft');
+                                        }
+                                    ).catch(function onerror(response) {
+                                        $scope.onError(response);
+                                    });
+                                }
+
+                            }); // load orgs
+                        } // init
+                        //============================================================
+                        //
+                        //============================================================
+                        function checkMeeting(index) {
 
 
-                if (formData.meeting.$error.required && $scope.submitted) {
-                  findScrollFocus('editForm.meeting');
-                //  return;
-                }
-                if (formData.exp_num_participants.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.exp_num_participants');
+                            var meeting = $scope.options.conferenceObj.meetings[index];
+                            meeting.selected = !meeting.selected;
+                            if (!$scope.doc.meetings) $scope.doc.meetings = [];
+                            if (meeting.selected)
+                                $scope.doc.meetings.push(meeting._id);
+                            else
+                                $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
 
-                if (formData.title.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.title');
+                        } //
+                        $scope.checkMeeting = checkMeeting;
+                        //============================================================
+                        //
+                        //============================================================
+                        function generateDates() {
 
-                if (formData.title.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.title');
+                            //mongoStorage.loadDoc('event-groups', $scope.doc.confrence).then(function(confr) {
+                            var confr = $scope.options.conferenceObj = _.find($scope.options.conferences, {
+                                _id: $scope.doc.conference
+                            });
 
-                if (formData.description.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.description');
+                            $scope.options.dates = [];
 
-                  if (formData.subjects.$error.required && $scope.submitted)
-                    findScrollFocus('editForm.subjects');
+                            var diff = Number(moment(confr.EndDate).format('X')) - Number(moment(confr.StartDate).format('X'));
 
-                if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
+                            var numDays = Math.ceil(diff / 86400) + 1;
 
-                  if (!$scope.focused)
-                    smoothScroll(document.getElementById('hostOrg-error'));
-                  if(!$scope.focused)
-                      $(document.getElementById('editForm.hostOrgs')).focus();
-                  $(document.getElementById('editForm.hostOrgs')).addClass('has-error');
-                  $(document.getElementById('hostOrg-error')).addClass('has-error-div');
-                  $(document.getElementById('hostOrgMsg')).css('display', 'block');
-                  $scope.focused = true;
-                }
-
-                if (formData.firstName.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.firstName');
-                if (formData.lastName.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.lastName');
-                if (formData.phone.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.phone');
-                if (formData.city.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.city');
-                if (formData.country.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.country');
-                if (formData.email.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.email');
-
-                if (formData.prefDateOne.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefDateOne');
-                if (formData.prefTimeOne.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefTimeOne');
-
-                if (formData.prefDateTwo.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefDateTwo');
-                if (formData.prefTimeTwo.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefTimeTwo');
-
-                if (formData.prefDateThree.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefDateThree');
-                if (formData.prefTimeThree.$error.required && $scope.submitted)
-                  findScrollFocus('editForm.prefTimeThree');
+                            confr.StartDate = moment(confr.StartDate);
+                            if (!$scope.options) $scope.options = {};
+                            if (!$scope.options.dates) $scope.options.dates = [];
+                            for (var i = 0; i < numDays; i++) {
+                                $scope.options.dates[i] = moment(confr.StartDate).format("YYYY/MM/DD");
+                                confr.StartDate = confr.StartDate.add(1, 'day');
+                            }
+                            // }).catch(function onerror(response) {
+                            //   $scope.onError(response);
+                            // });
+                            //load selected conference
+                            _.each($scope.options.conferences, function(conf) {
+                                if (conf._id === $scope.doc.conference)
+                                    conf.selected = true;
+                                //load selected meetings
+                                _.each(conf.meetings, function(meet) {
+                                    if ($scope.doc.meetings && $scope.doc.meetings.indexOf(meet._id) >= 0)
+                                        meet.selected = true;
+                                });
+                            });
 
 
-              }
 
-              $scope.focused = false;
+                        } // init
 
-            }; //
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function findScrollFocus(id) {
-
-              var el = document.getElementById(id);
-
-              if (!$scope.focused) {
-
-                smoothScroll(el);
-                if ($(el).is("input") || $(el).is("select"))
-                  el.focus();
-                else {
-                  if ($(el).find('input').length === 0)
-                    $(el).find('textarea').focus();
-                  else
-                    $(el).find('input').focus();
-
-                }
-                $scope.focused = true;
-              }
-            }
+                        //============================================================
+                        //
+                        //============================================================
+                        function initProfile(newDoc) {
+                            var userId;
+                            auth.getUser().then(function(user) {
+                                if (newDoc) {
+                                    $scope.user = user;
+                                    userId = $scope.user.userID;
+                                } else {
+                                    userId = $scope.doc.meta.createdBy;
+                                }
 
 
-            //============================================================
-            //
-            //============================================================
-            $scope.onError = function(res) {
+                                return $http.get('/api/v2013/users/' + userId).then(function onsuccess(response) {
+                                    //data = response.data;
+                                    if (!$scope.doc) $scope.doc = {};
+                                    if (!$scope.doc.contact) $scope.doc.contact = {};
 
-              $scope.status = "error";
-              if (res.status === -1) {
-                $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
-                if (res.data.message)
-                  $scope.error += " Message Detail: " + res.data.message;
-              }
-              if (res.status == "notAuthorized") {
-                $scope.error = "You are not authorized to perform this action: [Method:" + res.config.method + " URI:" + res.config.url + "]";
-                if (res.data.message)
-                  $scope.error += " Message Detail: " + res.data.message;
-              } else if (res.status == 404) {
-                $scope.error = "The server at URI: " + res.config.url + " has responded that the record was not found.";
-                if (res.data.message)
-                  $scope.error += " Message Detail: " + res.data.message;
-              } else if (res.status == 500) {
-                $scope.error = "The server at URI: " + res.config.url + " has responded with an internal server error message.";
-                if (res.data.message)
-                  $scope.error += " Message Detail: " + res.data.message;
-              } else if (res.status == "badSchema") {
-                $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
-              } else if (res.data && res.data.Message)
-                $scope.error = res.data.Message;
-              else
-                $scope.error = res.data;
-            };
-            //============================================================
-            //
-            //============================================================
-            $scope.hasError = function() {
-              return !!$scope.error;
-            };
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.close = function() {
-              history.goBack();
-            };
-          } //link
-      }; //return
-    }
-  ]);
+
+                                    $scope.doc.contact.email = _.clone(response.data.Email);
+                                    $scope.doc.contact.address = _.clone(response.data.Address);
+                                    $scope.doc.contact.city = _.clone(response.data.City);
+                                    $scope.doc.contact.country = _.clone(response.data.Country);
+                                    $scope.doc.contact.personalTitle = _.clone(response.data.Title);
+                                    $scope.doc.contact.state = _.clone(response.data.State);
+                                    $scope.doc.contact.zip = _.clone(response.data.Zip);
+                                    $scope.doc.contact.phone = _.clone(response.data.Phone);
+                                    $scope.doc.contact.firstName = _.clone(response.data.FirstName);
+                                    $scope.doc.contact.lastName = _.clone(response.data.LastName);
+                                    $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
+
+                                }).catch(function onerror(response) {
+                                    $scope.onError(response);
+                                });
+                            });
+                        } // initProfile()
+
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.toggleIcon = function() {
+                            if ($scope.doc.logo === 'app/images/ic_event_black_48px.svg')
+                                $scope.doc.logo = '';
+                            else
+                                $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
+                        };
+
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.options = {
+                            subjects: $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
+                                cache: true
+                            }).then(function(o) {
+                                return Thesaurus.buildTree(o.data);
+                            })
+
+
+                        };
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function loadOrgs() {
+
+                            return mongoStorage.loadOrgs().then(function(res) {
+                                $scope.options.orgs = res;
+                                return $scope.options.orgs;
+                            }).catch(function onerror(response) {
+                                $scope.onError(response);
+                            });
+                        }
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function loadCountries() {
+                            return mongoStorage.getCountries().then(function(o) {
+                                $scope.options.countries = $filter("orderBy")(o, "name.en");
+                                return $scope.options.countries;
+                            }).catch(function onerror(response) {
+                                $scope.onError(response);
+                            });
+                        }
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.orgCallback = function() {
+                            $scope.showOrgForm = 0;
+                        };
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.saveDoc = function() {
+
+                            $scope.doc.meta.status = 'draft';
+                            if (!$scope.doc.id) {
+                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+                                    $scope.$emit('showSuccess', 'New Side Event ' + $scope.id + ' Created and Saved as Draft');
+                                }).catch(function onerror(response) {
+                                    $scope.onError(response);
+                                });
+                            } else
+                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+                                    $scope.$emit('showSuccess', 'Side Event ' + $scope.id + ' Saved as Draft');
+                                }).catch(function onerror(response) {
+                                    $scope.onError(response);
+                                });
+                        };
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.goTo = function(url) {
+
+                            $location.url(url);
+                        };
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.getOrgImgSource = function(id) {
+                            var orgFound = false;
+                            if (id.length !== 2) {
+
+                                orgFound = _.find($scope.options.orgs, {
+                                    _id: id
+                                });
+                                if (orgFound) return orgFound.logo;
+                                else
+                                    return;
+
+                            }
+                        };
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.getOrgName = function(id) {
+                            var orgFound = false;
+                            if (id.length === 2) {
+                                orgFound = _.find($scope.options.countries, {
+                                    _id: id
+                                });
+                                if (orgFound) return orgFound.title;
+                                else
+                                    return;
+
+                            } else {
+                                orgFound = _.find($scope.options.orgs, {
+                                    _id: id
+                                });
+                                if (orgFound) return orgFound.title;
+                                else
+                                    throw 'Error: looking for org' + id + ' in $scope.options.orgs that does not exist';
+
+
+                            }
+                        };
+                        $scope.submitForm = function(formData) {
+                            $scope.submitted = true;
+                            switch ($scope.tab) {
+                                case 'general':
+                                    submitGeneral(formData);
+                                    break;
+                                case 'logistics':
+                                    submitLogistics(formData);
+                                    break;
+                                case 'orgs':
+                                    submitOrgs(formData);
+                                    break;
+
+                                case 'contact':
+                                    submitContact(formData);
+                                    break;
+                            }
+                        };
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function submitGeneral(formData) {
+                            $scope.doc.validTabs.general = false;
+                            if (formData.title.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.title');
+
+                            if (formData.description.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.description');
+
+                            if (formData.subjects.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.subjects');
+
+                            if (formData.title.$valid && formData.description.$valid && formData.subjects.$valid) {
+
+
+                                resetForm(formData, ['title', 'description', 'subjects']);
+                                $scope.doc.validTabs.general = true;
+                                $scope.tab = 'logistics';
+                                $timeout(function() {
+                                    $scope.tab = 'logistics';
+                                    $('#logistics-tab').tab('show');
+                                });
+                                $scope.saveDoc();
+                            }
+                        } //submitGeneral
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function submitLogistics(formData) {
+                            $scope.doc.validTabs.logistics = false;
+                            var ctrls = ['expNumPart', 'conference', 'prefDateOne', 'prefTimeOne', 'prefDateTwo', 'prefTimeTwo', 'prefDateThree', 'prefTimeThree'];
+                            if (formData.conference.$error.required && $scope.submitted) {
+                                findScrollFocus('formData.conference');
+                                //  return;
+                            }
+                            if (formData.expNumPart.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.expNumPart');
+
+                            if (formData.prefDateOne.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefDateOne');
+                            if (formData.prefTimeOne.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefTimeOne');
+
+                            if (formData.prefDateTwo.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefDateTwo');
+                            if (formData.prefTimeTwo.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefTimeTwo');
+
+                            if (formData.prefDateThree.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefDateThree');
+                            if (formData.prefTimeThree.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.prefTimeThree');
+
+
+                            if (formData.conference.$valid && formData.expNumPart.$valid && formData.prefDateOne.$valid &&
+                                formData.prefTimeOne.$valid && formData.prefDateTwo.$valid && formData.prefTimeTwo.$valid &&
+                                formData.prefDateThree.$valid && formData.prefTimeThree.$valid
+                            ) {
+                                $scope.doc.validTabs.logistics = true;
+                                $scope.saveDoc();
+                                resetForm(formData, ctrls);
+                                $scope.doc.validTabs.logistics = true;
+                                $timeout(function() {
+                                    $scope.tab = 'orgs';
+                                    $('#orgs-tab').tab('show');
+                                });
+                            }
+                        } //submitGeneral
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function submitOrgs(formData) {
+
+                            var ctrls = ['hostOrgs'];
+                            $scope.doc.validTabs.orgs = false;
+                            if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
+                                formData.$valid = false;
+                            } else {
+                                formData.$valid = true;
+                            }
+
+                            if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
+
+                                if (!$scope.focused)
+                                    smoothScroll(document.getElementById('hostOrg-error'));
+                                if (!$scope.focused)
+                                    $(document.getElementById('editForm.hostOrgs')).focus();
+                                $(document.getElementById('editForm.hostOrgs')).addClass('has-error');
+                                $(document.getElementById('hostOrg-error')).addClass('has-error-div');
+                                $(document.getElementById('hostOrgMsg')).css('display', 'block');
+                                $scope.focused = true;
+                            } else {
+
+                                resetForm(formData, ctrls);
+                                $scope.doc.validTabs.orgs = true;
+                                $timeout(function() {
+                                    $scope.tab = 'contact';
+                                    $('#contact-tab').tab('show');
+                                });
+                                $scope.saveDoc();
+                            }
+                        } //submitGeneral
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function submitContact(formData) {
+                            console.log('formData', formData);
+                            $scope.doc.validTabs.contact = true;
+                            var ctrls = ['firstName', 'lastName', 'phone', 'city', 'country', 'email'];
+
+                            if (formData.firstName.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.firstName');
+                            if (formData.lastName.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.lastName');
+                            if (formData.phone.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.phone');
+                            if (formData.city.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.city');
+                            if (formData.country.$error.required && $scope.submitted)
+                                findScrollFocus('editForm.country');
+                            if ((formData.emaill.$error.required || formData.emaill.$error.pattern || formData.emaill.$error.email) && $scope.submitted)
+                                findScrollFocus('editForm.email');
+
+                            var validRows = true;
+                            _.each($scope.doc.hostOrgs, function(resOrg, key) {
+
+                                if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
+                                    findScrollFocus('email_' + key);
+                                    if (validRows) validRows = false;
+                                }
+                                if (formData['firstName_' + key].$error.required && $scope.submitted) {
+                                    findScrollFocus('firstName_' + key);
+                                    if (validRows) validRows = false;
+                                }
+                                if (formData['lastName_' + key].required && $scope.submitted) {
+                                    findScrollFocus('lastName_' + key);
+                                    if (validRows) validRows = false;
+                                }
+                            });
+
+                            if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
+                                formData.city.$valid && formData.country.$valid && formData.emaill.$valid && validRows
+                            ) {
+
+                                resetForm(formData, ctrls);
+                                $scope.doc.validTabs.contact = true;
+                                $timeout(function() {
+                                    $scope.tab = 'documents';
+                                    $('#documents-tab').tab('show');
+                                });
+                                $scope.saveDoc();
+                            }
+                        } //submitGeneral
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function resetForm(formData, ctrlsException) {
+                            formData.$rollbackViewValue();
+                            formData.$setPristine();
+                            _.each(formData, function(ctrl, name) {
+                                if ((name.indexOf('$') !== 0) && ctrlsException.indexOf(name) === -1)
+                                    ctrl.$setValidity(name, true);
+                            });
+                        }
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function findScrollFocus(id) {
+
+                            var el = document.getElementById(id);
+
+                            if (!$scope.focused) {
+
+                                smoothScroll(el);
+                                if ($(el).is("input") || $(el).is("select"))
+                                    el.focus();
+                                else {
+                                    if ($(el).find('input').length === 0)
+                                        $(el).find('textarea').focus();
+                                    else
+                                        $(el).find('input').focus();
+
+                                }
+                                $scope.focused = true;
+                            }
+                        }
+
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.onError = function(res) {
+
+                            $scope.status = "error";
+                            if (res.status === -1) {
+                                $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            }
+                            if (res.status == "notAuthorized") {
+                                $scope.error = "You are not authorized to perform this action: [Method:" + res.config.method + " URI:" + res.config.url + "]";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == 404) {
+                                $scope.error = "The server at URI: " + res.config.url + " has responded that the record was not found.";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == 500) {
+                                $scope.error = "The server at URI: " + res.config.url + " has responded with an internal server error message.";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == "badSchema") {
+                                $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
+                            } else if (res.data && res.data.Message)
+                                $scope.error = res.data.Message;
+                            else
+                                $scope.error = res.data;
+                        };
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.hasError = function() {
+                            return !!$scope.error;
+                        };
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.close = function() {
+                            history.goBack();
+                        };
+                    } //link
+            }; //return
+        }
+    ]);
 });

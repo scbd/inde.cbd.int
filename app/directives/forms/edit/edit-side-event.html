@@ -7,8 +7,16 @@
       padding-left: 10px;
     }
 
-    label {
+    .label {
       padding-top: 5px;
+    }
+
+    .success-tab {
+      background-color: #b2dba1 !important;
+    }
+
+    .tab-content {
+      background-color: #b2dba1
     }
   </style>
 
@@ -33,366 +41,528 @@
       </h2>
     </legend>
     <div></div>
-    <div ng-show="registerAlert" class="alert alert-success alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
-      <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.  It is also required that any attendees to your side event are registered for the meeting (including organizers or speakers).</strong>
-    </div>
+    <div class="row">
 
-        <div class="row">
-        <div class="col-xs-12 col-lg-8">
-          <div class="row">
-            <div class="col-xs-12 col-lg-6">
-              <div ng-class="{'has-error': editForm.meeting.$error.required  && submitted}">
-                <label>Meeting</label>
-                <select id="editForm.meeting" class="form-control" ng-model="doc.confrence" name="meeting" required>
-                  <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
-                </select>
-                <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
-              </div>
-            </div>
-            <div class="col-xs-12 col-lg-6">
-              <div name="exp_num_participants" ng-class="{'has-error': (editForm.exp_num_participants.$error.required && submitted) || editForm.exp_num_participants.$error.number}">
-                <label>Expected Number of Participants</label>
-                <input id="editForm.exp_num_participants" class="form-control" type="number" name="exp_num_participants" ng-model="doc.expNumPart" placeholder=" " required/>
-                <p ng-show="editForm.exp_num_participants.$error.required && submitted" class="help-block">Number of participants is required.</p>
-                <p ng-show="editForm.exp_num_participants.$error.number" class="help-block"> Not valid number!</p>
-              </div>
-            </div>
-            <div class="col-xs-12 col-lg-12">
-              <div name="title" ng-class="{'has-error': editForm.title.$error.required && submitted}">
-                <label>Title</label>
-                <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required>
-                <p ng-show="editForm.title.$error.required && submitted" class="help-block">Title is required.</p>
-              </div>
-            </div>
-            <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
-              <div name="description" ng-class="{'has-error': editForm.description.$error.required && submitted}">
-                <label>Description</label>
-                <textarea id="editForm.description" class="form-control" rows="4" name="description" ng-model="doc.description" placeholder=" " locales="doc.meta.locales" required></textarea>
-                <p ng-show="editForm.description.$error.required && submitted" class="help-block">Description is required.</p>
-              </div>
-            </div>
+      <div class="col-xs-12">
+        <ul class="nav nav-tabs" role="tablist">
+          <li role="presentation" ng-class="{'active':tab==='general'}"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab" ng-click="tab='general'">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a>            </li>
+          <li role="presentation" ng-class="{'active':tab==='logistics'}"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab" ng-click="tab='logistics'">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='orgs'}"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab" ng-click="tab='orgs'">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='contact'}"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab" ng-click="tab='contact'">Contact Persons <i class="fa fa-check" ng-show="doc.contact"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='documents'}"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab" ng-click="tab='documents'">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='links'}"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab" ng-click="tab='links'">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='images'}"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab" ng-click="tab='images'">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='videos'}"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab" ng-click="tab='videos'">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <br>
+    </div>
+    <div id="general" class="tab-pane fade in active text-left" ng-show="tab==='general'">
+      <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+        <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.  It is also required that any attendees to your side event are registered for the meeting (including organizers or speakers).</strong>
           </div>
+
+
+          <div class="col-xs-12 col-lg-8">
+            <div class="row">
+
+              <div class="col-xs-12 col-lg-12">
+                <div name="title" style="padding-bottom:10px;" ng-class="{'has-error': editForm.title.$invalid && editForm.$submitted}">
+                  <label>Title</label>
+                  <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required>
+                  <p ng-show="editForm.title.$invalid && editForm.$submitted" class="help-block">Title is required.</p>
+                </div>
+              </div>
+              <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
+
+                  <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
+                    <label>Subject(s)</label><br>
+                    <div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
+                    <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
+                  </div>
+                </div>
+
+
+            </div>
         </div>
         <div class="col-xs-12 col-lg-4">
-          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon (Not Org. Logo)">
+          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon (Not Org. Logo)" style="padding-bottom:10px;">
             <label>Event Icon (Not Org. Logo)</label>
             <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
-            <button type="button" class="btn btn-default btn-sm" ng-click="randomPic()" style="margin-bottom:10px;">Generate Random BIO Related Icon</button>
             <scbd-file-upload  ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
 
           </div>
         </div>
-      </div>
 
-      <div class="row">
-        <div class="col-lg-6 col-xs-12" style="padding-bottom:10px;">
-          <div id="editForm.subjects" name="subjects" ng-class="{'has-error': editForm.subjects.$error.required && submitted}">
-            <div class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
-              <label>Subject(s)</label><br>
-              <div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]"></div>
-              <p ng-show="editForm.subjects.$error.required && submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
-            </div>
+
+
+        <div class="col-xs-12" style="padding-bottom:10px;">
+          <div name="description" ng-class="{'has-error': editForm.description.$invalid && editForm.$submitted}">
+            <label>Description</label>
+      <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular>
+            <p ng-show="editForm.description.$invalid && editForm.$submitted" class="help-block">Description is required.</p>
           </div>
         </div>
 
-        <div class="col-lg-6 col-xs-12">
-          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Documents">
-            <label>Published Documents</label>
-            <scbd-file-upload  ng-modal="doc.documents" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}"></scbd-file-upload>
-          </div>
-        </div>
-      </div>
+    </div>
 
-      <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && submitted)}" >
-          <legend class="container-subheader">
-            <h2>Organization(s)</h2>
-          </legend>
 
-                <p id="hostOrgMsg"  ng-show="!doc.hostOrgs.length && submitted" style="color:#a94442">At least one organization is required.</p>
-
-          <div class="row">
-
-            <div class="col-md-12 col-xs-12">
-              <div name="hostOrgs" caption="" style="margin-right:20px;">
-
-                <scbd-select-list ng-modal="doc.hostOrgs"  show-org-form="showOrgForm" doc="doc" ></scbd-select-list>
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <legend class="container-subheader" style="margin-top:15px;">
-        <h2>Contact Person </h2>
-      </legend>
-
+			<div  id="logistics" class="tab-pane fade in active text-left" ng-show="tab==='logistics'">
+        <legend class="container-subheader">
+          <h2>Conference and Associated Meetings </h2>
+        </legend>
             <div class="row">
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <div   name="personalTitle" caption="Personal Title">
-                  <label>Salutation</label>
-                  <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" "/>
+              <div class="col-xs-12 col-lg-4">
+                <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
+                  <label>Conference</label>
+                  <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" required>
+                    <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+                  </select>
+                  <p ng-show="editForm.conference.$invalid && editForm.$submitted" class="help-block">A conference is required.</p>
                 </div>
               </div>
-
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <div   ng-class="{'has-error': editForm.firstName.$error.required && submitted}">
-                  <label>First Name</label>
-                  <input id="editForm.firstName" class="form-control" type="text" name="firstName" ng-model="doc.contact.firstName" placeholder=" "/ required>
-                  <p ng-show="editForm.firstName.$error.required && submitted" class="help-block">First name is required.</p>
-                </div>
-              </div>
-
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <div   ng-class="{'has-error': editForm.lastName.$error.required && submitted}">
-                  <label>Last Name</label>
-                  <input id="editForm.lastName" class="form-control" name="lastName" type="text" ng-model="doc.contact.lastName" placeholder=" "required/>
-                  <p ng-show="editForm.lastName.$error.required && submitted" class="help-block">Last name is required.</p>
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <div name="jobTitla" caption="Job Title">
-                  <label>Job Title</label>
-                  <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" " />
-                </div>
-              </div>
-
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <div ng-class="{'has-error': editForm.phone.$error.required && submitted}">
-                  <label>Phone Number</label>
-                  <input id="editForm.phone" class="form-control" name="phone" type="text" ng-model="doc.contact.phone" placeholder=" " required/>
-                  <p ng-show="editForm.phone.$error.required && submitted" class="help-block">Phone number is required.</p>
-                </div>
-              </div>
-
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+              <div class="col-xs-12 col-lg-4">
                 <div>
-                  <label>Mobile</label>
-                  <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-model="doc.mobile" placeholder=" " />
-                </div>
-              </div>
-
-            </div>
-
-            <div class="row" style="margin-bottom:15px;">
-
-                <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
-                  <div >
-                    <label for="address">Address</label>
-                    <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
-                  </div>
-                </div>
-
-                <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-                  <div class="form-group">
-                    <div   ng-class="{'has-error': editForm.city.$error.required && submitted}">
-                      <label>City</label>
-                    <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
-                    <p ng-show="editForm.city.$error.required && submitted" class="help-block">City is required.</p>
+                  <label>Associated Meeting(s)</label>
+                  <div class="panel panel-default">
+                    <div class="panel-body">
+                      <div ng-repeat="meeting in options.conferenceObj.meetings" ng-click="checkMeeting($index)" class="pointer"><i class="fa fa-check-square-o" ng-show="options.conferenceObj.meetings[$index].selected"></i><i class="fa fa-square-o" ng-show="!options.conferenceObj.meetings[$index].selected"></i> {{meeting.EVT_CD}}</div>
+                    </div>
                   </div>
                 </div>
               </div>
-
-              <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-                <div class="form-group">
-                  <label for="state">State / Province / Region</label>
-                  <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
+              <div class="col-xs-12 col-lg-4">
+                <div name="expNumPart" ng-class="{'has-error': (editForm.expNumPart.$invalid && editForm.$submitted) || editForm.expNumPart.$error.number}">
+                  <label>Expected Number of Participants</label>
+                  <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" placeholder=" " required/>
+                  <p ng-show="editForm.expNumPart.$invalid && editForm.$submitted" class="help-block">Number of participants is required.</p>
+                  <p ng-show="editForm.expNumPart.$error.number" class="help-block"> Not valid number!</p>
                 </div>
               </div>
 
-          </div>
-
-        <div class="row">
-
-          <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
-            <div ng-class="{'has-error': editForm.email.$error.required && submitted}">
-              <label>Email</label>
-              <input id="editForm.email" class="form-control" name="email"  ng-model="doc.contact.email" placeholder=" " required/>
-
-              <p ng-show="editForm.email.$error.required && submitted" class="help-block">Email is required.</p>
             </div>
-          </div>
 
-          <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-            <div class="form-group">
-              <label for="zip">Postal / Zip code</label>
-              <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip" />
-            </div>
-          </div>
+            <legend class="container-subheader">
+              <h2>Preferred Date and Time {{prefDate}}</h2>
+            </legend>
+            <div class="row">
 
-          <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-            <div ng-class="{'has-error': editForm.country.$error.required && submitted}">
-              <div>
-                <label>Country</label>
+              <div class="ccol-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
+                <div ng-class="{'has-error': editForm.prefDateOne.$invalid && editForm.$submitted,'has-error': editForm.prefTimeOne.$invalid && editForm.$submitted }">
+                  <label>First Choice</label>
+                  <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Date</option>
+                    <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+                  </select>
+                  <p ng-show="editForm.prefDateOne.$invalid && editForm.$submitted" class="help-block">First Choice Date required.</p>
+                  <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Time</option>
+                    <option value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option value="evening">Evening: 18:15 - 19:45</option>
+                  </select>
+                  <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one && editForm.$submitted" class="help-block">First choice time required.</p>
+                </div>
               </div>
-              <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries()" required></div>
-              <p ng-show="editForm.country.$error.required && submitted" class="help-block">Country is required.</p>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
+                <div ng-class="{'has-error': editForm.prefDateTwo.$invalid && editForm.$submitted,'has-error': editForm.prefTimeTwo.$invalid && editForm.$submitted }">
+                  <label>Second Choice</label>
+                  <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Date</option>
+                    <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+                  </select>
+                  <p ng-show="editForm.prefDateTwo.$invalid && editForm.$submitted" class="help-block">Second choice date required.</p>
+                  <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Time</option>
+                    <option value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option value="evening">Evening: 18:15 - 19:45</option>
+                  </select>
+                  <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && editForm.$submitted" class="help-block">Second choice time required.</p>
+                </div>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
+                <div ng-class="{'has-error': editForm.prefDateThree.$invalid && editForm.$submitted,'has-error': editForm.prefTimeThree.$invalid && editForm.$submitted }" >
+                  <label>Third Choice</label>
+                  <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Date</option>
+                    <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+                  </select>
+                  <p ng-show="editForm.prefDateThree.$invalid && editForm.$submitted" class="help-block">Third choice date required.</p>
+                  <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates" required>
+                    <option value="" selected>Select a Time</option>
+                    <option value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option value="evening">Evening: 18:15 - 19:45</option>
+                  </select>
+                  <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && editForm.$submitted" class="help-block">Third choice time required.</p>
+                </div>
+              </div>
             </div>
-          </div>
 
-        </div>
+            <legend class="container-subheader">
+              <h2 >Requirements (optional)</h2>
+            </legend>
+            <div class="row">
 
-
-      <legend class="container-subheader">
-        <h2>Preferred Date and Time {{prefDate}}</h2>
-      </legend>
-      <div class="row">
-
-        <div class="ccol-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-          <div ng-class="{'has-error': editForm.prefDateOne.$error.required && submitted,'has-error': editForm.prefTimeOne.$error.required && submitted }">
-            <label>First Choice</label>
-            <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Date</option>
-              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
-            </select>
-            <p ng-show="editForm.prefDateOne.$error.required && submitted" class="help-block">First Choice Date required.</p>
-            <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Time</option>
-              <option value="lunch">Lunch: 13:15 - 14:45</option>
-              <option value="evening">Evening: 18:15 - 19:45</option>
-            </select>
-            <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one &&submitted" class="help-block">First choice time required.</p>
-          </div>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-          <div ng-class="{'has-error': editForm.prefDateTwo.$error.required && submitted,'has-error': editForm.prefTimeTwo.$error.required && submitted }">
-            <label>Second Choice</label>
-            <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Date</option>
-              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
-            </select>
-            <p ng-show="editForm.prefDateTwo.$error.required && submitted" class="help-block">Second choice date required.</p>
-            <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Time</option>
-              <option value="lunch">Lunch: 13:15 - 14:45</option>
-              <option value="evening">Evening: 18:15 - 19:45</option>
-            </select>
-            <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && submitted" class="help-block">Second choice time required.</p>
-          </div>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-          <div ng-class="{'has-error': editForm.prefDateThree.$error.required && submitted,'has-error': editForm.prefTimeThree.$error.required && submitted }" >
-            <label>Third Choice</label>
-            <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Date</option>
-              <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
-            </select>
-            <p ng-show="editForm.prefDateThree.$error.required && submitted" class="help-block">Third choice date required.</p>
-            <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates" required>
-              <option value="" selected>Select a Time</option>
-              <option value="lunch">Lunch: 13:15 - 14:45</option>
-              <option value="evening">Evening: 18:15 - 19:45</option>
-            </select>
-            <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && submitted" class="help-block">Third choice time required.</p>
-          </div>
-        </div>
-      </div>
-
-      <legend class="container-subheader">
-        <h2 >Requirements (optional)</h2>
-      </legend>
-      <div class="row">
-
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ng-click="doc.requirements.pc=!doc.requirements.pc;"><i class="fa fa-check-square-o" ng-show="doc.requirements.pc"></i><i class="fa fa-square-o" ng-show="!doc.requirements.pc"></i> PC</span>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-          <span ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-            <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span><span style="font-size:11px;">(at your own expense)</span>
-        </div>
-        <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-            <span ng-click="doc.requirements.skype=!doc.requirements.skype;"><i class="fa fa-check-square-o" ng-show="doc.requirements.skype"></i><i class="fa fa-square-o" ng-show="!doc.requirements.skype"></i><span > Skype </span>
-        </div>
-      </div>
-
-      <div class="row" style="margin-bottom:10px;">
-        <div class="col-xs-12">
-          <br>
-          <div>Other
-            <span style="font-size:10px;">(Please indicate any other requirements you may need)</span>
-          </div>
-          <input class="form-control" type="text" ng-model="doc.requirements.other"/>
-        </div>
-      </div>
-
-
-
-      <legend class="container-subheader" ng-if="false">
-        <h2>Side Event Promotion
-
-        </h2>
-      </legend>
-
-      <div class="row" ng-if="false">
-
-        <div class="col-xl-2 col-lg-2 col-md-12 col-xs-12">
-          <span>Facebook Event
-            <scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o" to-icon-name="fa-check-square-o" ani="tada" active="doc.promotion.fbEvent" ng-click="doc.promotion.fbEvent=!doc.promotion.fbEvent;"></scbd-icon-button>
-          </span>
-        </div>
-
-        <div class="col-xl-2 col-lg-2 col-md-12 col-xs-12">
-          <span>Flyers
-            <scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o" to-icon-name="fa-check-square-o" ani="tada" active="doc.promotion.flyers" ng-click="doc.promotion.flyers=!doc.promotion.flyers;"></scbd-icon-button>
-          </span>
-        </div>
-
-        <div class="col-xl-2 col-lg-2 col-md-4 col-xs-4">
-          <span>Email Cmapaign
-            <scbd-icon-button type="fa" style="margin-top:5px;color:#009b48;font-size:16px;" icon-name="fa-square-o" to-icon-name="fa-check-square-o" ani="tada" active="doc.promotion.emailCampaign" ng-click="doc.promotion.emailCampaign=!doc.promotion.emailCampaign;"></scbd-icon-button>
-          </span>
-        </div>
-
-      </div>
-
-      <div class="row"  ng-if="false">
-
-        <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
-          <div>Your Website Promoting the Side Event </div>
-          <input class="form-control" type="url" ng-model="doc.promotion.website"/>
-        </div>
-
-        <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
-          <div>Other
-            <span style="font-size:9px;">(Please indicate any other steps you have taken to promote your side event)</span>
-          </div>
-          <input class="form-control" type="text" ng-model="doc.promotion.other"/>
-        </div>
-
-      </div>
-
-      <legend class="container-subheader">
-        <h2>Additional Information (optional)</h2>
-      </legend>
-      <div class="row">
-          <div class="col-xs-12">
-            <div name="additionalInfo">
-              <label>Message</label>
-              <textarea style="width:100%" class="form-control" rows="4" name="additionalInfo" ng-model="doc.additionalInfo"></textarea>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.pc=!doc.requirements.pc;"><i class="fa fa-check-square-o" ng-show="doc.requirements.pc"></i><i class="fa fa-square-o" ng-show="!doc.requirements.pc"></i> PC</span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
+              </div>
             </div>
-          </div>
+            <div class="row">
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                  <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span><span style="font-size:11px;">(at your own expense)</span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                  <span ng-click="doc.requirements.skype=!doc.requirements.skype;"><i class="fa fa-check-square-o" ng-show="doc.requirements.skype"></i><i class="fa fa-square-o" ng-show="!doc.requirements.skype"></i><span > Skype </span>
+              </div>
+            </div>
 
-          <div class="col-xl-2 col-lg-2 col-md-12 col-xs-12">
-            <button class="btn btn-primary" type="submit" style="width:130%;margin-top:15px;"><i class="fa fa-floppy-o"></i> Save & Request Approval</button>
-          </div>
+            <div class="row" style="margin-bottom:10px;">
+              <div class="col-xs-12">
+                <br>
+                <div>Other
+                  <span style="font-size:10px;">(Please indicate any other requirements you may need)</span>
+                </div>
+                <input class="form-control" type="text" ng-model="doc.requirements.other"/>
+              </div>
+            </div>
       </div>
+
+
+              <div id="orgs" class="row tab-pane fade in active text-left" ng-show="tab==='orgs'">
+                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted)}">
+                    <legend class="container-subheader">
+                      <h2>Organization(s)</h2>
+                    </legend>
+
+                    <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && editForm.$submitted" style="color:#a94442">At least one organization is required.</p>
+
+                    <div class="row">
+
+                      <div class="col-md-12 col-xs-12">
+                        <div name="hostOrgs" caption="" style="margin-right:20px;">
+
+                          <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+        			<div  id="contact" class="row tab-pane fade in active text-left" ng-show="tab==='contact'">
+                      <legend class="container-subheader" style="margin-top:15px;">
+                        <h2>Contact Person </h2>
+                      </legend>
+
+                      <div ng-show="registerAlert" class="col-xs-12 alert alert-info alert-dismissable">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+                          <strong>This should be the main contact for the Meeting Services Assistant to contact before and during the meeting.  It is very important that the Meeting Services Assistant can contact this perosn via mobile phone if needed during the meeting to address any last minute concerns that may arise.</strong>
+                      </div>
+
+                        <div class="row">
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div   name="personalTitle" caption="Personal Title">
+                              <label>Salutation</label>
+                              <input class="form-control" type="text" ng-model="doc.contact.personalTitle" placeholder=" "/>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div   ng-class="{'has-error': editForm.firstName.$invalid && editForm.$submitted}">
+                              <label>First Name</label>
+                              <input id="editForm.firstName" class="form-control" type="text" name="firstName" ng-model="doc.contact.firstName" placeholder=" "/ required>
+                              <p ng-show="editForm.firstName.$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div   ng-class="{'has-error': editForm.lastName.$invalid && editForm.$submitted}">
+                              <label>Last Name</label>
+                              <input id="editForm.lastName" class="form-control" name="lastName" type="text" ng-model="doc.contact.lastName" placeholder=" "required/>
+                              <p ng-show="editForm.lastName.$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div name="jobTitla" caption="Job Title">
+                              <label>Job Title</label>
+                              <input class="form-control" type="text" ng-model="doc.contact.jobTitle" placeholder=" " />
+                            </div>
+                          </div>
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div ng-class="{'has-error': editForm.phone.$invalid }">
+                              <label>Phone Number</label>
+                              <input id="editForm.phone" class="form-control" name="phone" type="text" ng-pattern="patterns.phone" ng-model="doc.contact.phone" placeholder=" " required/>
+                              <div ng-show="(editForm.$submitted || editForm.phone.$touched)">
+                                <p class="help-block error" ng-show="editForm.phone.$error.required">This field is mandatory</p>
+                                <p class="help-block error" ng-show="editForm.phone.$error.pattern">
+                                    Please use the following format: + (country code) (city code) (telephone number) (extension, if necessary);<br>Example: <b>+1 514 288-2220 ext 221</b> (where 1 = North America, 514 = Montreal, 288-2220 = CBD Secretariat number, ext 221 = direct extension to the switchboard).
+                                </p>
+                            </div>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                            <div ng-class="{'has-error': editForm.mobile.$error.pattern}">
+                              <label>Mobile</label>
+                              <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-pattern="patterns.phone" ng-model="doc.mobile" placeholder=" " />
+                              <div ng-show="(editForm.$submitted || editForm.mobile.$touched)">
+                                <p class="help-block error" ng-show="editForm.mobile.$error.pattern">
+                                    Please use the following format: + (country code) (city code) (telephone number) (extension, if necessary);<br>Example: <b>+1 514 288-2220 ext 221</b> (where 1 = North America, 514 = Montreal, 288-2220 = CBD Secretariat number, ext 221 = direct extension to the switchboard).
+                                </p>
+                            </div>
+                            </div>
+                          </div>
+
+                        </div>
+
+                        <div class="row" style="margin-bottom:15px;">
+
+                            <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
+                              <div >
+                                <label for="address">Address</label>
+                                <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
+                              </div>
+                            </div>
+
+                            <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                              <div class="form-group">
+                                <div   ng-class="{'has-error': editForm.city.$invalid && editForm.$submitted}">
+                                  <label>City</label>
+                                <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
+                                <p ng-show="editForm.city.$invalid && editForm.$submitted" class="help-block">City is required.</p>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                            <div class="form-group">
+                              <label for="state">State / Province / Region</label>
+                              <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
+                            </div>
+                          </div>
+                        </div>
+
+                    <div class="row">
+
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
+                        <div ng-class="{'has-error': editForm.emaill.$invalid && editForm.emaill.$touched}">
+                          <label>Email</label>
+                          <input type="email" id="editForm.email" class="form-control" name="emaill" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-model="doc.contact.email" placeholder=" " required/>
+
+                          <div ng-show="(editForm.$submitted || editForm.emaill.$touched)">
+                              <p class="help-block error" ng-show="editForm.emaill.$error.required">This field is mandatory</p>
+                              <p class="help-block error" ng-show="editForm.emaill.$error.pattern || editForm.emaill.$error.email">This is not a valid email</p>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                        <div class="form-group">
+                          <label for="zip">Postal / Zip code</label>
+                          <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip" />
+                        </div>
+                      </div>
+
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                        <div ng-class="{'has-error': editForm.country.$invalid && editForm.$submitted}">
+                          <div>
+                            <label>Country</label>
+                          </div>
+                          <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries" required></div>
+                          <p ng-show="editForm.country.$invalid && editForm.$submitted" class="help-block">Country is required.</p>
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <legend class="container-subheader" style="margin-top:15px;">
+                      <h2>Responsible Person(s) </h2>
+                    </legend>
+
+                  <div class="col-xs-12">
+                    <div class="row panel panel-default">
+
+                      <div class="table-responsive">
+                        <table class="table table-striped">
+                          <thead>
+                            <tr>
+                              <th>Responsibility</th>
+                              <th>Same As</th>
+                              <th>Salutation</th>
+                              <th>First Name</th>
+                              <th>Last Name</th>
+                              <th>Email</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>Prinicipal for Side Event <i class="fa fa-info-circle" aria-hidden="true"></i></td>
+                              <td>
+                                <select ng-model="doc.responsible.sameAs">
+                                  <option value="" selected>Select a Person</option>
+                                  <option value="contact">Contact</option>
+                                </select>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm.responsiblePersonalTitle.$invalid && editForm.$submitted}">
+
+                                  <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" required/>
+                                  <p ng-show="editForm.responsiblePersonalTitle.$invalid && editForm.$submitted" class="help-block">Salutation is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm.responsibleFirstName.$invalid && editForm.$submitted}">
+
+                                  <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" required/>
+                                  <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm.responsibleLastName.$invalid && editForm.$submitted}">
+
+                                  <input id="editForm.responsibleLastName" class="form-control" type="text" name="responsibleLastName" ng-model="doc.responsible.lastName" required/>
+                                  <p ng-show="editForm.responsibleLastName.$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm.responsibleEmail.$invalid && editForm.$submitted}">
+
+                                  <input id="editForm.responsibleEmail" class="form-control" name="responsibleEmail" ng-model="doc.responsible.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder=" " required/>
+
+                                  <div ng-show="(editForm.$submitted || editForm.responsibleEmaill.$touched)">
+                                      <p class="help-block error" ng-show="editForm.responsibleEmail.$error.required">This field is mandatory</p>
+                                      <p class="help-block error" ng-show="editForm.responsibleEmail.$error.pattern || editForm.responsibleEmail.$error.email">This is not a valid email</p>
+
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+
+                            <tr ng-repeat="org in doc.hostOrgs">
+
+                              <td>
+                                <img src="{{getOrgImgSource(org)}}" ng-if="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />
+                                <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
+
+                                {{getOrgName(org)}} <i class="fa fa-info-circle" aria-hidden="true"></i></td>
+                              <td>
+                                <select ng-model="doc.responsibleOrgs[$index].sameAs">
+                                  <option value="" selected>Select a Person</option>
+                                  <option value="contact">Contact</option>
+                                  <option value="principal">Side Event Principal</option>
+                                </select>
+                                <input type="hidden" ng-model="doc.responsibleOrgs[$index].orgId" value="org">
+                              </td>
+                              <td>
+
+                                <div ng-class="{'has-error': editForm['personalTitle_'+$index].$invalid && editForm.$submitted}">
+
+                                  <input id="personalTitle_{{$index}}" class="form-control" type="text" name="personalTitle_{{$index}}" ng-model="doc.responsibleOrgs[$index].personalTitle" />
+                                  <p ng-show="editForm['personalTitle_'+$index].$invalid && editForm.$submitted" class="help-block">Salutation is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm['firstName_'+$index].$invalid && editForm.$submitted}">
+
+                                  <input id="firstName_{{$index}}" class="form-control" type="text" name="firstName_{{$index}}" ng-model="doc.responsibleOrgs[$index].firstName" />
+                                  <p ng-show="editForm['firstName_'+$index].$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm['lastName_'+$index].$invalid && editForm.$submitted}">
+
+                                  <input id="lastName_{{$index}}" class="form-control" type="text" name="lastName_{{$index}}" ng-model="doc.responsibleOrgs[$index].lastName" required/>
+                                  <p ng-show="editForm['lastName_'+$index].$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                                </div>
+                              </td>
+                              <td>
+                                <div ng-class="{'has-error': editForm['email_'+$index].$invalid && editForm.$submitted}">
+
+                                  <input type="email" id="email_{{$index}}" class="form-control" name="email_{{$index}}" ng-model="doc.responsibleOrgs[$index].email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder=" " required/>
+
+                                  <div ng-show="(editForm.$submitted || editForm['email_'+$index].$touched)">
+                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
+                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
+
+                                  </div>
+                                </div>
+                              </td>
+
+                            </tr>
+
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- end contact persons tab -->
+              </div>
+
+
+
+              <div id="documents" class="tab-pane fade in" ng-show="tab==='documents'">
+  <div>
+    <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
+  </div>
+  <div class="text-left">
+    <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
+  </div>
+</div>
+              <div  id="links" class="row tab-pane fade in active text-left" ng-show="tab==='links'">
+                <div>
+                  <link-list ng-show="!showEdit()" fa-class="fa-link" index="editIndex" name="links" document="doc" links="doc.links" save="saveDoc()"></link-list>
+                </div>
+                <div class="text-left">
+                  <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="links" document="doc" links="doc.links" save="saveDoc()"></edit-link>
+                </div>
+              </div>
+              <div  id="images" class="row tab-pane fade in active text-left" ng-show="tab==='images'">
+                <div>
+                  <link-list ng-show="!showEdit()" fa-class="fa-image" index="editIndex" name="images" document="doc" links="doc.images" save="saveDoc()"></link-list>
+                </div>
+                <div class="text-left">
+                  <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="images" document="doc" links="doc.images" save="saveDoc()"></edit-link>
+                </div>
+              </div>
+              <div  id="videos" class="row tab-pane fade in active text-left" ng-show="tab==='videos'">
+                <div>
+                  <link-list ng-show="!showEdit()" fa-class="fa-video-camera" index="editIndex" name="videos" document="doc" links="doc.videos" save="saveDoc()"></link-list>
+                </div>
+                <div class="text-left">
+                  <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="videos" document="doc" links="doc.videos" save="saveDoc()"></edit-link>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-2 col-lg-offset-8 col-xs-12">
+                    <div>
+
+                      <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-primary" type="submit" style="width:100%;margin-top:15px;">Next</button>
+                    </div>
+                </div>
+                <div class="col-lg-2  col-xs-12">
+                    <div>
+                      <button ng-show="!showEdit() && (doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-primary" type="submit" style="width:100%;margin-top:15px;">Register</button>
+                    </div>
+                </div>
+              </div>
   </form>
-
-
 </div>
