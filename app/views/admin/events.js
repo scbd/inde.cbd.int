@@ -3,18 +3,12 @@ define(['app', 'lodash',
       './menu',
       'services/mongo-storage',
       'services/filters',
+      'services/dev-router',
       'ngDialog'
     ], function(app, _, deleteDialog) {
 
       app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog','Excel', //"$http", "$filter", "Thesaurus",
           function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog,Excel) { //, $http, $filter, Thesaurus
-
-            authentication.getUser().then(function(user) {
-              $scope.isAuthenticated = user.isAuthenticated;
-            }).then(function() {
-              if (!$scope.isAuthenticated)
-                $window.location.href = 'https://accounts.cbd.int/signin?returnUrl=';
-            });
 
             $scope.loading = false;
             $scope.schema = "inde-side-events";
@@ -233,11 +227,8 @@ define(['app', 'lodash',
                 return mongoStorage.loadArchives($scope.schema).then(function(response) {
                   $scope.docs = response.data;
                   _.each($scope.docs, function(doc) {
-                          mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
-                            doc.confrenceObj = conf;
-                          });
                           doc.orgs = [];
-                          _.each(doc.hostOrgs, function(org, key) {
+                          _.each(doc.hostOrgs, function(org) {
                             mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
                               doc.orgs.push(conf);
                             });
@@ -246,7 +237,7 @@ define(['app', 'lodash',
                 }).then(function() {
                   registerToolTip();
                 });
-              }; // archiveOrg
+              } // archiveOrg
 
               //=======================================================================
               //
@@ -259,7 +250,7 @@ define(['app', 'lodash',
                   $scope.selectedChip = '';
                 else
                   $scope.selectedChip = chip;
-              }; // archiveOrg
+              } // archiveOrg
               $scope.selectChip = selectChip;
 
               //=======================================================================
@@ -286,9 +277,6 @@ define(['app', 'lodash',
                       mongoStorage.loadDocs($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
                           $scope.docs = response.data;
                         _.each($scope.docs, function(doc) {
-                                mongoStorage.loadDoc('conferences', doc.confrence).then(function(conf) {
-                                  doc.confrenceObj = conf;
-                                });
                                 doc.orgs = [];
                                 var foundOrg;
                                 _.each(doc.hostOrgs, function(org) {

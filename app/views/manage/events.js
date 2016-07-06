@@ -5,16 +5,10 @@ define(['app',
     '../../services/filters'
 ], function(app, _) {
 
-    app.controller("events", ['$scope', 'dashMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history',
-        function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history) {
+    app.controller("events", ['$scope', 'dashMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'history',
+        function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window,  history) {
 
-            authentication.getUser().then(function(user) {
-                $scope.isAuthenticated = user.isAuthenticated;
-            }).then(function() {
 
-                if (!$scope.isAuthenticated)
-                    $window.location.href = 'https://accounts.cbd.int/signin?returnUrl=';
-            });
 
             $scope.loading = false;
             $scope.schema = "inde-side-events";

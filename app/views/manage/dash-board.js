@@ -23,12 +23,6 @@ define(['app', '../../services/mongo-storage'], function(app) { //'scbd-services
             mongoStorage.getOwnerFacits('inde-side-events', $scope.facets, statuses);
             mongoStorage.getOwnerFacits('inde-orgs', $scope.facetsO, statuses);
 
-            authentication.getUser().then(function(user) {
-                $scope.isAuthenticated = user.isAuthenticated;
-            }).then(function() {
-                if (!$scope.isAuthenticated)
-                    $('#loginDialog').modal('show');
-            });
 
             //=======================================================================
             //

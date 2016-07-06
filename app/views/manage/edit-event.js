@@ -1,31 +1,19 @@
 define(['app',
-  '../../directives/side-menu/scbd-side-menu',
-  './menu',
-  '../../directives/forms/edit/edit-side-event',
-    '../../services/mongo-storage'
+  'directives/forms/edit/edit-side-event',
+    'services/mongo-storage'
 ], function(app) {
 
 
-  app.controller("edit-event", ['$scope', 'dashMenu', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window','history', //"$http", "$filter", "Thesaurus",
-    function($scope, dashMenu, $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout,$window,history) { //, $http, $filter, Thesaurus
+  app.controller("edit-event", ['$scope', '$q', '$http','$filter','$route','mongoStorage','$location','authentication','$timeout','$window','history', //"$http", "$filter", "Thesaurus",
+    function($scope,  $q, $http,$filter,$route,mongoStorage,$location,authentication,$timeout,$window,history) { //, $http, $filter, Thesaurus
 
 
-      $scope.toggle = dashMenu.toggle;
-      $scope.sections = dashMenu.getMenu('dashboard');
-      $scope.sectionsOptions = dashMenu.getMenu('editEventOptions');
 
+      $scope.isNew=true;
+      $scope._id = $route.current.params.id;
+      if($scope._id.length>3)$scope.isNew=false;
 
-      authentication.getUser().then(function (user) {
-        $scope.isAuthenticated=user.isAuthenticated;
-
-        $scope.isNew=true;
-        $scope._id = $route.current.params.id;
-        if($scope._id.length>3)$scope.isNew=false;
-
-      }).then(function(){
-        if(!$scope.isAuthenticated)
-              $window.location.href='https://accounts.cbd.int/signin?returnUrl='+encodeURIComponent($location.absUrl());
-      });
+    
 
       //=======================================================================
       //

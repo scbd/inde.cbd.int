@@ -4,15 +4,9 @@ define(['app', 'lodash',
   '../../services/mongo-storage'
 ], function(app, _) {
 
-  app.controller("organizations", ['$scope', 'orgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', //"$http", "$filter", "Thesaurus",
-    function($scope, orgMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history) { //, $http, $filter, Thesaurus
+  app.controller("organizations", ['$scope', 'orgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window',  'history', //"$http", "$filter", "Thesaurus",
+    function($scope, orgMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window,  history) { //, $http, $filter, Thesaurus
 
-      authentication.getUser().then(function(user) {
-        $scope.isAuthenticated = user.isAuthenticated;
-      }).then(function() {
-        if (!$scope.isAuthenticated)
-          $window.location.href = 'https://accounts.cbd.int/signin?returnUrl=';
-      });
 
       $scope.loading = false;
       $scope.schema = "inde-orgs";

@@ -10,12 +10,6 @@ define(['app', 'lodash',
   app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog', //"$http", "$filter", "Thesaurus",
     function($scope, adminMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog) { //, $http, $filter, Thesaurus
 
-      authentication.getUser().then(function(user) {
-        $scope.isAuthenticated = user.isAuthenticated;
-      }).then(function() {
-        if (!$scope.isAuthenticated)
-          $window.location.href = 'https://accounts.cbd.int/signin?returnUrl=';
-      });
 
       $scope.loading = false;
       $scope.schema = "inde-orgs";
