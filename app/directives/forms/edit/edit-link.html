@@ -1,0 +1,71 @@
+<div class="row">
+  <ng-form novalidate name="editLinkForm" ng-hide="loading" ng-submit="saveLink(editLinkForm)">
+    <div class="alert alert-danger" ng-show="error">
+      <strong>Error as occured...</strong>
+      <div ng-if="error.data.code==='INVALID_SCHEMA'">{{error.message}}</div>
+      <br>
+      <div ng-repeat="err in error.data.errors">
+
+        <div ng-repeat="er in err.inner">{{$index+1}}. <a src="#" ng-click="findScrollFocus(er.params[0])">{{er.message}}</a> </div>
+      </div>
+    </div>
+    <h4 class="center color-darkgreen" style="line-height:1.4em;">
+      <span ng-show="isNew()">New</span>
+      <span ng-show="!isNew()">Edit</span> {{name | capitalize}}
+      <button type="button" class="btn btn-default  pull-right" ng-click="close();"><i class="fa fa-times"></i></button>
+    </h4>
+
+    <div class="col-xs-8 col-xs-offset-2 ">
+      <div class="form-group" ng-class="{ 'has-error': (editLinkForm.$submitted && editLinkForm.title.$error.required)}" style="margin-top:20px;">
+        <label for="title">Title</label>
+
+
+        <input type="text" class="form-control" id="title" name="title" ng-model="document.title" placeholder="Title of your {{name}}" required>
+        <p class="help-block error" ng-show="editLinkForm.title.$error.required && editLinkForm.$submitted">This field is mandatory</p>
+
+
+      </div>
+    </div>
+
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="form-group" ng-class="{ 'has-error': editLinkForm.description.$error.required && editLinkForm.$submitted}">
+        <label for="description">Description</label>
+
+        <textarea class="form-control" name="description" id="description" ng-model="document.description" cols="30" rows="10" required placeholder="Briefly describe your {{name}}."></textarea>
+        <p class="help-block error" ng-show="editLinkForm.description.$error.required && editLinkForm.$submitted" style="margin-top:2px">This field is mandatory</p>
+      </div>
+    </div>
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="form-group">
+        <label for="title">Tags</label>
+
+        <input type="text" class="form-control" id="tag" name="tag" ng-model="document.tags" placeholder="key words for searching.">
+      </div>
+    </div>
+
+    <div class="col-xs-8 col-xs-offset-2">
+      <div class="panel panel-default">
+        <div class="form-group" ng-class="{ 'has-error': (editLinkForm.uri.$error.required && editLinkForm.$submitted),'has-error': (editLinkForm.uri.$invalid && editLinkForm.uri.$touched) }">
+          <label for="logo">Enter the URI to your {{name}} or upload the file.
+          </label>
+
+          <input type="url" class="form-control" id="uri" name="uri" placeholder="Enter in full path to the {{publication}} or upload it below." ng-model="document.uri" required>
+          <p class="help-block error" ng-show="editLinkForm.uri.$error.required && editLinkForm.$submitted">This field is mandatory</p>
+          <p class="help-block error" ng-show="editLinkForm.uri.$invalid && editLinkForm.uri.$touched">This is not a proper URI. URI should start with http:// such as http://google.ca or http://www.google.com</p>
+
+          or
+          <input type="file" accept="{{fileTypes}}" class="form-control" id="file" ng-model="document.file" on-file="upload(files,'uri')">
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="form-group">
+      <div class="col-xs-8 col-xs-offset-2">
+        <button type="submit" class="btn btn-primary " value="Submit"> Save </button>
+        <button type="button" class="btn btn-default " value="Submit" ng-click="close();"> Cancel</button>
+      </div>
+    </div>
+  </ng-form>
+</div>

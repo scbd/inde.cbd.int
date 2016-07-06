@@ -1,0 +1,72 @@
+<style>
+  .debug-border {
+    border-style: solid;
+    border-width: 3px;
+    border-color: red;
+  }
+
+  table {
+    width: 100%;
+  }
+</style>
+<div class="alert alert-danger" ng-show="hasError()">
+  <strong>Error as occured...</strong>
+  <div>{{error.message}}</div>
+</div>
+
+<div>
+  <div class="row">
+  <button ng-if="!viewOnly" type="button" class="btn  btn-default pull-right" style="margin-bottom:15px;margin-right:20px;" value="Submit" ng-click="edit(true)"> New <i class="fa fa-plus"></i></button>
+</div>
+  <div class="table-responsive">
+    <table class="table table-striped">
+    <!-- Header -->
+    <tr style="height:20px;padding-bottom:1px;padding-top:1px;">
+      <th  width="10%">File</th>
+      <th  ng-if="!viewOnly" >Title & Description</th>
+      <th  colspan="2" ng-if="viewOnly" >Title & Description</th>
+      <th width="5%">Tags</th>
+      <th ng-if="!viewOnly" width="5%">Actions</th>
+    </tr>
+
+    <!-- Lines -->
+    <tr ng-repeat="doc in documents">
+      <td width="10%" style="text-align:center;vertical-align:middle;padding: 10px 5px 5px 5px;" vertical-align="middle">
+
+        <p>
+          <a href="{{doc.uri}}">
+            <img src="{{doc.thumb || doc.uri}}" ng-show="(doc.thumb  && !isMovie()) || faClass==='fa-image'" style="max-width:100px;max-height:100px;">
+            <i class="fa {{faClass}}  fa-5x" ng-if="(!doc.thumb && !isMovie(doc.uri) && faClass!=='fa-image') "></i>
+            <iframe width="150px" height="100px" ng-if="isYoutube(doc.uri)" src="{{trustSrc(doc.uri)}}">
+            </iframe>
+
+            <video width="150px" height="100px" ng-if="(!isYoutube(doc.uri) && isMovie(doc.uri))">
+              <source src="{{trustSrc(doc.uri)}}" type="video/mp4">
+              <source src="{{trustSrc(doc.uri)}}" type="video/ogg">
+              <source src="{{trustSrc(doc.uri)}}" type="video/webm"> Your browser does not support the video tag.
+            </video>
+
+          </a>
+        </p>
+      </td>
+      <td width="80%" valign="top" style="vertical-align:middle;padding: 10px 5px 5px 5px;">
+        <p style="margin-bottom:3px;">
+          <strong>{{doc.title}}</strong>
+        </p>
+        <hr style="margin-top:0px;">
+        <p>{{doc.description}}</p>
+        <p><a href="{{doc.uri}}"><span ng-if="!isMovie(doc.uri)">{{getFileName(doc.uri)}}</span> <span ng-if="isMovie(doc.uri)">{{doc.uri}}</span></a></p>
+      </td>
+      <td width="5%" valign="middle" style="vertical-align:middle;padding: 5px 5px 5px 5px;">
+        <p>{{doc.tags |explode}} &nbsp;</p>
+      </td>
+      <td width="5%" style="vertical-align:middle;padding: 5px 5px 5px 5px;" ng-if="!viewOnly">
+        <div class="btn-group btn-group-xs" role="group" aria-label="...">
+          <button type="button" class="btn btn-default" ng-click="edit($index)"><i class="fa fa-edit"></i></button>
+          <button type="button" class="btn btn-default" ng-click="remove($index)"><i class="fa fa-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
