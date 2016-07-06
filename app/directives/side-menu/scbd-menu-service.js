@@ -5,14 +5,14 @@ define(['app','lodash'],function(app,_) {
 
 
   app.factory('scbdMenuService', [
-      '$location','$timeout','$q','$rootScope',
+      '$location','$timeout','$q','$rootScope','devRouter',
 
-      function ($location,$timeout,$q,$rootScope) {
+      function ($location,$timeout,$q,$rootScope,devRouter) {
         var navRegistry={};
         var menus={};
         var history=[];
 
-        $rootScope.$on('$locationChangeSuccess', function(event, url, oldUrl, state, oldState){
+        $rootScope.$on('$locationChangeSuccess', function(event, url, oldUrl){
             history.push({'from':oldUrl,'to':url});
         });
 
@@ -79,7 +79,7 @@ define(['app','lodash'],function(app,_) {
           name: 'Your Profile',
           type: 'link',
           mdIcon: 'person',
-          state:'https://accounts.cbd.int/profile'
+          state:devRouter.ACCOUNTS_URI+'/profile'
         });
 
         menus.accMenu.push({
@@ -105,7 +105,7 @@ define(['app','lodash'],function(app,_) {
           type: 'link',
           faIcon: 'fa fa-key',
           faIconSize: 'fa-lg',
-          state:'https://accounts.cbd.int/password'
+          state:devRouter.ACCOUNTS_URI+'/password'
         });
         menus.accMenu.push({
           name: 'Sign-out',

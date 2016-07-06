@@ -10,10 +10,6 @@ define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav'], function
       controller: ['$scope', '$location', '$window', '$timeout', '$element', 'authentication','$rootScope','mongoStorage',
         function($scope, $location, $window, $timeout, $element, authentication,$rootScope,mongoStorage) {
 
-          mongoStorage.getLatestConfrences().then(function(res){
-              if(_.isEmpty(res.data))
-                $scope.hideNavs=true;
-          });
 
           //============================================================
           //
