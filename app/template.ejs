@@ -78,8 +78,37 @@
         z-index: 9999;
     }
 
+    .toast-info {
+      background-color: rgba(34, 34, 34, .9);
+      padding: 15px 5px 15px 5px;
+      font-weight: lighter;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      letter-spacing: 1.5px;
+    }
+
+    .toast-success {
+      background-color: rgba(34, 34, 34, .9);
+      padding: 15px 5px 15px 5px;
+      font-weight: lighter;
+      font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+      letter-spacing: 1.8px;
+      font-size: 16px;
+    }
+
+    #toast-container>:hover {
+      -moz-box-shadow: 0 0 9pt #000;
+      -webkit-box-shadow: 0 0 9pt #000;
+      box-shadow: 0 0 9pt #000;
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    #toast-container> div .title {
+      padding: 15px 15px 15px 15px;
+    }
     </style>
 </head>
+
 <body class="ltr" id="top">
     <!-- HEADER (MOBILE) -->
     <header class="mobile navbar visible-xs " role="banner">
