@@ -1,14 +1,17 @@
 define(['app', 'jquery',
     'lodash',
+    'text!./toast.html',
+    'toastr',
     'services/authentication',
     'directives/portal/portal-nav',
-    'services/history'
-], function(app, $, _) {
+    'services/history',
+    'services/dev-router'
+], function(app, $, _, toastTemplate) {
     'use strict';
 
-    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', 'realm', '$q', function($scope, $rootScope, $window, $location, authentication, realm, $q) {
+    app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
 
-
+        $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
         $q.when(authentication.getUser()).then(function(u) {
             $rootScope.user = u;
         });
@@ -21,7 +24,7 @@ define(['app', 'jquery',
             $scope.showEmailVerificationMessage = data.message;
         });
 
-        $scope.auth=authentication;
+        $scope.auth = authentication;
         //============================================================
         //
         //
@@ -51,6 +54,38 @@ define(['app', 'jquery',
                 }
             });
         }, 1000));
+
+        $templateCache.put("directives/toast/toast.html", toastTemplate);
+
+
+        //==============================
+        //
+        //==============================
+        $rootScope.$on("showInfo", function(evt, msg) {
+          console.log('test');
+            toastr.info(msg);
+        });
+
+        //==============================
+        //
+        //==============================
+        $rootScope.$on("showWarning", function(evt, msg) {
+            toastr.warning(msg);
+        });
+
+        //==============================
+        //
+        //==============================
+        $rootScope.$on("showSuccess", function(evt, msg) {
+            toastr.success(msg);
+        });
+
+        //==============================
+        //
+        //==============================
+        $rootScope.$on("showError", function(evt, msg) {
+            toastr.error(msg);
+        });
 
     }]);
 });
