@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" ng-controller="TemplateController">
+
 <head>
   <base href="<%=baseUrl%>">
   <title>Side Events - Convention on Biological Diversity</title>
@@ -12,70 +13,148 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="app/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <!-- <link href="app/libs/angular-toastr/dist/angular-toastr.min.css" rel="stylesheet"> -->
+  <link href="app/libs/angular-toastr/dist/angular-toastr.min.css" rel="stylesheet">
   <link href="app/libs/flag-icon-css/css/flag-icon.css" rel="stylesheet">
   <link href="app/libs/ng-dialog/css/ngDialog.css" rel="stylesheet">
   <link href="app/libs/ng-dialog/css/ngDialog-theme-default.min.css" rel="stylesheet">
   <link href="app/css/main.css" rel="stylesheet">
-    <style>
-
-    [ng\:cloak], [ng-cloak], .ng-cloak { display: none !important; }
-
-    body, .greybg { background: #f4f4f4; }
-    .whitebg      { background: #FFFFFF; }
-
-    header.mobile.navbar              { color:#009B48; background-color:white; }
-    header.mobile.navbar a            { color:#009B48; }
-    header.mobile .navbar-nav a:hover { color:white;background-color:#009B48 }
-    header.mobile .navbar-header      { font-weight:semi-bold; }
-    header.mobile .navbar-header img.logo {
-        height:55px;
-        vertical-align:middle;
-        margin-left:3px;
+  <style>
+    [ng\:cloak],
+    [ng-cloak],
+    .ng-cloak {
+      display: none !important;
     }
 
-    header.large > div.container > div { border-bottom:solid 1px #f4f4f4; }
-    header.large   img.logo          { height:70px }
-    header.large .navbar-nav a       { color:#009B48; }
-    header.large .navbar-nav a:hover { color:white; background-color:#009B48; }
+    body,
+    .greybg {
+      background: #f4f4f4;
+    }
 
+    .whitebg {
+      background: #FFFFFF;
+    }
 
-    footer {  display: block; padding: 15px 20px; }
-    footer ul { list-style-type: none; padding:0px; }
-    footer ul li a { font-size: 14px; color: #666; }
-    footer ul li a:hover { color: #000; }
+    header.mobile.navbar {
+      color: #009B48;
+      background-color: white;
+    }
+
+    header.mobile.navbar a {
+      color: #009B48;
+    }
+
+    header.mobile .navbar-nav a:hover {
+      color: white;
+      background-color: #009B48
+    }
+
+    header.mobile .navbar-header {
+      font-weight: semi-bold;
+    }
+
+    header.mobile .navbar-header img.logo {
+      height: 55px;
+      vertical-align: middle;
+      margin-left: 3px;
+    }
+
+    header.large> div.container> div {
+      border-bottom: solid 1px #f4f4f4;
+    }
+
+    header.large img.logo {
+      height: 70px
+    }
+
+    header.large .navbar-nav a {
+      color: #009B48;
+    }
+
+    header.large .navbar-nav a:hover {
+      color: white;
+      background-color: #009B48;
+    }
+
+    footer {
+      display: block;
+      padding: 15px 20px;
+    }
+
+    footer ul {
+      list-style-type: none;
+      padding: 0px;
+    }
+
+    footer ul li a {
+      font-size: 14px;
+      color: #666;
+    }
+
+    footer ul li a:hover {
+      color: #000;
+    }
+
     footer h4 {
       font-size: 14px;
       color: #666;
       font-weight: bold;
     }
 
-    footer.standard ul.list-inline > li { padding: 0px 5px; border-right:solid 1px #666;font-size: 14px;}
-    footer.standard ul.list-inline > li:last-child { border-right: none; }
+    footer.standard ul.list-inline> li {
+      padding: 0px 5px;
+      border-right: solid 1px #666;
+      font-size: 14px;
+    }
 
-    h1 { font-size: 28px; }
-    .view h1, .view h2, .view h3, .view h4, .view h5, .view h6, .view .h1, .view .h2, .view .h3, .view .h4, .view .h5, .view .h6 {
+    footer.standard ul.list-inline> li:last-child {
+      border-right: none;
+    }
+
+    h1 {
+      font-size: 28px;
+    }
+
+    .view h1,
+    .view h2,
+    .view h3,
+    .view h4,
+    .view h5,
+    .view h6,
+    .view .h1,
+    .view .h2,
+    .view .h3,
+    .view .h4,
+    .view .h5,
+    .view .h6 {
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-      color:#009B48;
+      color: #009B48;
     }
 
     @media (min-width: 768px) {
-        button.hidden-xs { display: inline-block !important; }
-        span.hidden-xs   { display: inline !important; }
+      button.hidden-xs {
+        display: inline-block !important;
+      }
+      span.hidden-xs {
+        display: inline !important;
+      }
     }
 
     @media (max-width: 767px) {
-        button.visible-xs { display: inline-block !important; }
-        span.visible-xs   { display: inline !important; }
+      button.visible-xs {
+        display: inline-block !important;
+      }
+      span.visible-xs {
+        display: inline !important;
+      }
     }
 
     .growl {
-        width: 50%;
-        position: fixed;
-        right: 5px;
-        margin: 0 0 0 -25%;
-        top: 5px;
-        z-index: 9999;
+      width: 50%;
+      position: fixed;
+      right: 5px;
+      margin: 0 0 0 -25%;
+      top: 5px;
+      z-index: 9999;
     }
 
     .toast-info {
@@ -106,185 +185,198 @@
     #toast-container> div .title {
       padding: 15px 15px 15px 15px;
     }
-    </style>
+  </style>
 </head>
 
 <body class="ltr" id="top">
-    <!-- HEADER (MOBILE) -->
-    <header class="mobile navbar visible-xs " role="banner">
-        <div class="container">
+  <!-- HEADER (MOBILE) -->
+  <header class="mobile navbar visible-xs " role="banner">
+    <div class="container">
 
-            <div class="navbar-header">
-                <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
-                    <i class="fa fa-bars" style="font-size:1.66em;"></i>
-                </button>
+      <div class="navbar-header">
+        <button class="navbar-toggle collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+          <i class="fa fa-bars" style="font-size:1.66em;"></i>
+        </button>
 
-                <div ng-cloak ng-show="user" class="pull-right">
+        <div ng-cloak ng-show="user" class="pull-right">
 
-                    <a ng-hide="user.isAuthenticated" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" href="https://accounts.cbd.int/signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
-                        <i  class="fa fa-power-off" style="font-size:1.66em;"></i>
-                    </a>
+          <a ng-hide="user.isAuthenticated" class="navbar-toggle collapsed" style="text-decoration:none;color:#009B48" href="{{ACCOUNTS_URI}}signin?returnUrl={{encodedReturnUrl()}}" style="color: black">
+            <i class="fa fa-power-off" style="font-size:1.66em;"></i>
+          </a>
 
-                    <div ng-show="user.isAuthenticated" class="dropdown">
+          <div ng-show="user.isAuthenticated" class="dropdown">
 
-                        <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          <i class="fa fa-user" style="font-size:1.66em;"></i>
-                        </button>
+            <button class="navbar-toggle collapsed" title="{{user.name}}" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <i class="fa fa-user" style="font-size:1.66em;"></i>
+            </button>
 
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
-                            <li><a href="https://accounts.cbd.int/profile?returnurl={{encodedReturnUrl()}}" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                            <li><a href="https://accounts.cbd.int/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                            <li><a href="/user/signout" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
-                        </ul>
-                    </div>
-
-               </div> <!--  end sign in-->
-
-                <a href="/" target="_self">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
-                </a>
-
-            </div>
-
-            <nav class="collapse navbar-collapse" role="navigation">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="/convention">The Convention</a></li>
-                    <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
-                    <li class="active"><a href="/abs">Nagoya Protocol</a></li>
-                    <li class="active"><a href="/programmes">Programmes</a></li>
-                    <li class="active"><a href="/information">Information</a></li>
-                    <li class="active"><a href="/secretariat">Secretariat</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- HEADER (LARGE) -->
-    <header class="large hidden-xs  ">
-        <div class="container whitebg">
-            <div>
-
-                <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
-
-                    <a class="btn btn-link"  style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="#" ng-click="auth.goToSignIn()" style="color: black">
-                        <i  class="fa fa-power-off"></i> Sign in
-                    </a>
-
-                    <div ng-show="user.isAuthenticated" class="dropdown">
-                        <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                          <span class="caret"></span> {{user.name}}
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
-                            <li ng-click="auth.editProfile()"><a href="#" ><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
-                            <li ng-click="auth.passwordReset()"><a href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
-                            <li ng-click="auth.goToSignOut()"><a href="#" ><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
-                        </ul>
-                    </div>
-
-               </div> <!--  end sign in-->
-
-                <div style="padding:5px 0px">
-                    <a href="/"><img class="logo" src="/app/images/cbd-logo-green-en.svg"/></a>
-                </div>
-
-                <div class="pull-right">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="/convention">The Convention</a></li>
-                        <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
-                        <li class="active"><a href="/abs">Nagoya Protocol</a></li>
-                        <li class="active"><a href="/programmes">Programmes</a></li>
-                        <li class="active"><a href="/information">Information</a></li>
-                        <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
-                    </ul>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </header>
-
-    <!-- CONTENT -->
-    <!-- CONTENT -->
-    <div class="container whitebg view">
-
-      <portal-nav></portal-nav>
-      <ng-view></ng-view>
-    </div>
-
-    <!--  FOOTER   -->
-    <footer class="container whitebg" ng-show="routeLoaded">
-        <div class="greybg">
-            <div class="col-sm-4 fleft">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="/decisions">Decisions</a></li>
-                    <li><a href="/meetings">Meetings</a></li>
-                    <li><a href="/notifications">Notifications</a></li>
-                    <li><a href="/news">News Headlines</a></li>
-                    <li><a href="/publications">Publications</a></li>
-                    <li><a href="/chm">CHM</a></li>
-                    <li><a href="http://bch.cbd.int/">BCH</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-4 fleft">
-                <h4 class="hidden-xs">&nbsp;</h4>
-                <ul>
-                    <li><a href="/parties">Parties</a></li>
-                    <li><a href="/countries">Country Profiles</a></li>
-                    <li><a href="/nfp">National Focal Point</a></li>
-                    <li><a href="/nbsap">National Strategies (NBSAPs)</a></li>
-                    <li><a href="/reports">National Reports</a></li>
-                    <li><a href="/contributions">Contributions</a></li>
-                    <li><a href="/cooperation">Cooperation & Partnerships</a></li>
-                </ul>
-            </div>
-            <div class="col-sm-4 fleft">
-                <h4>Follow us</h4>
-                <ul>
-                    <li><a href="/rss" target="_blank"><i class="fa fa-rss-square"></i> RSS</a></li>
-                    <li><a href="https://twitter.com/cbdnews" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a></li>
-                    <li><a href="https://www.facebook.com/UNBiodiversity" target="_blank"><i class="fa fa-facebook-square"></i> Facebook</a></li>
-                    <li><a href="https://www.youtube.com/user/chmcbd" target="_blank"><i class="fa fa-youtube-play"></i> YouTube</a></li>
-                </ul>
-            </div>
-
-            <div class="clearfix"></div>
-
-        </div>
-    </footer>
-
-    <footer class="container standard whitebg" >
-        <div class="col-md-9">
-            <ul class="list-inline">
-                <li><a href="/feedback">Feedback</a></li>
-                <li><a href="/map">Site Map</a></li>
-                <li><a href="/contact">Contact Us</a></li>
-                <li><a href="/terms">Terms of Use</a></li>
-                <li><a href="/privacy">Privacy Policy</a></li>
-                <li><a href="/credits">Credits</a></li>
-                <li><a href="/copyright">&copy; CBD Secretariat</a></li>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+              <li><a href="{{ACCOUNTS_URI}}/profile?returnurl={{encodedReturnUrl()}}"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+              <li><a href="{{ACCOUNTS_URI}}/password?returnurl={{encodedReturnUrl()}}"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+              <li><a href="/user/signout"><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
             </ul>
+          </div>
+
         </div>
-        <div class="col-md-3 pull-right">
-            <a href="http://www.un.org/" target="_blank"><img src="/app/images/un-logo-white.gif" alt="UN logo" /></a>
-            <a href="http://unep.org/"   target="_blank"><img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" /></a>
+        <!--  end sign in-->
+
+        <a href="/" target="_self">
+          <a href="/">
+            <img class="logo" src="/app/images/cbd-logo-green-en.svg" />
+          </a>
+        </a>
+
+      </div>
+
+      <nav class="collapse navbar-collapse" role="navigation">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="/convention">The Convention</a></li>
+          <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+          <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+          <li class="active"><a href="/programmes">Programmes</a></li>
+          <li class="active"><a href="/information">Information</a></li>
+          <li class="active"><a href="/secretariat">Secretariat</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HEADER (LARGE) -->
+  <header class="large hidden-xs  ">
+    <div class="container whitebg">
+      <div>
+
+        <div ng-cloak ng-show="user" class="navbar-right" style="margin:5px">
+
+          <a class="btn btn-link" style="text-decoration:none;color:#009B48" ng-hide="user.isAuthenticated" href="#" ng-click="auth.goToSignIn()" style="color: black">
+            <i class="fa fa-power-off"></i> Sign in
+          </a>
+
+          <div ng-show="user.isAuthenticated" class="dropdown">
+            <button class="btn btn-link dropdown-toggle" style="text-decoration:none;color:#009B48" type="button" id="dropdownMenuL" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+              <span class="caret"></span> {{user.name}}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuL">
+              <li ng-click="auth.editProfile()"><a href="#"><i class="fa fa-user" style="font-size:15px"></i>&nbsp; Profile</a></li>
+              <li ng-click="auth.passwordReset()"><a href="#"><i class="fa fa-lock" style="font-size:15px"></i>&nbsp; Password</a></li>
+              <li ng-click="auth.goToSignOut()"><a href="#"><i class="fa fa-sign-out" style="font-size:15px"></i>&nbsp; Sign-out</a></li>
+            </ul>
+          </div>
+
         </div>
-    </footer>
+        <!--  end sign in-->
 
-    <div growl></div>
+        <div style="padding:5px 0px">
+          <a href="/">
+            <img class="logo" src="/app/images/cbd-logo-green-en.svg" />
+          </a>
+        </div>
+
+        <div class="pull-right">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/convention">The Convention</a></li>
+            <li class="active"><a href="/biosafety">Cartagena Protocol</a></li>
+            <li class="active"><a href="/abs">Nagoya Protocol</a></li>
+            <li class="active"><a href="/programmes">Programmes</a></li>
+            <li class="active"><a href="/information">Information</a></li>
+            <li class="active hidden-sm"><a href="/secretariat">Secretariat</a></li>
+          </ul>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <!-- CONTENT -->
+  <div class="container whitebg view">
+
+    <portal-nav></portal-nav>
+    <ng-view></ng-view>
+  </div>
+
+  <!--  FOOTER   -->
+  <footer class="container whitebg" ng-show="routeLoaded">
+    <div class="greybg">
+      <div class="col-sm-4 fleft">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/decisions">Decisions</a></li>
+          <li><a href="/meetings">Meetings</a></li>
+          <li><a href="/notifications">Notifications</a></li>
+          <li><a href="/news">News Headlines</a></li>
+          <li><a href="/publications">Publications</a></li>
+          <li><a href="/chm">CHM</a></li>
+          <li><a href="http://bch.cbd.int/">BCH</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4 fleft">
+        <h4 class="hidden-xs">&nbsp;</h4>
+        <ul>
+          <li><a href="/parties">Parties</a></li>
+          <li><a href="/countries">Country Profiles</a></li>
+          <li><a href="/nfp">National Focal Point</a></li>
+          <li><a href="/nbsap">National Strategies (NBSAPs)</a></li>
+          <li><a href="/reports">National Reports</a></li>
+          <li><a href="/contributions">Contributions</a></li>
+          <li><a href="/cooperation">Cooperation & Partnerships</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-4 fleft">
+        <h4>Follow us</h4>
+        <ul>
+          <li><a href="/rss" target="_blank"><i class="fa fa-rss-square"></i> RSS</a></li>
+          <li><a href="https://twitter.com/cbdnews" target="_blank"><i class="fa fa-twitter-square"></i> Twitter</a></li>
+          <li><a href="https://www.facebook.com/UNBiodiversity" target="_blank"><i class="fa fa-facebook-square"></i> Facebook</a></li>
+          <li><a href="https://www.youtube.com/user/chmcbd" target="_blank"><i class="fa fa-youtube-play"></i> YouTube</a></li>
+        </ul>
+      </div>
+
+      <div class="clearfix"></div>
+
+    </div>
+  </footer>
+
+  <footer class="container standard whitebg">
+    <div class="col-md-9">
+      <ul class="list-inline">
+        <li><a href="/feedback">Feedback</a></li>
+        <li><a href="/map">Site Map</a></li>
+        <li><a href="/contact">Contact Us</a></li>
+        <li><a href="/terms">Terms of Use</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/credits">Credits</a></li>
+        <li><a href="/copyright">&copy; CBD Secretariat</a></li>
+      </ul>
+    </div>
+    <div class="col-md-3 pull-right">
+      <a href="http://www.un.org/" target="_blank">
+        <img src="/app/images/un-logo-white.gif" alt="UN logo" />
+      </a>
+      <a href="http://unep.org/" target="_blank">
+        <img src="/app/images/unep-logo-white-en.gif" alt="UNEP logo" />
+      </a>
+    </div>
+  </footer>
+
+  <div growl></div>
 
 
-    <!-- Slaask. need to be placed just before require.JS script tag -->
-    <script src="https://cdn.slaask.com/chat.js"></script>
-    <script>
-        //patch slaask to works with requireJS
-        window._slaask.createScriptTag = function (url) {
-            var t = {};
-            require([url], function() { t.onload(); });
-            return t;
-        };
-    </script>
+  <!-- Slaask. need to be placed just before require.JS script tag -->
+  <script src="https://cdn.slaask.com/chat.js"></script>
+  <script>
+    //patch slaask to works with requireJS
+    window._slaask.createScriptTag = function(url) {
+      var t = {};
+      require([url], function() {
+        t.onload();
+      });
+      return t;
+    };
+  </script>
 
-    <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
+  <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
 </body>
+
 </html>
