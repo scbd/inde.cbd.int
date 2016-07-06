@@ -3,30 +3,14 @@ define(['app', 'lodash', 'jquery', 'moment',
     'services/filters'
 ], function(app, _, $, moment) {
 
-    app.controller("home", ['$scope', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', '$anchorScroll', 'authentication', //"$http", "$filter", "Thesaurus",
-        function($scope, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, $anchorScroll, auth) { //, $http, $filter, Thesaurus
+    app.controller("home", ['$scope', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', '$anchorScroll',
+        function($scope, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, $anchorScroll) {
             var allOrgs;
-            $scope.loading = false;
-            $scope.schema = "inde-orgs";
-            $scope.createURL = '/manage/events/0';
-            $scope.editURL = '/manage/events/';
 
-            $scope.sortReverse = 0;
-            $scope.listView = 1;
-            $scope.showArchived = 0;
-
-            $scope.statusFacits = {};
-            $scope.statusFacitsArcView = {};
-            $scope.statusFacitsArcView.all = 0;
-            $scope.preLoadImages = [];
             $scope.showDescriptions = 0;
 
             $scope.docs = [];
-            auth.getUser().then(function(user) {
-                $scope.user = user;
-            }).catch(function onerror(response) {
-                $scope.onError(response);
-            });
+
             init();
 
             //=======================================================================
@@ -68,18 +52,12 @@ define(['app', 'lodash', 'jquery', 'moment',
                                                     }); // each
                                                 }
                                             }); // each
-                                            //          countCyc++;
                                         }
-                                        //       if (countCyc === 5) // hack
-                                        //           clearInterval(cancelOrgLoad);
-                                        //   }, 10); //interval
-
                                     }); // loadReservations
 
                                 }); //each conference
                             }); // then on load venues
                         });
-
                     }).catch(function onerror(response) {
                         $scope.onError(response);
                     })
@@ -89,11 +67,6 @@ define(['app', 'lodash', 'jquery', 'moment',
             function loadAllOrgsAndImages() {
                 return mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
                     allOrgs = orgs;
-                    //_.each(allOrgs, function(org) {
-                    // var image = new Image();
-                    // image.src = org.logo;
-                    //  $scope.preLoadImages.push(image);
-                    //});
                 });
             }
             //============================================================
@@ -159,6 +132,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                     var conf = _.find($scope.options.conferences, {
                         '_id': conferenceId
                     });
+
                     //  conf.options={};
                     //  console.log(conf);
                     conf.days = [];
@@ -175,7 +149,6 @@ define(['app', 'lodash', 'jquery', 'moment',
                         res.daySeconds = moment.utc(res.day).format('X');
 
                         var diff = moment.utc(res.start).format('X') - moment.utc(res.day).format('X');
-
                         res.tier = _.find(conf.seTiers, {
                             'seconds': diff
                         });
