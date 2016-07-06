@@ -1,6 +1,6 @@
-define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUpload'], function(angular,angularDragula) { 'use strict';
+define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUpload','text-angular-setup','text-angular','text-angular-sanitize'], function(angular,angularDragula) { 'use strict';
 
-    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','LocalStorageModule','angular-messages','ngFileUpload','ngDialog','smoothScroll','scroll-animate-directive', angularDragula(angular)];
+    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','ngFileUpload','ngDialog','smoothScroll','scroll-animate-directive', angularDragula(angular),'textAngularSetup','ngSanitize','textAngular','toastr'];
 
     angular.defineModules(deps);
 
@@ -15,6 +15,24 @@ define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUploa
         $httpProvider.interceptors.push('realmHttpIntercepter');
     }]);
 
+      app.config(['toastrConfig', function(toastrConfig) {
+        angular.extend(toastrConfig, {
+          autoDismiss: true,
+          containerId: 'toast-container',
+          newestOnTop: true,
+          closeButton: true,
+          positionClass: 'toast-top-right',
+          iconClasses: {
+            error: 'alert-danger',
+            info: 'toast-info',
+            success: 'toast-success',
+            warning: 'alert-warning'
+          },
+          target: 'body',
+          timeOut: 5000,
+          progressBar: true,
+        });
+      }]);
     app.factory('realmHttpIntercepter', ["realm", function(realm) {
 
 		return {
