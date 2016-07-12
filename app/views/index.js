@@ -304,7 +304,7 @@ define(['app', 'lodash', 'jquery', 'moment',
             //=======================================================================
             $scope.registerNew = function(id) {
                     $location.url('/manage/events/new?c=' + id);
-                } // archiveOrg
+            }; // archiveOrg
 
             //============================================================
             //
