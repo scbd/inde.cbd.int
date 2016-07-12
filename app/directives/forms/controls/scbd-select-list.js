@@ -35,8 +35,6 @@ define(['app',
                 //==================================
                 $scope.$watch('binding', function() {
 
-                    // if ($scope.binding && !_.isEmpty($scope.binding))
-
                     if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && ($scope.binding && $scope.binding.length !== numOrgs)) {
 
                         numOrgs = $scope.binding.length;
@@ -132,7 +130,7 @@ define(['app',
                                 });
 
                             }
-      
+
 
                 } // set chips
 
@@ -190,7 +188,6 @@ define(['app',
                             return obj === docObj._id;
                         });
 
-                    //  buldBindingMirror();
                     if (reload)
                         $scope.loadList();
 
