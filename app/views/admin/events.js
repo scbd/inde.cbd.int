@@ -77,7 +77,7 @@ define(['app', 'lodash',
             $scope.selectedChip = {};
 
             $scope.docs = [];
-            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected'];
             var statusesArchived = ['deleted', 'archived'];
 
             init();
