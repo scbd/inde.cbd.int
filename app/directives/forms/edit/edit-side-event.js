@@ -48,21 +48,31 @@ define(['app', 'lodash',
                         };
                         $('#general-tab').tab('show');
 
+                        init();
 
+                        //============================================================
+                        //
+                        //============================================================
                         $scope.$watch('doc.conference', function() {
                             if ($scope.doc.conference) {
 
-                                generateDates($scope.doc.conference);
-
+                                if (_.isEmpty($scope.options.conferences))
+                                    loadConferences().then(generateDates);
+                                else
+                                    generateDates();
                             }
 
                         });
 
+                        //============================================================
+                        //
+                        //============================================================
                         $scope.$watch('doc.hostOrgs', function() {
                             if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
                                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
                                 $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
                                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
+
                             }
                         }, true);
 
@@ -80,55 +90,59 @@ define(['app', 'lodash',
                             }
                         };
 
-                        $http.get("/api/v2016/event-groups", {
-                            params: {
-                                q: query,
-                                s: {
-                                    StartDate: -1
+                        //============================================================
+                        //
+                        //============================================================
+                        function loadConferences() {
+                            return $http.get("/api/v2016/event-groups", {
+                                params: {
+                                    q: query,
+                                    s: {
+                                        StartDate: -1
+                                    }
                                 }
-                            }
-                        }, {
-                            cache: true
-                        }).then(function(o) {
+                            }, {
+                                cache: true
+                            }).then(function(o) {
 
-                            $scope.options.conferences = $filter("orderBy")(o.data, "StartDate");
+                                $scope.options.conferences = $filter("orderBy")(o.data, "StartDate");
 
-                            _.each($scope.options.conferences, function(conf, key) {
-                                if (conf._id === $location.search().m)
-                                    conf.selected = true;
-                                else
-                                    conf.selected = false;
+                                _.each($scope.options.conferences, function(conf, key) {
+                                    if (conf._id === $location.search().m)
+                                        conf.selected = true;
+                                    else
+                                        conf.selected = false;
 
-                                var oidArray = [];
-                                _.each(conf.MajorEventIDs, function(id) {
-                                    oidArray.push({
-                                        '$oid': id
+                                    var oidArray = [];
+                                    _.each(conf.MajorEventIDs, function(id) {
+                                        oidArray.push({
+                                            '$oid': id
+                                        });
                                     });
-                                });
 
-                                $http.get("/api/v2016/meetings", {
-                                    params: {
-                                        q: {
-                                            _id: {
-                                                $in: oidArray
+                                    $http.get("/api/v2016/meetings", {
+                                        params: {
+                                            q: {
+                                                _id: {
+                                                    $in: oidArray
+                                                }
                                             }
                                         }
-                                    }
-                                }, {
-                                    cache: true
-                                }).then(function(m) {
-                                    $scope.options.conferences[key].meetings = m.data;
+                                    }, {
+                                        cache: true
+                                    }).then(function(m) {
+                                        $scope.options.conferences[key].meetings = m.data;
+                                    });
+
                                 });
 
+                            }).then($timeout(function() {
+                                if ($location.search().m) $scope.doc.confrence = $location.search().m;
+                            }, 1000)).catch(function onerror(response) {
+                                $scope.onError(response);
                             });
+                        }
 
-                        }).then($timeout(function() {
-                            if ($location.search().m) $scope.doc.confrence = $location.search().m;
-                        }, 1000)).catch(function onerror(response) {
-                            $scope.onError(response);
-                        });
-
-                        init();
                         //============================================================
                         //
                         //============================================================
@@ -140,6 +154,7 @@ define(['app', 'lodash',
                             }
 
                         });
+
                         //============================================================
                         //
                         //============================================================
@@ -155,8 +170,12 @@ define(['app', 'lodash',
                             $scope.ignoreDirtyCheck = true;
                             dialog.closePromise.then(function(ret) {
 
-                                if (ret.value == 'draft') $scope.close();
-                                if (ret.value == 'publish') $scope.requestPublish().then($scope.close()).catch(function onerror(response) {
+                                if (ret.value == 'draft') $scope.saveDoc().then(function() {
+                                    $scope.close();
+                                });
+                                if (ret.value == 'publish') $scope.requestPublish().then(function() {
+                                    $scope.close();
+                                }).catch(function onerror(response) {
 
                                     $scope.onError(response);
 
@@ -168,15 +187,159 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
+                        $scope.sameAs = function(selectedValue, row) {
+
+                            if (row === 'responsible')
+                                sameAsResponisble(selectedValue);
+                            else if (_.isNumber(row))
+                                sameAsResponisbleOrg(selectedValue, row);
+                        };
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.allSameAsOptionsInUse = function() {
+
+                            return (_.find($scope.doc.responsibleOrgs, {
+                                    sameAs: 'me'
+                                }) &&
+                                _.find($scope.doc.responsibleOrgs, {
+                                    sameAs: 'contact'
+                                }) &&
+                                _.find($scope.doc.responsibleOrgs, {
+                                    sameAs: 'principal'
+                                })
+                            );
+                        };
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.isContactUsedInSameAs = function(index) {
+                            if (!$scope.doc.responsibleOrgs) $scope.doc.responsibleOrgs = [];
+
+                            return ((_.find($scope.doc.responsibleOrgs, {
+                                        sameAs: 'contact'
+                                    }) ||
+                                    ($scope.doc.responsibleOrgs[index] && !!(_.find($scope.doc.responsibleOrgs, {
+                                        email: $scope.doc.contact.email
+                                    })))
+                                ) &&
+                                (!$scope.doc.responsibleOrgs[index] || ($scope.doc.responsibleOrgs[index] && ($scope.doc.responsibleOrgs[index].sameAs !== 'contact'))));
+
+
+                        };
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.isMeUsedInSameAs = function(index) {
+                            if (!$scope.doc.responsibleOrgs) $scope.doc.responsibleOrgs = [];
+
+                            return ((_.find($scope.doc.responsibleOrgs, {
+                                        sameAs: 'me'
+                                    }) ||
+                                    ($scope.doc.responsibleOrgs[index] && !!(_.find($scope.doc.responsibleOrgs, {
+                                        email: $scope.me.email
+                                    })))
+                                ) &&
+                                (!$scope.doc.responsibleOrgs[index] || ($scope.doc.responsibleOrgs[index] && ($scope.doc.responsibleOrgs[index].sameAs !== 'me'))));
+
+                        };
+
+
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.isPrincipalUsedInSameAs = function(index) {
+                            if (!$scope.doc.responsibleOrgs) $scope.doc.responsibleOrgs = [];
+                            return ((_.find($scope.doc.responsibleOrgs, {
+                                        sameAs: 'principal'
+                                    }) ||
+                                    ($scope.doc.responsibleOrgs[index] && $scope.doc.responsible && !!(_.find($scope.doc.responsibleOrgs, {
+                                        email: $scope.doc.responsible.email
+                                    })))
+                                ) &&
+                                (!$scope.doc.responsibleOrgs[index] || ($scope.doc.responsibleOrgs[index] && ($scope.doc.responsibleOrgs[index].sameAs !== 'principal'))));
+
+                        };
+
+                        //============================================================
+                        // load responsible person for SE with data
+                        //============================================================
+                        function sameAsResponisble(selectedValue) {
+                            switch (selectedValue) {
+                                case 'contact':
+                                    $scope.doc.responsible.personalTitle = $scope.doc.contact.personalTitle || '';
+                                    $scope.doc.responsible.firstName = $scope.doc.contact.firstName || '';
+                                    $scope.doc.responsible.lastName = $scope.doc.contact.lastName || '';
+                                    $scope.doc.responsible.email = $scope.doc.contact.email || '';
+                                    break;
+                                case 'me':
+                                    auth.getUser().then(function(user) {
+                                        $scope.me = user;
+                                        var nameArray = user.name.split(" ");
+                                        $scope.doc.responsible.lastName = nameArray[nameArray.length - 1] || '';
+                                        if (nameArray.length >= 3)
+                                            $scope.doc.responsible.personalTitle = nameArray[0] || '';
+                                        else {
+                                            $scope.doc.responsible.firstName = nameArray[0] || '';
+                                            $scope.doc.responsible.personalTitle = '';
+                                        }
+                                        $scope.doc.responsible.email = user.email || '';
+                                    });
+                                    break;
+                            }
+                        } // $scope.sameAsResponisble
+
+                        //============================================================
+                        // load responsible person for ORG with data
+                        //============================================================
+                        function sameAsResponisbleOrg(selectedValue, row) {
+
+                            switch (selectedValue) {
+                                case 'contact':
+                                    $scope.doc.responsibleOrgs[row].personalTitle = $scope.doc.contact.personalTitle || '';
+                                    $scope.doc.responsibleOrgs[row].firstName = $scope.doc.contact.firstName || '';
+                                    $scope.doc.responsibleOrgs[row].lastName = $scope.doc.contact.lastName || '';
+                                    $scope.doc.responsibleOrgs[row].email = $scope.doc.contact.email || '';
+                                    break;
+                                case 'me':
+                                    auth.getUser().then(function(user) {
+                                        var nameArray = user.name.split(" ");
+                                        $scope.doc.responsibleOrgs[row].lastName = nameArray[nameArray.length - 1] || '';
+                                        if (nameArray.length >= 3)
+                                            $scope.doc.responsibleOrgs[row].personalTitle = nameArray[0] || '';
+                                        else {
+                                            $scope.doc.responsibleOrgs[row].firstName = nameArray[0] || '';
+                                            $scope.doc.responsibleOrgs[row].personalTitle = '';
+                                        }
+                                        $scope.doc.responsibleOrgs[row].email = user.email || '';
+                                    });
+                                    break;
+                                case 'principal':
+
+                                    $scope.doc.responsibleOrgs[row].personalTitle = $scope.doc.responsible.personalTitle || '';
+                                    $scope.doc.responsibleOrgs[row].firstName = $scope.doc.responsible.firstName || '';
+                                    $scope.doc.responsibleOrgs[row].lastName = $scope.doc.responsible.lastName || '';
+                                    $scope.doc.responsibleOrgs[row].email = $scope.doc.responsible.email || '';
+                                    break;
+                            }
+                        } // $scope.sameAsResponisble
+                        //============================================================
+                        //
+                        //============================================================
                         $scope.requestPublish = function() {
-                            //dialogTemplate = $compile(dialogTemplate,$scope);
+
                             $scope.ignoreDirtyCheck = true;
                             $scope.doc.meta.status = 'request';
                             return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+
+                                $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' is Now Registered as a Request');
                                 _.each($scope.doc.hostOrgs, function(org) {
+
                                     if (org.length > 2)
                                         mongoStorage.loadDoc('inde-orgs', org).then(function(conf) {
-
                                             if (conf.meta.status !== 'published')
                                                 mongoStorage.requestDoc('inde-orgs', conf, conf._id);
                                         }).catch(function onerror(response) {
@@ -217,6 +380,17 @@ define(['app', 'lodash',
                             });
                         }; // archiveOrg
 
+                        function loadUser() {
+                            return auth.getUser().then(function(user) {
+                                $scope.me = user;
+                            });
+                        }
+
+                        function loadOrgs() {
+                            return mongoStorage.loadOrgs().then(function(orgs) {
+                                $scope.options.orgs = orgs;
+                            });
+                        }
                         //============================================================
                         //
                         //============================================================
@@ -226,7 +400,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.when(loadOrgs(), loadCountries()).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs()]).then(function() {
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
                                     if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
@@ -407,18 +581,7 @@ define(['app', 'lodash',
 
 
                         };
-                        //=======================================================================
-                        //
-                        //=======================================================================
-                        function loadOrgs() {
 
-                            return mongoStorage.loadOrgs().then(function(res) {
-                                $scope.options.orgs = res;
-                                return $scope.options.orgs;
-                            }).catch(function onerror(response) {
-                                $scope.onError(response);
-                            });
-                        }
 
                         //=======================================================================
                         //
@@ -443,16 +606,17 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.saveDoc = function() {
 
+
                             $scope.doc.meta.status = 'draft';
                             if (!$scope.doc.id) {
-                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
-                                    $scope.$emit('showSuccess', 'New Side Event ' + $scope.id + ' Created and Saved as Draft');
+                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() { 
+                                    $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
                                 }).catch(function onerror(response) {
                                     $scope.onError(response);
                                 });
                             } else
                                 return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
-                                    $scope.$emit('showSuccess', 'Side Event ' + $scope.id + ' Saved as Draft');
+                                    $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' Saved as Draft');
                                 }).catch(function onerror(response) {
                                     $scope.onError(response);
                                 });
@@ -489,6 +653,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.getOrgName = function(id) {
                             var orgFound = false;
+
                             if (id.length === 2) {
                                 orgFound = _.find($scope.options.countries, {
                                     _id: id
@@ -502,11 +667,10 @@ define(['app', 'lodash',
                                     _id: id
                                 });
                                 if (orgFound) return orgFound.title;
-                                else
-                                    throw 'Error: looking for org' + id + ' in $scope.options.orgs that does not exist';
 
 
                             }
+
                         };
                         $scope.submitForm = function(formData) {
                             $scope.submitted = true;
@@ -641,8 +805,8 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function submitContact(formData) {
-                            console.log('formData', formData);
-                            $scope.doc.validTabs.contact = true;
+                            $scope.doc.validTabs.contact = false;
+
                             var ctrls = ['firstName', 'lastName', 'phone', 'city', 'country', 'email'];
 
                             if (formData.firstName.$error.required && $scope.submitted)
@@ -701,7 +865,14 @@ define(['app', 'lodash',
                             });
                         }
 
-
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function isTabsValid() {
+                            if (!$scope.doc.validTabs) return false;
+                            return ($scope.doc.validTabs.general && $scope.doc.validTabs.logistics && $scope.doc.validTabs.orgs && $scope.doc.validTabs.contact);
+                        }
+                        $scope.isTabsValid = isTabsValid;
                         //=======================================================================
                         //
                         //=======================================================================
