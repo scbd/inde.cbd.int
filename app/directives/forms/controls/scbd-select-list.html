@@ -47,7 +47,7 @@ animation-fill-mode: forwards;
 <div class="row">
 
   <div class="col-xs-12" ng-show="!showOrgForm">
-    <label>Search for the host organization(s):</label>
+    <label>Search for the host organization(s): <i class="fa fa-info-circle"></i></label>
   </div>
 
   <div class="col-xs-10  col-md-6" ng-show="!showOrgForm">
@@ -99,8 +99,8 @@ animation-fill-mode: forwards;
       <span class="label label-pill label-primary">{{binding.length}}</span>
     </div>
     <div dragula='"se-bag"' dragula-model='binding' style="padding:10px;min-height:150px;border-style:solid;border-width:1px;border-color:#009B48;">
-      <div class="chip" ng-repeat="doc in binding track by $index" style="margin-left:20px;margin-bottom:10px;">
-        <span>#{{$index+1}} </span>
+      <div class="chip" ng-repeat="doc in binding track by $index" style="margin-left:20px;margin-bottom:10px;" ng-show="mirror[$index].acronym">
+        <span>#{{$index+1}}</span>
         <img src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
         <img ng-if="mirror[$index]._id.length===2" class="flag-icon flag-icon-{{mirror[$index].identifier}}" ></img>
         <span ng-if="mirror[$index].acronym"> {{mirror[$index].acronym | limitTo : 40}}</span>
