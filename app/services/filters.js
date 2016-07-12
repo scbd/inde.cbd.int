@@ -91,6 +91,19 @@ app.filter('schemaName', [function() {
             };
       }]);
 
-
-
+      app.filter('rawHtml', ['$sce', function($sce){
+        return function(val) {
+          return $sce.trustAsHtml(val);
+        };
+      }]);
+      app.filter('fileSize', function() {
+          return function(size) {
+              if (size < 1024)
+                  return Math.ceil(size) + ' B';
+              else if (size < 1048576)
+                  return Math.ceil((Number(size) / 1024)) + ' KB';
+              else
+                return Math.ceil((Number(size) / 1048576)) + ' MB';
+          };
+      });
 });
