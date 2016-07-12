@@ -7,19 +7,26 @@ define(['app'], function(app) {
      ***************************************************************************************/
     app.factory('devRouter', [function() {
 
-      var domain = document.location.hostname.replace(/[^\.]+\./, '');
-      var production = false; // change to true to work on production accounts
-      if ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
-          domain = 'cbddev.xyz';
-      else
-          domain = 'cbd.int';
+        var domain = document.location.hostname.replace(/[^\.]+\./, '');
+        var production = false; // change to true to work on production accounts
+        if ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
+            domain = 'cbddev.xyz';
+        else
+            domain = 'cbd.int';
 
-      var ACCOUNTS_URI = 'https://accounts.' + domain;
+        var ACCOUNTS_URI = 'https://accounts.' + domain;
+
+        /***************************************************************************************
+         *
+
+         ***************************************************************************************/
+        function isDev() {
+            return ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production);
+        }
 
         return {
-            ACCOUNTS_URI: ACCOUNTS_URI
+            ACCOUNTS_URI: ACCOUNTS_URI,
+            isDev: isDev
         };
     }]);
-
-
 });
