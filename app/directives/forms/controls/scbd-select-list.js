@@ -1,13 +1,13 @@
 define(['app',
-        'lodash',
-        'text!./scbd-select-list.html',
-        'css!./scbd-select-list.css',
-        'services/filters',
-        'services/mongo-storage',
-        'css!libs/angular-dragula/dist/dragula.css',
+    'lodash',
+    'text!./scbd-select-list.html',
+    'css!./scbd-select-list.css',
+    'services/filters',
+    'services/mongo-storage',
+    'css!libs/angular-dragula/dist/dragula.css',
 ], function(app, _, template) {
     'use strict';
-    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$http',  function($location, $timeout, mongoStorage, $http) {
+    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$q', function($location, $timeout, mongoStorage, $q) {
 
         return {
             restrict: 'E',
@@ -29,70 +29,111 @@ define(['app',
 
                 var numOrgs = 0;
 
-                // //==================================
-                // //
-                // //==================================
-                // $scope.$watch('showOrgForm', function() {
-                //     if (typeof $scope.doc !== 'undefined')
-                //         $scope.loadList();
-                // }, true);
 
                 //==================================
                 //
                 //==================================
                 $scope.$watch('binding', function() {
-                  
-                    if($scope.binding && !_.isEmpty($scope.binding))
-                      buldBindingMirror();
-                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && ($scope.binding && $scope.binding.length!==numOrgs)){
+
+                    // if ($scope.binding && !_.isEmpty($scope.binding))
+
+                    if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && ($scope.binding && $scope.binding.length !== numOrgs)) {
+
                         numOrgs = $scope.binding.length;
-                        $scope.loadList(true);
-                    }
+                        buldBindingMirror(true);
+
+                    } else if (typeof $scope.binding !== 'undefined' && !_.isEmpty($scope.docs) && ($scope.binding && $scope.binding.length === numOrgs))
+                        buldBindingMirror(false);
                 }, true);
+
 
                 //==================================
                 //
                 //==================================
                 $scope.$watch('doc', function() {
-                    if ($scope.doc && (_.isArray($scope.doc.hostOrgs) && $scope.doc.hostOrgs.length!==0))
+                    if ($scope.doc && (_.isArray($scope.doc.hostOrgs) && $scope.doc.hostOrgs.length !== 0))
+                        buldBindingMirror(true);
+                    else if ($scope.docs && !_.isEmpty($scope.docs)) {
+                        $scope.doc.hostOrgs = [];
                         $scope.loadList();
-                    else {
-                      $scope.doc.hostOrgs=[];
-                      $scope.loadList();
                     }
                 });
+
 
                 //==================================
                 //
                 //==================================
-                function buldBindingMirror() {
-                    $scope.mirror = [];
-                    _.each($scope.binding, function(val, key) {
-                        $scope.mirror[key] = _.find($scope.docs, {
-                            '_id': val
+                function buldBindingMirror(reloadAllOrgs) {
+
+                    if (reloadAllOrgs)
+                        $q.when($scope.loadList()).then(function() {
+                            populateMirror();
                         });
-                    });
+                    else
+                        populateMirror();
+
                 } // init
 
 
                 //==================================
                 //
                 //==================================
+                function populateMirror() {
+                    var org;
+                    $scope.mirror = [];
+
+                        if ($scope.binding.length) numOrgs = $scope.binding.length;
+                        if ($scope.docs && $scope.docs.length > 0)
+                            _.each($scope.binding, function(val, key) {
+                                org = _.find($scope.docs, {
+                                    '_id': val
+                                });
+
+                                if (org)
+                                    $scope.mirror[key] = org;
+                                else {
+
+                                    mongoStorage.loadDoc('inde-orgs', val).then(
+                                        function(res) {
+
+                                            if (_.isObject(res) && res.meta && (res.meta.status === 'published' || res.meta.status === 'draft' || res.meta.status === 'request')) {
+                                                $scope.mirror[key] = res;
+
+                                                $scope.loadList(true).then(function() {
+                                                    $scope.search = res.title;
+                                                });
+
+                                            } else {
+                                                numOrgs = numOrgs - 1;
+                                                $scope.binding.splice(key, 1);
+                                            }
+                                        }
+                                    );
+                                }
+
+                            });
+                }
+
+                //==================================
+                //
+                //==================================
                 function setChips() {
-                    $timeout(function() {
+
+
                         if ($scope.binding)
                             if ($scope.binding.length > 0) {
                                 $scope.loading = false;
 
-                                  _.each($scope.docs, function(doc) {
-                                      _.each($scope.binding, function(id) {
-                                          if (doc._id === id)
-                                              doc.selected = !doc.selected;
-                                      });
-                                  });
-                                  buldBindingMirror();
+                                _.each($scope.docs, function(doc) {
+                                    _.each($scope.binding, function(id) {
+                                        if (doc._id === id)
+                                            doc.selected = true;
+                                    });
+                                });
+
                             }
-                    }, 500);
+      
+
                 } // set chips
 
 
@@ -115,9 +156,8 @@ define(['app',
                 //
                 //=======================================================================
                 $scope.noEnter = function(event) {
-                    if (event.keyCode === 13) { // '13' is the key code for enter
+                    if (event.keyCode === 13)
                         event.preventDefault();
-                    }
                 }; //$scope.noEnter
 
 
@@ -126,11 +166,11 @@ define(['app',
                 //=======================================================================
                 $scope.loadList = function(force) {
 
-                    if(force || (!force && _.isEmpty($scope.docs)))
-                    mongoStorage.loadOrgs().then(function(res) {
-                      $scope.docs = res;
-                      setChips();
-                    });
+                    if (force || (!force && _.isEmpty($scope.docs)))
+                        return mongoStorage.loadOrgs().then(function(res) {
+                            $scope.docs = res;
+                            setChips();
+                        });
                 };
 
 
@@ -150,7 +190,7 @@ define(['app',
                             return obj === docObj._id;
                         });
 
-                    buldBindingMirror();
+                    //  buldBindingMirror();
                     if (reload)
                         $scope.loadList();
 
