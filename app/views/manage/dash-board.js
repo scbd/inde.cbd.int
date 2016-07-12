@@ -1,27 +1,29 @@
-define(['app', '../../services/mongo-storage'], function(app) { //'scbd-services/utilities',
-    app.controller("dashBoard", ['$scope',  'authentication', '$location', '$timeout', 'mongoStorage', '$window', 'history', //"$http", "$filter", "Thesaurus",
-        function($scope,  authentication, $location, $timeout, mongoStorage, $window, history) { //, $http, $filter, Thesaurus
-            $scope.test = [];
+define(['app', '../../services/mongo-storage'], function(app) {
+    app.controller("dashBoard", ['$scope', 'authentication', '$location', 'mongoStorage', 'history',
+        function($scope, authentication, $location, mongoStorage, history) {
 
-            $scope.facets = {};
-            $scope.facets.all = 0;
-            $scope.facets.drafts = 0;
-            $scope.facets.requests = 0;
-            $scope.facets.published = 0;
-            $scope.facets.canceled = 0;
-            $scope.facets.rejected = 0;
-            $scope.facets.archived = 0;
-            $scope.facetsO = {};
-            $scope.facetsO.all = 0;
-            $scope.facetsO.drafts = 0;
-            $scope.facetsO.requests = 0;
-            $scope.facetsO.published = 0;
-            $scope.facetsO.canceled = 0;
-            $scope.facetsO.rejected = 0;
-            $scope.facetsO.archived = 0;
             var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
-            mongoStorage.getOwnerFacits('inde-side-events', $scope.facets, statuses);
-            mongoStorage.getOwnerFacits('inde-orgs', $scope.facetsO, statuses);
+
+
+            init();
+            //=======================================================================
+            //
+            //=======================================================================
+            function init() {
+                authentication.getUser().then(function(user) {
+                    mongoStorage.getStatusFacits('inde-side-events', statuses,'all', user.userID).then(
+                        function(data) {
+                            $scope.facets = data;
+                        }
+                    );
+
+                    $scope.facets = mongoStorage.getStatusFacits('inde-orgs', statuses,'all', user.userID).then(
+                        function(data) {
+                            $scope.facetsO = data;
+                        }
+                    );
+                });
+            } //init
 
 
             //=======================================================================
@@ -32,12 +34,6 @@ define(['app', '../../services/mongo-storage'], function(app) { //'scbd-services
                     $location.path(path).search(search);
             }; // archiveOrg
 
-            // //=======================================================================
-            // //
-            // //=======================================================================
-            // $scope.goTo = function (url){
-            //   $location.url(url);
-            // }// archiveOrg
 
             //============================================================
             //
