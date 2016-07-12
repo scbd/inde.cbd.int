@@ -2,9 +2,10 @@
   <!-- mobil menu -->
   <div class="row portal-nav-mobi portal-branding center visible-xs" ng-class="portalMobiNavClass" ng-cloak>
     <div class="btn-group ">
-      <!-- <button ng-show="hideNavs" id="home-sm" class="btn btn-default  btn-sm " ng-click="goTo('/');setActivePath();">Side Events</button> -->
+      <button ng-show="hideNavs" id="home-sm" class="btn btn-default  btn-sm " ng-click="goTo('/');setActivePath();">Side Events</button>
+      <button ng-show="hideNavs" id="request-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage/events/new');setActivePath();" ng-if="isAdmin">Register a S.E.</button>
       <button id="past-sm" class="btn btn-default  btn-sm " ng-click="goTo('/past');setActivePath();">Past Events</button>
-      <!-- <button ng-show="hideNavs" id="request-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage/events/new');setActivePath();" ng-if="isAdmin">Register a S.E.</button> -->
+
       <button id="dash-sm" class="btn btn-default  btn-sm " ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</button>
       <button id="admin-sm" class="btn btn-default btn-sm " ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</button>
     </div>
@@ -16,10 +17,10 @@
   <div ng-cloak>
     <section class="lg-menu  hidden-xs">
       <span class="cl-effect-14">
-        <!-- <a ng-show="hideNavs"id="home" ng-click="goTo('/');setActivePath();">Side Events </a> -->
-        <a id="past" ng-click="goTo('/past');setActivePath();">Past Events </a>
-        <!-- <a ng-show="hideNavs" id="request" ng-click="goTo('/manage/events/new');setActivePath();" ng-if="isAdmin">Register a Side Event</a> -->
+        <a ng-show="hideNavs"id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
 
+        <a ng-show="hideNavs" id="request" ng-click="goTo('/manage/events/new');setActivePath();" ng-if="isAdmin">Register a Side Event</a>
+        <a id="past" ng-click="goTo('/past');setActivePath();">Past Events </a>
         <a id="dash" ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
         <a id="admin" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</a>
       </span>
