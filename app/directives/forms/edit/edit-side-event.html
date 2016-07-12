@@ -48,7 +48,7 @@
           <li role="presentation" ng-class="{'active':tab==='general'}"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab" ng-click="tab='general'">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a>            </li>
           <li role="presentation" ng-class="{'active':tab==='logistics'}"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab" ng-click="tab='logistics'">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='orgs'}"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab" ng-click="tab='orgs'">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='contact'}"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab" ng-click="tab='contact'">Contact Persons <i class="fa fa-check" ng-show="doc.contact"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='contact'}"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab" ng-click="tab='contact'">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='documents'}"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab" ng-click="tab='documents'">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='links'}"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab" ng-click="tab='links'">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='images'}"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab" ng-click="tab='images'">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
@@ -68,7 +68,6 @@
 
           <div class="col-xs-12 col-lg-8">
             <div class="row">
-
               <div class="col-xs-12 col-lg-12">
                 <div name="title" style="padding-bottom:10px;" ng-class="{'has-error': editForm.title.$invalid && editForm.$submitted}">
                   <label>Title</label>
@@ -77,20 +76,17 @@
                 </div>
               </div>
               <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
-
                   <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
                     <label>Subject(s)</label><br>
                     <div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
                     <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
                   </div>
                 </div>
-
-
             </div>
         </div>
         <div class="col-xs-12 col-lg-4">
-          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon (Not Org. Logo)" style="padding-bottom:10px;">
-            <label>Event Icon (Not Org. Logo)</label>
+          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon & Cover Image (Not Org. Logo)" style="padding-bottom:10px;">
+            <label>Event Icon & Cover Image (Not Org. Logo)</label>
             <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
             <scbd-file-upload  ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
 
@@ -114,7 +110,7 @@
         <legend class="container-subheader">
           <h2>Conference and Associated Meetings </h2>
         </legend>
-            <div class="row">
+            <div >
               <div class="col-xs-12 col-lg-4">
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
@@ -148,7 +144,7 @@
             <legend class="container-subheader">
               <h2>Preferred Date and Time {{prefDate}}</h2>
             </legend>
-            <div class="row">
+            <div >
 
               <div class="ccol-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div ng-class="{'has-error': editForm.prefDateOne.$invalid && editForm.$submitted,'has-error': editForm.prefTimeOne.$invalid && editForm.$submitted }">
@@ -203,7 +199,7 @@
             <legend class="container-subheader">
               <h2 >Requirements (optional)</h2>
             </legend>
-            <div class="row">
+            <div >
 
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
@@ -215,7 +211,7 @@
                 <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
               </div>
             </div>
-            <div class="row">
+            <div >
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
               </div>
@@ -230,7 +226,7 @@
               </div>
             </div>
 
-            <div class="row" style="margin-bottom:10px;">
+            <div  style="margin-bottom:10px;">
               <div class="col-xs-12">
                 <br>
                 <div>Other
@@ -243,26 +239,28 @@
 
 
               <div id="orgs" class="row tab-pane fade in active text-left" ng-show="tab==='orgs'">
+                <div>
+                <div class="col-md-12 col-xs-12">
                   <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted)}">
                     <legend class="container-subheader">
-                      <h2>Organization(s)</h2>
+                      <h2>Host Organization(s)</h2>
                     </legend>
 
                     <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && editForm.$submitted" style="color:#a94442">At least one organization is required.</p>
 
-                    <div class="row">
 
-                      <div class="col-md-12 col-xs-12">
+
+
                         <div name="hostOrgs" caption="" style="margin-right:20px;">
 
                           <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
                         </div>
                       </div>
                     </div>
-                  </div>
+</div>
               </div>
 
-        			<div  id="contact" class="row tab-pane fade in active text-left" ng-show="tab==='contact'">
+        			<div  id="contact" class="tab-pane fade in active text-left" ng-show="tab==='contact'">
                       <legend class="container-subheader" style="margin-top:15px;">
                         <h2>Contact Person </h2>
                       </legend>
@@ -272,7 +270,7 @@
                           <strong>This should be the main contact for the Meeting Services Assistant to contact before and during the meeting.  It is very important that the Meeting Services Assistant can contact this perosn via mobile phone if needed during the meeting to address any last minute concerns that may arise.</strong>
                       </div>
 
-                        <div class="row">
+                        <div >
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div   name="personalTitle" caption="Personal Title">
@@ -298,7 +296,7 @@
                           </div>
                         </div>
 
-                        <div class="row">
+                        <div >
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div name="jobTitla" caption="Job Title">
@@ -334,7 +332,7 @@
 
                         </div>
 
-                        <div class="row" style="margin-bottom:15px;">
+                        <div  style="margin-bottom:15px;">
 
                             <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
                               <div >
@@ -361,7 +359,7 @@
                           </div>
                         </div>
 
-                    <div class="row">
+                    <div >
 
                       <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
                         <div ng-class="{'has-error': editForm.emaill.$invalid && editForm.emaill.$touched}">
@@ -400,7 +398,7 @@
                     </legend>
 
                   <div class="col-xs-12">
-                    <div class="row panel panel-default">
+                    <div class="panel panel-default">
 
                       <div class="table-responsive">
                         <table class="table table-striped">
@@ -416,24 +414,25 @@
                           </thead>
                           <tbody>
                             <tr>
-                              <td>Prinicipal for Side Event <i class="fa fa-info-circle" aria-hidden="true"></i></td>
+                              <td class="text-nowrap">Prinicipal for Side Event <i class="fa fa-info-circle" aria-hidden="true"></i></td>
                               <td>
-                                <select ng-model="doc.responsible.sameAs">
+                                <select ng-model="doc.responsible.sameAs" ng-change="sameAs(doc.responsible.sameAs,'responsible')">
                                   <option value="" selected>Select a Person</option>
                                   <option value="contact">Contact</option>
+                                  <option value="me">Me</option>
                                 </select>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm.responsiblePersonalTitle.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" required/>
+                                  <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" />
                                   <p ng-show="editForm.responsiblePersonalTitle.$invalid && editForm.$submitted" class="help-block">Salutation is required.</p>
                                 </div>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm.responsibleFirstName.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" required/>
+                                  <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" />
                                   <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block">First name is required.</p>
                                 </div>
                               </td>
@@ -458,19 +457,21 @@
                               </td>
                             </tr>
 
-                            <tr ng-repeat="org in doc.hostOrgs">
+                            <tr ng-repeat="org in doc.hostOrgs" ng-show="getOrgName(org)">
 
                               <td>
-                                <img src="{{getOrgImgSource(org)}}" ng-if="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />
+                                <img src="{{getOrgImgSource(org)}}" ng-show="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />
                                 <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
 
                                 {{getOrgName(org)}} <i class="fa fa-info-circle" aria-hidden="true"></i></td>
                               <td>
-                                <select ng-model="doc.responsibleOrgs[$index].sameAs">
+                                <select id="res-org" ng-model="doc.responsibleOrgs[$index].sameAs" ng-change="sameAs(doc.responsibleOrgs[$index].sameAs,$index)" ng-disabled="allSameAsOptionsInUse() || document.getElementById('res-org').length===1">
                                   <option value="" selected>Select a Person</option>
-                                  <option value="contact">Contact</option>
-                                  <option value="principal">Side Event Principal</option>
+                                  <option value="contact" ng-if="!isContactUsedInSameAs($index)">Contact</option>
+                                  <option value="principal" ng-if="!isPrincipalUsedInSameAs($index) && (doc.responsible && doc.responsible.email)">Side Event Principal</option>
+                                  <option value="me" ng-if="!isMeUsedInSameAs($index)">Me</option>
                                 </select>
+
                                 <input type="hidden" ng-model="doc.responsibleOrgs[$index].orgId" value="org">
                               </td>
                               <td>
@@ -520,13 +521,13 @@
 
 
               <div id="documents" class="tab-pane fade in" ng-show="tab==='documents'">
-  <div>
-    <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
-  </div>
-  <div class="text-left">
-    <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
-  </div>
-</div>
+                <div>
+                  <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
+                </div>
+                <div class="text-left">
+                  <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
+                </div>
+              </div>
               <div  id="links" class="row tab-pane fade in active text-left" ng-show="tab==='links'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-link" index="editIndex" name="links" document="doc" links="doc.links" save="saveDoc()"></link-list>
@@ -552,15 +553,15 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-lg-2 col-lg-offset-8 col-xs-12">
+                <div ng-class="{'col-lg-2 col-lg-offset-10 col-xs-12':!isTabsValid()}" ng-show="!isTabsValid()">
                     <div>
 
                       <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-primary" type="submit" style="width:100%;margin-top:15px;">Next</button>
                     </div>
                 </div>
-                <div class="col-lg-2  col-xs-12">
+                <div ng-class="{'col-lg-2 col-lg-offset-10 col-xs-12':isTabsValid()}">
                     <div>
-                      <button ng-show="!showEdit() && (doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-primary" type="submit" style="width:100%;margin-top:15px;">Register</button>
+                      <button ng-click="publishRequestDial()" ng-show="!showEdit() && (doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-primary" type="button" style="width:100%;margin-top:15px;">Register Request</button>
                     </div>
                 </div>
               </div>
