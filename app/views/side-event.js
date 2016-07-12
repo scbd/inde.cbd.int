@@ -10,7 +10,7 @@ define(['app', 'lodash'], function(app, _) {
         };
     });
 
-    return ['mongoStorage', '$route', '$http', '$sce', '$location', function(mongoStorage, $route, $http, $sce, $location) {
+    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q', function(mongoStorage, $route, $http, $sce, $location, $q) {
 
         var _ctrl = this;
         var allOrgs;
@@ -18,71 +18,128 @@ define(['app', 'lodash'], function(app, _) {
         _ctrl.hasError = hasError;
         _ctrl.trustSrc = trustSrc;
         _ctrl.goTo = goTo;
-        load();
+        init();
         return this;
 
-        function loadAllOrgsAndImages() {
+
+        //==============================
+        //
+        //==============================
+        function loadOrgs() {
             return mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
                 allOrgs = orgs;
             });
         }
 
+
         //==============================
         //
         //==============================
-        function load() {
-            var _id = $route.current.params.id;
-            $http.get('/api/v2016/conferences?s={"start":1}').then(function(conf) {
+        function loadConfrences() {
+
+            return $http.get('/api/v2016/conferences?s={"StartDate":1}', {
+                cache: true
+            }).then(function(conf) {
                 _ctrl.conferences = conf.data;
 
+            }).then(function(){
+              _.each(_ctrl.conferences, function(conf, key) {
+                var oidArray=[];
+              if(!_.isArray(conf.MajorEventIDs))conf.MajorEventIDs=[];
+
+              _.each(conf.MajorEventIDs, function(id) {
+                  oidArray.push({
+                      '$oid': id
+                  });
+              });
+
+              $http.get("/api/v2016/meetings", {
+                  params: {
+                      q: {
+                          _id: {
+                              $in: oidArray
+                          }
+                      }
+                  }
+              }, {
+                  cache: true
+              }).then(function(m) {
+                  _ctrl.conferences[key].meetings = m.data;
+
+              });
+                });
+
             });
-            _ctrl.subjects = $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
-                cache: true
-            });
-            mongoStorage.loadDoc('inde-side-events', _id).then(function(se) {
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function loadDoc() {
+            var _id = $route.current.params.id;
+            return mongoStorage.loadDoc('inde-side-events', _id).then(function(se) {
                 _ctrl.doc = se;
                 _ctrl.doc.orgs = [];
+            });
+        }
 
-                _ctrl.doc.conferenceObj = _.find(_ctrl.conferences, {
-                    '_id': _ctrl.doc.confrence
-                });
-                loadAllOrgsAndImages().then(function() {
 
-                    if (allOrgs && allOrgs.length > 0) {
-                        _.each(_ctrl.doc.hostOrgs, function(org) {
-                            _ctrl.doc.orgs.push(_.findWhere(allOrgs, {
-                                '_id': org
-                            })); // findWhere
-                        }); // each
-                        console.log('_ctrl.doc.orgs', _ctrl.doc.orgs);
-                    }
+        //==============================
+        //
+        //==============================
+        function loadSubjects() {
 
-                });
-
+            return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
+                cache: true
+            }).then(function(res) {
+                if(!_ctrl.doc)_ctrl.doc={};
+                
                 _ctrl.doc.subjectObjs = [];
-                _ctrl.subjects.then(function(res) {
-                    _.each(_ctrl.doc.subjects, function(subj) {
+                _.each(_ctrl.doc.subjects, function(subj) {
 
-                        _ctrl.doc.subjectObjs.push(_.find(res.data, {
-                            'identifier': subj.identifier
-                        }));
+                    _ctrl.doc.subjectObjs.push(_.find(res.data, {
+                        'identifier': subj.identifier
+                    }));
 
-                    });
-
-                }).catch(onError);
+                });
 
             }).catch(onError);
         }
+
+
+        //==============================
+        //
+        //==============================
+        function init() {
+
+            $q.all([loadConfrences(), loadDoc(), loadOrgs(), loadSubjects()]).then(function() {
+
+                _ctrl.doc.conferenceObj = _.find(_ctrl.conferences, {
+                    '_id': _ctrl.doc.conference
+                });
+
+
+                if (allOrgs && allOrgs.length > 0) {
+                    _.each(_ctrl.doc.hostOrgs, function(org) {
+                        _ctrl.doc.orgs.push(_.find(allOrgs, {
+                            '_id': org
+                        })); // findWhere
+                    }); // each
+
+                }
+
+            }).catch(onError);
+        }
+
         //============================================================
         //
         //============================================================
         function goTo(url, code) {
-            console.log(url + code);
             if (code)
                 $location.url(url + code);
             else
                 $location.url(url);
-
         }
 
         //============================================================
