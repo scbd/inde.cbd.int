@@ -1,6 +1,6 @@
 <div ng-controller="home">
 
-  <div scroll-to="top" class="hidden-md hidden-sm hidden-xs">
+  <!-- <div scroll-to="top" class="hidden-md hidden-sm hidden-xs">
     <div ani-scroll="550" class="float-button" style="padding-top:5px;">
       <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
     </div>
@@ -10,7 +10,7 @@
     <div ani-scroll="550" class="float-button">
       <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
     </div>
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="container-header" style="height:40px;margin-bottom:10px;">
@@ -39,6 +39,7 @@
           <div class="btn-group-vertical">
             <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
             <button class="btn btn-sm btn-info disabled">Register a Side Event (now closed)</button>
+            <button class="btn btn-sm btn-info" ng-click="registerNew(con._id);">Register a Side Event</button>
             <!-- ng-click="goTo(con._id);" -->
           </div>
         </div>
@@ -147,8 +148,8 @@
               <div class="relative" ng-show="doc.sideEvent.meta.status==='published'">
                 <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
                   <span class="cir" style="position:relative;">
-                    <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                    <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
+                    <!-- <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
+                    <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button> -->
                   </span>
                   <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} <span ng-hide="$last">|</span></span>
                 </span>
