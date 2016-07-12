@@ -1,55 +1,53 @@
-define(['app', 'lodash', 'services/locale'], function(app, _) {
+define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) {
 
-    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter', function($http, authentication, $q, locale, $filter) {
+    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter','devRouter', function($http, authentication, $q, locale, $filter,devRouter) {
 
         var user;
         var clientOrg = 0; // means cbd
 
+        authentication.getUser().then(function(u) {
+            user = u;
+        });
 
         //============================================================
         //
         //============================================================
         function save(schema, document, _id) {
             var url = '/api/v2016/' + schema;
-            var prevDoc = _.cloneDeep(document.initialState) || {};
-            var currentDoc = _.cloneDeep(document);
-            var data = {};
-
-            var params = {};
-
-            delete(prevDoc.history);
-            delete(currentDoc.initialState);
             if (_id) {
+
+                var params = {};
                 params.id = _id;
                 url = url + '/' + _id;
 
-                delete(currentDoc._id);
-                delete(currentDoc.history);
-                if (currentDoc.meta && currentDoc.meta.version === 0) currentDoc.meta.version = 1;
-                if (currentDoc.meta && (typeof currentDoc.meta.createdOn === 'number')) currentDoc.meta.createdOn = new Date(currentDoc.meta.createdOn).toUTCString();
-                if (currentDoc.meta && (typeof currentDoc.meta.modifiedOn === 'number')) currentDoc.meta.modifiedOn = new Date(currentDoc.meta.modifiedOn).toUTCString();
-                if (!currentDoc.clientOrg) currentDoc.clientOrg = clientOrg;
-                data = _.cloneDeep(currentDoc);
-                data.$set = currentDoc;
-                data.$push = {
-                    "history": prevDoc
-                };
+                if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
 
-                return $http.patch(url, data, params);
+                if (_.isNumber(document.meta.createdOn))
+                    document.meta.createdOn = new Date(moment.utc(document.meta.createdOn));
 
+                if (_.isNumber(document.meta.modifiedOn))
+                    document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
+
+                return $http.put(url, document, params).then(function(){
+                  authentication.getUser().then(function(user) {
+                      var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                      getStatusFacits(schema, statuses,'all', user.userID,true);
+                      getStatusFacits(schema, statuses,'all',true);
+                  });
+                });
             } else {
-                currentDoc.meta = {};
-                currentDoc.meta.version = 0;
-
-                if (!currentDoc.clientOrg) currentDoc.clientOrg = clientOrg;
-
-                return $http.post(url, currentDoc, params).then(function(res) {
-                    currentDoc.initialState = data;
-                    delete(currentDoc.initialState.history);
+                if (!document.meta) document.meta = {
+                    'clientOrg': clientOrg
+                };
+                if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
+                return $http.post(url, document).then(function(res) {
+                  authentication.getUser().then(function(user) {
+                      var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                      getStatusFacits(schema, statuses,'all', user.userID,true);
+                      getStatusFacits(schema, statuses,'all',true);
+                  });
                     return res;
                 });
-
-
             } //create
         }
 
@@ -57,81 +55,72 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
         //============================================================
         //
         //============================================================
-        function loadOrgs() {
+        function loadOrgs(force) {
 
-            return authentication.getUser().then(function(u) {
-                user = u;
-                if (!localStorage.getItem('allOrgs')) {
-                    var params = {
-                        q: {
-                            'meta.status': 'published',
-                            'meta.v': {
-                                $ne: 0
+            return isModified('inde-orgs').then(
+                function(isModified) {
+
+                    var params = {};
+                    if (!localStorage.getItem('allOrgs') || isModified || force) {
+                        params = {
+                            q: {
+                              'meta.status': 'published',
+                              'meta.v': {
+                                  $ne: 0
+                              }
                             }
-                        }
-                    };
-                    return $http.get('/api/v2016/inde-orgs', {
-                        'params': params
-                    }).then(function(res) {
-                        return countries().then(function(data) {
-                            var orgsAndParties = _.union(res.data, data);
-                            localStorage.setItem('allOrgs', JSON.stringify(orgsAndParties));
-                            var params = {
-                                q: {
+                        };
+                        return $http.get('/api/v2016/inde-orgs', {
+                            'params': params
+                        }).then(function(res) {
 
-                                    'meta.createdBy': user.userID,
-                                    'meta.status': {
-                                        $in: ['draft', 'request']
-                                    },
-                                    'meta.v': {
-                                        $ne: 0
+                            return countries().then(function(data) {
+                                var orgsAndParties = _.union(res.data, data);
+                                localStorage.setItem('allOrgs-' + user.userID, JSON.stringify(orgsAndParties));
+                                params = {
+                                    q: {
+
+                                        'meta.createdBy': user.userID,
+                                        'meta.status': {
+                                            $in: ['draft', 'request']
+                                        },
+                                        'meta.v': {
+                                            $ne: 0
+                                        }
                                     }
-                                }
-                            };
-                            return $http.get('/api/v2016/inde-orgs', {
-                                'params': params
-                            }).then(function(res) {
-                                orgsAndParties = _.union(res.data, orgsAndParties);
-                                return orgsAndParties;
+                                };
+
+                                return $http.get('/api/v2016/inde-orgs', {
+                                    'params': params
+                                }).then(function(res) {
+                                    orgsAndParties = _.union(res.data, orgsAndParties);
+                                    return orgsAndParties;
+                                });
                             });
                         });
-                    });
-                } else
-                    return authentication.getUser().then(function(user) {
-                        return getLocalOrgs(user);
-                    });
-            });
+                    } else {
+                        params = {
+                            q: {
 
+                                'meta.createdBy': user.userID,
+                                'meta.status': {
+                                    $in: ['draft', 'request']
+                                },
+                                'meta.v': {
+                                    $ne: 0
+                                }
+                            }
+                        };
+                        return $http.get('/api/v2016/inde-orgs', {
+                            'params': params
+                        }).then(function(res) {
+                            return _.union(res.data, JSON.parse(localStorage.getItem('allOrgs-' + user.userID)));
+                        });
 
-        } // loadDocs
-
-
-        //============================================================
-        //
-        //============================================================
-        function getLocalOrgs(user) {
-            return $q(function(resolve) {
-
-                var params = {
-                    q: {
-
-                        'meta.createdBy': user.userID,
-                        'meta.status': {
-                            $in: ['draft', 'request']
-                        },
-                        'meta.v': {
-                            $ne: 0
-                        }
                     }
-                };
-                return $http.get('/api/v2016/inde-orgs', {
-                    'params': params
-                }).then(function(res) {
-                    var orgsAndParties = _.union(res.data, JSON.parse(localStorage.getItem('allOrgs')));
-                    return resolve(orgsAndParties);
+
                 });
-            });
-        }
+        } // loadDocs
 
 
         //============================================================
@@ -165,23 +154,18 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
         //
         //============================================================
         function loadDoc(schema, _id) {
-            //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
-            if (!schema) throw "Error: failed to indicate schema mongoStorageService.loadDocument";
-            // var params = {
-            //               q:{_id:{$oid:_id}}
-            //             };
+
+
             return $q.when($http.get('/api/v2016/' + schema + '/' + _id)) //}&f={"document":1}'))
                 .then(
 
                     function(response) {
-                        if (!_.isEmpty(response.data)) {
-                            response.data.initialState = _.cloneDeep(response.data);
-                            delete(response.data.initialState.history);
+                        if (!_.isEmpty(response.data))
                             return response.data;
-                        } else
-                            return false;
-                    }
-                );
+                        else
+                        return false;
+
+                });
         }
 
 
@@ -189,7 +173,7 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
         //
         //============================================================
         function loadArchives(schema) {
-            //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
+
             if (!schema) throw "Error: failed to indicate schema loadArchives";
             var params = {
                 q: {
@@ -208,7 +192,7 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
         //
         //============================================================
         function loadOwnerArchives(schema) {
-            //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
+
             if (!schema) throw "Error: failed to indicate schema loadArchives";
             return $q.when(authentication.getUser().then(function(u) {
                 user = u;
@@ -232,8 +216,6 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
         //
         //============================================================
         function loadDocs(schema, status) {
-            //+'?q={"_id":{"$oid":"'+_id+'"},"clientOrganization":'+clientOrg+'}&f={"document":1}'
-
             var params = {};
             if (!schema) throw "Error: failed to indicate schema loadDocs";
             if (!status) {
@@ -319,10 +301,10 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
             var obj = {
                 meta: {
                     locales: [_.clone(locale)],
-                    v: -1,
-                    status: 'draft'
+                    status: 'draft',
+                    clientOrg: clientOrg
                 },
-                clientOrg: clientOrg
+
             };
 
             return save(schema, obj).then(function(res) {
@@ -366,7 +348,6 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
             return save(schema, docObj, _id);
         }
 
-
         //=======================================================================
         //
         //=======================================================================
@@ -377,7 +358,6 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
             docObj.meta.status = 'canceled';
             return save(schema, docObj, _id);
         }
-
 
         //============================================================
         //                    sk: pageNumber,
@@ -543,89 +523,116 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
             return save(schema, docObj, _id);
         }
 
-
         //=======================================================================
         //
         //=======================================================================
-        function getStatusFacits(schema, statusFacits, statArry, stat) {
-            statusFacits.all = 0;
+        function isModified(schema) {
+            var isModified = true;
+            var modifiedSchemas = localStorage.getItem('modifiedSchemas');
 
-            if (stat) {
-                $http.get('/api/v2016/' + schema + '?c=1&q={"meta.status":"' + stat + '","meta.version":{"$ne":0}}').then(
-                    function(res) {
+            if (modifiedSchemas)
+                modifiedSchemas = JSON.parse(modifiedSchemas);
 
-                        statusFacits[stat] = res.data.count;
-                        statusFacits.all += res.data.count;
+            return $q(function(resolve, reject) {
+
+                $http.get('/api/v2016/' + schema + '/last-modified').then(function(lastModified) {
+
+                    if (!lastModified.data) reject('Error: no date returned');
+
+                    if (!modifiedSchemas || lastModified.data !== modifiedSchemas[schema]) {
+                        if (!modifiedSchemas) modifiedSchemas = {};
+
+                        modifiedSchemas[schema] = lastModified.data;
+                        localStorage.setItem('modifiedSchemas', JSON.stringify(modifiedSchemas));
+                        resolve(isModified);
+                    } else {
+
+                        isModified = false;
+                        resolve(isModified);
                     }
-                );
-            } else
-                _.each(statArry, function(status) {
-
-                    $http.get('/api/v2016/' + schema + '?c=1&q={"meta.status":"' + status + '","meta.version":{"$ne":0}}').then(
-                        function(res) {
-                            statusFacits[status] = res.data.count;
-                            statusFacits.all += res.data.count;
-                        }
-                    );
-
+                }).catch(function(err) {
+                    reject(err);
                 });
-        } //getStatusFacits
 
-
-        //=======================================================================
-        //
-        //=======================================================================
-        function getOwnerFacits(schema, statusFacits, statArry, stat) {
-            statusFacits.draft = 0;
-            statusFacits.deleted = 0;
-            statusFacits.approved = 0;
-            statusFacits.rejected = 0;
-            statusFacits.canceled = 0;
-            statusFacits.archived = 0;
-            statusFacits.all = 0;
-            return $q.when(authentication.getUser().then(function(u) {
-                user = u;
-            }).then(function() {
-                statusFacits.all = 0;
-
-                if (stat) {
-                    $http.get('/api/v2016/' + schema + '?c=1&q={"meta.status":"' + stat + '","meta.version":{"$ne":0},"meta.createdBy":' + user.userID + '}').then(
-                        function(res) {
-
-                            statusFacits[stat] = res.data.count;
-                            statusFacits.all += res.data.count;
-                        }
-                    );
-                } else
-                    _.each(statArry, function(status) {
-
-                        $http.get('/api/v2016/' + schema + '?c=1&q={"meta.status":"' + status + '","meta.version":{"$ne":0},"meta.createdBy":' + user.userID + '}').then(
-                            function(res) {
-                                statusFacits[status] = res.data.count;
-                                statusFacits.all += res.data.count;
-                            }
-                        );
-                    });
-            }));
-        } //getStatusFacits
-
-        
-        //=======================================================================
-        //
-        //=======================================================================
-        function generateEventId() {
-            var params = {};
-            params.f = {
-                'id': 1
-            };
-            params.s = {
-                'id': -1
-            };
-            params.l = 1;
-            return $http.get('/api/v2016/inde-side-events', {
-                'params': params
             });
+        }
 
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function getStatusFacits(schema, statArry, set, ownersOnly,force) {
+
+            if(_.isBoolean(ownersOnly))force=true;
+
+            var statusFacits = {};
+            var allPromises = [];
+
+            if (ownersOnly)
+                statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set + ownersOnly));
+            else
+                statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set));
+
+            isModified(schema).then(
+                function(isModified) {
+                    if(schema==='inde-orgs') loadOrgs(true);
+                    if (!statusFacits || isModified || force) {
+                        if (!statusFacits) statusFacits = {};
+                        statusFacits.all = 0;
+                        var params = {};
+                        _.each(statArry, function(status) {
+                            params = {
+                                c: 1,
+                                q: {
+                                    'meta.status': status,
+                                }
+                            };
+                            if (ownersOnly)
+                                params.q['meta.createdBy'] = ownersOnly;
+
+                            allPromises.push($http.get('/api/v2016/' + schema, {
+                                'params': params
+                            }).then(
+                                function(res) {
+                                    statusFacits[status] = res.data.count;
+                                    statusFacits.all += res.data.count;
+                                }
+                            ));
+                        });
+                    } else {
+                        if (ownersOnly && !_.isBoolean(ownersOnly))
+                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set + ownersOnly));
+                        else
+                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set));
+
+                        allPromises.push($q(function(resolve) {
+                            resolve(statusFacits);
+                        }));
+                    }
+                }
+            );
+
+            return $q(function(resolve, reject) {
+                var time;
+                var timeOut = setInterval(function() {
+                    time = time + 10;
+                    if (statArry.length === allPromises.length || (allPromises.length === 1 && (!statusFacits || isModified)))
+                        $q.all(allPromises).then(function() {
+                            clearInterval(timeOut);
+                            if (ownersOnly)
+                                localStorage.setItem(schema + 'Facits' + set + ownersOnly, JSON.stringify(statusFacits));
+                            else
+                                localStorage.setItem(schema + 'Facits' + set, JSON.stringify(statusFacits));
+                            resolve(statusFacits);
+                        });
+                    else if (time === 5000) {
+                        clearInterval(timeOut);
+
+                        reject('Error: getting facits timed out for schema: ' + schema);
+                    }
+                }, 100);
+
+            });
         } //getStatusFacits
 
 
@@ -659,7 +666,12 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
                     }
                 }).then(function() {
                     // move temp file form temp to its proper home schema/is/filename
-                    return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {});
+
+                    return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {
+                        params: {
+                            dev: devRouter.isDev()
+                        }
+                    });
                 });
             });
         } // touch
@@ -669,12 +681,12 @@ define(['app', 'lodash', 'services/locale'], function(app, _) {
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,
             loadOrgs: loadOrgs,
-            getOwnerFacits: getOwnerFacits,
+
             requestDoc: requestDoc,
             rejectDoc: rejectDoc,
             approveDoc: approveDoc,
             cancelDoc: cancelDoc,
-            generateEventId: generateEventId,
+
             getStatusFacits: getStatusFacits,
             deleteDoc: deleteDoc,
             loadDoc: loadDoc,
