@@ -29,7 +29,7 @@
     <div>{{error}}</div>
   </div>
   <div class="row">
-    <div class="col-lg-6 col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences )">
+    <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences )">
 
       <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
         <div class="panel-heading  text-center text-nowrap">
@@ -38,7 +38,7 @@
         <div class="panel-body text-center" style="min-height:110px">
           <div class="btn-group-vertical">
             <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
-            <button class="btn btn-sm btn-info disabled">Register a Side Event (now closed)</button>
+            <!-- <button class="btn btn-sm btn-info disabled">Register a Side Event (now closed)</button> -->
             <button class="btn btn-sm btn-info" ng-click="registerNew(con._id);">Register a Side Event</button>
             <!-- ng-click="goTo(con._id);" -->
           </div>
@@ -75,7 +75,13 @@
           }
         }
       </style>
-      <div class="row">
+      <div>&nbsp;</div>
+      <div class="col-xs-8 col-xs-offset-2">
+        <div class="bs-callout bs-callout-info">
+          The side event schedule will be posted in September for COP 13 / MOP 8 / NP-MOP 2
+        </div>
+      </div>
+      <div class="row" ng-if="false">
         <div style="padding: 10px 20px 0px 20px;">
           <div class="col-lg-3">
             <div>
@@ -108,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="row" style="margin-top:6px;">
+      <div class="row" style="margin-top:6px;" ng-if="false">
         <div class="col-lg-6">
           <span style="padding-left:17px;">Showing
             <span class="badge">{{filtered.length}}</span> Side Events</span>
@@ -118,7 +124,7 @@
             <span class="badge">{{con.reservations.length}}</span> Side Events in Total</span>
         </div>
       </div>
-      <table class="table table-hover table-striped" style="margin-top:10px;">
+      <table class="table table-hover table-striped" style="margin-top:10px;" ng-if="false">
         <thead>
           <tr class="info">
             <th>ID</th>
