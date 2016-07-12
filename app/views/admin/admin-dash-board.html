@@ -56,37 +56,37 @@ background-color: #f5f5f5;
             <div class="panel-body text-center" style="min-height:110px">
               <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facets.all}" ng-click="goTo('/admin/events','chip=all',facets.all)">
                 <span class="title">All</span>
-                <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facets.all}}</span>
+                <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facets.all || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facets.draft}" ng-click="goTo('/admin/events','chip=draft',facets.draft)">
                 <span class="title">Drafts</span>
-                <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facets.draft}}</span>
+                <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facets.draft || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facets.published}" ng-click="goTo('/admin/events','chip=published',facets.published)">
-                <span class="title">Published</span>
-                <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published}}</span>
+                <span class="title">Under Review</span>
+                <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/admin/events','chip=request',facets.request)">
                 <span class="title">Requests</span>
-                <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request}}</span>
+                <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facets.canceled}" ng-click="goTo('/admin/events','chip=canceled',facets.canceled)">
                 <span class="title">Canceled</span>
-                <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facets.canceled}}</span>
+                <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facets.canceled || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facets.archived}" ng-click="goTo('/admin/events','chip=archived',facets.archived)">
                 <span class="title">Archived</span >
-                <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived}}</span>
+                <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived || 0}}</span>
               </div>
               <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/admin/events','chip=rejected',facets.rejected)">
                 <span class="title">Rejected</span>
-                <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
+                <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected || 0}}</span>
               </div>
 
             </div>
             <div class="panel-footer text-right">
               <div class="text-center">
-                <button class="btn btn-sm btn-info" ng-click="goTo('/admin/events','chip=all',1)">Go to Admin Side Event Management</button>
+                <button class="btn btn-sm btn-info" ng-click="goTo('/admin/events','chip=all',1)">Go to Side Event Administration</button>
               </div>
             </div>
           </div>
@@ -105,36 +105,36 @@ background-color: #f5f5f5;
 
                 <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facetsO.all}" ng-click="goTo('/admin/organizations','chip=all',facetsO.all)">
                   <span class="title">All</span>
-                  <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facetsO.all}}</span>
+                  <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facetsO.all || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facetsO.draft}" ng-click="goTo('/admin/organizations','chip=draft',facetsO.draft)">
                   <span class="title">Drafts</span>
-                  <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facetsO.draft}}</span>
+                  <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facetsO.draft || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facetsO.published}" ng-click="goTo('/admin/organizations','chip=published',facetsO.published)">
-                  <span class="title">Published</span>
-                  <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published}}</span>
+                  <span class="title">Under Review</span>
+                  <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/admin/organizations','chip=request',facetsO.request)">
                   <span class="title">Requests</span>
-                  <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request}}</span>
+                  <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facetsO.canceled}" ng-click="goTo('/admin/organizations','chip=canceled',facetsO.canceled)">
                   <span class="title">Canceled</span>
-                  <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facetsO.canceled}}</span>
+                  <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facetsO.canceled || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facetsO.archived}" ng-click="goTo('/admin/organizations','chip=archived',facetsO.archived)">
                   <span class="title">Archived</span>
-                  <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived}}</span>
+                  <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived || 0}}</span>
                 </div>
                 <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/admin/organizations','chip=rejected',facetsO.rejected)">
                   <span class="title">Rejected</span>
-                  <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
+                  <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected || 0}}</span>
                 </div>
             </div>
             <div class="panel-footer text-right">
               <div class="text-center">
-                <button class="btn btn-sm btn-info" ng-click="goTo('/admin/organizations','chip=all',1)">Go to Admin Organization Management</button>
+                <button class="btn btn-sm btn-info" ng-click="goTo('/admin/organizations','chip=all',1)">Go to Organization Administration</button>
               </div>
             </div>
           </div>
@@ -143,141 +143,6 @@ background-color: #f5f5f5;
 
       </div>
 
-        <div class="row">
-
-
-        <div class="  col-lg-12 col-xs-12">
-          <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
-            <div class="panel-heading  text-center">
-              <h2 style="color:inherit">Schedules</h2>
-              <div>
-                <div    >
-                    <label>Select a Meeting</label>
-                      <select id="editForm.meeting" class="form-control" ng-model="conference" name="Select a Meeting"  ng-change="loadSides(conference)" >
-
-                        <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
-                      </select>
-
-                        <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
-                </div>
-              </div>
-            </div>
-            <div class="panel-body" style="min-height:110px">
-
-              <div>
-              </div>
-<style>
-@-moz-document url-prefix() {
-  fieldset { display: table-cell; }
-}
-</style>
-<div class="row">
-
-
-<div class="  col-lg-12 col-xs-12">
-  <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
-    <div class="panel-heading  text-center">
-      <h2 style="color:inherit">Schedules</h2>
-      <div>
-        <div    >
-            <label>Select a Meeting</label>
-              <select id="editForm.meeting" class="form-control" ng-model="conference" name="Select a Meeting"  ng-change="loadSides(conference)" >
-
-                <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.acronym}} </option>
-              </select>
-
-                <p ng-show="editForm.meeting.$error.required && submitted" class="help-block">A meeting is required.</p>
-        </div>
-      </div>
-    </div>
-    <div class="panel-body" style="min-height:110px">
-
-      <div>
-      </div>
-<style>
-@-moz-document url-prefix() {
-fieldset { display: table-cell; }
-}
-</style>
-<div class="row">
-<div class="col-lg-3">
-      <div class="table-responsive">
-        <div    >
-
-              <select id="editForm.meeting" class="form-control" ng-model="day" >
-                <option value="" selected>Day</option>
-                <option ng-repeat="docObj in options.days | orderBy:'value'" value="{{docObj.value}}"  >{{docObj.title}} </option>
-              </select>
-
-        </div>
-      </div>
-</div>
-<div class="col-lg-3">
-      <div class="table-responsive">
-        <div    >
-
-              <select id="editForm.meeting" class="form-control" ng-model="day" >
-                <option value="" selected> Time</option>
-                <option ng-repeat="docObj in options.times | orderBy:'value'" value="{{docObj.value}}"  >{{docObj.title}} </option>
-              </select>
-
-        </div>
-      </div>
-</div>
-</div>
-<table class="table table-hover table-striped">
-<thead>
-<tr >
-  <th>ID</th>
-  <th>Date</th>
-  <th>Location</th>
-  <th>Title</th>
-  <!-- <th>Description</th> -->
-  <!-- <th>Status</th>                   -->
-</tr>
-</thead>
-<tbody>
-
-<tr ng-repeat-start="doc in filtered = (sides |orderBy:'startSeconds')">
-  <td>{{doc.title}}</td>
-  <td >{{doc.dayOfWeek}}<br>{{doc.tier.title}}<br><hr style="margin: 5px 0 5px 0;">{{doc.day}}<br>{{doc.time}}</td>
-  <td>{{doc.room.title}}<br>{{doc.room.location}}</td>
-  <td>{{doc.sideEvent.title}} <a><i class="fa fa-arrow-down" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;" ng-show="!doc.showDes" ></i><i class="fa fa-arrow-up" aria-hidden="true" ng-click=" doc.showDes=!doc.showDes;"  ng-show="doc.showDes" ></i></a>
-    <br><hr>
-    <div class="relative">
-    <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
-      <span class="cir" style="position:relative;">
-        <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-        <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button>
-      </span>
-      <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
-    </span>
-  </div>
-  </td>
-</tr>
-<tr></tr>
-<tr  ng-show="doc.showDes" ng-repeat-end>
-  <td><img src="{{doc.sideEvent.logo}}"></img></td>
-  <td colspan="3"><strong>Description:</strong><br>{{doc.sideEvent.description}}</td>
-</tr>
-
-</tbody>
-</table>
-</div>
-    </div>
-    <div class="panel-footer text-right">
-      <div class="text-center">
-        <button class="btn btn-sm btn-info" ng-click="goTo('/admin/events','chip=all',1)">Go to Admin Side Event Management</button>
-      </div>
-    </div>
-  </div>
 
 </div>
-</div>
-</div>
-        </div>
-      </div>
-
-
-  </section>
 </div>
