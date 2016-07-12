@@ -76,19 +76,7 @@ define(['app', 'lodash',
                             }
                         }, true);
 
-                        var query = {
-                            timezone: {
-                                $exists: true
-                            },
-                            venueId: {
-                                $exists: true
-                            }, // TMP for compatibility with coference collection;
-                            StartDate: {
-                                '$gt': {
-                                    '$date': moment.utc().subtract(1, 'year')
-                                }
-                            }
-                        };
+
 
                         //============================================================
                         //
@@ -96,7 +84,7 @@ define(['app', 'lodash',
                         function loadConferences() {
                             return $http.get("/api/v2016/event-groups", {
                                 params: {
-                                    q: query,
+                                    q: {StartDate: {'$gt':{'$date':moment.utc()}}},
                                     s: {
                                         StartDate: -1
                                     }
@@ -609,7 +597,7 @@ define(['app', 'lodash',
 
                             $scope.doc.meta.status = 'draft';
                             if (!$scope.doc.id) {
-                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() { 
+                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                                     $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
                                 }).catch(function onerror(response) {
                                     $scope.onError(response);
