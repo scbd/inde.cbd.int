@@ -23,7 +23,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                 var query = {
                     timezone: { $exists: true },
                     venueId:  { $exists: true }, // TMP for compatibility with coference collection;
-                    StartDate: {'$gt':{'$date':moment.utc().subtract(1,'year')}}
+                    StartDate: {'$gt':{'$date':moment.utc()}}
                 };
                 loadAllOrgsAndImages().then(
                     $http.get('/api/v2016/event-groups', { params : { q : query, s : { StartDate : -1 } } }).then(function(conf) {
@@ -193,14 +193,6 @@ define(['app', 'lodash', 'jquery', 'moment',
 
             } // loadDocs
 
-            //=======================================================================
-            //
-            //=======================================================================
-            $scope.showDesc = function(doc) {
-                //$timeout(function(){
-                doc.showDes = !doc.showDes;
-                //});
-            };
 
             //=======================================================================
             //
