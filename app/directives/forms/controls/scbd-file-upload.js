@@ -1,6 +1,6 @@
-define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string'], function(app, _, template) {
+define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','services/filters'], function(app, _, template) {
     'use strict';
-    app.directive('scbdFileUpload', ["$http", "Upload", "$timeout", 'mongoStorage','$sce', function($http, Upload, $timeout, mongoStorage,$sce) {
+    app.directive('scbdFileUpload', ["$http", "Upload", "$timeout", 'mongoStorage','$sce','devRouter', function($http, Upload, $timeout, mongoStorage,$sce,devRouter) {
         return {
             restrict: 'E',
             template: template,
@@ -61,7 +61,13 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string'], fun
 
                             if (!file.$error && $attrs.schema)
                                 mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function() {
-                                  pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
+
+
+                                  if(!devRouter.isDev())
+                                    pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
+                                  else
+                                    pubDoc.src = 'https://s3.amazonaws.com/dev.mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
+
                                   pubDoc.size = file.size;
                                   pubDoc.name = file.name;
                                     if ($scope.isImage)
@@ -79,14 +85,6 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string'], fun
             }
         };
     }]);
-    app.filter('fileSize', function() {
-        return function(size) {
-            if (size < 1024)
-                return Math.ceil(size) + ' B';
-            else if (size < 1048576)
-                return Math.ceil((Number(size) / 1024)) + ' KB';
-            else
-              return Math.ceil((Number(size) / 1048576)) + ' MB';
-        };
-    });
+
+
 });
