@@ -51,7 +51,7 @@ define(['app',
                 $scope.$watch('doc', function() {
                     if ($scope.doc && (_.isArray($scope.doc.hostOrgs) && $scope.doc.hostOrgs.length !== 0))
                         buldBindingMirror(true);
-                    else if ($scope.docs && !_.isEmpty($scope.docs)) {
+                    else if (!($scope.docs && !_.isEmpty($scope.docs))) {
                         $scope.doc.hostOrgs = [];
                         $scope.loadList();
                     }
