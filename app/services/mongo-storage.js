@@ -770,13 +770,22 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             return true;
             else return false;
         }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isOrgParty(doc){
+
+            if(doc.code && doc.code.length===2 && doc.identifier && doc.identifier.length===2)
+            return true;
+            else return false;
+        }
         return {
             getCountries: countries,
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,
             loadOrgs: loadOrgs,
 isPublishable:isPublishable,
-
+isOrgParty:isOrgParty,
             isNotPublishable:isNotPublishable,
             isArchived: isArchived,
             isDeleted: isDeleted,

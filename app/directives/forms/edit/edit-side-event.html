@@ -457,9 +457,9 @@
                               </td>
                             </tr>
 
-                            <tr ng-repeat="org in doc.hostOrgs" ng-if="isOrgPublishable(org)" >
+                            <tr ng-repeat="org in doc.hostOrgs" ng-if="isOrgPublishable(org) || isOrgParty(org)" >
 
-                              <td>
+                              <td class="text-nowrap">
                                 <img src="{{getOrgImgSource(org)}}" ng-show="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />
                                 <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
 

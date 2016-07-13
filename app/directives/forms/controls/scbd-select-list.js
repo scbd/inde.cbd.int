@@ -90,7 +90,7 @@ define(['app',
                             if (org)
                                 $scope.mirror[key] = org;
                             else {
-
+                                if(val.length>2)
                                 mongoStorage.loadDoc('inde-orgs', val).then(
                                     function(res) {
 
