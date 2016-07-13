@@ -363,13 +363,16 @@ define(['app', 'lodash',
                         _.each($scope.docs, function(doc) {
                             doc.orgs = [];
                             var foundOrg;
-                            _.each(doc.hostOrgs, function(org) {
-                                foundOrg = _.find($scope.orgs, {
-                                    _id: org
-                                });
-                                if (foundOrg)
-                                    doc.orgs.push(foundOrg);
+                            loadHostOrgs(doc).then(function(){
+                              _.each(doc.hostOrgs, function(org) {
+                                  foundOrg = _.find($scope.orgs, {
+                                      _id: org
+                                  });
+                                  if (foundOrg)
+                                      doc.orgs.push(foundOrg);
+                              });
                             });
+
                             doc.conferenceObj = _.find($scope.conferences, {
                                 '_id': doc.conference
                             });
@@ -405,6 +408,31 @@ define(['app', 'lodash',
                 });
             }; // archiveOrg
 
+            //=======================================================================
+            //
+            //=======================================================================
+            function loadHostOrgs(doc) {
+                return $q(function(resolve, reject) {
+                    if (_.isEmpty(doc.hostOrgs)) resolve(true);
+                    _.each(doc.hostOrgs, function(orgId) {
+                        if (!_.find($scope.orgs, {
+                                _id: orgId
+                            })) {
+                            mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
+                                if (!_.find($scope.orgs, {
+                                        _id: orgId
+                                    }) && mongoStorage.isPublishable(responce))
+                                    $scope.orgs.push(responce);
+                                    resolve(true);
+                            }).catch(function(){
+                              reject(false);
+                            });
+                        } else
+                            resolve(true);
+
+                    });
+                });
+            } //submitGeneral
 
             //=======================================================================
             //
