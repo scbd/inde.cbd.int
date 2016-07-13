@@ -23,6 +23,7 @@ define(['app', 'lodash',
                 transclude: false,
                 scope: {},
                 link: function($scope) {
+                        var numHostOrgs =0;
                         $scope.status = "";
                         $scope._id = $route.current.params.id;
 
@@ -73,6 +74,15 @@ define(['app', 'lodash',
                                 $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
                                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
                                 loadHostOrgs();
+                                if(numHostOrgs < $scope.doc.hostOrgs.length){
+                                  $scope.doc.validTabs.orgs=false;
+                                  $scope.doc.validTabs.contact=false;
+                                }else{
+                                  $scope.doc.validTabs.orgs=true;
+                                  if(validateResponsibleOrgs())
+                                    $scope.doc.validTabs.contact=true;
+                                }
+
                             }
                         }, true);
 
@@ -419,6 +429,11 @@ define(['app', 'lodash',
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
                                             if (!$scope.doc.videos) $scope.doc.videos = [];
+                                            if(_.isArray($scope.doc.hostOrgs))
+                                              numHostOrgs = $scope.doc.hostOrgs.length;
+                                            else
+                                                numHostOrgs = 0;
+
                                         }).catch(function onerror(response) {
 
                                             $scope.onError(response);
@@ -602,6 +617,7 @@ define(['app', 'lodash',
 
 
                             $scope.doc.meta.status = 'draft';
+                            numHostOrgs = $scope.doc.hostOrgs.length;
                             if (!$scope.doc.id) {
                                 return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                                     $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
@@ -716,7 +732,16 @@ define(['app', 'lodash',
                             return mongoStorage.isPublishable(orgFound);
                         } //submitGeneral
                         $scope.isOrgPublishable = isOrgPublishable;
-
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function isOrgParty(orgId) {
+                            var orgFound = _.find($scope.options.orgs, {
+                                _id: orgId
+                            });
+                            return mongoStorage.isOrgParty(orgFound);
+                        } //submitGeneral
+                        $scope.isOrgParty = isOrgParty;
 
                         //=======================================================================
                         //
@@ -879,6 +904,15 @@ define(['app', 'lodash',
                             }
                         } //submitGeneral
 
+
+function validateResponsibleOrgs (){
+  var isValid =true;
+  _.each($scope.doc.responsibleOrgs, function(resOrg) {
+      if(!resOrg.lastName || !resOrg.email)
+        isValid =false;
+  });
+  return isValid;
+}
                         //=======================================================================
                         //
                         //=======================================================================
