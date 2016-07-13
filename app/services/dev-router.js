@@ -8,7 +8,7 @@ define(['app'], function(app) {
     app.factory('devRouter', [function() {
 
         var domain = document.location.hostname.replace(/[^\.]+\./, '');
-        var production = false; // change to true to work on production accounts
+        var production = true; // change to true to work on production accounts
         if ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
             domain = 'cbddev.xyz';
         else
@@ -16,16 +16,22 @@ define(['app'], function(app) {
 
         var ACCOUNTS_URI = 'https://accounts.' + domain;
 
+
         /***************************************************************************************
          *
 
          ***************************************************************************************/
         function isDev() {
-            return ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production);
+          if((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
+            return true;
+            else {
+              return '';
+            }
         }
 
         return {
             ACCOUNTS_URI: ACCOUNTS_URI,
+            DOMAIN: domain,
             isDev: isDev
         };
     }]);
