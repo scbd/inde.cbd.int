@@ -676,11 +676,116 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             });
         } // touch
 
+        //=======================================================================
+        //
+        //=======================================================================
+        function isArchived (doc){
+
+            if(doc && doc.meta && doc.meta.status==='archived')
+            return true;
+            else return false;
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isDeleted(doc){
+
+            if(doc && doc.meta && doc.meta.status==='deleted')
+            return true;
+            else return false;
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isCanceled(doc){
+
+            if(doc && doc.meta && doc.meta.status==='canceled')
+            return true;
+            else return false;
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isRejected(doc){
+
+            if(doc && doc.meta && doc.meta.status==='rejected')
+            return true;
+            else return false;
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isDraft(doc){
+
+            if(doc && doc.meta && doc.meta.status==='draft')
+            return true;
+            else return false;
+        }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function isPublished(doc){
+
+            if(doc && doc.meta && doc.meta.status==='published')
+            return true;
+            else return false;
+        }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function isUnderReview(doc){
+
+            if(doc && doc.meta && doc.meta.status==='published')
+            return true;
+            else return false;
+        }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function isRequest(doc){
+
+            if(doc && doc.meta && doc.meta.status==='request')
+            return true;
+            else return false;
+        }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function isNotPublishable(doc){
+
+            if(isRejected(doc) || isCanceled(doc) || isDeleted(doc) || isArchived (doc))
+            return true;
+            else return false;
+        }
+        //=======================================================================
+        //
+        //=======================================================================
+        function isPublishable(doc){
+
+            if(isDraft(doc) || isRequest(doc) || isPublished(doc))
+            return true;
+            else return false;
+        }
         return {
             getCountries: countries,
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,
             loadOrgs: loadOrgs,
+isPublishable:isPublishable,
+
+            isNotPublishable:isNotPublishable,
+            isArchived: isArchived,
+            isDeleted: isDeleted,
+            isCanceled: isCanceled,
+            isRejected: isRejected,
+            isDraft:isDraft,
+            isPublished:isPublished,
+            isUnderReview:isUnderReview,
+            isRequest:isRequest,
 
             requestDoc: requestDoc,
             rejectDoc: rejectDoc,

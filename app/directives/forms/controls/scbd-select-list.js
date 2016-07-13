@@ -80,36 +80,36 @@ define(['app',
                     var org;
                     $scope.mirror = [];
 
-                        if ($scope.binding.length) numOrgs = $scope.binding.length;
-                        if ($scope.docs && $scope.docs.length > 0)
-                            _.each($scope.binding, function(val, key) {
-                                org = _.find($scope.docs, {
-                                    '_id': val
-                                });
-
-                                if (org)
-                                    $scope.mirror[key] = org;
-                                else {
-
-                                    mongoStorage.loadDoc('inde-orgs', val).then(
-                                        function(res) {
-
-                                            if (_.isObject(res) && res.meta && (res.meta.status === 'published' || res.meta.status === 'draft' || res.meta.status === 'request')) {
-                                                $scope.mirror[key] = res;
-
-                                                $scope.loadList(true).then(function() {
-                                                    $scope.search = res.title;
-                                                });
-
-                                            } else {
-                                                numOrgs = numOrgs - 1;
-                                                $scope.binding.splice(key, 1);
-                                            }
-                                        }
-                                    );
-                                }
-
+                    if ($scope.binding.length) numOrgs = $scope.binding.length;
+                    if ($scope.docs && $scope.docs.length > 0)
+                        _.each($scope.binding, function(val, key) {
+                            org = _.find($scope.docs, {
+                                '_id': val
                             });
+
+                            if (org)
+                                $scope.mirror[key] = org;
+                            else {
+
+                                mongoStorage.loadDoc('inde-orgs', val).then(
+                                    function(res) {
+
+                                        if (_.isObject(res) && res.meta && (res.meta.status === 'published' || res.meta.status === 'draft' || res.meta.status === 'request')) {
+                                            $scope.mirror[key] = res;
+
+                                            $scope.loadList(true).then(function() {
+                                                $scope.search = res.title;
+                                            });
+
+                                        } else {
+                                            numOrgs = numOrgs - 1;
+                                            $scope.binding.splice(key, 1);
+                                        }
+                                    }
+                                );
+                            }
+
+                        });
                 }
 
                 //==================================
@@ -118,18 +118,18 @@ define(['app',
                 function setChips() {
 
 
-                        if ($scope.binding)
-                            if ($scope.binding.length > 0) {
-                                $scope.loading = false;
+                    if ($scope.binding)
+                        if ($scope.binding.length > 0) {
+                            $scope.loading = false;
 
-                                _.each($scope.docs, function(doc) {
-                                    _.each($scope.binding, function(id) {
-                                        if (doc._id === id)
-                                            doc.selected = true;
-                                    });
+                            _.each($scope.docs, function(doc) {
+                                _.each($scope.binding, function(id) {
+                                    if (doc._id === id)
+                                        doc.selected = true;
                                 });
+                            });
 
-                            }
+                        }
 
 
                 } // set chips
@@ -168,9 +168,26 @@ define(['app',
                         return mongoStorage.loadOrgs().then(function(res) {
                             $scope.docs = res;
                             setChips();
-                        });
+                        }).then(loadHostOrgs);
                 };
+                //=======================================================================
+                //
+                //=======================================================================
+                function loadHostOrgs() {
 
+                    _.each($scope.binding, function(orgId) {
+                        if (!_.find($scope.docs, {
+                                _id: orgId
+                            })) {
+                            mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
+                                if (!_.find($scope.docs, {
+                                        _id: orgId
+                                    }) && mongoStorage.isPublishable(responce))
+                                    $scope.docs.push(responce);
+                            });
+                        }
+                    });
+                } //submitGeneral
 
                 //=======================================================================
                 //

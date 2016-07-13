@@ -457,7 +457,7 @@
                               </td>
                             </tr>
 
-                            <tr ng-repeat="org in doc.hostOrgs" ng-show="getOrgName(org)">
+                            <tr ng-repeat="org in doc.hostOrgs" ng-if="isOrgPublishable(org)" >
 
                               <td>
                                 <img src="{{getOrgImgSource(org)}}" ng-show="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />

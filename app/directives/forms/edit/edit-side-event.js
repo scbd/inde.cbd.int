@@ -72,7 +72,7 @@ define(['app', 'lodash',
                                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
                                 $(document.getElementById('hostOrg-error')).removeClass('has-error-div');
                                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
-
+                                loadHostOrgs();
                             }
                         }, true);
 
@@ -84,7 +84,13 @@ define(['app', 'lodash',
                         function loadConferences() {
                             return $http.get("/api/v2016/event-groups", {
                                 params: {
-                                    q: {StartDate: {'$gt':{'$date':moment.utc()}}},
+                                    q: {
+                                        StartDate: {
+                                            '$gt': {
+                                                '$date': moment.utc()
+                                            }
+                                        }
+                                    },
                                     s: {
                                         StartDate: -1
                                     }
@@ -654,7 +660,7 @@ define(['app', 'lodash',
                                 orgFound = _.find($scope.options.orgs, {
                                     _id: id
                                 });
-                                if (orgFound) return orgFound.title;
+                                if (orgFound) return orgFound.acronym;
 
 
                             }
@@ -678,6 +684,38 @@ define(['app', 'lodash',
                                     break;
                             }
                         };
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function loadHostOrgs() {
+                            _.each($scope.doc.hostOrgs, function(orgId) {
+                                if (!_.find($scope.options.orgs, {
+                                        _id: orgId
+                                    })) {
+                                    mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
+                                        if (!_.find($scope.docs, {
+                                                _id: orgId
+                                            }) && mongoStorage.isPublishable(responce))
+                                            $scope.options.orgs.push(responce);
+
+                                    });
+                                }
+                            });
+                        } //submitGeneral
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function isOrgPublishable(orgId) {
+                            var orgFound = _.find($scope.options.orgs, {
+                                _id: orgId
+                            });
+                            return mongoStorage.isPublishable(orgFound);
+                        } //submitGeneral
+                        $scope.isOrgPublishable = isOrgPublishable;
 
 
                         //=======================================================================
