@@ -298,7 +298,7 @@ define(['app', 'lodash',
             //
             //============================================================
             function loadOrgs() {
-                mongoStorage.loadOrgs().then(function(orgs) {
+                return mongoStorage.loadOrgs().then(function(orgs) {
                     $scope.orgs = orgs;
                 });
             }
