@@ -767,6 +767,8 @@ define(['app', 'lodash',
                                     $scope.tab = 'logistics';
                                     $('#logistics-tab').tab('show');
                                 });
+                                if(!$scope.doc.conference)
+                                    $scope.doc.conference='56f14b1e49a977d560a27ede';
                                 $scope.saveDoc();
                             }
                         } //submitGeneral
