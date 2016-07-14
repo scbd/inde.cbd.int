@@ -1,6 +1,6 @@
 define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) {
 
-    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter','devRouter', function($http, authentication, $q, locale, $filter,devRouter) {
+    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter', 'devRouter', function($http, authentication, $q, locale, $filter, devRouter) {
 
         var user;
         var clientOrg = 0; // means cbd
@@ -28,12 +28,12 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 if (_.isNumber(document.meta.modifiedOn))
                     document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
 
-                return $http.put(url, document, params).then(function(){
-                  authentication.getUser().then(function(user) {
-                      var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                return $http.put(url, document, params).then(function() {
+                    authentication.getUser().then(function(user) {
+                        var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
                       getStatusFacits(schema, statuses,'all', user.userID,true);
                       getStatusFacits(schema, statuses,'all',true);
-                  });
+                    });
                 });
             } else {
                 if (!document.meta) document.meta = {
@@ -41,11 +41,11 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 };
                 if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
                 return $http.post(url, document).then(function(res) {
-                  authentication.getUser().then(function(user) {
-                      var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                    authentication.getUser().then(function(user) {
+                        var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
                       getStatusFacits(schema, statuses,'all', user.userID,true);
                       getStatusFacits(schema, statuses,'all',true);
-                  });
+                    });
                     return res;
                 });
             } //create
@@ -64,10 +64,10 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                     if (!localStorage.getItem('allOrgs') || isModified || force) {
                         params = {
                             q: {
-                              'meta.status': 'published',
-                              'meta.v': {
-                                  $ne: 0
-                              }
+                                'meta.status': 'published',
+                                'meta.v': {
+                                    $ne: 0
+                                }
                             }
                         };
                         return $http.get('/api/v2016/inde-orgs', {
@@ -163,9 +163,9 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                         if (!_.isEmpty(response.data))
                             return response.data;
                         else
-                        return false;
+                            return false;
 
-                });
+                    });
         }
 
 
@@ -575,7 +575,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
             isModified(schema).then(
                 function(isModified) {
-                    if(schema==='inde-orgs') loadOrgs(true);
+                    if (schema === 'inde-orgs') loadOrgs(true);
                     if (!statusFacits || isModified || force) {
                         if (!statusFacits) statusFacits = {};
                         statusFacits.all = 0;
@@ -679,104 +679,104 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //=======================================================================
         //
         //=======================================================================
-        function isArchived (doc){
+        function isArchived(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='archived')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'archived')
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isDeleted(doc){
+        function isDeleted(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='deleted')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'deleted')
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isCanceled(doc){
+        function isCanceled(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='canceled')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'canceled')
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isRejected(doc){
+        function isRejected(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='rejected')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'rejected')
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isDraft(doc){
+        function isDraft(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='draft')
-            return true;
-            else return false;
-        }
-
-        //=======================================================================
-        //
-        //=======================================================================
-        function isPublished(doc){
-
-            if(doc && doc.meta && doc.meta.status==='published')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'draft')
+                return true;
             else return false;
         }
 
         //=======================================================================
         //
         //=======================================================================
-        function isUnderReview(doc){
+        function isPublished(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='published')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'published')
+                return true;
             else return false;
         }
 
         //=======================================================================
         //
         //=======================================================================
-        function isRequest(doc){
+        function isUnderReview(doc) {
 
-            if(doc && doc.meta && doc.meta.status==='request')
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'published')
+                return true;
             else return false;
         }
 
         //=======================================================================
         //
         //=======================================================================
-        function isNotPublishable(doc){
+        function isRequest(doc) {
 
-            if(isRejected(doc) || isCanceled(doc) || isDeleted(doc) || isArchived (doc))
-            return true;
+            if (doc && doc.meta && doc.meta.status === 'request')
+                return true;
+            else return false;
+        }
+
+        //=======================================================================
+        //
+        //=======================================================================
+        function isNotPublishable(doc) {
+
+            if (isRejected(doc) || isCanceled(doc) || isDeleted(doc) || isArchived(doc))
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isPublishable(doc){
+        function isPublishable(doc) {
 
-            if(isDraft(doc) || isRequest(doc) || isPublished(doc))
-            return true;
+            if (isDraft(doc) || isRequest(doc) || isPublished(doc))
+                return true;
             else return false;
         }
         //=======================================================================
         //
         //=======================================================================
-        function isOrgParty(doc){
+        function isOrgParty(doc) {
 
-            if(doc.code && doc.code.length===2 && doc.identifier && doc.identifier.length===2)
-            return true;
+            if (doc && doc.code && doc.code.length === 2 && doc.identifier && doc.identifier.length === 2)
+                return true;
             else return false;
         }
         return {
@@ -784,17 +784,17 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,
             loadOrgs: loadOrgs,
-isPublishable:isPublishable,
-isOrgParty:isOrgParty,
-            isNotPublishable:isNotPublishable,
+            isPublishable: isPublishable,
+            isOrgParty: isOrgParty,
+            isNotPublishable: isNotPublishable,
             isArchived: isArchived,
             isDeleted: isDeleted,
             isCanceled: isCanceled,
             isRejected: isRejected,
-            isDraft:isDraft,
-            isPublished:isPublished,
-            isUnderReview:isUnderReview,
-            isRequest:isRequest,
+            isDraft: isDraft,
+            isPublished: isPublished,
+            isUnderReview: isUnderReview,
+            isRequest: isRequest,
 
             requestDoc: requestDoc,
             rejectDoc: rejectDoc,
