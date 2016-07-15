@@ -359,49 +359,52 @@ define(['app','lodash'],function(app,_) {
         //============================================================
         function isOpen(navId) {
 
-              return whenNavCtrlLoaded(navId).then(function(){return navRegistry[navId].isOpen;});
+              if(navRegistry[navId])
+                return navRegistry[navId].isOpen();
+              else
+                return false;
         }
+
         //============================================================
         //
         //
         //============================================================
         function toggle(navId) {
 
-              whenNavCtrlLoaded(navId).then(navRegistry[navId].toggle());
+              whenNavCtrlLoaded(navId).then(function(nav){nav.toggle();}).catch(function(err){throw err;});
         }
+
         //=======================================================================
         //
         //=======================================================================
         function whenNavCtrlLoaded(navId) {
-          var deferred = $q.defer();
-          deferred.resolved = 0;
-
+          var resolved = false;
+          return $q(function(resolve, reject){
           var cancelId = setInterval(function() {
             if (navRegistry[navId]) {
 
-              deferred.resolve(navRegistry[navId]);
-              deferred.resolved = 1;
+              resolved=true;
+              resolve(navRegistry[navId]);
               clearInterval(cancelId);
-              return deferred.promise;
             }
           }, 100);
-          setTimeout(function() {
-            if (!deferred.resolved) {
-              deferred.reject('Nav Controler is not loaded within 5 seconds.');
+          $timeout(function() {
+            if (!resolved) {
+              reject('Nav Controler is not loaded within 5 seconds.');
               clearInterval(cancelId);
             }
           }, 5000);
-          return deferred.promise;
+        });
         }
 
-        //============================================================
-        //
-        //============================================================
-        function addMenu() {
-              _.each(navRegistry,function(navCtrl){
-                  navCtrl.close();
-              });
-        }
+        // //============================================================
+        // //
+        // //============================================================
+        // function addMenu() {
+        //       _.each(navRegistry,function(navCtrl){
+        //           navCtrl.close();
+        //       });
+        // }
         //============================================================
         //
         //============================================================
@@ -464,10 +467,33 @@ define(['app','lodash'],function(app,_) {
 
           		return (supported !== undefined && supported.length > 0 && supported !== "none");
             }
+            function buildLinks(menu, toggle) {
+                if (!menu[0].links)
+                    menu[0].links = [];
 
+                var section = toggle || menu;
+                _.each(section, function(item) {
+                    if (item.type === 'link')
+                        menu[0].links.push(item);
+                    if (item.type === 'toggle')
+                        buildLinks(menu, item.pages);
+                });
+            }
+
+            function setPathOfLink(menu, linkName, value) {
+
+                var link = _.find(menu[0].links, {
+                    'name': linkName
+                });
+                if (link)
+                    link.path = value;
+                else throw 'Error: Menu link not found by the name of: '+linkName;
+            }
             validateMenus();
 
           return  {
+            buildLinks:buildLinks,
+            setPathOfLink:setPathOfLink,
             history:history,
             cssTransforms3d:cssTransforms3d,
             closeAllActive:closeAllActive,
@@ -477,7 +503,7 @@ define(['app','lodash'],function(app,_) {
             close: close,
             open: open,
             menus:menus,
-            addMenu:addMenu,
+
             getMenu:getMenu,
             cbdMenu:menus.cbdMenu,
             accMenu:menus.accMenu,
