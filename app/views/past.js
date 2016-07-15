@@ -1,6 +1,6 @@
 define(['app', 'lodash', 'moment'], function(app, _, moment) {
 
-    return ['mongoStorage', '$route', '$http', function(mongoStorage, $route, $http) {
+    return ['mongoStorage', '$route', '$http', '$timeout',function(mongoStorage, $route, $http,$timeout) {
 
         var _ctrl = this;
         _ctrl.hasError = hasError;
@@ -22,7 +22,7 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
             _ctrl.subjects = $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
                 cache: true
             });
-            
+
             mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
                 allOrgs = orgs;
                 _.each(allOrgs, function(org) {
@@ -42,7 +42,6 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
 
             mongoStorage.getReservations('', '', '', '570fd0a52e3fa5cfa61d90ee', _ctrl.search).then(function(res) {
                 _ctrl.reservations = res.data;
-
                 var cancelOrgLoad = setInterval(function() {
                     if (allOrgs && length > 0) {
                         _.each(_ctrl.reservations, function(res) {
@@ -64,7 +63,7 @@ define(['app', 'lodash', 'moment'], function(app, _, moment) {
                     if (countCyc === 5 || allOrgs.length > 0) // hack
                         clearInterval(cancelOrgLoad);
                 }, 1000); //interval
-
+                $timeout(function(){clearInterval(cancelOrgLoad);},5000);
             }).catch(function onerror(response) {
               onError(response);
             });
