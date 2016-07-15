@@ -1,6 +1,6 @@
 define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) {
 
-    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter', 'devRouter', function($http, authentication, $q, locale, $filter, devRouter) {
+    app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter', 'devRouter','$timeout', function($http, authentication, $q, locale, $filter, devRouter,$timeout) {
 
         var user;
         var clientOrg = 0; // means cbd
@@ -31,8 +31,9 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 return $http.put(url, document, params).then(function() {
                     authentication.getUser().then(function(user) {
                         var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
-                      getStatusFacits(schema, statuses,'all', user.userID,true);
-                      getStatusFacits(schema, statuses,'all',true);
+                        getStatusFacits(schema, statuses, user.userID, true);
+                        getStatusFacits(schema, statuses, true);
+
                     });
                 });
             } else {
@@ -43,13 +44,85 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 return $http.post(url, document).then(function(res) {
                     authentication.getUser().then(function(user) {
                         var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
-                      getStatusFacits(schema, statuses,'all', user.userID,true);
-                      getStatusFacits(schema, statuses,'all',true);
+                        getStatusFacits(schema, statuses, user.userID, true);
+                        getStatusFacits(schema, statuses, true);
+
                     });
                     return res;
                 });
             } //create
         }
+        //============================================================
+        //
+        //============================================================
+        function loadConferences(force) {
+            var allPromises = [];
+            var conferences =[];
+            var numPromises= 1;
+            var modified = true;
+
+            allPromises[0] = isModified('conferences').then(
+                function(isModified) {
+                    modified = (!localStorage.getItem('allConferences') || isModified || force);
+                    var params = {};
+                    if (modified) {
+                        params = {
+                            q: {}
+                          };
+                        numPromises++;
+                        allPromises[1]= $http.get('/api/v2016/conferences', {
+                            'params': params
+                        }).then(function(res) {
+                              var oidArray = [];
+                              conferences=res.data;
+                              numPromises+=conferences.length;
+                              _.each(conferences,function(conf,key){
+                                oidArray=[];
+                                      _.each(conf.MajorEventIDs, function(id) {
+                                          oidArray.push({
+                                              '$oid': id
+                                          });
+                                      });
+
+                                      allPromises.push($http.get("/api/v2016/meetings", {
+                                          params: {
+                                              q: {
+                                                  _id: {
+                                                      $in: oidArray
+                                                  }
+                                              }
+                                          }
+                                      }).then(function(m) {
+                                          conferences[key].meetings = m.data;
+
+                                          //localStorage.setItem('allConferences', JSON.stringify(conferences));
+                                      }));
+                              });
+                          });
+
+                    } else{
+                            conferences=JSON.parse(localStorage.getItem('allConferences'));
+                            numPromises++;
+                            allPromises.push($q(function(resolve) {resolve(conferences);}));
+                    }
+                });
+                return $q(function(resolve, reject) {
+                    var timeOut = setInterval(function() {
+                        if ((allPromises.length === 2 && !modified) || (modified && numPromises === allPromises.length && allPromises.length > 2) )
+                            $q.all(allPromises).then(function() {
+                                clearInterval(timeOut);
+                                if(modified)
+                                  localStorage.setItem('allConferences', JSON.stringify(conferences));
+                                resolve(conferences);
+                            });
+
+                    }, 100);
+                    $timeout(function(){
+                      clearInterval(timeOut);
+                      reject('Error: getting conferences timed out 5 seconds');
+                    },5000);
+                });
+        } // loadDocs
 
 
         //============================================================
@@ -561,24 +634,28 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //=======================================================================
         //
         //=======================================================================
-        function getStatusFacits(schema, statArry, set, ownersOnly,force) {
+        function getStatusFacits(schema, statArry, ownersOnly, force) {
 
-            if(_.isBoolean(ownersOnly))force=true;
+            if (ownersOnly && _.isBoolean(ownersOnly) && !force) force = true;
 
             var statusFacits = {};
             var allPromises = [];
+            var loacalStorageName = schema + 'Facits';
 
-            if (ownersOnly)
-                statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set + ownersOnly));
-            else
-                statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set));
+            if (ownersOnly && !_.isBoolean(ownersOnly))
+                loacalStorageName = schema + 'Facits' + ownersOnly;
+
+
+            statusFacits = JSON.parse(localStorage.getItem(loacalStorageName));
 
             isModified(schema).then(
                 function(isModified) {
                     if (schema === 'inde-orgs') loadOrgs(true);
                     if (!statusFacits || isModified || force) {
+
                         if (!statusFacits) statusFacits = {};
                         statusFacits.all = 0;
+                        statusFacits.allNoArchived = 0;
                         var params = {};
                         _.each(statArry, function(status) {
                             params = {
@@ -587,7 +664,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                                     'meta.status': status,
                                 }
                             };
-                            if (ownersOnly)
+                            if (ownersOnly && !_.isBoolean(ownersOnly))
                                 params.q['meta.createdBy'] = ownersOnly;
 
                             allPromises.push($http.get('/api/v2016/' + schema, {
@@ -595,15 +672,18 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                             }).then(
                                 function(res) {
                                     statusFacits[status] = res.data.count;
+                                    if (status !== 'archived')
+                                        statusFacits.allNoArchived += res.data.count;
+
                                     statusFacits.all += res.data.count;
                                 }
                             ));
                         });
                     } else {
                         if (ownersOnly && !_.isBoolean(ownersOnly))
-                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set + ownersOnly));
+                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + ownersOnly));
                         else
-                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits' + set));
+                            statusFacits = JSON.parse(localStorage.getItem(schema + 'Facits'));
 
                         allPromises.push($q(function(resolve) {
                             resolve(statusFacits);
@@ -615,14 +695,14 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             return $q(function(resolve, reject) {
                 var time;
                 var timeOut = setInterval(function() {
-                    time = time + 10;
+                    time = time + 100;
                     if (statArry.length === allPromises.length || (allPromises.length === 1 && (!statusFacits || isModified)))
                         $q.all(allPromises).then(function() {
                             clearInterval(timeOut);
-                            if (ownersOnly)
-                                localStorage.setItem(schema + 'Facits' + set + ownersOnly, JSON.stringify(statusFacits));
+                            if (ownersOnly && !_.isBoolean(ownersOnly))
+                                localStorage.setItem(schema + 'Facits' + ownersOnly, JSON.stringify(statusFacits));
                             else
-                                localStorage.setItem(schema + 'Facits' + set, JSON.stringify(statusFacits));
+                                localStorage.setItem(schema + 'Facits', JSON.stringify(statusFacits));
                             resolve(statusFacits);
                         });
                     else if (time === 5000) {
@@ -784,6 +864,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,
             loadOrgs: loadOrgs,
+            loadConferences:loadConferences,
             isPublishable: isPublishable,
             isOrgParty: isOrgParty,
             isNotPublishable: isNotPublishable,
