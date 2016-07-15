@@ -518,12 +518,9 @@ define(['app', 'lodash',
                                     userId = $scope.doc.meta.createdBy;
                                 }
 
-
                                 return $http.get('/api/v2013/users/' + userId).then(function onsuccess(response) {
-                                    //data = response.data;
                                     if (!$scope.doc) $scope.doc = {};
                                     if (!$scope.doc.contact) $scope.doc.contact = {};
-
 
                                     $scope.doc.contact.email = _.clone(response.data.Email);
                                     $scope.doc.contact.address = _.clone(response.data.Address);
@@ -564,8 +561,6 @@ define(['app', 'lodash',
                             }).then(function(o) {
                                 return Thesaurus.buildTree(o.data);
                             })
-
-
                         };
 
 
@@ -580,6 +575,7 @@ define(['app', 'lodash',
                                 $scope.onError(response);
                             });
                         }
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -591,7 +587,6 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         $scope.saveDoc = function() {
-
 
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
@@ -692,7 +687,6 @@ define(['app', 'lodash',
                                                 _id: orgId
                                             }) && mongoStorage.isPublishable(responce))
                                             $scope.options.orgs.push(responce);
-
                                     });
                                 }
                             });
