@@ -11,13 +11,13 @@ define(['app', '../../services/mongo-storage'], function(app) {
             //=======================================================================
             function init() {
                 authentication.getUser().then(function(user) {
-                    mongoStorage.getStatusFacits('inde-side-events', statuses,'all', user.userID).then(
+                    mongoStorage.getStatusFacits('inde-side-events', statuses, user.userID).then(
                         function(data) {
                             $scope.facets = data;
                         }
                     );
 
-                    $scope.facets = mongoStorage.getStatusFacits('inde-orgs', statuses,'all', user.userID).then(
+                    $scope.facets = mongoStorage.getStatusFacits('inde-orgs', statuses, user.userID).then(
                         function(data) {
                             $scope.facetsO = data;
                         }

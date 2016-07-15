@@ -12,13 +12,13 @@ define(['app', 'lodash',  '../../services/mongo-storage'], function(app, _) {
             //
             //=======================================================================
             function init() {
-                mongoStorage.getStatusFacits('inde-side-events', statuses,'all').then(
+                mongoStorage.getStatusFacits('inde-side-events', statuses).then(
                     function(data) {
                         $scope.facets = data;
                     }
                 );
 
-                $scope.facets = mongoStorage.getStatusFacits('inde-orgs', statuses,'all').then(
+                $scope.facets = mongoStorage.getStatusFacits('inde-orgs', statuses).then(
                     function(data) {
                         $scope.facetsO = data;
                     }
