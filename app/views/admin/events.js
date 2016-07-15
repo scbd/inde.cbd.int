@@ -7,78 +7,14 @@ define(['app', 'lodash',
     'ngDialog'
 ], function(app, _, deleteDialog) {
 
-    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog',
-        function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog) {
+    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog',
+        function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog) {
 
-            $scope.loading = false;
+            $scope.loading = true;
             $scope.schema = "inde-side-events";
-            $scope.createURL = '/manage/events/new';
-            $scope.editURL = '/manage/events/';
-
-            $scope.toggle = dashMenu.toggle;
-            $scope.sections = dashMenu.getMenu('admin');
-            $scope.sectionsOptions = dashMenu.getMenu('adminOptions');
-
-
-
-            var sec = _.findWhere($scope.sectionsOptions, {
-                name: 'Sort'
-            });
-            sec.path = sortOrder;
-            sec = _.findWhere($scope.sectionsOptions, {
-                name: 'Archives'
-            });
-            sec.path = toggleArchived;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'All'
-            });
-            sec.path = selectChipAll;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'Drafts'
-            });
-            sec.path = selectChipDraft;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'Requests'
-            });
-            sec.path = selectChipRequest;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'Approved'
-            });
-            sec.path = selectChipApproved;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'Canceled'
-            });
-            sec.path = selectChipCanceled;
-            sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                name: 'Rejected'
-            });
-            sec.path = selectChipRejected;
-            sec = _.findWhere($scope.sectionsOptions[6].pages, {
-                name: 'Card View'
-            });
-            sec.path = cardView;
-            sec = _.findWhere($scope.sectionsOptions[6].pages, {
-                name: 'List View'
-            });
-            sec.path = listView;
-            sec = _.findWhere($scope.sectionsOptions[6].pages, {
-                name: 'Detail View'
-            });
-            sec.path = detailView;
-
-
-            $scope.sortReverse = 0;
-            $scope.listView = 0;
-            $scope.showArchived = 0;
-            $scope.statusFacits = {};
-            $scope.statusFacits.all = 0;
-            $scope.statusFacitsArcView = {};
-            $scope.statusFacitsArcView.all = 0;
             $scope.selectedChip = {};
-
             $scope.docs = [];
-            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected'];
-            var statusesArchived = ['deleted', 'archived'];
+
 
             init();
 
@@ -87,38 +23,77 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function init() {
-
+                initSlideMenu();
                 authentication.getUser().then(function(user) {
                     $scope.selectChip('all');
                     $scope.user = user;
-                    $scope.loadList();
-                    getFacits();
+                    $scope.loadList()
+                        .then(getFacits);
                 });
 
             } //init
 
 
+            //=======================================================================
+            //
+            //=======================================================================
+            function initSlideMenu() {
+
+                $scope.menu = dashMenu.getMenu('adminOptions');
+                $scope.toggle = dashMenu.toggle;
+
+                dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
+                dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
+                dashMenu.setPathOfLink($scope.menu, 'All', function() {
+                    selectChip('all');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Drafts', function() {
+                    selectChip('draft');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Requests', function() {
+                    selectChip('request');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Under Review', function() {
+                    selectChip('approved');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Canceled', function() {
+                    selectChip('canceled');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
+                    selectChip('rejected');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'List View', listView);
+            }
+
+
             //============================================================
             //
             //============================================================
-            function getFacits() {
-                if ($location.absUrl().indexOf('manage') > -1) {
-                    mongoStorage.getStatusFacits($scope.schema, statuses, 'all', $scope.user.userID).then(function(facits) {
-                        $scope.statusFacits = facits;
-                    });
-                    mongoStorage.getStatusFacits($scope.schema, statusesArchived, 'archived', $scope.user.userID).then(function(arcFacits) {
-                        $scope.statusFacitsArcView = arcFacits;
-                    });
-                } else {
-                    mongoStorage.getStatusFacits($scope.schema, statuses, 'all').then(function(facits) {
-                        $scope.statusFacits = facits;
-                    });
-                    mongoStorage.getStatusFacits($scope.schema, statusesArchived, 'archived').then(function(arcFacits) {
-                        $scope.statusFacitsArcView = arcFacits;
-                    });
-                }
+            function setLoading($last) {
+                $timeout(function() {
+                    $scope.loading = !$last;
+                });
             }
+            $scope.setLoading = setLoading;
 
+
+            //============================================================
+            //
+            //============================================================
+            function getFacits(time) {
+                var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                $timeout(function() {
+                    if ($location.absUrl().indexOf('manage') > -1) {
+                        mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
+                            $scope.statusFacits = facits;
+                        });
+                    } else {
+                        mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
+                            $scope.statusFacits = facits;
+                        });
+                    }
+                }, time);
+            }
 
             //============================================================
             //
@@ -156,7 +131,9 @@ define(['app', 'lodash',
             //============================================================
             $scope.customSearch = function(doc) {
 
-                if (!$scope.search || $scope.search == ' ' || $scope.search.length <= 2) return true;
+                if (!$scope.search || $scope.search == ' ' || $scope.search.length <= 2)
+                    return true;
+
                 var temp = JSON.stringify(doc);
 
                 return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
@@ -195,9 +172,10 @@ define(['app', 'lodash',
                             if (conf.meta.status !== 'published')
                                 mongoStorage.approveDoc('inde-orgs', conf, conf._id);
                         });
-                        getFacits();
-                        //$scope.loadList ();
+
                     });
+                    $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Under Review');
+                    getFacits(1000);
                 });
             }; // archiveOrg
 
@@ -207,9 +185,11 @@ define(['app', 'lodash',
             //=======================================================================
             $scope.cancelDoc = function(docObj) {
                 docObj.meta.status = 'canceled';
-                mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits();
-                });
+                mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id)
+                    .then(function() {
+                        $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now canceled');
+                        getFacits(1000);
+                    });
             }; // archiveOrg
 
 
@@ -218,9 +198,11 @@ define(['app', 'lodash',
             //=======================================================================
             $scope.rejectDoc = function(docObj) {
                 docObj.meta.status = 'rejected';
-                mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits();
-                });
+                mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id)
+                    .then(function() {
+                        $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Rejected');
+                        getFacits(1000);
+                    });
             }; // archiveOrg
 
 
@@ -238,7 +220,7 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function archiveList() {
-                return  $q.all([loadOrgs(), loadConfrences()]).then(function() {
+                return $q.all([loadOrgs(), loadConfrences()]).then(function() {
 
 
                     var loadDocsFunc = mongoStorage.loadArchives;
@@ -258,6 +240,7 @@ define(['app', 'lodash',
                                 if (foundOrg)
                                     doc.orgs.push(foundOrg);
                             });
+
                         });
                     });
 
@@ -277,22 +260,13 @@ define(['app', 'lodash',
                     $scope.selectedChip = chip;
             } // archiveOrg
             $scope.selectChip = selectChip;
-
-
             //=======================================================================
             //
             //=======================================================================
-            $scope.searchToggle = function() {
-                var serEl = $element.find('.search');
-                serEl.toggleClass('search-expanded');
-                serEl.focus();
-                var serElb = $element.find('.search-btn');
-                serElb.toggleClass('search-btn-expanded');
-
-                $scope.sOpen = !$scope.sOpen;
-                $scope.search = '';
-            }; // archiveOrg
-
+            function isLoading() {
+                return $scope.loading;
+            } // archiveOrg
+            $scope.isLoading = isLoading;
 
             //============================================================
             //
@@ -351,8 +325,20 @@ define(['app', 'lodash',
             $scope.loadList = function() {
 
 
-                $q.all([loadOrgs(), loadConfrences()]).then(function() {
-
+                return $q.all([loadOrgs(), loadConfrences()]).then(function() {
+                    var srch = $location.search();
+                    if (!_.isEmpty(srch)) {
+                        if (srch.chip === 'archived')
+                            toggleArchived();
+                        else
+                            $timeout(function() {
+                                selectChip(srch.chip);
+                            }, 10);
+                    } else {
+                        $timeout(function() {
+                            selectChip('all');
+                        }, 1000);
+                    }
                     var loadDocsFunc = mongoStorage.loadDocs;
 
                     if ($location.absUrl().indexOf('manage') > -1)
@@ -363,14 +349,14 @@ define(['app', 'lodash',
                         _.each($scope.docs, function(doc) {
                             doc.orgs = [];
                             var foundOrg;
-                            loadHostOrgs(doc).then(function(){
-                              _.each(doc.hostOrgs, function(org) {
-                                  foundOrg = _.find($scope.orgs, {
-                                      _id: org
-                                  });
-                                  if (foundOrg)
-                                      doc.orgs.push(foundOrg);
-                              });
+                            loadHostOrgs(doc).then(function() {
+                                _.each(doc.hostOrgs, function(org) {
+                                    foundOrg = _.find($scope.orgs, {
+                                        _id: org
+                                    });
+                                    if (foundOrg)
+                                        doc.orgs.push(foundOrg);
+                                });
                             });
 
                             doc.conferenceObj = _.find($scope.conferences, {
@@ -386,24 +372,6 @@ define(['app', 'lodash',
 
                         });
 
-                    }).then(function() {
-                        var srch = $location.search();
-                        if (!_.isEmpty(srch)) {
-                            if (srch.chip === 'archived') {
-                                $scope.showArchived = !$scope.showArchived;
-                                mongoStorage.getStatusFacits($scope.schema, $scope.statusFacitsArcView, statusesArchived);
-                                archiveList().then(function() {
-                                    selectChip(srch.chip);
-                                });
-                            } else
-                                $timeout(function() {
-                                    selectChip(srch.chip);
-                                }, 1000);
-                        } else {
-                            $timeout(function() {
-                                selectChip('all');
-                            }, 1000);
-                        }
                     });
                 });
             }; // archiveOrg
@@ -423,9 +391,9 @@ define(['app', 'lodash',
                                         _id: orgId
                                     }) && mongoStorage.isPublishable(responce))
                                     $scope.orgs.push(responce);
-                                    resolve(true);
-                            }).catch(function(){
-                              reject(false);
+                                resolve(true);
+                            }).catch(function() {
+                                reject(false);
                             });
                         } else
                             resolve(true);
@@ -466,67 +434,49 @@ define(['app', 'lodash',
             function listView() {
                 $scope.listView = 0;
                 $scope.toggle('adminOptions');
-            } //toggleListView
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function cardView() {
-                $scope.listView = 1;
-                $scope.toggle('adminOptions');
-            } //toggleListView
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function detailView() {
-                $scope.listView = 2;
-                $scope.toggle('adminOptions');
-            } //toggleListView
+            } //listView
 
 
             //=======================================================================
             //
             //=======================================================================
             $scope.archiveDoc = function(docObj) {
-                docObj.meta.status = 'archived';
                 mongoStorage.archiveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now archived');
+                    getFacits(1000);
                 });
-            }; // archiveOrg
+            }; // archiveDoc
 
 
             //=======================================================================
             //
             //=======================================================================
             $scope.deleteDoc = function(docObj) {
-                docObj.meta.status = 'deleted';
                 return mongoStorage.deleteDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is deleted permanently');
+                    getFacits(1000);
                 });
-            }; // archiveOrg
+            }; // deleteDoc
 
 
             //=======================================================================
             //
             //=======================================================================
             $scope.unArchiveDoc = function(docObj) {
-                docObj.meta.status = 'draft';
                 mongoStorage.unArchiveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is unarchived and saved as a draft');
+                    getFacits(1000);
                 });
-            }; // archiveOrg
+            }; //unArchiveDoc
 
 
             //=======================================================================
@@ -534,100 +484,29 @@ define(['app', 'lodash',
             //=======================================================================
             $scope.goTo = function(url) {
                 $location.url(url);
-            }; // archiveOrg
+            }; //goTo
 
 
             //=======================================================================
             //
             //=======================================================================
             $scope.edit = function(id) {
-                $location.url($scope.editURL + id);
-            }; // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipAll() {
-                selectChip('all');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipRejected() {
-                selectChip('rejected');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipDraft() {
-                selectChip('draft');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipRequest() {
-                selectChip('request');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipApproved() {
-                selectChip('published');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipCanceled() {
-                selectChip('canceled');
-                $scope.toggle('adminOptions');
-            } // archiveOrg
+                $location.url('/manage/events/' + id);
+            }; //edit
 
 
             //=======================================================================
             //
             //=======================================================================
             function toggleArchived() {
-                $timeout(function() {
-                    if (!$scope.showArchived) {
-                        getFacits();
-                        archiveList();
-                    } else {
-                        getFacits();
-                        $scope.loadList();
-                    }
-
-                    $scope.showArchived = !$scope.showArchived;
-
-
+                $scope.showArchived = !$scope.showArchived;
+                //  $timeout(function() {
+                selectChip('archived');
+                archiveList();
+                if (dashMenu.isOpen('adminOptions'))
                     $scope.toggle('adminOptions');
-                    selectChip('archived');
-                });
-                $timeout(function() {
-
-                    if ($scope.selectedChip === 'archived')
-                        $scope.selectedChip = 'all';
-                    else
-                        $scope.selectedChip = 'archived';
-
-                }, 500);
-
-            } // archiveOrg
+                //    });
+            } //toggleArchived
 
 
             //============================================================
@@ -659,7 +538,7 @@ define(['app', 'lodash',
                     $scope.error = res.data.Message;
                 else
                     $scope.error = res.data;
-            };
+            }; // on error
 
 
             //============================================================
