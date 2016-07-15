@@ -38,8 +38,9 @@ define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUploa
 		return {
 			request: function(config) {
 				var trusted = /^http:\/\/localhost\//i .test(config.url)||
-                              /^https:\/\/api.cbd.int\//i .test(config.url) ||
-							  /^\/api\//i                 .test(config.url);
+                      /^http:\/\/randy.local\//i .test(config.url)||
+                      /^https:\/\/api.cbd.int\//i .test(config.url) ||
+							        /^\/api\//i                 .test(config.url);
 
                 //exception if the APi call needs to be done for different realm
                 if(trusted && realm && config.params && config.params.realm && config.params.realm != realm) {
