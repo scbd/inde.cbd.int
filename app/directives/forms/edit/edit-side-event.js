@@ -55,15 +55,11 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         $scope.$watch('doc.conference', function() {
-                            if ($scope.doc.conference) {
-
-                                if (_.isEmpty($scope.options.conferences))
-                                    loadConferences().then(generateDates);
-                                else
+                            if ($scope.doc.conference)
                                     generateDates();
-                            }
 
                         });
+
 
                         //============================================================
                         //
@@ -87,62 +83,23 @@ define(['app', 'lodash',
                         }, true);
 
 
+                          function compareDates(a,b) {
+                          if (moment(a.StartDate).isBefore(b.StartDate))
+                            return 1;
+                          if (moment(a.StartDate).isAfter(b.StartDate))
+                            return -1;
+                          return 0;
+                        }
 
                         //============================================================
                         //
                         //============================================================
                         function loadConferences() {
-                            return $http.get("/api/v2016/event-groups", {
-                                params: {
-                                    q: {
-                                        StartDate: {
-                                            '$gt': {
-                                                '$date': moment.utc()
-                                            }
-                                        }
-                                    },
-                                    s: {
-                                        StartDate: -1
-                                    }
-                                }
-                            }, {
-                                cache: true
-                            }).then(function(o) {
+                            return mongoStorage.loadConferences().then(function(o) {
 
-                                $scope.options.conferences = $filter("orderBy")(o.data, "StartDate");
+                                $scope.options.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
 
-                                _.each($scope.options.conferences, function(conf, key) {
-                                    if (conf._id === $location.search().m)
-                                        conf.selected = true;
-                                    else
-                                        conf.selected = false;
-
-                                    var oidArray = [];
-                                    _.each(conf.MajorEventIDs, function(id) {
-                                        oidArray.push({
-                                            '$oid': id
-                                        });
-                                    });
-
-                                    $http.get("/api/v2016/meetings", {
-                                        params: {
-                                            q: {
-                                                _id: {
-                                                    $in: oidArray
-                                                }
-                                            }
-                                        }
-                                    }, {
-                                        cache: true
-                                    }).then(function(m) {
-                                        $scope.options.conferences[key].meetings = m.data;
-                                    });
-
-                                });
-
-                            }).then($timeout(function() {
-                                if ($location.search().m) $scope.doc.confrence = $location.search().m;
-                            }, 1000)).catch(function onerror(response) {
+                            }).catch(function onerror(response) {
                                 $scope.onError(response);
                             });
                         }
@@ -404,7 +361,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences()]).then(function() {
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
                                     if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
@@ -440,6 +397,7 @@ define(['app', 'lodash',
 
                                         });
                                 } else {
+
                                     mongoStorage.createDoc($scope.schema).then(
                                         function(document) {
                                             $scope.conferenceId = $route.current.params.c;
@@ -466,16 +424,29 @@ define(['app', 'lodash',
                                         }
                                     ).catch(function onerror(response) {
                                         $scope.onError(response);
+                                    }).then(function(){
+                                      if($location.search().c)
+                                      _.each($scope.options.conferences, function(conf) {
+                                          if (conf._id === $location.search().c)
+                                              conf.selected = true;
+                                          else
+                                              conf.selected = false;
+                                          $scope.doc.conference=conf._id;
+                                      });
+                                      else{
+                                        $scope.doc.conference=$scope.options.conferences[0]._id;
+                                        $scope.options.conferences[0].selected=true;
+                                      }
                                     });
                                 }
-
                             }); // load orgs
                         } // init
+
+
                         //============================================================
                         //
                         //============================================================
                         function checkMeeting(index) {
-
 
                             var meeting = $scope.options.conferenceObj.meetings[index];
                             meeting.selected = !meeting.selected;
@@ -487,12 +458,14 @@ define(['app', 'lodash',
 
                         } //
                         $scope.checkMeeting = checkMeeting;
+
+
                         //============================================================
                         //
                         //============================================================
                         function generateDates() {
 
-                            //mongoStorage.loadDoc('event-groups', $scope.doc.confrence).then(function(confr) {
+                            if(!$scope.options.conferences) return;
                             var confr = $scope.options.conferenceObj = _.find($scope.options.conferences, {
                                 _id: $scope.doc.conference
                             });
@@ -503,29 +476,33 @@ define(['app', 'lodash',
 
                             var numDays = Math.ceil(diff / 86400) + 1;
 
-                            confr.StartDate = moment(confr.StartDate);
+                            var startDate = moment(confr.StartDate);
                             if (!$scope.options) $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
+
                             for (var i = 0; i < numDays; i++) {
-                                $scope.options.dates[i] = moment(confr.StartDate).format("YYYY/MM/DD");
-                                confr.StartDate = confr.StartDate.add(1, 'day');
+                                if(i && (moment(startDate).subtract(1, 'day').day()===0 || moment(startDate).subtract(1, 'day').day()===6)){
+                                    i--;
+                                }
+                                if(startDate.day()===0 || startDate.day()===6){
+                                    numDays--;
+                                    startDate = startDate.add(1, 'day');
+                                    continue;
+                                }
+                                $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
+                                startDate = startDate.add(1, 'day');
                             }
-                            // }).catch(function onerror(response) {
-                            //   $scope.onError(response);
-                            // });
-                            //load selected conference
+
                             _.each($scope.options.conferences, function(conf) {
-                                if (conf._id === $scope.doc.conference)
+                                if (conf._id === $scope.doc.conference || $scope.options.conferences.length===1)
                                     conf.selected = true;
                                 //load selected meetings
+
                                 _.each(conf.meetings, function(meet) {
                                     if ($scope.doc.meetings && $scope.doc.meetings.indexOf(meet._id) >= 0)
                                         meet.selected = true;
                                 });
                             });
-
-
-
                         } // init
 
                         //============================================================
