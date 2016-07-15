@@ -219,7 +219,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 return $q(function(resolve) {
                     return resolve(JSON.parse(localStorage.getItem('countries')));
                 });
-
         }
 
 
@@ -390,9 +389,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function archiveDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'archived';
             return save(schema, docObj, _id);
         }
@@ -402,9 +398,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function requestDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'request';
             return save(schema, docObj, _id);
         }
@@ -414,9 +407,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function approveDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'published';
             return save(schema, docObj, _id);
         }
@@ -425,9 +415,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function cancelDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'canceled';
             return save(schema, docObj, _id);
         }
@@ -565,9 +552,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function rejectDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'rejected';
             return save(schema, docObj, _id);
         }
@@ -577,9 +561,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function deleteDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'deleted';
             return save(schema, docObj, _id);
         }
@@ -589,9 +570,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function unArchiveDoc(schema, docObj, _id) {
-            docObj.initialState = _.cloneDeep(docObj.document);
-            if (docObj.initialState)
-                delete(docObj.initialState.history);
             docObj.meta.status = 'draft';
             return save(schema, docObj, _id);
         }
