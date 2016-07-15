@@ -9,7 +9,7 @@ define(['app'], function(app) {
 
         var domain = document.location.hostname.replace(/[^\.]+\./, '');
         var production = true; // change to true to work on production accounts
-        if ((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
+        if ((domain == 'localhost' || domain == 'houlahan.local' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
             domain = 'cbddev.xyz';
         else
             domain = 'cbd.int';
@@ -22,7 +22,7 @@ define(['app'], function(app) {
 
          ***************************************************************************************/
         function isDev() {
-          if((domain == 'localhost' || (domain.indexOf('cbddev.xyz') >= 0)) && !production)
+          if((domain == 'localhost' || domain == 'houlahan.local' ||(domain.indexOf('cbddev.xyz') >= 0)) && !production)
             return true;
             else {
               return '';
