@@ -1,7 +1,6 @@
 define(['app',
     'lodash',
     'text!./scbd-select-list.html',
-    'css!./scbd-select-list.css',
     'services/filters',
     'services/mongo-storage',
     'css!libs/angular-dragula/dist/dragula.css',
