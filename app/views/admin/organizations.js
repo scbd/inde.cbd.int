@@ -17,7 +17,7 @@ define(['app', 'lodash',
             $scope.editURL = '/manage/organizations/';
             $timeout(function() {
                 $scope.toggle = adminMenu.toggle;
-                $scope.sections = adminMenu.getMenu('admin');
+
                 $scope.sectionsOptions = adminMenu.getMenu('adminOrgOptions');
                 var sec = _.findWhere($scope.sectionsOptions, {
                     name: 'Sort'
@@ -27,26 +27,32 @@ define(['app', 'lodash',
                     name: 'Archives'
                 });
                 sec.path = toggleArchived;
+
                 sec = _.findWhere($scope.sectionsOptions[5].pages, {
                     name: 'All'
                 });
-                sec.path = selectChipAll;
+                sec.path = function(){selectChip('all');};
+
                 sec = _.findWhere($scope.sectionsOptions[5].pages, {
                     name: 'Drafts'
                 });
-                sec.path = selectChipDraft;
+                sec.path = function(){selectChip('draft');};
+
                 sec = _.findWhere($scope.sectionsOptions[5].pages, {
                     name: 'Requests'
                 });
-                sec.path = selectChipRequest;
+                sec.path = function(){selectChip('request');};
+
                 sec = _.findWhere($scope.sectionsOptions[5].pages, {
                     name: 'Approved'
                 });
-                sec.path = selectChipApproved;
+                sec.path = function(){selectChip('approved');};
+
                 sec = _.findWhere($scope.sectionsOptions[5].pages, {
                     name: 'Canceled'
                 });
-                sec.path = selectChipCanceled;
+                sec.path = function(){selectChip('canceled');};
+
                 sec = _.findWhere($scope.sectionsOptions[6].pages, {
                     name: 'Card View'
                 });
@@ -69,8 +75,8 @@ define(['app', 'lodash',
             $scope.selectedChip = '';
 
             $scope.docs = [];
-            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected'];
-            var statusesArchived = ['deleted', 'archived'];
+            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+
             init();
 
 
@@ -86,26 +92,30 @@ define(['app', 'lodash',
                 });
             } //init
 
+            //============================================================
+            //
+            //============================================================
+            $scope.$watch('statusFacits', function() {
+                if(!$scope.statusFacits[$scope.selectedChip])
+                selectChip('all');
+            },true);
 
             //=======================================================================
             //
             //=======================================================================
-            function getFacits() {
+            function getFacits(time) {
+
+              $timeout(function(){ // time out prevent an additional call for facits as they are force updated by save
                 if ($location.absUrl().indexOf('manage') > -1) {
-                    mongoStorage.getStatusFacits($scope.schema, statuses, 'all', $scope.user.userID).then(function(facits) {
+                    mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
                         $scope.statusFacits = facits;
-                    });
-                    mongoStorage.getStatusFacits($scope.schema, statusesArchived, 'archived', $scope.user.userID).then(function(arcFacits) {
-                        $scope.statusFacitsArcView = arcFacits;
                     });
                 } else {
-                    mongoStorage.getStatusFacits($scope.schema, statuses, 'all').then(function(facits) {
+                    mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
                         $scope.statusFacits = facits;
                     });
-                    mongoStorage.getStatusFacits($scope.schema, statusesArchived, 'archived').then(function(arcFacits) {
-                        $scope.statusFacitsArcView = arcFacits;
-                    });
                 }
+              },time);
             }
 
             //=======================================================================
@@ -135,7 +145,6 @@ define(['app', 'lodash',
                     return doc;
                 else if ($scope.selectedChip === 'all' || $scope.selectedChip === '')
                     return doc;
-
             };
 
 
@@ -145,7 +154,6 @@ define(['app', 'lodash',
             function sortOrder() {
 
                 $scope.sortReverse = !$scope.sortReverse;
-
                 $scope.toggle('orgOptions');
             }
 
@@ -190,7 +198,7 @@ define(['app', 'lodash',
             $scope.approveDoc = function(docObj) {
                 docObj.meta.status = 'published';
                 mongoStorage.approveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits();
+                    getFacits(1000);
                 });
             }; // approveDoc
 
@@ -201,7 +209,7 @@ define(['app', 'lodash',
             $scope.cancelDoc = function(docObj) {
                 docObj.meta.status = 'canceled';
                 mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits();
+                    getFacits(1000);
                 });
             }; // cancelDoc
 
@@ -212,7 +220,7 @@ define(['app', 'lodash',
             $scope.rejectDoc = function(docObj) {
                 docObj.meta.status = 'rejected';
                 mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits();
+                    getFacits(1000);
                 });
             }; // archiveOrg
 
@@ -284,7 +292,7 @@ define(['app', 'lodash',
                     if (!_.isEmpty(srch)) {
                         if (srch.chip === 'archived') {
                             $scope.showArchived = !$scope.showArchived;
-                            getFacits();
+                            getFacits(1000);
                             archiveList().then(function() {
                                 $timeout(function() {
                                     selectChip(srch.chip);
@@ -344,7 +352,7 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    getFacits(1000);
                 });
 
             }; // archiveOrg
@@ -359,7 +367,7 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    getFacits(1000);
                 });
 
             }; // archiveOrg
@@ -374,7 +382,7 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits();
+                    getFacits(1000);
                 });
             }; // archiveOrg
 
@@ -446,10 +454,10 @@ define(['app', 'lodash',
             function toggleArchived() {
                 $timeout(function() {
                     if (!$scope.showArchived) {
-                        getFacits();
+                        getFacits(1000);
                         archiveList();
                     } else {
-                        getFacits();
+                        getFacits(1000);
                         $scope.loadList();
                     }
 

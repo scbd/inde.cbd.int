@@ -55,7 +55,7 @@
           <div>
             <i class="material-icons">&#xEB3D;</i>
           </div>All
-          <span class="sqr">{{statusFacits.all}}</span>
+          <span class="sqr">{{statusFacits.allNoArchived}}</span>
         </div>
 
         <div id="chip-draft" class="chip" ng-if="(!showArchived && statusFacits.draft) || selectedChip==='draft'" ng-click="selectChip('draft')">
@@ -93,7 +93,7 @@
           <div>
             <i class="material-icons">&#xE149;</i>
           </div>Archived
-          <span class="sqr">{{statusFacitsArcView.archived}}</span>
+          <span class="sqr">{{statusFacits.archived}}</span>
         </div>
       </div>
       <!-- card VIEW -->
