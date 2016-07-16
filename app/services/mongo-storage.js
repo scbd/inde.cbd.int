@@ -28,13 +28,14 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 if (_.isNumber(document.meta.modifiedOn))
                     document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
 
-                return $http.put(url, document, params).then(function() {
+                return $http.put(url, document, params).then(function(res) {
                     authentication.getUser().then(function(user) {
                         var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
                         getStatusFacits(schema, statuses, user.userID, true);
                         getStatusFacits(schema, statuses, true);
 
                     });
+                    return res;
                 });
             } else {
                 if (!document.meta) document.meta = {
@@ -48,6 +49,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                         getStatusFacits(schema, statuses, true);
 
                     });
+
                     return res;
                 });
             } //create
@@ -697,40 +699,55 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //=======================================================================
         //
         //=======================================================================
+        function moveTempFileToPermanent(target,id) {
+            var params={};
+            if(devRouter.isDev())
+              params.dev=true;
+
+            if(id)
+              params.docid=id;
+
+          return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {
+              params:params
+          });
+        } // touch
+        //=======================================================================
+        //
+        //=======================================================================
         function uploadDocAtt(schema, _id, file) {
             if (!schema) throw "Error: no schema set to upload attachment";
             if (!_id) throw "Error: no docId set to upload attachment";
 
+            return uploadTempFile(schema, file, {'_id':_id}).then(function(target) {
+                  return moveTempFileToPermanent(target.data);
+            });
+        } // touch
+        //=======================================================================
+        //
+        //=======================================================================
+        function uploadTempFile(schema, file, options) {
+            if (!schema) throw "Error: no schema set to upload attachment";
+            if(!options)options={};
             var postData = {
                 filename: file.name,
+                mongo:true,
                 //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                 // hence no camalized and no hyphanized meta names
+                public:options.public,
                 metadata: {
                     createdby: user.userID,
                     createdon: Date.now(),
                     schema: schema,
-                    docid: _id,
+                    docid: options._id,
                     filename: file.name,
                 }
             };
             return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
-                // Create a temp file location to upload to
-                return res.data;
-            }).then(function(target) {
-                // upload file to temp area
-                return $http.put(target.url, file, {
+                return $http.put(res.data.url, file, {
                     headers: {
-                        'Content-Type': target.contentType
+                        'Content-Type': res.data.contentType
                     }
-                }).then(function() {
-                    // move temp file form temp to its proper home schema/is/filename
-
-                    return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {
-                        params: {
-                            dev: devRouter.isDev()
-                        }
-                    });
-                });
+                }).then(function(){console.log(res);return res;});
             });
         } // touch
 
@@ -854,12 +871,12 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             isPublished: isPublished,
             isUnderReview: isUnderReview,
             isRequest: isRequest,
-
+            moveTempFileToPermanent:moveTempFileToPermanent,
             requestDoc: requestDoc,
             rejectDoc: rejectDoc,
             approveDoc: approveDoc,
             cancelDoc: cancelDoc,
-
+            uploadTempFile:uploadTempFile,
             getStatusFacits: getStatusFacits,
             deleteDoc: deleteDoc,
             loadDoc: loadDoc,

@@ -6,7 +6,9 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
             template: template,
             transclude: false,
             scope: {
-                binding: "=ngModal"
+                binding: "=ngModal",
+                tempFile: "=tempFile",
+                error  : "=?error"
             },
             link: function($scope, $element, $attrs) {
 
@@ -54,14 +56,14 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
 
                     if (files && files.length) {
                         if (!_.isArray($scope.binding)) $scope.binding = [];
+                        if ($scope.tempFile) $scope.tempFile = {};
 
                         _.each(files, function(file) {
                             var pubDoc = {};
 
 
-                            if (!file.$error && $attrs.schema)
+                            if (!file.$error && $attrs.schema &&  $attrs.docId)
                                 mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function() {
-
 
                                   if(!devRouter.isDev())
                                     pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
@@ -74,9 +76,20 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
                                         $scope.binding = pubDoc.src;
                                     else
                                         $scope.binding.push(pubDoc);
-                                });
-                            else
-                                throw file.$error;
+                                }).catch(function(err){$scope.error=err;});
+                            else if(!file.$error && $attrs.schema &&  !$attrs.docId) {
+                                mongoStorage.uploadTempFile($attrs.schema, file,{'public':true}).then(function(tempFile) {
+                                    $scope.tempFile=tempFile.data;
+                                    $scope.binding = 'https://s3.amazonaws.com/mongo.document.attachments.temporary/'+tempFile.data.uid;
+                                }).catch(function(err){$scope.error=err;});
+                            } else {
+                                if(file.$error)
+                                  $scope.error=file.$error;
+
+                                if(!$attrs.schema )
+                                  $scope.error={msg:"Error: you must specify a schema in order ot upload a document"};
+                                  throw $scope.error;
+                            }
                         });
                     }
                 }; //upload

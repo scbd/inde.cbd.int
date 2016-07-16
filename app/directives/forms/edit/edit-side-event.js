@@ -36,7 +36,7 @@ define(['app', 'lodash',
                         $scope.doc.hostOrgs = [];
                         $scope.updateProfile = 'No';
                         $scope.ignoreDirtyCheck = false;
-                        $scope.tab = 'general';
+
                         $scope.document = {};
 
                         $scope.patterns = {
@@ -47,6 +47,7 @@ define(['app', 'lodash',
                             time: /^([0-1][0-9]|2[0-3]|[0-9]):[0-5][0-9]$/,
                             email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
                         };
+                        $scope.tab = 'general';
                         $('#general-tab').tab('show');
 
                         init();
@@ -352,6 +353,18 @@ define(['app', 'lodash',
                                 $scope.options.orgs = orgs;
                             });
                         }
+
+                        function showTab(validTabs){
+                           var shownSelected = false;
+                          _.each(validTabs,function(tab,key){
+                                if(shownSelected) return;
+                                if(!tab){
+                                  $scope.tab = key;
+                                  $timeout(function(){$('#'+key+'-tab').tab('show');});
+                                  shownSelected=true;
+                                }
+                          });
+                        }
                         //============================================================
                         //
                         //============================================================
@@ -382,6 +395,7 @@ define(['app', 'lodash',
                                                     'orgs': false,
                                                     'contact': false
                                                 };
+                                              showTab($scope.doc.validTabs);
                                             if (!$scope.doc.publications) $scope.doc.publications = [];
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
@@ -397,17 +411,14 @@ define(['app', 'lodash',
 
                                         });
                                 } else {
-
-                                    mongoStorage.createDoc($scope.schema).then(
-                                        function(document) {
-                                            $scope.conferenceId = $route.current.params.c;
                                             $scope.loading = true;
-                                            $scope._id = document._id;
-                                            $scope.id = document.id;
-                                            $scope.doc = document;
+                                            $scope.doc = {};
+                                            $scope.doc.meta={};
+                                            $scope.doc.tempFile={};
+                                            delete($scope._id);
                                             $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
                                             initProfile(true);
-                                            $scope.doc.conference = $scope.conferenceId;
+
                                             $scope.doc.validTabs = {
                                                 'general': false,
                                                 'logistics': false,
@@ -420,11 +431,7 @@ define(['app', 'lodash',
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
                                             if (!$scope.doc.videos) $scope.doc.videos = [];
-                                            $scope.$emit('showSuccess', 'Side Event ' + $scope.id + ' Created and Saved as Draft');
-                                        }
-                                    ).catch(function onerror(response) {
-                                        $scope.onError(response);
-                                    }).then(function(){
+
                                       if($location.search().c)
                                       _.each($scope.options.conferences, function(conf) {
                                           if (conf._id === $location.search().c)
@@ -437,7 +444,7 @@ define(['app', 'lodash',
                                         $scope.doc.conference=$scope.options.conferences[0]._id;
                                         $scope.options.conferences[0].selected=true;
                                       }
-                                    });
+
                                 }
                             }); // load orgs
                         } // init
@@ -590,19 +597,75 @@ define(['app', 'lodash',
 
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
-                            if (!$scope.doc.id) {
-                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
-                                    $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
-                                }).catch(function onerror(response) {
-                                    $scope.onError(response);
-                                });
+console.log('$scope._id',$scope._id);
+                            if (!$scope.doc.id && !$scope._id) {
+
+                                return mongoStorage.save($scope.schema, $scope.doc)
+                                  .then(postSaveNewDoc)
+                                    .catch($scope.onError);
                             } else
                                 return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                                     $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' Saved as Draft');
-                                }).catch(function onerror(response) {
-                                    $scope.onError(response);
-                                });
+                                }).catch($scope.onError);
                         };
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function postSaveNewDoc (result){
+                          $scope._id=$scope.doc._id=result.data.id;
+                          var tempFile=getTempFile();
+
+                            if(!_.isEmpty(tempFile))
+                                  saveLogoNewDoc(tempFile);// move form temporary to perminant on S3
+                            else{
+  console.log('no tempfile detected');
+                              $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
+                              $location.url('/manage/events/'+$scope._id);
+                            }
+                      }// postSaveNewDoc
+
+                      //=======================================================================
+                      //
+                      //=======================================================================
+                      function getTempFile(){
+                        if(!_.isEmpty($scope.doc.tempFile)){
+                          var tempFile=$scope.doc.tempFile;
+                            delete($scope.doc.tempFile);
+                            return tempFile;
+                        }else
+                          return false;
+
+                      }//getTempFile
+
+
+                      //=======================================================================
+                      //
+                      //=======================================================================
+                      function saveLogoNewDoc(tempFile){
+                        tempFile.metadata.docid=$scope._id;
+
+                        if(tempFile.metadata.schema && tempFile.metadata.docid && tempFile.metadata.filename){
+
+                            return mongoStorage.moveTempFileToPermanent(tempFile,$scope._id).then(function(){
+
+                                mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
+                                  $scope.doc=document;
+                              $scope.doc.logo='https://s3.amazonaws.com/mongo.document.attachments/';
+                              $scope.doc.logo+=tempFile.metadata.schema+'/';
+                              $scope.doc.logo+=tempFile.metadata.docid+'/';
+                              $scope.doc.logo+=tempFile.metadata.filename;
+
+                              return $scope.saveDoc().then(function(){
+                                  $location.url('/manage/events/'+$scope._id);
+                              });
+});
+                            }).catch($scope.onError);
+                        }else
+                          throw 'Error: Missing schema or id or filename to move file from temp to perminant';
+                      }//saveLogoNewDoc
+
 
                         //=======================================================================
                         //

@@ -81,6 +81,7 @@
                     <div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
                     <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
                   </div>
+
                 </div>
             </div>
         </div>
@@ -88,7 +89,7 @@
           <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon & Cover Image (Not Org. Logo)" style="padding-bottom:10px;">
             <label>Event Icon & Cover Image (Not Org. Logo)</label>
             <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
-            <scbd-file-upload  ng-modal="doc.logo" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
+            <scbd-file-upload  ng-modal="doc.logo" temp-file="doc.tempFile" error="error" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
 
           </div>
         </div>
