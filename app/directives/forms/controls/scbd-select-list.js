@@ -71,14 +71,13 @@ define(['app',
 
                 } // init
 
-
                 //==================================
                 //
                 //==================================
                 function populateMirror() {
                     var org;
                     $scope.mirror = [];
-
+                    $scope.binding=_.uniq($scope.binding);
                     if ($scope.binding.length) numOrgs = $scope.binding.length;
                     if ($scope.docs && $scope.docs.length > 0)
                         _.each($scope.binding, function(val, key) {
@@ -86,14 +85,17 @@ define(['app',
                                 '_id': val
                             });
 
-                            if (org)
+                            if (org){
+                              org.selected=true;
                                 $scope.mirror[key] = org;
+                              }
                             else {
                                 if(val.length>2)
                                 mongoStorage.loadDoc('inde-orgs', val).then(
                                     function(res) {
 
                                         if (_.isObject(res) && res.meta && (res.meta.status === 'published' || res.meta.status === 'draft' || res.meta.status === 'request')) {
+                                            res.selected=true;
                                             $scope.mirror[key] = res;
 
                                             $scope.loadList(true).then(function() {
