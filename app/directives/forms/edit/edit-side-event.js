@@ -13,6 +13,7 @@ define(['app', 'lodash',
     './edit-link',
     'directives/link-list',
     'services/theasarus', 'ngDialog', 'ngSmoothScroll',
+    'directives/fade-in-tab'
 ], function(app, _, template, moment, dialogTemplate, rangy) {
     app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
         function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
@@ -356,15 +357,22 @@ define(['app', 'lodash',
 
                         function showTab(validTabs){
                            var shownSelected = false;
+                           if(_.isObject(validTabs))
                           _.each(validTabs,function(tab,key){
                                 if(shownSelected) return;
                                 if(!tab){
-                                  $scope.tab = key;
-                                  $timeout(function(){$('#'+key+'-tab').tab('show');});
+
+                                  $timeout(function(){$scope.tab = key;$('#'+key+'-tab').tab('show');});
                                   shownSelected=true;
                                 }
                           });
+                          else {
+
+                            $timeout(function(){$scope.tab = validTabs;$('#'+validTabs+'-tab').tab('show');});
+                          }
+
                         }
+                        $scope.showTab=showTab;
                         //============================================================
                         //
                         //============================================================

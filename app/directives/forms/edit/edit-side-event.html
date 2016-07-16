@@ -45,21 +45,21 @@
 
       <div class="col-xs-12">
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" ng-class="{'active':tab==='general'}"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab" ng-click="tab='general'">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a>            </li>
-          <li role="presentation" ng-class="{'active':tab==='logistics'}"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab" ng-click="tab='logistics'">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='orgs'}"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab" ng-click="tab='orgs'">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='contact'}"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab" ng-click="tab='contact'">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='documents'}"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab" ng-click="tab='documents'">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='links'}"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab" ng-click="tab='links'">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='images'}"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab" ng-click="tab='images'">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
-          <li role="presentation" ng-class="{'active':tab==='videos'}"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab" ng-click="tab='videos'">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
+          <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='contact'}" ng-click="showTab('contact')"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='documents'}" ng-click="showTab('documents')"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='images'}" ng-click="showTab('images')"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
+          <li role="presentation" ng-class="{'active':tab==='videos'}" ng-click="showTab('videos')"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
         </ul>
       </div>
     </div>
     <div>
       <br>
     </div>
-    <div id="general" class="tab-pane fade in active text-left" ng-show="tab==='general'">
+    <div fade-in-tab id="general" class="tab-pane   active text-left" ng-show="tab==='general'">
       <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
         <strong>Please note that by registering for a side event you are not registering for entrance into the meeting. Please see <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/> for meeting registration information.  It is also required that any attendees to your side event are registered for the meeting (including organizers or speakers).</strong>
@@ -107,11 +107,11 @@
     </div>
 
 
-			<div  id="logistics" class="tab-pane fade in active text-left" ng-show="tab==='logistics'">
+			<div fade-in-tab id="logistics"  class="tab-pane   active text-left" ng-show="tab==='logistics'">
         <legend class="container-subheader">
           <h2>Conference and Associated Meetings </h2>
         </legend>
-            <div >
+            <div class="row" >
               <div class="col-xs-12 col-lg-4">
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
@@ -145,7 +145,7 @@
             <legend class="container-subheader">
               <h2>Preferred Date and Time {{prefDate}}</h2>
             </legend>
-            <div >
+            <div class="row">
 
               <div class="ccol-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div ng-class="{'has-error': editForm.prefDateOne.$invalid && editForm.$submitted,'has-error': editForm.prefTimeOne.$invalid && editForm.$submitted }">
@@ -200,7 +200,7 @@
             <legend class="container-subheader">
               <h2 >Requirements (optional)</h2>
             </legend>
-            <div >
+            <div class="row">
 
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
@@ -212,7 +212,7 @@
                 <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
               </div>
             </div>
-            <div >
+            <div class="row">
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
               </div>
@@ -227,7 +227,7 @@
               </div>
             </div>
 
-            <div  style="margin-bottom:10px;">
+            <div  class="row" style="margin-bottom:10px;">
               <div class="col-xs-12">
                 <br>
                 <div>Other
@@ -239,7 +239,7 @@
       </div>
 
 
-              <div id="orgs" class="row tab-pane fade in active text-left" ng-show="tab==='orgs'">
+              <div fade-in-tab id="orgs" class="row tab-pane   active text-left" ng-show="tab==='orgs'">
                 <div>
                 <div class="col-md-12 col-xs-12">
                   <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted)}">
@@ -258,10 +258,10 @@
                         </div>
                       </div>
                     </div>
-</div>
+                  </div>
               </div>
 
-        			<div  id="contact" class="tab-pane fade in active text-left" ng-show="tab==='contact'">
+        			<div  fade-in-tab id="contact"  class="tab-pane   active text-left" ng-show="tab==='contact'">
                       <legend class="container-subheader" style="margin-top:15px;">
                         <h2>Contact Person </h2>
                       </legend>
@@ -521,7 +521,7 @@
 
 
 
-              <div id="documents" class="tab-pane fade in" ng-show="tab==='documents'">
+              <div fade-in-tab id="documents"  class="tab-pane   active text-left" ng-show="tab==='documents'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
                 </div>
@@ -529,7 +529,7 @@
                   <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div  id="links" class="row tab-pane fade in active text-left" ng-show="tab==='links'">
+              <div  fade-in-tab  id="links" class="tab-pane    active text-left" ng-show="tab==='links'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-link" index="editIndex" name="links" document="doc" links="doc.links" save="saveDoc()"></link-list>
                 </div>
@@ -537,7 +537,7 @@
                   <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="links" document="doc" links="doc.links" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div  id="images" class="row tab-pane fade in active text-left" ng-show="tab==='images'">
+              <div  fade-in-tab  id="images" class="tab-pane    active text-left" ng-show="tab==='images'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-image" index="editIndex" name="images" document="doc" links="doc.images" save="saveDoc()"></link-list>
                 </div>
@@ -545,7 +545,7 @@
                   <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="images" document="doc" links="doc.images" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div  id="videos" class="row tab-pane fade in active text-left" ng-show="tab==='videos'">
+              <div fade-in-tab  id="videos" class="tab-pane    active text-left" ng-show="tab==='videos'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-video-camera" index="editIndex" name="videos" document="doc" links="doc.videos" save="saveDoc()"></link-list>
                 </div>
