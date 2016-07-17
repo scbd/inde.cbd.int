@@ -74,7 +74,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
             }
         };
     }]);
-    app.directive('editLink', ['$http', 'authentication', 'smoothScroll', function($http, authentication, smoothScroll) {
+    app.directive('editLink', ['$http', 'authentication', 'smoothScroll','devRouter', function($http, authentication, smoothScroll,devRouter) {
         return {
             restrict: 'E',
             template: template,
@@ -118,11 +118,20 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //=======================================================================
                 //
                 //=======================================================================
-                function saveLink(editLinkForm) {
+                function saveLink() {
                     $scope.document.uri = isYoutubeWatchFix($scope.document.uri); // fix malformed youtube by user
 
+                    var params={};
+                    if(devRouter.isDev())
+                      params.dev=true;
+
+                    if($scope.doc._id)
+                      params.docid=$scope.doc._id;
+
                     if ($scope.document.tempFile)
-                        $http.get("/api/v2016/mongo-document-attachment/" + $scope.document.tempFile, {}).then(function() {
+                        $http.get("/api/v2016/mongo-document-attachment/" + $scope.document.tempFile,  {
+                            params:params
+                        }).then(function() {
                             save();
                             delete($scope.document.tempFile);
                         }).catch(function(error) {
@@ -139,7 +148,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //=======================================================================
                 // saves doc to mongo
                 //=======================================================================
-                function save(form) {
+                function save() {
 
                     if (!_.isNumber($scope.editIndex)) // if new put in array
                         $scope.documents.push($scope.document);
@@ -237,6 +246,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                     if (!_id) throw "Error: no docId set to upload attachment";
                     var postData = {
                         filename: file.name,
+                        mongo:true,
                         //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                         // hence no camalized and no hyphanized meta names
                         metadata: {

@@ -18,6 +18,44 @@
     .tab-content {
       background-color: #b2dba1
     }
+    .tab-content {
+padding:10px;
+border:1px solid #ddd;
+border-bottom:0px;
+}
+.nav-tabs-bottom {
+border-bottom: 0px;
+border-top: 1px solid #ddd;
+}
+.nav-tabs-bottom > li {
+margin-bottom:0;
+margin-top:-1px;
+}
+
+.nav-tabs-bottom > li > a {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+  line-height: 20px !important;
+  border: 1px solid transparent !important;
+      -moz-border-radius:0px !important;
+    -webkit-border-radius:0px !important;
+    border-radius:0px !important;
+
+  -moz-border-radius-bottomright: 5px !important;
+  -webkit-border-bottom-right-radius: 5px !important;
+  border-bottom-right-radius: 5px !important;
+
+  -moz-border-radius-bottomleft: 5px !important;
+  -webkit-border-bottom-left-radius: 5px !important;
+  border-bottom-left-radius: 5px !important;
+}
+.nav-tabs-bottom  > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+color: #555555 !important;
+cursor: default !important;
+background-color: #ffffff !important;
+border: 1px solid #ddd !important;
+border-top-color: transparent !important;
+}
   </style>
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
@@ -41,6 +79,13 @@
       </h2>
     </legend>
     <div></div>
+    <div class="row" >
+      <div class="col-lg-6  col-lg-offset-6 col-xs-12 text-right text-nowrap" >
+           <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="submit"  >Save (as is)</button>
+         <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit"  > Save & Validate Step</button>
+         <button ng-click="publishRequestDial()"  ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"  >Register Request</button>
+      </div>
+    </div>
     <div class="row">
 
       <div class="col-xs-12">
@@ -59,6 +104,7 @@
     <div>
       <br>
     </div>
+
     <div fade-in-tab id="general" class="tab-pane   active text-left" ng-show="tab==='general'">
       <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
@@ -553,17 +599,28 @@
                   <edit-link ng-show="showEdit()" index="editIndex" schema="inde-side-events" name="videos" document="doc" links="doc.videos" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div class="row">
-                <div ng-class="{'col-lg-2 col-lg-offset-10 col-xs-12':!isTabsValid()}" ng-show="!isTabsValid()">
-                    <div>
 
-                      <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-primary" type="submit" style="width:100%;margin-top:15px;">Next</button>
-                    </div>
+              <div class="row">
+
+                <div class="col-xs-12">
+                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist">
+                    <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
+                    <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='contact'}" ng-click="showTab('contact')"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='documents'}" ng-click="showTab('documents')"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='images'}" ng-click="showTab('images')"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
+                    <li role="presentation" ng-class="{'active':tab==='videos'}" ng-click="showTab('videos')"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
+                  </ul>
                 </div>
-                <div ng-class="{'col-lg-2 col-lg-offset-10 col-xs-12':isTabsValid()}">
-                    <div>
-                      <button ng-click="publishRequestDial()" ng-show="!showEdit() && (doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-primary" type="button" style="width:100%;margin-top:15px;">Register Request</button>
-                    </div>
+              </div>
+
+              <div class="row" >
+                <div class="col-lg-6  col-lg-offset-6 col-xs-12 text-right text-nowrap" >
+                     <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="submit"  >Save (as is)</button>
+                   <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit"  > Save & Validate Step</button>
+                   <button ng-click="publishRequestDial()"  ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"  >Register Request</button>
                 </div>
               </div>
   </form>

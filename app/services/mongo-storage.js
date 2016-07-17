@@ -96,8 +96,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                                           }
                                       }).then(function(m) {
                                           conferences[key].meetings = m.data;
-
-                                          //localStorage.setItem('allConferences', JSON.stringify(conferences));
                                       }));
                               });
                           });

@@ -85,6 +85,9 @@ define(['app', 'lodash',
                         }, true);
 
 
+                        //============================================================
+                        //
+                        //============================================================
                           function compareDates(a,b) {
                           if (moment(a.StartDate).isBefore(b.StartDate))
                             return 1;
@@ -110,6 +113,7 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         $scope.$on('$locationChangeStart', function(event) {
+
                             if ($scope.editForm.$dirty && !$scope.ignoreDirtyCheck) {
                                 var answer = confirm("Are you sure you want to leave this page, your data has not been saved?");
                                 if (!answer)
@@ -443,10 +447,11 @@ define(['app', 'lodash',
                                       if($location.search().c)
                                       _.each($scope.options.conferences, function(conf) {
                                           if (conf._id === $location.search().c)
-                                              conf.selected = true;
+                                            {  conf.selected = true;
+                                              $scope.doc.conference=conf._id;}
                                           else
                                               conf.selected = false;
-                                          $scope.doc.conference=conf._id;
+
                                       });
                                       else{
                                         $scope.doc.conference=$scope.options.conferences[0]._id;
@@ -520,6 +525,7 @@ define(['app', 'lodash',
                             });
                         } // init
 
+
                         //============================================================
                         //
                         //============================================================
@@ -591,12 +597,14 @@ define(['app', 'lodash',
                             });
                         }
 
+
                         //=======================================================================
                         //
                         //=======================================================================
                         $scope.orgCallback = function() {
                             $scope.showOrgForm = 0;
                         };
+
 
                         //=======================================================================
                         //
@@ -605,7 +613,6 @@ define(['app', 'lodash',
 
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
-console.log('$scope._id',$scope._id);
                             if (!$scope.doc.id && !$scope._id) {
 
                                 return mongoStorage.save($scope.schema, $scope.doc)
@@ -628,7 +635,6 @@ console.log('$scope._id',$scope._id);
                             if(!_.isEmpty(tempFile))
                                   saveLogoNewDoc(tempFile);// move form temporary to perminant on S3
                             else{
-  console.log('no tempfile detected');
                               $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
                               $location.url('/manage/events/'+$scope._id);
                             }
@@ -644,35 +650,34 @@ console.log('$scope._id',$scope._id);
                             return tempFile;
                         }else
                           return false;
-
                       }//getTempFile
 
 
                       //=======================================================================
                       //
                       //=======================================================================
-                      function saveLogoNewDoc(tempFile){
-                        tempFile.metadata.docid=$scope._id;
+                      function saveLogoNewDoc(tempFile) {
+                          tempFile.metadata.docid = $scope._id;
 
-                        if(tempFile.metadata.schema && tempFile.metadata.docid && tempFile.metadata.filename){
+                          if (tempFile.metadata.schema && tempFile.metadata.docid && tempFile.metadata.filename) {
 
-                            return mongoStorage.moveTempFileToPermanent(tempFile,$scope._id).then(function(){
+                              return mongoStorage.moveTempFileToPermanent(tempFile, $scope._id).then(function() {
 
-                                mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
-                                  $scope.doc=document;
-                              $scope.doc.logo='https://s3.amazonaws.com/mongo.document.attachments/';
-                              $scope.doc.logo+=tempFile.metadata.schema+'/';
-                              $scope.doc.logo+=tempFile.metadata.docid+'/';
-                              $scope.doc.logo+=tempFile.metadata.filename;
+                                  mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
+                                      $scope.doc = document;
+                                      $scope.doc.logo = 'https://s3.amazonaws.com/mongo.document.attachments/';
+                                      $scope.doc.logo += tempFile.metadata.schema + '/';
+                                      $scope.doc.logo += tempFile.metadata.docid + '/';
+                                      $scope.doc.logo += tempFile.metadata.filename;
 
-                              return $scope.saveDoc().then(function(){
-                                  $location.url('/manage/events/'+$scope._id);
-                              });
-});
-                            }).catch($scope.onError);
-                        }else
-                          throw 'Error: Missing schema or id or filename to move file from temp to perminant';
-                      }//saveLogoNewDoc
+                                      return $scope.saveDoc().then(function() {
+                                          $location.url('/manage/events/' + $scope._id);
+                                      });
+                                  });
+                              }).catch($scope.onError);
+                          } else
+                              throw 'Error: Missing schema or id or filename to move file from temp to perminant';
+                      } //saveLogoNewDoc
 
 
                         //=======================================================================
@@ -725,6 +730,10 @@ console.log('$scope._id',$scope._id);
                             }
 
                         };
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
                         $scope.submitForm = function(formData) {
                             $scope.submitted = true;
                             switch ($scope.tab) {
@@ -896,6 +905,7 @@ console.log('$scope._id',$scope._id);
                             }
                         } //submitGeneral
 
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -949,14 +959,19 @@ console.log('$scope._id',$scope._id);
                         } //submitGeneral
 
 
-function validateResponsibleOrgs (){
-  var isValid =true;
-  _.each($scope.doc.responsibleOrgs, function(resOrg) {
-      if(!resOrg.lastName || !resOrg.email)
-        isValid =false;
-  });
-  return isValid;
-}
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function validateResponsibleOrgs (){
+                          var isValid =true;
+                          _.each($scope.doc.responsibleOrgs, function(resOrg) {
+                              if(!resOrg.lastName || !resOrg.email)
+                                isValid =false;
+                          });
+                          return isValid;
+                        }
+
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -977,6 +992,8 @@ function validateResponsibleOrgs (){
                             return ($scope.doc.validTabs.general && $scope.doc.validTabs.logistics && $scope.doc.validTabs.orgs && $scope.doc.validTabs.contact);
                         }
                         $scope.isTabsValid = isTabsValid;
+
+
                         //=======================================================================
                         //
                         //=======================================================================

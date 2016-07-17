@@ -16,7 +16,7 @@
 
 <div>
   <div class="row">
-  <button ng-if="!viewOnly" type="button" class="btn  btn-default pull-right" style="margin-bottom:15px;margin-right:20px;" value="Submit" ng-click="edit(true)"> New <i class="fa fa-plus"></i></button>
+  <button ng-if="!viewOnly" type="button" class="btn  btn-default pull-right" style="margin-bottom:15px;margin-right:20px;" value="Submit" ng-click="edit(true)" ng-disabled="!doc._id"> New <i class="fa fa-plus"></i></button>
 </div>
   <div class="table-responsive">
     <table class="table table-striped">
