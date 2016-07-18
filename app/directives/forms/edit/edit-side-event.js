@@ -49,6 +49,12 @@ define(['app', 'lodash',
                             time: /^([0-1][0-9]|2[0-3]|[0-9]):[0-5][0-9]$/,
                             email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
                         };
+
+
+                        $scope.options = {};
+
+
+
                         $scope.tab = 'general';
                         $('#general-tab').tab('show');
 
@@ -84,6 +90,18 @@ define(['app', 'lodash',
 
                             }
                         }, true);
+
+                        //============================================================
+                        //
+                        //============================================================
+                        function loadSubjects()
+                        {
+                            return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
+                                cache: true
+                            }).then(function(o) {
+                              $scope.options.subjects =Thesaurus.buildTree(o.data);
+                            });
+                        }
 
 
                         //============================================================
@@ -138,10 +156,10 @@ define(['app', 'lodash',
                             $scope.ignoreDirtyCheck = true;
                             dialog.closePromise.then(function(ret) {
 
-                                if (ret.value == 'draft') $scope.saveDoc().then(function() {
+                                if (ret.value === 'draft') $scope.saveDoc().then(function() {
                                     $scope.close();
                                 });
-                                if (ret.value == 'publish') $scope.requestPublish().then(function() {
+                                if (ret.value === 'publish') $scope.requestPublish().then(function() {
                                     $scope.close();
                                 }).catch(function onerror(response) {
 
@@ -224,7 +242,7 @@ define(['app', 'lodash',
                               });
                               if($scope.doc.meta && ($scope.doc.meta.status==='published' || $scope.doc.meta.status==='request') && count===4)
                                 count++;
-      
+
                                 return count;
 
                         };
@@ -411,7 +429,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects()]).then(function() {
                               showProgress();
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
@@ -469,6 +487,8 @@ define(['app', 'lodash',
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
                                             if (!$scope.doc.videos) $scope.doc.videos = [];
+                                            if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
+                                            if (!$scope.doc.prefDate)$scope.doc.prefDate={};
 
                                       if($location.search().c)
                                       _.each($scope.options.conferences, function(conf) {
@@ -598,17 +618,6 @@ define(['app', 'lodash',
                                 $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
                         };
 
-
-                        //============================================================
-                        //
-                        //============================================================
-                        $scope.options = {
-                            subjects: $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
-                                cache: true
-                            }).then(function(o) {
-                                return Thesaurus.buildTree(o.data);
-                            })
-                        };
 
 
                         //=======================================================================
