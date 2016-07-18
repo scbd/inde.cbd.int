@@ -4,10 +4,16 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
         var user;
         var clientOrg = 0; // means cbd
+        loadUser() ;
 
-        authentication.getUser().then(function(u) {
-            user = u;
-        });
+        //============================================================
+        //
+        //============================================================
+        function loadUser() {
+            return authentication.getUser().then(function(u) {
+                user = u;
+            });
+        }
 
         //============================================================
         //
@@ -150,7 +156,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                             'params': params
                         }).then(function(res) {
 
-                            return countries().then(function(data) {
+                            return $q.all([countries(),loadUser()]).then(function(data) {
                                 var orgsAndParties = _.union(res.data, data);
                                 localStorage.setItem('allOrgs', JSON.stringify(orgsAndParties));
                                 params = {
