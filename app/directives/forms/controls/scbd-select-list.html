@@ -75,7 +75,7 @@ animation-fill-mode: forwards;
         <div style="padding:10px;position:relative;width:100%;text-align:left;height:28px;background-color:#fff;" ng-click="select(docObj);" waves>
           <div class="panel panel-default" style="height:25px; width:100%;line-height:25px;vertical-align:bottom;padding-left:5px;padding-right:5px;white-space: nowrap; overflow:hidden;">
             <i class="fa fa-check-square-o" ng-show="docObj.selected"></i><i class="fa fa-square-o" ng-show="!docObj.selected"></i>
-            <img ng-if="docObj.logo" src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
+            <img ng-if="docObj.logo" ng-src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
             <span ng-if="docObj.identifier.length===2" class="flag-icon flag-icon-{{docObj.identifier}}" ></span>
             <span style="font-weight:bold;">{{docObj.acronym }} </span>
             <span class="hidden-md hidden-sm hidden-xs">{{docObj.title }}</span>
@@ -101,7 +101,7 @@ animation-fill-mode: forwards;
     <div dragula='"se-bag"' dragula-model='binding' style="padding:10px;min-height:150px;border-style:solid;border-width:1px;border-color:#009B48;">
       <div class="chip" ng-repeat="doc in binding track by $index" style="margin-left:20px;margin-bottom:10px;" ng-show="mirror[$index].acronym || mirror[$index].title">
         <span>#{{$index+1}}</span>
-        <img src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
+        <img ng-src="{{mirror[$index].logo}}" ng-if="mirror[$index].logo.length>0" />
         <img ng-if="mirror[$index]._id.length===2" class="flag-icon flag-icon-{{mirror[$index].identifier}}" ></img>
         <span ng-if="mirror[$index].acronym"> {{mirror[$index].acronym | limitTo : 40}}</span>
         <span ng-if="!mirror[$index].acronym"> {{mirror[$index].title | limitTo : 40}}</span>

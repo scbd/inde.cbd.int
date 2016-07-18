@@ -114,13 +114,13 @@
           <div class="collection-item " ng-init="setLoading($last)">
 
             <div class="collection-item-img-cont pull-right hidden-lg hidden-xl" style="position:relative;right:30px;top:20px;">
-              <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
+                <span ng-if="doc.logo.length"><img ng-if="doc.logo.length" ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
               <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
             </div>
 
             <div style=" position:absolute;top:0px;left:0px;">
               <div class="collection-item-img-cont hidden-sm hidden-md hidden-xs">
-                <img ng-if="doc.logo.length" src="{{doc.logo}}" class="collection-item-img"></img>
+                <span ng-if="doc.logo.length"><img  ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
                 <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
               </div>
             </div>
@@ -174,7 +174,7 @@
                 <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
                   <span class="text-nowrap">
                     <span class="cir">
-                      <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                      <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
                       <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
                     </span>
                     <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
@@ -191,7 +191,7 @@
               <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
                 <span class="text-nowrap">
                   <span class="cir">
-                    <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                    <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
                     <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
                   </span>
                   <span ng-if="org._id.length>2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
