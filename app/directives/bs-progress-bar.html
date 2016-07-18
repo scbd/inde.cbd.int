@@ -1,0 +1,4 @@
+  <span class='small'>{{total}} {{label}}</span>
+            <div class='progress'>
+         <div class='progress-bar {{barClass}}' title='{{complete/total * 100 | number:0 }}%' style='width:{{complete/total * 100}}%;'>{{showPercent ? (complete/total*100) : complete | number:0}} {{completeLabel}}</div>   
+            </div>

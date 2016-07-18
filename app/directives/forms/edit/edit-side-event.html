@@ -56,6 +56,7 @@ background-color: #ffffff !important;
 border: 1px solid #ddd !important;
 border-top-color: transparent !important;
 }
+
   </style>
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
@@ -79,17 +80,27 @@ border-top-color: transparent !important;
       </h2>
     </legend>
     <div></div>
-    <div class="row" >
-      <div class="col-lg-6  col-lg-offset-6 col-xs-12 text-right text-nowrap" >
-           <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="submit"  >Save (as is)</button>
-         <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit"  > Save & Validate Step</button>
-         <button ng-click="publishRequestDial()"  ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"  >Register Request</button>
-      </div>
+<div class="row">
+
+  <div class="col-lg-6   col-xs-12 text-nowrap">
+
+    <div ng-if="showProg">
+      <bs-progress-bar id="form-progress" class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
+
     </div>
+  </div>
+  <div class="col-lg-6  col-xs-12 text-right text-nowrap">
+    <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
+      ng-click="saveDoc()">Save</button>
+    <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
+    Save & Validate Step</button>
+    <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+  </div>
+</div>
     <div class="row">
 
       <div class="col-xs-12">
-        <ul class="nav nav-tabs" role="tablist">
+        <ul class="nav nav-tabs" role="tablist" >
           <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
           <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
@@ -603,7 +614,7 @@ border-top-color: transparent !important;
               <div class="row">
 
                 <div class="col-xs-12">
-                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist">
+                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist" style="padding-top:15px;">
                     <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
                     <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
                     <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
@@ -616,11 +627,21 @@ border-top-color: transparent !important;
                 </div>
               </div>
 
-              <div class="row" >
-                <div class="col-lg-6  col-lg-offset-6 col-xs-12 text-right text-nowrap" >
-                     <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="submit"  >Save (as is)</button>
-                   <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit"  > Save & Validate Step</button>
-                   <button ng-click="publishRequestDial()"  ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"  >Register Request</button>
+              <div class="row">
+
+                <div class="col-lg-6   col-xs-12 text-nowrap">
+
+                  <div ng-if="showProg">
+                    <bs-progress-bar id="form-progress" class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
+
+                  </div>
+                </div>
+                <div class="col-lg-6  col-xs-12 text-right text-nowrap">
+                  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
+                    ng-click="saveDoc()">Save</button>
+                  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
+                  Save & Validate Step</button>
+                  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
                 </div>
               </div>
   </form>

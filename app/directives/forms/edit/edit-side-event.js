@@ -13,7 +13,8 @@ define(['app', 'lodash',
     './edit-link',
     'directives/link-list',
     'services/theasarus', 'ngDialog', 'ngSmoothScroll',
-    'directives/fade-in-tab'
+    'directives/fade-in-tab',
+    'directives/bs-progress-bar'
 ], function(app, _, template, moment, dialogTemplate, rangy) {
     app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
         function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
@@ -213,7 +214,31 @@ define(['app', 'lodash',
                                 (!$scope.doc.responsibleOrgs[index] || ($scope.doc.responsibleOrgs[index] && ($scope.doc.responsibleOrgs[index].sameAs !== 'me'))));
 
                         };
+                        //============================================================
+                        //
+                        //============================================================
+                        $scope.numStepsCompleted = function() {
+                              var count =0;
+                              _.each($scope.doc.validTabs,function(tab,key){
+                                if(tab && (key!=='links' || key!=='publications' || key!=='images' || key!=='videos' )) count++;
+                              });
+                              if($scope.doc.meta && ($scope.doc.meta.status==='published' || $scope.doc.meta.status==='request') && count===4)
+                                count++;
+      
+                                return count;
 
+                        };
+
+                        //============================================================
+                        //
+                        //============================================================
+                        function showProgress() {
+                          $scope.showProg=true;
+                              $timeout(function(){
+                                if($scope.numStepsCompleted()===5)
+                                  $scope.showProg = false;
+                              },5000);
+                        }
 
                         //============================================================
                         //
@@ -387,6 +412,7 @@ define(['app', 'lodash',
                             $scope.editIndex = false;
 
                             $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences()]).then(function() {
+                              showProgress();
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
                                     if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
