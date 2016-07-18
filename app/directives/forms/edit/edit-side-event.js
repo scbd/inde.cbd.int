@@ -726,10 +726,8 @@ define(['app', 'lodash',
                                     _id: id
                                 });
                                 if (orgFound) return orgFound.logo;
-                                else
-                                    return;
-
                             }
+                            return 'app/images/ic_business_black_48px.svg';
                         };
 
                         //=======================================================================
