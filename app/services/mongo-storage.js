@@ -124,16 +124,18 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 });
         } // loadDocs
 
-
+        var loadOrgsInProgress=null;
         //============================================================
         //
         //============================================================
         function loadOrgs(force) {
 
-            return isModified('inde-orgs').then(
+            if(loadOrgsInProgress) return loadOrgsInProgress;
+            loadOrgsInProgress = isModified('inde-orgs').then(
                 function(isModified) {
 
                     var params = {};
+
                     if (!localStorage.getItem('allOrgs') || isModified || force) {
                         params = {
                             q: {
@@ -143,13 +145,14 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                                 }
                             }
                         };
-                        return $http.get('/api/v2016/inde-orgs', {
+
+                        return  $http.get('/api/v2016/inde-orgs', {
                             'params': params
                         }).then(function(res) {
 
                             return countries().then(function(data) {
                                 var orgsAndParties = _.union(res.data, data);
-                                localStorage.setItem('allOrgs-' + user.userID, JSON.stringify(orgsAndParties));
+                                localStorage.setItem('allOrgs', JSON.stringify(orgsAndParties));
                                 params = {
                                     q: {
 
@@ -166,6 +169,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                                 return $http.get('/api/v2016/inde-orgs', {
                                     'params': params
                                 }).then(function(res) {
+                                    loadOrgsInProgress=null;
                                     orgsAndParties = _.union(res.data, orgsAndParties);
                                     return orgsAndParties;
                                 });
@@ -187,12 +191,15 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                         return $http.get('/api/v2016/inde-orgs', {
                             'params': params
                         }).then(function(res) {
-                            return _.union(res.data, JSON.parse(localStorage.getItem('allOrgs-' + user.userID)));
+                            loadOrgsInProgress = null;
+                            return _.union(res.data, JSON.parse(localStorage.getItem('allOrgs')));
                         });
 
                     }
 
                 });
+
+                return loadOrgsInProgress;
         } // loadDocs
 
 
@@ -574,17 +581,26 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             return save(schema, docObj, _id);
         }
 
+        var isModifiedInProgress =null;
         //=======================================================================
         //
         //=======================================================================
         function isModified(schema) {
+
+          if(isModifiedInProgress)
+           return isModifiedInProgress;
+
             var isModified = true;
+
             var modifiedSchemas = localStorage.getItem('modifiedSchemas');
 
             if (modifiedSchemas)
                 modifiedSchemas = JSON.parse(modifiedSchemas);
 
-            return $q(function(resolve, reject) {
+
+
+
+            isModifiedInProgress= $q(function(resolve, reject) {
 
                 $http.get('/api/v2016/' + schema + '/last-modified').then(function(lastModified) {
 
@@ -595,20 +611,25 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
                         modifiedSchemas[schema] = lastModified.data;
                         localStorage.setItem('modifiedSchemas', JSON.stringify(modifiedSchemas));
+                        isModifiedInProgress=null;
                         resolve(isModified);
                     } else {
 
                         isModified = false;
+                        isModifiedInProgress=null;
                         resolve(isModified);
+
                     }
                 }).catch(function(err) {
+                    isModifiedInProgress=null;
                     reject(err);
                 });
 
             });
+            return isModifiedInProgress;
         }
 
-
+//todo inprogress stringify query as key in array
         //=======================================================================
         //
         //=======================================================================
