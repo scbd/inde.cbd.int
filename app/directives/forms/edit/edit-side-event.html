@@ -18,11 +18,11 @@
     .tab-content {
       background-color: #b2dba1
     }
-    .tab-content {
+    /*.tab-content {
 padding:10px;
 border:1px solid #ddd;
 border-bottom:0px;
-}
+}*/
 .nav-tabs-bottom {
 border-bottom: 0px;
 border-top: 1px solid #ddd;
@@ -49,7 +49,7 @@ margin-top:-1px;
   -webkit-border-bottom-left-radius: 5px !important;
   border-bottom-left-radius: 5px !important;
 }
-.nav-tabs-bottom  > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus {
+.nav-tabs-bottom  > .active > a, .nav-tabs-bottom > .active > a:hover, .nav-tabs-bottom > .active > a:focus {
 color: #555555 !important;
 cursor: default !important;
 background-color: #ffffff !important;
@@ -89,13 +89,21 @@ border-top-color: transparent !important;
 
     </div>
   </div>
-  <div class="col-lg-6  col-xs-12 text-right text-nowrap">
+  <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-bottom:15px;">
     <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
       ng-click="saveDoc()">Save</button>
     <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
     Save & Validate Step</button>
     <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
   </div>
+
+<div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
+  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default btn-block" type="button"
+    ng-click="saveDoc()">Save</button>
+  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning btn-block" type="submit">
+  Save & Validate Step</button>
+  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+</div>
 </div>
     <div class="row">
 
@@ -135,7 +143,7 @@ border-top-color: transparent !important;
               <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
                   <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
                     <label>Subject(s)</label><br>
-                    <div km-select required multiple name="subjects" ng-model="doc.subjects" watch-items items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
+                    <div km-select required multiple name="subjects" ng-model="doc.subjects"  items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
                     <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
                   </div>
 
@@ -164,7 +172,7 @@ border-top-color: transparent !important;
     </div>
 
 
-			<div fade-in-tab id="logistics"  class="tab-pane   active text-left" ng-show="tab==='logistics'">
+			<div fade-in-tab id="logistics"  class="tab-pane   active text-left" ng-show="tab==='logistics'" >
         <legend class="container-subheader">
           <h2>Conference and Associated Meetings </h2>
         </legend>
@@ -204,8 +212,8 @@ border-top-color: transparent !important;
             </legend>
             <div class="row">
 
-              <div class="ccol-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-                <div ng-class="{'has-error': editForm.prefDateOne.$invalid && editForm.$submitted,'has-error': editForm.prefTimeOne.$invalid && editForm.$submitted }">
+              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
+                <div id="ssdf" ng-class="{'has-error': (editForm.prefDateOne.$invalid && editForm.$submitted)|| (editForm.prefTimeOne.$invalid && editForm.$submitted) }">
                   <label>First Choice</label>
                   <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Date</option>
@@ -221,7 +229,7 @@ border-top-color: transparent !important;
                 </div>
               </div>
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-                <div ng-class="{'has-error': editForm.prefDateTwo.$invalid && editForm.$submitted,'has-error': editForm.prefTimeTwo.$invalid && editForm.$submitted }">
+                <div ng-class="{'has-error': (editForm.prefDateTwo.$invalid && editForm.$submitted) || (editForm.prefTimeTwo.$invalid && editForm.$submitted )}">
                   <label>Second Choice</label>
                   <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Date</option>
@@ -237,7 +245,7 @@ border-top-color: transparent !important;
                 </div>
               </div>
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
-                <div ng-class="{'has-error': editForm.prefDateThree.$invalid && editForm.$submitted,'has-error': editForm.prefTimeThree.$invalid && editForm.$submitted }" >
+                <div ng-class="{'has-error': (editForm.prefDateThree.$invalid && editForm.$submitted) || (editForm.prefTimeThree.$invalid && editForm.$submitted)}" >
                   <label>Third Choice</label>
                   <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Date</option>
@@ -518,7 +526,11 @@ border-top-color: transparent !important;
                             <tr ng-repeat="org in doc.hostOrgs" ng-if="isOrgPublishable(org) || isOrgParty(org)" >
 
                               <td class="text-nowrap">
-                                <img src="{{getOrgImgSource(org)}}" ng-show="getOrgImgSource(org)" style="max-hight:38px;max-width:38px;" />
+
+
+                                  <img  ng-if="org.length>2" ng-src="{{getOrgImgSource(org);}}" style="max-hight:38px;max-width:38px;" />
+
+
                                 <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
 
                                 {{getOrgName(org)}} <i class="fa fa-info-circle" aria-hidden="true"></i></td>
@@ -573,7 +585,7 @@ border-top-color: transparent !important;
                       </div>
                     </div>
                   </div>
-                  <!-- end contact persons tab -->
+
               </div>
 
 
@@ -613,8 +625,8 @@ border-top-color: transparent !important;
 
               <div class="row">
 
-                <div class="col-xs-12">
-                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist" style="padding-top:15px;">
+                <div class="col-xs-12" style="margin-top:15px;">
+                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist" >
                     <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
                     <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
                     <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
@@ -636,13 +648,21 @@ border-top-color: transparent !important;
 
                   </div>
                 </div>
-                <div class="col-lg-6  col-xs-12 text-right text-nowrap">
+                <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;">
                   <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
                     ng-click="saveDoc()">Save</button>
                   <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
                   Save & Validate Step</button>
                   <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
                 </div>
+
+              <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-top:15px;">
+                <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default btn-block" type="button"
+                  ng-click="saveDoc()">Save</button>
+                <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning btn-block" type="submit">
+                Save & Validate Step</button>
+                <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
               </div>
+            </div>
   </form>
 </div>
