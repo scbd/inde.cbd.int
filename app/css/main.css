@@ -6,7 +6,7 @@
 @import url(collection.css);
 @import url(chip.css);
 
-
+#t-headerLogo a:hover{text-decoration:none;}
 
 .imbeded{background-color: #eeeeee;padding: 10px 20px 20px 20px;}
 .bs-callout {
