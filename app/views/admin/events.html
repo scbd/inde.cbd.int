@@ -12,12 +12,7 @@
 
 
   <section class="row relative">
-    <!-- menues -->
-    <scbd-side-menu overlay id="admin" sections="menu">
-      <div class="portal-branding dash-nav-header" layout-align="center center">
-        <h1>Admin Center</h1>
-      </div>
-    </scbd-side-menu>
+
     <scbd-side-menu right-side overlay id="adminOptions" sections="menu">
       <div class="portal-branding dash-nav-header" layout-align="center center">
         <h1>Options</h1>
@@ -51,7 +46,6 @@
 
       <!-- chips -->
       <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">
-        <!-- ng-repeat="status in statiFacits " -->
         <div ng-show="loading" style="display:inline;">
           <i class="fa fa-spinner fa-spin"></i> Loading...
         </div>
@@ -99,7 +93,6 @@
           </div>Archived
           <span class="sqr">{{statusFacits.archived}}</span>
         </div>
-
       </div>
 
 
