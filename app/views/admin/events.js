@@ -128,14 +128,11 @@ define(['app', 'lodash',
             //
             //============================================================
             $scope.customSearch = function(doc) {
-
                 if (!$scope.search || $scope.search == ' ' || $scope.search.length <= 2)
                     return true;
 
                 var temp = JSON.stringify(doc);
-
                 return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
-
             };
 
 
@@ -378,8 +375,7 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function loadHostOrgs(doc) {
-                return $q(function(resolve, reject) {
-                    if (_.isEmpty(doc.hostOrgs)) resolve(true);
+                return $q.all([loadOrgs()]).then(function() {
                     _.each(doc.hostOrgs, function(orgId) {
                         if (!_.find($scope.orgs, {
                                 _id: orgId
@@ -389,12 +385,9 @@ define(['app', 'lodash',
                                         _id: orgId
                                     }) && mongoStorage.isPublishable(responce))
                                     $scope.orgs.push(responce);
-                                resolve(true);
-                            }).catch(function() {
-                                reject(false);
-                            });
-                        } else
-                            resolve(true);
+
+                            }).catch(onError);
+                        }
 
                     });
                 });
@@ -510,7 +503,7 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            $scope.onError = function(res) {
+            function onError (res) {
 
                 $scope.status = "error";
                 if (res.status === -1) {
@@ -536,7 +529,7 @@ define(['app', 'lodash',
                     $scope.error = res.data.Message;
                 else
                     $scope.error = res.data;
-            }; // on error
+            }
 
 
             //============================================================
