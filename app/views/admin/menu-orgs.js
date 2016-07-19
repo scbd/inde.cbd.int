@@ -1,4 +1,4 @@
-define(['app','../../directives/side-menu/scbd-side-menu'], function (app,_) {
+define(['app','directives/side-menu/scbd-side-menu'], function (app,_) {
 
 app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
 
@@ -108,7 +108,7 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
               roles:['Administrator','IndeAdministrator'],
             },
             {
-              name: 'Approved',
+              name: 'Under Review',
               type: 'link',
               path: '',
               mdIcon: 'thumb_up',
@@ -138,13 +138,7 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
           mdIcon: 'remove_red_eye',
           roles:['Administrator','IndeAdministrator'],
           pages: [
-            {
-              name: 'Card View',
-              type: 'link',
-              path: '',
-              mdIcon: 'view_module',
-              roles:['Administrator','IndeAdministrator'],
-            },
+
             {
               name: 'List View',
               type: 'link',
@@ -152,19 +146,12 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
               mdIcon: 'view_list',
               roles:['Administrator','IndeAdministrator'],
             },
-          //   {
-          //   name: 'Detail View',
-          //   type: 'link',
-          //   path: '/admin/events/detail-view',
-          //   mdIcon: 'view_headline',
-          //   roles:['Administrator','IndeAdministrator'],
-          //
-          // }
         ],
         });
 
+        scbdMenuService.buildLinks(scbdMenuService.menus.adminOrgOptions);
 
-        scbdMenuService.validateMenus();// minds color classes and animation ect
+        scbdMenuService.validateMenus(); // minds color classes and animation ect
 
         return scbdMenuService;
   }]);
