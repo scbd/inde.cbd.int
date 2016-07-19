@@ -13,7 +13,7 @@ define(['app', 'lodash',
 
             $scope.loading = true;
             $scope.schema = "inde-orgs";
-            $scope.selectedChip = {};
+            $scope.selectedChip = 'all';
             $scope.docs = [];
 
             init();
@@ -220,7 +220,7 @@ define(['app', 'lodash',
                 $element.find('.chip').removeClass('chip-active');
                 $element.find('#chip-' + chip).addClass('chip-active');
 
-                if (chip === 'all')
+                if (!chip || chip === 'all' || chip === '' )
                     $scope.selectedChip = '';
                 else
                     $scope.selectedChip = chip;
@@ -232,7 +232,7 @@ define(['app', 'lodash',
             //
             //=======================================================================
             $scope.loadList = function() {
-
+                $scope.loading=true;
                 var loadDocsFunc = mongoStorage.loadDocs;
 
                 if ($location.absUrl().indexOf('manage') > -1)
@@ -299,8 +299,6 @@ define(['app', 'lodash',
             } //toggleListView
 
 
-
-
             //=======================================================================
             //
             //=======================================================================
@@ -324,7 +322,7 @@ define(['app', 'lodash',
                 return mongoStorage.deleteDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
-                    })
+                    });
                     getFacits(1000);
                 }).catch(onError);
 

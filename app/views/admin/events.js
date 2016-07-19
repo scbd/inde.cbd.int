@@ -12,7 +12,7 @@ define(['app', 'lodash',
 
             $scope.loading = true;
             $scope.schema = "inde-side-events";
-            $scope.selectedChip = {};
+            $scope.selectedChip = 'all';
             $scope.docs = [];
 
 
@@ -70,9 +70,10 @@ define(['app', 'lodash',
             //
             //============================================================
             function setLoading($last) {
+
                 $timeout(function() {
                     $scope.loading = !$last;
-                });
+               });
             }
             $scope.setLoading = setLoading;
 
@@ -86,11 +87,11 @@ define(['app', 'lodash',
                     if ($location.absUrl().indexOf('manage') > -1) {
                         mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
                             $scope.statusFacits = facits;
-                        });
+                        }).catch(onError);
                     } else {
                         mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
                             $scope.statusFacits = facits;
-                        });
+                        }).catch(onError);
                     }
                 }, time);
             }
@@ -110,7 +111,7 @@ define(['app', 'lodash',
             $scope.statusFilter = function(doc) {
                 if (doc.meta.status === $scope.selectedChip)
                     return doc;
-                else if ($scope.selectedChip === 'all' || $scope.selectedChip === '')
+                else if (!$scope.selectedChip || $scope.selectedChip === 'all' || $scope.selectedChip === '' )
                     return doc;
             };
 
@@ -171,7 +172,7 @@ define(['app', 'lodash',
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Under Review');
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // archiveOrg
 
 
@@ -184,7 +185,7 @@ define(['app', 'lodash',
                     .then(function() {
                         $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now canceled');
                         getFacits(1000);
-                    });
+                    }).catch(onError);
             }; // archiveOrg
 
 
@@ -197,7 +198,7 @@ define(['app', 'lodash',
                     .then(function() {
                         $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Rejected');
                         getFacits(1000);
-                    });
+                    }).catch(onError);
             }; // archiveOrg
 
 
@@ -249,12 +250,14 @@ define(['app', 'lodash',
                 $element.find('.chip').removeClass('chip-active');
                 $element.find('#chip-' + chip).addClass('chip-active');
 
-                if (chip === 'all')
+                if ( !chip || chip === 'all' || chip==='chip')
                     $scope.selectedChip = '';
                 else
                     $scope.selectedChip = chip;
-            } // archiveOrg
+            } // selectChip
             $scope.selectChip = selectChip;
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -262,6 +265,7 @@ define(['app', 'lodash',
                 return $scope.loading;
             } // archiveOrg
             $scope.isLoading = isLoading;
+
 
             //============================================================
             //
@@ -318,7 +322,7 @@ define(['app', 'lodash',
             //
             //=======================================================================
             $scope.loadList = function() {
-
+                $scope.loading = true;
 
                 return $q.all([loadOrgs(), loadConfrences()]).then(function() {
                     var srch = $location.search();
@@ -371,6 +375,7 @@ define(['app', 'lodash',
                 });
             }; // archiveOrg
 
+
             //=======================================================================
             //
             //=======================================================================
@@ -392,6 +397,7 @@ define(['app', 'lodash',
                     });
                 });
             } //submitGeneral
+
 
             //=======================================================================
             //
@@ -438,7 +444,7 @@ define(['app', 'lodash',
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now archived');
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // archiveDoc
 
 
@@ -452,7 +458,7 @@ define(['app', 'lodash',
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is deleted permanently');
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // deleteDoc
 
 
@@ -466,7 +472,7 @@ define(['app', 'lodash',
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is unarchived and saved as a draft');
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; //unArchiveDoc
 
 
@@ -491,12 +497,10 @@ define(['app', 'lodash',
             //=======================================================================
             function toggleArchived() {
                 $scope.showArchived = !$scope.showArchived;
-                //  $timeout(function() {
                 selectChip('archived');
                 archiveList();
                 if (dashMenu.isOpen('adminOptions'))
                     $scope.toggle('adminOptions');
-                //    });
             } //toggleArchived
 
 
@@ -544,7 +548,6 @@ define(['app', 'lodash',
             //
             //=======================================================================
             $scope.close = function() {
-
                 history.goBack();
             };
         }
