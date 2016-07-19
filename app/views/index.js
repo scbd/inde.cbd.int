@@ -25,7 +25,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                     venueId:  { $exists: true }, // TMP for compatibility with coference collection;
                     StartDate: {'$gt':{'$date':moment.utc()}}
                 };
-                loadAllOrgsAndImages().then(
+                loadOrgs().then(
                     $http.get('/api/v2016/event-groups', { params : { q : query, s : { StartDate : -1 } } }).then(function(conf) {
                         $scope.conferences = $scope.options.conferences = conf.data;
                         loadSideEventTypes().then(function() {
@@ -64,8 +64,8 @@ define(['app', 'lodash', 'jquery', 'moment',
                 ); // then on load org
             } //init
 
-            function loadAllOrgsAndImages() {
-                return mongoStorage.loadOrgs('inde-orgs').then(function(orgs) {
+            function loadOrgs() {
+                return mongoStorage.loadOrgs().then(function(orgs) {
                     allOrgs = orgs;
                 });
             }
