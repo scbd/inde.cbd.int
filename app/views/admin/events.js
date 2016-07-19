@@ -381,10 +381,10 @@ define(['app', 'lodash',
                                 _id: orgId
                             })) {
                             mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
-                                if (!_.find($scope.orgs, {
-                                        _id: orgId
-                                    }) && mongoStorage.isPublishable(responce))
-                                    $scope.orgs.push(responce);
+                              if (!_.find($scope.orgs, {
+                                      _id: orgId
+                                  }) && mongoStorage.isPublishable(responce))
+                                $scope.orgs.push(responce);
 
                             }).catch(onError);
                         }

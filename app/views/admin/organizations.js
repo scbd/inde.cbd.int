@@ -8,74 +8,13 @@ define(['app', 'lodash',
 ], function(app, _, deleteDialog) {
 
     app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog', //"$http", "$filter", "Thesaurus",
-        function($scope, adminMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog) { //, $http, $filter, Thesaurus
+        function($scope, dashMenu, $q, $http, $filter, $route, mongoStorage, $location, $element, $timeout, $window, authentication, history, ngDialog) { //, $http, $filter, Thesaurus
 
 
-            $scope.loading = false;
+            $scope.loading = true;
             $scope.schema = "inde-orgs";
-            $scope.createURL = '/manage/organizations/new';
-            $scope.editURL = '/manage/organizations/';
-            $timeout(function() {
-                $scope.toggle = adminMenu.toggle;
-
-                $scope.sectionsOptions = adminMenu.getMenu('adminOrgOptions');
-                var sec = _.findWhere($scope.sectionsOptions, {
-                    name: 'Sort'
-                });
-                sec.path = sortOrder;
-                sec = _.findWhere($scope.sectionsOptions, {
-                    name: 'Archives'
-                });
-                sec.path = toggleArchived;
-
-                sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                    name: 'All'
-                });
-                sec.path = function(){selectChip('all');};
-
-                sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                    name: 'Drafts'
-                });
-                sec.path = function(){selectChip('draft');};
-
-                sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                    name: 'Requests'
-                });
-                sec.path = function(){selectChip('request');};
-
-                sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                    name: 'Approved'
-                });
-                sec.path = function(){selectChip('approved');};
-
-                sec = _.findWhere($scope.sectionsOptions[5].pages, {
-                    name: 'Canceled'
-                });
-                sec.path = function(){selectChip('canceled');};
-
-                sec = _.findWhere($scope.sectionsOptions[6].pages, {
-                    name: 'Card View'
-                });
-                sec.path = cardView;
-                sec = _.findWhere($scope.sectionsOptions[6].pages, {
-                    name: 'List View'
-                });
-                sec.path = listView;
-            }, 2000);
-
-
-
-            $scope.sortReverse = 0;
-            $scope.listView = 0;
-            $scope.showArchived = 0;
-            $scope.statusFacits = {};
-            $scope.statusFacits.all = 0;
-            $scope.statusFacitsArcView = {};
-            $scope.statusFacitsArcView.all = 0;
-            $scope.selectedChip = '';
-
+            $scope.selectedChip = {};
             $scope.docs = [];
-            var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
 
             init();
 
@@ -84,36 +23,63 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function init() {
+              initSlideMenu() ;
                 authentication.getUser().then(function(u) {
                     $scope.selectChip('all');
                     $scope.user = u;
-                    $scope.loadList();
+                    $scope.loadList().catch(onError);
                     getFacits();
                 });
             } //init
 
-            //============================================================
+
+            //=======================================================================
             //
-            //============================================================
-            $scope.$watch('statusFacits', function() {
-                if(!$scope.statusFacits[$scope.selectedChip])
-                selectChip('all');
-            },true);
+            //=======================================================================
+            function initSlideMenu() {
+
+                $scope.menu = dashMenu.getMenu('adminOrgOptions');
+                $scope.toggle = dashMenu.toggle;
+
+                dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
+                dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
+                dashMenu.setPathOfLink($scope.menu, 'All', function() {
+                    selectChip('all');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Drafts', function() {
+                    selectChip('draft');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Requests', function() {
+                    selectChip('request');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Under Review', function() {
+                    selectChip('approved');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Canceled', function() {
+                    selectChip('canceled');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
+                    selectChip('rejected');
+                });
+                dashMenu.setPathOfLink($scope.menu, 'List View', listView);
+            }
+
+
 
             //=======================================================================
             //
             //=======================================================================
             function getFacits(time) {
-
-              $timeout(function(){ // time out prevent an additional call for facits as they are force updated by save
+              var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+              return $timeout(function(){ // time out prevent an additional call for facits as they are force updated by save
                 if ($location.absUrl().indexOf('manage') > -1) {
-                    mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
+                    return mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
                         $scope.statusFacits = facits;
-                    });
+                    }).catch(onError);
                 } else {
-                    mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
+                    return mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
                         $scope.statusFacits = facits;
-                    });
+                    }).catch(onError);
                 }
               },time);
             }
@@ -152,7 +118,6 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function sortOrder() {
-
                 $scope.sortReverse = !$scope.sortReverse;
                 $scope.toggle('orgOptions');
             }
@@ -187,8 +152,6 @@ define(['app', 'lodash',
                 var temp = JSON.stringify(doc);
 
                 return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
-
-
             };
 
 
@@ -199,7 +162,7 @@ define(['app', 'lodash',
                 docObj.meta.status = 'published';
                 mongoStorage.approveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // approveDoc
 
 
@@ -210,7 +173,7 @@ define(['app', 'lodash',
                 docObj.meta.status = 'canceled';
                 mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // cancelDoc
 
 
@@ -221,7 +184,7 @@ define(['app', 'lodash',
                 docObj.meta.status = 'rejected';
                 mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // archiveOrg
 
 
@@ -246,7 +209,7 @@ define(['app', 'lodash',
 
                 return loadDocsFunc($scope.schema).then(function(response) {
                     $scope.docs = response.data;
-                });
+                }).catch(onError);
             } // archiveOrg
 
 
@@ -275,7 +238,7 @@ define(['app', 'lodash',
                 if ($location.absUrl().indexOf('manage') > -1)
                     loadDocsFunc = mongoStorage.loadOwnerDocs;
 
-                loadDocsFunc($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
+                return loadDocsFunc($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
                     $scope.docs = response.data;
 
                     if ($scope.isAdmin)
@@ -285,8 +248,9 @@ define(['app', 'lodash',
                                 cache: true
                             }).then(function onsuccess(response) {
                                 doc.contact = response.data;
-                            });
+                            }).catch(onError);
                         });
+                          $scope.loading=false;
                 }).then(function() {
                     var srch = $location.search();
                     if (!_.isEmpty(srch)) {
@@ -295,8 +259,9 @@ define(['app', 'lodash',
                             getFacits(1000);
                             archiveList().then(function() {
                                 $timeout(function() {
+                                  $scope.loading=false;
                                     selectChip(srch.chip);
-                                }, 1000);
+                                }, 1000).catch(onError);
                             });
                         } else
                             $timeout(function() {
@@ -307,7 +272,7 @@ define(['app', 'lodash',
                             selectChip('all');
                         }, 1000);
                     }
-                });
+                }).catch(onError);
             }; // loadList
 
 
@@ -334,13 +299,6 @@ define(['app', 'lodash',
             } //toggleListView
 
 
-            //=======================================================================
-            //
-            //=======================================================================
-            function cardView() {
-                $scope.listView = 1;
-                $scope.toggle('orgOptions');
-            } //toggleListView
 
 
             //=======================================================================
@@ -353,7 +311,7 @@ define(['app', 'lodash',
                         return obj._id === docObj._id;
                     });
                     getFacits(1000);
-                });
+                }).catch(onError);
 
             }; // archiveOrg
 
@@ -366,9 +324,9 @@ define(['app', 'lodash',
                 return mongoStorage.deleteDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
-                    });
+                    })
                     getFacits(1000);
-                });
+                }).catch(onError);
 
             }; // archiveOrg
 
@@ -383,7 +341,7 @@ define(['app', 'lodash',
                         return obj._id === docObj._id;
                     });
                     getFacits(1000);
-                });
+                }).catch(onError);
             }; // archiveOrg
 
 
@@ -406,59 +364,14 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            function selectChipAll() {
-                selectChip('all');
-                $scope.toggle('orgOptions');
-            } //
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipDraft() {
-                selectChip('draft');
-                $scope.toggle('orgOptions');
-            } //
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipRequest() {
-                selectChip('request');
-                $scope.toggle('orgOptions');
-            } //
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipApproved() {
-                selectChip('published');
-                $scope.toggle('orgOptions');
-            } //
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function selectChipCanceled() {
-                selectChip('canceled');
-                $scope.toggle('orgOptions');
-            } //
-
-
-            //=======================================================================
-            //
-            //=======================================================================
             function toggleArchived() {
                 $timeout(function() {
                     if (!$scope.showArchived) {
                         getFacits(1000);
-                        archiveList();
+                        archiveList().catch(onError);
                     } else {
                         getFacits(1000);
-                        $scope.loadList();
+                        $scope.loadList().catch(onError);
                     }
 
                     $scope.showArchived = !$scope.showArchived;
@@ -480,7 +393,7 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            $scope.onError = function(res) {
+            function onError(res)  {
 
                 $scope.status = "error";
                 if (res.status === -1) {
@@ -506,7 +419,7 @@ define(['app', 'lodash',
                     $scope.error = res.data.Message;
                 else
                     $scope.error = res.data;
-            };
+            }
 
 
             //============================================================
