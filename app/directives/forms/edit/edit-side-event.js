@@ -681,6 +681,7 @@ define(['app', 'lodash',
                       function getTempFile(){
                         if(!_.isEmpty($scope.doc.tempFile)){
                           var tempFile=$scope.doc.tempFile;
+                          tempFile.name=encodeURIComponent(tempFile.name);
                             delete($scope.doc.tempFile);
                             return tempFile;
                         }else

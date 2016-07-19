@@ -63,7 +63,7 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
 
 
                             if (!file.$error && $attrs.schema &&  $attrs.docId)
-                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function() {
+                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function(responce) {
 
                                   if(!devRouter.isDev())
                                     pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
