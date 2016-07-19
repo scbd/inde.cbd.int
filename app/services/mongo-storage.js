@@ -11,7 +11,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //============================================================
         function loadUser() {
             return authentication.getUser().then(function(u) {
-                user = u;
+                return user = u;
             });
         }
 
@@ -137,6 +137,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         function loadOrgs(force) {
 
             if(loadOrgsInProgress) return loadOrgsInProgress;
+
             loadOrgsInProgress = isModified('inde-orgs').then(
                 function(isModified) {
 
@@ -157,7 +158,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                         }).then(function(res) {
 
                             return $q.all([countries(),loadUser()]).then(function(data) {
-                                var orgsAndParties = _.union(res.data, data);
+                                var orgsAndParties = _.union(res.data, data[0]);
+
                                 localStorage.setItem('allOrgs', JSON.stringify(orgsAndParties));
                                 params = {
                                     q: {
