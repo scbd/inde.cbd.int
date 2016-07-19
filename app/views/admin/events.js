@@ -119,10 +119,8 @@ define(['app', 'lodash',
             //
             //============================================================
             function sortOrder() {
-
                 $scope.sortReverse = !$scope.sortReverse;
-
-                $scope.toggle('adminOptions');
+                $scope.toggle('adminOrgOptions');
             }
 
 
