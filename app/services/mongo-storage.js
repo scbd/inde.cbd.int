@@ -868,7 +868,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //=======================================================================
         function isPublishable(doc) {
 
-            if (isDraft(doc) || isRequest(doc) || isPublished(doc))
+            if (isDraft(doc) || isRequest(doc) || isPublished(doc) || doc._id.length===2)
                 return true;
             else return false;
         }
