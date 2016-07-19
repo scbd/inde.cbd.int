@@ -229,7 +229,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
 
                         authentication.getUser().then(function(res) {
                             $scope.user = res;
-                            $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' + file.name;
+                            $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' + encodeURI(file.name);
                             uploadDocAtt($scope.schema, $scope.doc._id, file);
                         });
                    });
@@ -245,7 +245,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                     if (!schema) throw "Error: no schema set to upload attachment";
                     if (!_id) throw "Error: no docId set to upload attachment";
                     var postData = {
-                        filename: file.name,
+                        filename: encodeURI(file.name),
                         mongo:true,
                         //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                         // hence no camalized and no hyphanized meta names
@@ -254,7 +254,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                             createdon: Date.now(),
                             schema: schema,
                             docid: _id,
-                            filename: file.name,
+                            filename: encodeURI(file.name),
                         }
                     };
                     return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
@@ -267,9 +267,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                                 'Content-Type': target.contentType
                             }
                         }).then(function() {
-                            // move temp file form temp to its proper home schema/is/filename
                             $scope.document.tempFile = target.uid;
-                            //return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {});
                         });
                     });
 

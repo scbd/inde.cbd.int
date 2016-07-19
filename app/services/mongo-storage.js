@@ -657,7 +657,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
             isModified(schema).then(
                 function(isModified) {
-                    if (schema === 'inde-orgs') loadOrgs(true);
+
                     if (!statusFacits || isModified || force) {
 
                         if (!statusFacits) statusFacits = {};
@@ -756,7 +756,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             if (!schema) throw "Error: no schema set to upload attachment";
             if(!options)options={};
             var postData = {
-                filename: file.name,
+                filename: encodeURI(file.name),
                 mongo:true,
                 //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                 // hence no camalized and no hyphanized meta names
@@ -766,7 +766,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                     createdon: Date.now(),
                     schema: schema,
                     docid: options._id,
-                    filename: file.name,
+                    filename: encodeURI(file.name),
                 }
             };
             return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
