@@ -756,7 +756,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             if (!schema) throw "Error: no schema set to upload attachment";
             if(!options)options={};
             var postData = {
-                filename: file.name,
+                filename: replaceAllSpaces(file.name),
                 mongo:true,
                 //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                 // hence no camalized and no hyphanized meta names
@@ -766,7 +766,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                     createdon: Date.now(),
                     schema: schema,
                     docid: options._id,
-                    filename: file.name,
+                    filename: replaceAllSpaces(file.name),
                 }
             };
             return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
@@ -778,6 +778,30 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             });
         } // touch
 
+
+        //=======================================================================
+        //
+        //=======================================================================
+      function replaceAllSpaces(string) {
+
+          return string.split(' ').reduce(function(prev, curr, index) {
+              if (index === 0) return curr;
+              else return prev + '-' + curr;
+          }, '');
+
+      }
+        //=======================================================================
+        //
+        //=======================================================================
+      function awsFileNameFix(string) {
+          string = encodeURIComponent(string);
+          return string.split('%20').reduce(function(prev, curr, index) {
+              curr = curr.replace("'", '%27');
+              if (index === 0) return curr;
+              else return prev + '-' + curr;
+          }, '');
+
+      }
         //=======================================================================
         //
         //=======================================================================
@@ -867,7 +891,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //=======================================================================
         function isPublishable(doc) {
-
+            if(!doc) return false;
             if (isDraft(doc) || isRequest(doc) || isPublished(doc) || doc._id.length===2)
                 return true;
             else return false;
@@ -882,6 +906,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             else return false;
         }
         return {
+          awsFileNameFix:awsFileNameFix,
             getCountries: countries,
             getLatestConfrences: getLatestConfrences,
             getReservations: getReservations,

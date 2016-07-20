@@ -61,17 +61,16 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
                         _.each(files, function(file) {
                             var pubDoc = {};
 
-
                             if (!file.$error && $attrs.schema &&  $attrs.docId)
-                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function(responce) {
+                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function() {
 
                                   if(!devRouter.isDev())
-                                    pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
+                                    pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + mongoStorage.awsFileNameFix(file.name);
                                   else
-                                    pubDoc.src = 'https://s3.amazonaws.com/dev.mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + file.name;
+                                    pubDoc.src = 'https://s3.amazonaws.com/dev.mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + mongoStorage.awsFileNameFix(file.name);
 
                                   pubDoc.size = file.size;
-                                  pubDoc.name = file.name;
+                                  pubDoc.name =   mongoStorage.awsFileNameFix(file.name);
                                     if ($scope.isImage)
                                         $scope.binding = pubDoc.src;
                                     else
@@ -93,6 +92,7 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
                         });
                     }
                 }; //upload
+
 
                 $scope.init();
             }

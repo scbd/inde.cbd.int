@@ -28,11 +28,10 @@
     </div>
 
     <div class="col-xs-8 col-xs-offset-2">
-      <div class="form-group" ng-class="{ 'has-error': editLinkForm.description.$error.required && editLinkForm.$submitted}">
+      <div class="form-group" >
         <label for="description">Description</label>
 
-        <textarea class="form-control" name="description" id="description" ng-model="document.description" cols="30" rows="10" required ng-placeholder="Briefly describe your {{name}}."></textarea>
-        <p class="help-block error" ng-show="editLinkForm.description.$error.required && editLinkForm.$submitted" style="margin-top:2px">This field is mandatory</p>
+        <textarea class="form-control" name="description" id="description" ng-model="document.description" cols="30" rows="10" ng-placeholder="Briefly describe your {{name}}."></textarea>
       </div>
     </div>
     <div class="col-xs-8 col-xs-offset-2">
@@ -49,7 +48,7 @@
           <label for="logo">Enter the URI to your {{name}} or upload the file.
           </label>
 
-          <input type="url" class="form-control" id="uri" name="uri" placeholder="Enter in full path to the {{publication}} or upload it below." ng-model="document.uri" required>
+          <input type="url" class="form-control" id="linkUri" name="uri" placeholder="Enter in full path to the {{publication}} or upload it below." ng-model="document.uri" required>
           <p class="help-block error" ng-show="editLinkForm.uri.$error.required && editLinkForm.$submitted">This field is mandatory</p>
           <p class="help-block error" ng-show="editLinkForm.uri.$invalid && editLinkForm.uri.$touched">This is not a proper URI. URI should start with http:// such as http://google.ca or http://www.google.com</p>
 

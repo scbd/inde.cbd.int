@@ -681,7 +681,7 @@ define(['app', 'lodash',
                       function getTempFile(){
                         if(!_.isEmpty($scope.doc.tempFile)){
                           var tempFile=$scope.doc.tempFile;
-                          tempFile.name=encodeURIComponent(tempFile.name);
+
                             delete($scope.doc.tempFile);
                             return tempFile;
                         }else
@@ -704,7 +704,7 @@ define(['app', 'lodash',
                                       $scope.doc.logo = 'https://s3.amazonaws.com/mongo.document.attachments/';
                                       $scope.doc.logo += tempFile.metadata.schema + '/';
                                       $scope.doc.logo += tempFile.metadata.docid + '/';
-                                      $scope.doc.logo += tempFile.metadata.filename;
+                                      $scope.doc.logo +=   mongoStorage.awsFileNameFix(tempFile.metadata.filename);
 
                                       return $scope.saveDoc().then(function() {
                                           $location.url('/manage/events/' + $scope._id);

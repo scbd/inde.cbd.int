@@ -74,7 +74,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
             }
         };
     }]);
-    app.directive('editLink', ['$http', 'authentication', 'smoothScroll','devRouter', function($http, authentication, smoothScroll,devRouter) {
+    app.directive('editLink', ['$http', 'smoothScroll','devRouter', function($http, smoothScroll,devRouter) {
         return {
             restrict: 'E',
             template: template,
@@ -84,6 +84,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 documents: '=links',
                 save:      '&save',
                 editIndex: '=index',
+                onError: '&onError',
             },
             link: function($scope, $element, $attr) {
 
@@ -98,7 +99,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
 
             }, //link
 
-            controller: ["$scope", function($scope) {
+            controller: ['$scope','mongoStorage','$element', function($scope,mongoStorage,$element) {
 
                 $scope.$watch('editIndex', function() {
                     edit();
@@ -119,29 +120,17 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //
                 //=======================================================================
                 function saveLink() {
-                    $scope.document.uri = isYoutubeWatchFix($scope.document.uri); // fix malformed youtube by user
 
-                    var params={};
-                    if(devRouter.isDev())
-                      params.dev=true;
+                    if ($scope.editLinkForm.title.$error.required )
+                        findScrollFocus('title');
 
-                    if($scope.doc._id)
-                      params.docid=$scope.doc._id;
+                    if (($scope.editLinkForm.uri.$error.required || !$scope.editLinkForm.uri.$valid))
+                        findScrollFocus('linkUri');
 
-                    if ($scope.document.tempFile)
-                        $http.get("/api/v2016/mongo-document-attachment/" + $scope.document.tempFile,  {
-                            params:params
-                        }).then(function() {
-                            save();
-                            delete($scope.document.tempFile);
-                        }).catch(function(error) {
-                            console.log(error);
-                            $scope.error = error;
-                            throw error;
-                        });
-                    else
+                    if ($scope.editLinkForm.title.$valid && $scope.editLinkForm.uri.$valid ){
+                        $scope.document.uri = isYoutubeWatchFix($scope.document.uri);
                         save();
-
+                    }
                 } // saveLink
                 $scope.saveLink = saveLink;
 
@@ -153,10 +142,19 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                     if (!_.isNumber($scope.editIndex)) // if new put in array
                         $scope.documents.push($scope.document);
 
-                    $scope.save().then(function() {
+                    return $scope.save().then(function() {
                         $scope.editIndex = false;
+                        $scope.editLinkForm.$setPristine();
+                        $scope.editLinkForm.$setValidity();
+                        $scope.editLinkForm.$setUntouched();
+                        $scope.document={};
+                        var el = $element.find('#file');
+                        el.value='';
+                          $scope.focused=false;
+
                     }).catch(function(error) {
                         console.log(error);
+                        $scope.onError(error);
                         $scope.documents.pop();
                         $scope.error = error;
                         throw error;
@@ -223,55 +221,14 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //
                 //=======================================================================
                 function upload(files,uri) {
-
-
                     _.each(files, function(file) {
-
-                        authentication.getUser().then(function(res) {
-                            $scope.user = res;
-                            $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' + encodeURI(file.name);
-                            uploadDocAtt($scope.schema, $scope.doc._id, file);
-                        });
+                            mongoStorage.uploadDocAtt($scope.schema, $scope.doc._id, file).then(function(){
+                                      $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' +  mongoStorage.awsFileNameFix(file.name);
+                            }).catch($scope.onError);
                    });
-
-
                 }
                 $scope.upload = upload;
 
-                //=======================================================================
-                //
-                //=======================================================================
-                function uploadDocAtt(schema, _id, file) {
-                    if (!schema) throw "Error: no schema set to upload attachment";
-                    if (!_id) throw "Error: no docId set to upload attachment";
-                    var postData = {
-                        filename: encodeURI(file.name),
-                        mongo:true,
-                        //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
-                        // hence no camalized and no hyphanized meta names
-                        metadata: {
-                            createdby: $scope.user.userID,
-                            createdon: Date.now(),
-                            schema: schema,
-                            docid: _id,
-                            filename: encodeURI(file.name),
-                        }
-                    };
-                    return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
-                        // Create a temp file location to upload to
-                        return res.data;
-                    }).then(function(target) {
-                        // upload file to temp area
-                        return $http.put(target.url, file, {
-                            headers: {
-                                'Content-Type': target.contentType
-                            }
-                        }).then(function() {
-                            $scope.document.tempFile = target.uid;
-                        });
-                    });
-
-                } // uploadDocAtt
 
 
                 //=======================================================================
@@ -282,18 +239,11 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                     var el = document.getElementById(id);
 
                     if (!$scope.focused) {
-
-                        smoothScroll(el);
-                        if ($(el).is("input") || $(el).is("select"))
-                            el.focus();
-                        else {
-                            if ($(el).find('input').length === 0)
-                                $(el).find('textarea').focus();
-                            else
-                                $(el).find('input').focus();
-
-                        }
+                        smoothScroll(el); /// angular element does not work with smooth scroll
+                        $element.find('#'+id).focus(); // focus would not work with element from document
+                        $scope.focused=true;
                     }
+
                 } //
                 $scope.findScrollFocus = findScrollFocus;
             }],
