@@ -665,13 +665,14 @@ define(['app', 'lodash',
                         //=======================================================================
                         function postSaveNewDoc (result){
                           $scope._id=$scope.doc._id=result.data.id;
+                          $location.url('/manage/events/'+$scope._id);
                           var tempFile=getTempFile();
 
                             if(!_.isEmpty(tempFile))
                                   saveLogoNewDoc(tempFile);// move form temporary to perminant on S3
                             else{
                               $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
-                              $location.url('/manage/events/'+$scope._id);
+
                             }
                       }// postSaveNewDoc
 
@@ -998,6 +999,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         function validateResponsibleOrgs (){
                           var isValid =true;
+                          if(!$scope.doc.responsibleOrgs || _.isEmpty($scope.doc.responsibleOrgs)) isValid =false;
                           _.each($scope.doc.responsibleOrgs, function(resOrg) {
                               if(!resOrg.lastName || !resOrg.email)
                                 isValid =false;
