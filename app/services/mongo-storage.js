@@ -184,6 +184,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                             });
                         });
                     } else {
+                      return $q.all([countries(),loadUser()]).then(function() {
                         params = {
                             q: {
 
@@ -202,7 +203,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                             loadOrgsInProgress = null;
                             return _.union(res.data, JSON.parse(localStorage.getItem('allOrgs')));
                         });
-
+                      });
                     }
 
                 });
@@ -745,7 +746,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             if (!schema) throw "Error: no schema set to upload attachment";
             if (!_id) throw "Error: no docId set to upload attachment";
 
-            return uploadTempFile(schema, file, {'_id':_id}).then(function(target) {
+            return uploadTempFile(schema, file, {'_id':_id,'public':true}).then(function(target) {
                   return moveTempFileToPermanent(target.data);
             });
         } // touch
