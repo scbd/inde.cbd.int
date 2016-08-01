@@ -10,13 +10,15 @@ define(['app', 'lodash'], function(app, _) {
         };
     });
 
-    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q', function(mongoStorage, $route, $http, $sce, $location, $q) {
+    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication', function(mongoStorage, $route, $http, $sce, $location, $q, auth) {
 
         var _ctrl = this;
         var allOrgs;
+        var editable=false;
 
         _ctrl.hasError = hasError;
         _ctrl.trustSrc = trustSrc;
+        _ctrl.isEditable= isEditable;
         _ctrl.goTo = goTo;
         init();
         return this;
@@ -31,6 +33,23 @@ define(['app', 'lodash'], function(app, _) {
             });
         }
 
+        //==============================
+        //
+        //==============================
+        function loadEditPermisions(doc) {
+            return auth.getUser().then(
+              function(u){
+                  editable = (_.intersection(['Administrator', 'IndeAdministrator'], u.roles).length > 0) || u.userID===doc.meta.createdBy ;
+              }
+            );
+        }
+
+        //==============================
+        //
+        //==============================
+        function isEditable() {
+            return editable;
+        }
 
         //==============================
         //
@@ -94,7 +113,7 @@ define(['app', 'lodash'], function(app, _) {
                 cache: true
             }).then(function(res) {
                 if(!_ctrl.doc)_ctrl.doc={};
-                
+
                 _ctrl.doc.subjectObjs = [];
                 _.each(_ctrl.doc.subjects, function(subj) {
 
@@ -128,7 +147,7 @@ define(['app', 'lodash'], function(app, _) {
                     }); // each
 
                 }
-
+                loadEditPermisions(_ctrl.doc);
             }).catch(onError);
         }
 

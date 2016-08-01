@@ -7,7 +7,7 @@
   <div class="container-header col-xs-12" style="height:100%;margin-bottom:10px;">
     <span style="white-space: normal;">
       <h4>Side Event #{{sideEventCtrl.doc.id}}</h4>
-      <span ng-click="sideEventCtrl.goTo('/manage/events/',sideEventCtrl.doc._id)" class="pull-right pointer" ><a src="#"><i class="fa fa-edit"></i> Edit Side Event</a></span>
+      <span ng-if="sideEventCtrl.isEditable()" ng-click="sideEventCtrl.goTo('/manage/events/',sideEventCtrl.doc._id)" class="pull-right pointer" ><a src="#"><i class="fa fa-edit"></i> Edit Side Event</a></span>
     </span>
     <div class="clearfix"></div>
   </div>
