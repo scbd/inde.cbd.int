@@ -1,4 +1,4 @@
-define(['app', 'lodash',  '../../services/mongo-storage'], function(app, _) {
+define(['app', 'lodash',  'services/mongo-storage','directives/mobi-menu'], function(app, _) {
 
 
     app.controller("adminDashBoard", ['$scope',  '$location', 'mongoStorage',  'history',

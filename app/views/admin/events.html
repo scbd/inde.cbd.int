@@ -18,14 +18,12 @@
         <h1>Options</h1>
       </div>
     </scbd-side-menu>
-    <div class="container-header-name visible-xs">
-      <span ng-if="showArchived">Archived</span> Side Events</h1>
-      </span>
-    </div>
+
+
     <div class="list-container">
 
-      <div class="container-header">
-        <div style="position:absolute;left:15px; width:80%;">
+      <div mobi-menu>
+        <div class="col-xs-5 hidden-xs">
           <div class="input-group input-group-sm search-bs">
             <input type="test" class="form-control " ng-model="search">
             <span class="input-group-btn">
@@ -33,16 +31,26 @@
             </span>
           </div>
         </div>
-        <span class="container-header-name hidden-xs">
+        <span class="container-header-name">
           <h1 style="display:inline;">
             <span ng-if="showArchived">Archived</span> Side Events</h1>
         </span>
+
         <div class=" pull-right">
           <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button>
         </div>
         <div class="clearfix"></div>
       </div>
-
+      <div class="row">
+            <div  class="col-xs-12 visible-xs">
+              <div class="input-group input-group-sm search-bs">
+                <input type="test" class="form-control " ng-model="search">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
 
       <!-- chips -->
       <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">

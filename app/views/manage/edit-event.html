@@ -13,14 +13,15 @@
     </scbd-side-menu>
 
     <div class="list-container">
-      <div class="container-header">
-        <h1 style="display:inline;white-space:nowrap">
+      <div class="container-header" mobi-menu>
+        <span class="hidden-xs"><h1 style="display:inline;white-space:nowrap">
           <span ng-if="!isNew">Edit a</span>
           <span ng-if="isNew">Register a</span> Side Event </h1>
+        </span>
         <span class="visible-xs">
-          <h2 style="display:inline;background-color:#fff;">
+          <h4 style="display:inline;background-color:#fff;">
             <span ng-if="!isNew">Edit a</span>
-            <span ng-if="isNew">Register a</span> Side Event </h2>
+            <span ng-if="isNew">Register a</span> Side Event </h4>
         </span>
         <button style="position:absolute; right:10px; top:5px;" class="btn btn-default btn-sm" ng-click="close()" ng-if="prev"><i class="fa fa-times"></i></button>
       </div>

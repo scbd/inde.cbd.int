@@ -4,7 +4,8 @@ define(['app', 'lodash',
     './menu-orgs',
     'services/mongo-storage',
     'services/filters',
-    'ngDialog'
+    'ngDialog',
+    'directives/mobi-menu'
 ], function(app, _, deleteDialog) {
 
     app.controller("adminOrganizations", ['$scope', 'adminOrgMenu', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', 'authentication', 'history', 'ngDialog', //"$http", "$filter", "Thesaurus",

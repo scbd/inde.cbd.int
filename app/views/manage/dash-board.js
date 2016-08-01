@@ -1,4 +1,4 @@
-define(['app', '../../services/mongo-storage'], function(app) {
+define(['app', 'services/mongo-storage','directives/mobi-menu'], function(app) {
     app.controller("dashBoard", ['$scope', 'authentication', '$location', 'mongoStorage', 'history',
         function($scope, authentication, $location, mongoStorage, history) {
 

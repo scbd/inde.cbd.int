@@ -1,6 +1,7 @@
 define(['app', 'lodash', 'jquery', 'moment',
     'css!./index', '../services/mongo-storage',
-    'services/filters'
+    'services/filters',
+    'directives/mobi-menu'
 ], function(app, _, $, moment) {
 
     app.controller("home", ['$scope', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', '$anchorScroll',

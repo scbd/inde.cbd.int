@@ -1,6 +1,7 @@
 define(['app',
   'directives/forms/edit/edit-side-event',
-    'services/mongo-storage'
+    'services/mongo-storage',
+    'directives/mobi-menu'
 ], function(app) {
 
 
@@ -13,7 +14,7 @@ define(['app',
       $scope._id = $route.current.params.id;
       if($scope._id.length>3)$scope.isNew=false;
 
-    
+
 
       //=======================================================================
       //

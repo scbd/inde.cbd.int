@@ -4,7 +4,8 @@ define(['app', 'lodash',
     'services/mongo-storage',
     'services/filters',
     'services/dev-router',
-    'ngDialog'
+    'ngDialog',
+    'directives/mobi-menu'
 ], function(app, _, deleteDialog) {
 
     app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog',
