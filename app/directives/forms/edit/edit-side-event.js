@@ -88,11 +88,11 @@ define(['app', 'lodash',
                                     $scope.doc.validTabs.contact=true;
                                 }
                                 _.each($scope.doc.hostOrgs, function(resOrg, key) {
-                                    if($scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                    if(!_.isEmpty($scope.doc.responsibleOrgs) && $scope.doc.responsibleOrgs[key] && $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
                                       $scope.doc.responsibleOrgs[key].sameAs='';
                                 });
 
-                                if(!$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                                if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
                                   $scope.doc.responsible.sameAs='';
 
                             }
@@ -192,10 +192,10 @@ define(['app', 'lodash',
                             dialog.closePromise.then(function(ret) {
 
                                 if (ret.value === 'draft') $scope.saveDoc().then(function() {
-                                    $scope.close();
+                                    $scope.goTo('/manage');
                                 });
                                 if (ret.value === 'publish') $scope.requestPublish().then(function() {
-                                    $scope.close();
+                                    $scope.goTo('/manage');
                                 }).catch(onError);
 
                             });
@@ -673,6 +673,7 @@ define(['app', 'lodash',
 
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
+                            validateTabs();
                             if (!$scope.doc.id && !$scope._id) {
 
                                 return mongoStorage.save($scope.schema, $scope.doc)
@@ -843,6 +844,8 @@ define(['app', 'lodash',
                             return mongoStorage.isPublishable(orgFound);
                         } //submitGeneral
                         $scope.isOrgPublishable = isOrgPublishable;
+
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -854,11 +857,66 @@ define(['app', 'lodash',
                         } //submitGeneral
                         $scope.isOrgParty = isOrgParty;
 
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function validateTabs() {
+                          var formData = $scope.editForm;
+                            $scope.doc.validTabs.general = false;
+                            $scope.doc.validTabs.logistics = false;
+                            $scope.doc.validTabs.orgs = false;
+                            $scope.doc.validTabs.contact = false;
+
+                            if (formData.title.$valid && formData.description.$valid && formData.subjects.$valid)
+                                $scope.doc.validTabs.general = true;
+
+                            if (formData.conference.$valid && formData.expNumPart.$valid && formData.prefDateOne.$valid &&
+                                formData.prefTimeOne.$valid && formData.prefDateTwo.$valid && formData.prefTimeTwo.$valid &&
+                                formData.prefDateThree.$valid && formData.prefTimeThree.$valid
+                            )
+                                $scope.doc.validTabs.logistics = true;
+
+                            if (!_.isEmpty($scope.doc.hostOrgs) )
+                                $scope.doc.validTabs.orgs = true;
+
+                            var validRows = true;
+                            _.each($scope.doc.hostOrgs, function(resOrg, key) {
+
+                                if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
+                                    if (validRows) validRows = false;
+                                }
+
+                                if (formData['lastName_' + key].required && $scope.submitted) {
+                                    if (validRows) validRows = false;
+                                }
+                                if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
+                                    validRows = false;
+
+                                _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                                    if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                      $scope.doc.responsibleOrgs[key].sameAs='';
+                                });
+
+                                if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                                  $scope.doc.responsible.sameAs='';
+                            });
+
+                            if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
+                                formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
+                            )
+                              $scope.doc.validTabs.contact = true;
+
+                        } //validateTabs
+                        $scope.validateTabs = validateTabs;
+
+
                         //=======================================================================
                         //
                         //=======================================================================
                         function submitGeneral(formData) {
                             $scope.doc.validTabs.general = false;
+                            $scope.doc.validTabs.logistics = false;
                             if (formData.title.$error.required && $scope.submitted)
                                 findScrollFocus('editForm.title');
 
@@ -1009,15 +1067,15 @@ define(['app', 'lodash',
                                     findScrollFocus('lastName_' + key);
                                     if (validRows) validRows = false;
                                 }
-                                if(duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
+                                if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
                                     validRows = false;
 
                                 _.each($scope.doc.hostOrgs, function(resOrg, key) {
-                                    if(!$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                    if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
                                       $scope.doc.responsibleOrgs[key].sameAs='';
                                 });
 
-                                if(!$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                                if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
                                   $scope.doc.responsible.sameAs='';
                             });
 
