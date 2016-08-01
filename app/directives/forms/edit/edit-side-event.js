@@ -29,7 +29,7 @@ define(['app', 'lodash',
                         $scope.status = "";
                         $scope._id = $route.current.params.id;
 
-                        $scope.loading = false;
+                        $scope.loading = true;
                         $scope.schema = "inde-side-events";
                         $scope.showOrgForm = 0;
                         $scope.isNew = true;
@@ -88,7 +88,7 @@ define(['app', 'lodash',
                                     $scope.doc.validTabs.contact=true;
                                 }
                                 _.each($scope.doc.hostOrgs, function(resOrg, key) {
-                                    if(!$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                    if($scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
                                       $scope.doc.responsibleOrgs[key].sameAs='';
                                 });
 
@@ -107,9 +107,39 @@ define(['app', 'lodash',
                                 cache: true
                             }).then(function(o) {
                               $scope.options.subjects =Thesaurus.buildTree(o.data);
-                            });
+                            }).catch(onError);
                         }
 
+                        //============================================================
+                        //
+                        //============================================================
+                        function onError (res) {
+
+                            $scope.status = "error";
+                            if (res.status === -1) {
+                                $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            }
+                            if (res.status == "notAuthorized") {
+                                $scope.error = "You are not authorized to perform this action: [Method:" + res.config.method + " URI:" + res.config.url + "]";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == 404) {
+                                $scope.error = "The server at URI: " + res.config.url + " has responded that the record was not found.";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == 500) {
+                                $scope.error = "The server at URI: " + res.config.url + " has responded with an internal server error message.";
+                                if (res.data.message)
+                                    $scope.error += " Message Detail: " + res.data.message;
+                            } else if (res.status == "badSchema") {
+                                $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
+                            } else if (res.data.Message)
+                                $scope.error = res.data.Message;
+                            else
+                                $scope.error = res.data;
+                        }
 
                         //============================================================
                         //
@@ -130,9 +160,7 @@ define(['app', 'lodash',
 
                                 $scope.options.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
 
-                            }).catch(function onerror(response) {
-                                $scope.onError(response);
-                            });
+                            }).catch(onError);
                         }
 
                         //============================================================
@@ -168,11 +196,7 @@ define(['app', 'lodash',
                                 });
                                 if (ret.value === 'publish') $scope.requestPublish().then(function() {
                                     $scope.close();
-                                }).catch(function onerror(response) {
-
-                                    $scope.onError(response);
-
-                                });
+                                }).catch(onError);
 
                             });
                         };
@@ -304,7 +328,7 @@ define(['app', 'lodash',
                                             $scope.doc.responsible.personalTitle = '';
                                         }
                                         $scope.doc.responsible.email = user.email || '';
-                                    });
+                                    }).catch(onError);
                                     break;
                             }
                         } // $scope.sameAsResponisble
@@ -363,7 +387,7 @@ define(['app', 'lodash',
                                             $scope.onError(response);
                                         });
                                 });
-                            });
+                            }).catch(onError);
                         };
                         //=======================================================================
                         //
@@ -400,13 +424,13 @@ define(['app', 'lodash',
                         function loadUser() {
                             return auth.getUser().then(function(user) {
                                 $scope.me = user;
-                            });
+                            }).catch(onError);
                         }
 
                         function loadOrgs() {
                             return mongoStorage.loadOrgs().then(function(orgs) {
                                 $scope.options.orgs = orgs;
-                            });
+                            }).catch(onError);
                         }
 
                         function showTab(validTabs){
@@ -427,6 +451,8 @@ define(['app', 'lodash',
 
                         }
                         $scope.showTab=showTab;
+
+
                         //============================================================
                         //
                         //============================================================
@@ -467,12 +493,8 @@ define(['app', 'lodash',
                                               numHostOrgs = $scope.doc.hostOrgs.length;
                                             else
                                                 numHostOrgs = 0;
-
-                                        }).catch(function onerror(response) {
-
-                                            $scope.onError(response);
-
-                                        });
+                                            $scope.loading=false;
+                                        }).catch(onError);
                                 } else {
                                             $scope.loading = true;
                                             $scope.doc = {};
@@ -510,9 +532,9 @@ define(['app', 'lodash',
                                         $scope.doc.conference=$scope.options.conferences[0]._id;
                                         $scope.options.conferences[0].selected=true;
                                       }
-
+                                      $scope.loading=false;
                                 }
-                            }); // load orgs
+                            }).catch(onError); // load orgs
                         } // init
 
 
@@ -608,9 +630,7 @@ define(['app', 'lodash',
                                     $scope.doc.contact.lastName = _.clone(response.data.LastName);
                                     $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
 
-                                }).catch(function onerror(response) {
-                                    $scope.onError(response);
-                                });
+                                }).catch(onError);
                             });
                         } // initProfile()
 
@@ -634,9 +654,7 @@ define(['app', 'lodash',
                             return mongoStorage.getCountries().then(function(o) {
                                 $scope.options.countries = $filter("orderBy")(o, "name.en");
                                 return $scope.options.countries;
-                            }).catch(function onerror(response) {
-                                $scope.onError(response);
-                            });
+                            }).catch(onError);
                         }
 
 
@@ -659,11 +677,11 @@ define(['app', 'lodash',
 
                                 return mongoStorage.save($scope.schema, $scope.doc)
                                   .then(postSaveNewDoc)
-                                    .catch($scope.onError);
+                                    .catch(onError);
                             } else
                                 return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
                                     $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' Saved as Draft');
-                                }).catch($scope.onError);
+                                }).catch(onError);
                         };
 
 
@@ -718,7 +736,7 @@ define(['app', 'lodash',
                                           $location.url('/manage/events/' + $scope._id);
                                       });
                                   });
-                              }).catch($scope.onError);
+                              }).catch(onError);
                           } else
                               throw 'Error: Missing schema or id or filename to move file from temp to perminant';
                       } //saveLogoNewDoc
@@ -809,7 +827,7 @@ define(['app', 'lodash',
                                                 _id: orgId
                                             }) && mongoStorage.isPublishable(responce))
                                             $scope.options.orgs.push(responce);
-                                    });
+                                    }).catch(onError);
                                 }
                             });
                         } //submitGeneral
@@ -1107,36 +1125,6 @@ define(['app', 'lodash',
                         }
 
 
-                        //============================================================
-                        //
-                        //============================================================
-                        $scope.onError = function(res) {
-
-                            $scope.status = "error";
-                            if (res.status === -1) {
-                                $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
-                                if (res.data.message)
-                                    $scope.error += " Message Detail: " + res.data.message;
-                            }
-                            if (res.status == "notAuthorized") {
-                                $scope.error = "You are not authorized to perform this action: [Method:" + res.config.method + " URI:" + res.config.url + "]";
-                                if (res.data.message)
-                                    $scope.error += " Message Detail: " + res.data.message;
-                            } else if (res.status == 404) {
-                                $scope.error = "The server at URI: " + res.config.url + " has responded that the record was not found.";
-                                if (res.data.message)
-                                    $scope.error += " Message Detail: " + res.data.message;
-                            } else if (res.status == 500) {
-                                $scope.error = "The server at URI: " + res.config.url + " has responded with an internal server error message.";
-                                if (res.data.message)
-                                    $scope.error += " Message Detail: " + res.data.message;
-                            } else if (res.status == "badSchema") {
-                                $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
-                            } else if (res.data && res.data.Message)
-                                $scope.error = res.data.Message;
-                            else
-                                $scope.error = res.data;
-                        };
                         //============================================================
                         //
                         //============================================================

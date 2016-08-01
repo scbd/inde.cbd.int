@@ -534,6 +534,7 @@ define(['app', 'lodash',
                 else
                     $scope.error = res.data;
             }
+            $scope.onError=onError;
 
 
             //============================================================

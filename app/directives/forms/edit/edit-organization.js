@@ -19,20 +19,11 @@ define(['app', 'lodash',
                 },
                 link: function($scope, $element, $attrs) { //, $http, $filter, Thesaurus
 
-                        $scope.options = {
-                            countries: function() {
-                                return $http.get("https://api.cbd.int/api/v2015/countries", {
-                                    cache: true
-                                }).then(function(o) {
-                                    return $filter("orderBy")(o.data, "name.en");
-                                });
-                            },
-                        };
-
                         $scope.$watch('hide', function() {
                             if ($scope.hide)
                                 init();
                         });
+
 
                         //==================================
                         //
@@ -42,6 +33,7 @@ define(['app', 'lodash',
                               $scope.isInForm = true;
 
                         }, true);
+
 
                         //=======================================================================
                         //
@@ -56,9 +48,6 @@ define(['app', 'lodash',
 
                           $scope.doc = {};
 
-
-
-
                             if ((!$scope._id || $scope._id === '0' || $scope._id === 'new') && $scope.hide) {
 
                                 mongoStorage.createDoc('inde-orgs').then(
@@ -69,7 +58,7 @@ define(['app', 'lodash',
                                         $scope.isNew = true;
                                         $scope.doc.hostOrgs = [];
                                     }
-                                );
+                                ).catch(onError);
 
                             } else {
 
@@ -83,9 +72,11 @@ define(['app', 'lodash',
                                             $scope.doc.logo = 'app/images/ic_business_black_48px.svg';
                                         $scope.isNew = false;
 
-                                    });
+                                    }).catch(onError);
                             }
                         }
+
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -102,8 +93,10 @@ define(['app', 'lodash',
                                     $scope._id=null;
 
                                 }
-                            });
+                                $scope.$emit('showSuccess', 'Organization Created');
+                            }).catch(onError);
                         };
+
 
                         //============================================================
                         //
@@ -112,15 +105,18 @@ define(['app', 'lodash',
                                 $scope.doc.logo = 'app/images/ic_business_black_48px.svg';
                             }; // initProfile()
 
+
                         //============================================================
                         //
                         //============================================================
                         $scope.toggleForm = function() {
                                 $scope.hide = !$scope.hide;
-                            } // initProfile()
-                            //=======================================================================
-                            //
-                            //=======================================================================
+                        }; // initProfile()
+
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
                         $scope.close = function() {
                             history.goBack();
                         };
@@ -140,9 +136,10 @@ define(['app', 'lodash',
                             //dialogTemplate = $compile(dialogTemplate,$scope);
 
                             $scope.doc.meta.status = 'request';
-                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id);
+                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).catch(onError);
 
                         };
+
                         //=======================================================================
                         //
                         //=======================================================================
@@ -157,10 +154,13 @@ define(['app', 'lodash',
 
                                 if (!formData.title && $scope.submitted) {
                                     findScrollFocus('editOrgForm.title');
+                                    $scope.$emit('showError', 'Title of organization is required');
                                     return;
                                 }
-                                if (!formData.acronym && $scope.submitted)
+                                if (!formData.acronym && $scope.submitted){
+                                  $scope.$emit('showError', 'Acronym of organization is required');
                                     findScrollFocus('editOrgForm.acronym');
+                                  }
 
                             }
 
@@ -189,6 +189,7 @@ define(['app', 'lodash',
                                 $scope.focused = true;
                             }
                         }
+
                         //============================================================
                         //
                         //============================================================
@@ -201,9 +202,8 @@ define(['app', 'lodash',
                                     scope: $scope,
                                     preCloseCallback: $scope.close
                                 });
-
-
                         };
+
                         //============================================================
                         //
                         //============================================================
@@ -220,11 +220,7 @@ define(['app', 'lodash',
                             dialog.closePromise.then(function(ret) {
 
                                 if (ret.value == 'draft') $scope.close();
-                                if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(function onerror(response) {
-
-                                    $scope.onError(response);
-
-                                });
+                                if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(onError);
 
                             });
                         };
@@ -232,7 +228,7 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
-                        $scope.onError = function(res) {
+                        function onError (res) {
 
                             $scope.status = "error";
                             if (res.status === -1) {
@@ -258,7 +254,10 @@ define(['app', 'lodash',
                                 $scope.error = res.data.Message;
                             else
                                 $scope.error = res.data;
-                        };
+                        }
+                        $scope.onError=onError;
+
+
                         //============================================================
                         //
                         //============================================================
