@@ -84,9 +84,16 @@ define(['app', 'lodash',
                                   $scope.doc.validTabs.contact=false;
                                 }else{
                                   $scope.doc.validTabs.orgs=true;
-                                  if(validateResponsibleOrgs())
+                                  if(validateResponsibleOrgs() && $scope.doc.validTabs.contact)
                                     $scope.doc.validTabs.contact=true;
                                 }
+                                _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                                    if(!$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                      $scope.doc.responsibleOrgs[key].sameAs='';
+                                });
+
+                                if(!$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                                  $scope.doc.responsible.sameAs='';
 
                             }
                         }, true);
@@ -962,6 +969,12 @@ define(['app', 'lodash',
                             if ((formData.emaill.$error.required || formData.emaill.$error.pattern || formData.emaill.$error.email) && $scope.submitted)
                                 findScrollFocus('editForm.email');
 
+                            if ((formData.responsibleEmail.$error.required || formData.responsibleEmail.$error.pattern || formData.responsibleEmail.$error.email) && $scope.submitted)
+                                findScrollFocus('editForm.responsibleEmail');
+
+                            if ((formData.responsibleLastName.$error.required || formData.responsibleLastName.$error.pattern || formData.responsibleLastName.$error.email) && $scope.submitted)
+                                findScrollFocus('editForm.responsibleLastName');
+
                             var validRows = true;
                             _.each($scope.doc.hostOrgs, function(resOrg, key) {
 
@@ -969,6 +982,7 @@ define(['app', 'lodash',
                                     findScrollFocus('email_' + key);
                                     if (validRows) validRows = false;
                                 }
+
                                 if (formData['firstName_' + key].$error.required && $scope.submitted) {
                                     findScrollFocus('firstName_' + key);
                                     if (validRows) validRows = false;
@@ -977,10 +991,21 @@ define(['app', 'lodash',
                                     findScrollFocus('lastName_' + key);
                                     if (validRows) validRows = false;
                                 }
+                                if(duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
+                                    validRows = false;
+
+                                _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                                    if(!$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                                      $scope.doc.responsibleOrgs[key].sameAs='';
+                                });
+
+                                if(!$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                                  $scope.doc.responsible.sameAs='';
                             });
 
+
                             if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
-                                formData.city.$valid && formData.country.$valid && formData.emaill.$valid && validRows
+                                formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
                             ) {
 
                                 resetForm(formData, ctrls);
@@ -990,9 +1015,37 @@ define(['app', 'lodash',
                                     $('#documents-tab').tab('show');
                                 });
                                 $scope.saveDoc();
+                            }else{
+                               if($scope.doc.validTabs.contact){
+                                $scope.doc.validTabs.contact = false;
+                                $scope.saveDoc();
+                              }
                             }
                         } //submitGeneral
 
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function duplicateResponsibleOrgs (formData,email, key){
+                            var duplicateFound = false;
+                            _.each($scope.doc.hostOrgs, function(resOrg, k) {
+
+                                if($scope.doc.responsibleOrgs[k].email===email && k!=key)
+                                {
+                                      formData['email_' + key].$error.duplicate=true;
+                                      formData['email_' + key].$invalid=true;
+                                      formData.$invalid=true;
+                                      findScrollFocus('email_' + key);
+                                      duplicateFound = true;
+                                }else{
+                                  formData['email_' + key].$error.duplicate=false;
+                                  formData['email_' + key].$invalid=false;
+                                  formData.$invalid=false;
+                                }
+                            });
+                            return duplicateFound;
+                        }
 
                         //=======================================================================
                         //

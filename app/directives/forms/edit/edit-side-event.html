@@ -80,31 +80,31 @@ border-top-color: transparent !important;
       </h2>
     </legend>
     <div></div>
-<div class="row">
+    <div class="row">
 
-  <div class="col-lg-6   col-xs-12 text-nowrap">
+      <div class="col-lg-6   col-xs-12 text-nowrap">
 
-    <div ng-if="showProg">
-      <bs-progress-bar id="form-progress" class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
+        <div ng-if="showProg">
+          <bs-progress-bar id="form-progress"  steps="doc.validTabs"  class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
 
-    </div>
+        </div>
+      </div>
+      <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;">
+        <button ng-show="!showEdit()" class="btn btn-default" type="button"
+          ng-click="saveDoc()">Save</button>
+        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
+        Save & Validate Step</button>
+        <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+      </div>
+
+      <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
+        <button ng-show="!showEdit()" class="btn btn-default btn-block" type="button"
+          ng-click="saveDoc()">Save</button>
+        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning btn-block" type="submit">
+        Save & Validate Step</button>
+        <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+      </div>
   </div>
-  <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-bottom:15px;">
-    <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
-      ng-click="saveDoc()">Save</button>
-    <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
-    Save & Validate Step</button>
-    <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
-  </div>
-
-<div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
-  <button ng-show="!showEdit()" class="btn btn-default btn-block" type="button"
-    ng-click="saveDoc()">Save</button>
-  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact )" class="btn btn-warning btn-block" type="submit">
-  Save & Validate Step</button>
-  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
-</div>
-</div>
     <div class="row">
 
       <div class="col-xs-12">
@@ -539,7 +539,7 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                                 <select id="res-org" ng-model="doc.responsibleOrgs[$index].sameAs" ng-change="sameAs(doc.responsibleOrgs[$index].sameAs,$index)" ng-disabled="allSameAsOptionsInUse() || document.getElementById('res-org').length===1">
                                   <option value="" selected>Select a Person</option>
                                   <option value="contact" ng-if="!isContactUsedInSameAs($index)">Contact</option>
-                                  <option value="principal" ng-if="!isPrincipalUsedInSameAs($index) && (doc.responsible && doc.responsible.email)">Side Event Principal</option>
+                                  <option value="principal" ng-if="(!isPrincipalUsedInSameAs($index) && (doc.responsible && doc.responsible.email)) || doc.responsibleOrgs[$index].sameAs==='principal'">Side Event Principal</option>
                                   <option value="me" ng-if="!isMeUsedInSameAs($index)">Me</option>
                                 </select>
 
@@ -573,9 +573,9 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                                   <input type="email" id="email_{{$index}}" class="form-control" name="email_{{$index}}" ng-model="doc.responsibleOrgs[$index].email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder=" " required/>
 
                                   <div ng-show="(editForm.$submitted || editForm['email_'+$index].$touched)">
+                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.duplicate">Error: one person cannot be reponsible for more then on host organization association.</p>
                                       <p class="help-block error" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
                                       <p class="help-block error" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
-
                                   </div>
                                 </div>
                               </td>
@@ -645,24 +645,24 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                 <div class="col-lg-6   col-xs-12 text-nowrap">
 
                   <div ng-if="showProg">
-                    <bs-progress-bar id="form-progress" class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
+                    <bs-progress-bar id="form-progress"  steps="doc.validTabs"  class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
 
                   </div>
                 </div>
                 <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;">
-                  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-default" type="button"
+                  <button ng-show="!showEdit()" class="btn btn-default" type="button"
                     ng-click="saveDoc()">Save</button>
-                  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact && doc.links.length && doc.publications.length && doc.images.length && doc.videos.length)" class="btn btn-warning" type="submit">
+                  <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
                   Save & Validate Step</button>
-                  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+                  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
                 </div>
 
                 <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
                   <button ng-show="!showEdit()" class="btn btn-default btn-block" type="button"
                     ng-click="saveDoc()">Save</button>
-                  <button ng-show="!showEdit() && !(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact )" class="btn btn-warning btn-block" type="submit">
+                  <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning btn-block" type="submit">
                   Save & Validate Step</button>
-                  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!(doc.validTabs.general && doc.validTabs.logistics && doc.validTabs.orgs && doc.validTabs.contact)" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+                  <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
                 </div>
             </div>
   </form>

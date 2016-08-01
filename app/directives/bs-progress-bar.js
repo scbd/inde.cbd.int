@@ -8,7 +8,8 @@ define(['app', 'text!./bs-progress-bar.html'], function(app,template) {
                 total: '=total',
                 complete: '=complete',
                 barClass: '@barClass',
-                completedClass: '=?'
+                completedClass: '=?',
+                steps: '=?'
             },
             transclude: true,
             link: function(scope, elem, attrs) {
