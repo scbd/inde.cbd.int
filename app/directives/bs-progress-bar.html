@@ -3,9 +3,9 @@
     1.<span ng-class="{'alert-success':steps.general}" style="padding-right:5px;"> General <i class="fa fa-check" ng-show="steps.general"></i></span>
     2.<span ng-class="{'alert-success':steps.logistics}" style="padding-right:5px;"> Logisitcs <i class="fa fa-check" ng-show="steps.logistics"></i></span>
     3.<span ng-class="{'alert-success':steps.orgs}" style="padding-right:5px;"> Host Orgs <i class="fa fa-check" ng-show="steps.orgs"></i></span>
-    4.<span ng-class="{'alert-success':steps.orgs}" style="padding-right:5px;"> Contact Persons <i class="fa fa-check" ng-show="steps.contact"></i></span>
+    4.<span ng-class="{'alert-success':steps.contact}" style="padding-right:5px;"> Contact Persons <i class="fa fa-check" ng-show="steps.contact"></i></span>
     5.<span ng-class="{'alert-success':steps.register}" style="padding-right:5px;"> Request Register <i class="fa fa-check" ng-show="steps.register"></i></span>
   </div>
             <div class='progress'>
-         <div class='progress-bar {{barClass}}' title='{{complete/total * 100 | number:0 }}%' style='width:{{complete/total * 100}}%;'>{{showPercent ? (complete/total*100) : complete | number:0}} {{completeLabel}}</div>
+         <div class='progress-bar' ng-class="{barClass:barClass}" title='{{complete/total * 100 | number:0 }}%' ng-style="{width:(complete/total * 100)+'%'}">{{showPercent ? (complete/total*100) : complete | number:0}} {{completeLabel}}</div>
             </div>

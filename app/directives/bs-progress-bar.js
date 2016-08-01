@@ -12,7 +12,7 @@ define(['app', 'text!./bs-progress-bar.html'], function(app,template) {
                 steps: '=?'
             },
             transclude: true,
-            link: function(scope, elem, attrs) {
+            link: function(scope, $element, attrs) {
 
                 scope.label = attrs.label;
                 scope.completeLabel = attrs.completeLabel;
@@ -24,9 +24,9 @@ define(['app', 'text!./bs-progress-bar.html'], function(app,template) {
                     //change style at 100%
                     var progress = scope.complete / scope.total;
                     if (progress >= 1) {
-                        $(elem).find('.progress-bar').addClass(scope.completedClass);
+                        $element.find('.progress-bar').addClass(scope.completedClass);
                     } else if (progress < 1) {
-                        $(elem).find('.progress-bar').removeClass(scope.completedClass);
+                        $element.find('.progress-bar').removeClass(scope.completedClass);
                     }
 
                 });
