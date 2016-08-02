@@ -501,10 +501,12 @@ define(['app', 'lodash',
                 $scope.showArchived = !$scope.showArchived;
                 if($scope.showArchived){
                     selectChip('archived');
-                    archiveList();
+                    getFacits(1000);
+                    archiveList().catch(onError);
                 }else{
                     selectChip('all');
-                    $scope.loadList();
+                    getFacits(1000);
+                    $scope.loadList().catch(onError);
                 }
 
                 if (dashMenu.isOpen('adminOptions'))

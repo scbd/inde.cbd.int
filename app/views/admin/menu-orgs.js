@@ -23,13 +23,13 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
           path: '/admin',
           roles:['Administrator','IndeAdministrator'],
         });
-        scbdMenuService.menus.admin.push({
-          name: 'Side Events',
-          type: 'link',
-          path: '/admin/events',
-          mdIcon: 'event',
-          roles:['Administrator','IndeAdministrator'],
-        });
+        // scbdMenuService.menus.admin.push({
+        //   name: 'Side Events',
+        //   type: 'link',
+        //   path: '/admin/events',
+        //   mdIcon: 'event',
+        //   roles:['Administrator','IndeAdministrator'],
+        // });
 
         scbdMenuService.menus.admin.push({
           name: 'Organizations',
@@ -58,9 +58,9 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
           roles:['Administrator','IndeAdministrator'],
         });
         scbdMenuService.menus.adminOrgOptions.push({
-          name: 'Unarchived',
+          name: 'Organizations',
           type: 'link',
-          mdIcon: 'archive',
+          mdIcon: 'unarchive',
           path: '/admin/organizations/',
                   roles:['Administrator','IndeAdministrator'],
         });

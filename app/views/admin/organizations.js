@@ -43,6 +43,7 @@ define(['app', 'lodash',
                 $scope.toggle = dashMenu.toggle;
 
                 dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
+                dashMenu.setPathOfLink($scope.menu, 'Organizations', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'All', function() {
                     selectChip('all');
@@ -366,9 +367,11 @@ define(['app', 'lodash',
             function toggleArchived() {
                 $timeout(function() {
                     if (!$scope.showArchived) {
+                        selectChip('archived');
                         getFacits(1000);
                         archiveList().catch(onError);
                     } else {
+                        selectChip('all');
                         getFacits(1000);
                         $scope.loadList().catch(onError);
                     }
@@ -376,8 +379,7 @@ define(['app', 'lodash',
                     $scope.showArchived = !$scope.showArchived;
 
 
-                    $scope.toggle('orgOptions');
-                    selectChip('archived');
+                    $scope.toggle('adminOrgOptions');
                 });
                 $timeout(function() {
 
