@@ -28,9 +28,9 @@ define(['app', 'lodash', 'directives/side-menu/scbd-side-menu'], function(app, _
 
         });
         scbdMenuService.menus.adminOptions.push({
-            name: 'Unarchived',
+            name: 'Side Events',
             type: 'link',
-            mdIcon: 'archive',
+            mdIcon: 'unarchive',
             path: '/admin/events/',
 
         });

@@ -44,6 +44,7 @@ define(['app', 'lodash',
                 $scope.toggle = dashMenu.toggle;
 
                 dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
+                dashMenu.setPathOfLink($scope.menu, 'Side Events', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'All', function() {
                     selectChip('all');
@@ -498,8 +499,14 @@ define(['app', 'lodash',
             //=======================================================================
             function toggleArchived() {
                 $scope.showArchived = !$scope.showArchived;
-                selectChip('archived');
-                archiveList();
+                if($scope.showArchived){
+                    selectChip('archived');
+                    archiveList();
+                }else{
+                    selectChip('all');
+                    $scope.loadList();
+                }
+
                 if (dashMenu.isOpen('adminOptions'))
                     $scope.toggle('adminOptions');
             } //toggleArchived
