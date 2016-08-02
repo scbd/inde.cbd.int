@@ -18,7 +18,7 @@
           <li class="active" ng-click="goTo('/manage/events/new');setActivePath();"><a href="#">Register a S.E.</a></li>
           <li class="active" ng-click="goTo('/past');setActivePath();"><a href="#">Past Events</a></li>
           <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Dashboard</a></li>
-          <li class="active" ng-click="goTo('/admin');setActivePath();"><a href="#">Admin</a></li>
+          <li class="active" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin"><a href="#">Admin</a></li>
         </ul>
       </nav>
     </div>
