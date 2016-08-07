@@ -21,7 +21,8 @@ app.set('port', process.env.PORT || 2050);
 
 app.use('/app',   require('serve-static')(__dirname + '/app_build'));
 app.use('/app',   require('serve-static')(__dirname + '/app'));
-app.all('/api/*', function(req, res) { proxy.web(req, res, { target: 'http://localhost:8000',changeOrigin: true  } ); } );
+app.all('/api/*', (req, res) => proxy.web(req, res, { target: 'https://api.cbddev.xyz', changeOrigin: true, secure:false }));
+
 //app.all('/app/*', function(req, res) { res.status(404).send(); } );
 
 // CONFIGURE TEMPLATE
