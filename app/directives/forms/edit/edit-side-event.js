@@ -135,10 +135,10 @@ define(['app', 'lodash',
                                     $scope.error += " Message Detail: " + res.data.message;
                             } else if (res.status == "badSchema") {
                                 $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
-                            } else if (res.data.Message)
+                            } else if (res.data && res.data.Message)
                                 $scope.error = res.data.Message;
                             else
-                                $scope.error = res.data;
+                                $scope.error = res.data || res;
                         }
 
                         //============================================================
@@ -868,10 +868,10 @@ define(['app', 'lodash',
                             $scope.doc.validTabs.orgs = false;
                             $scope.doc.validTabs.contact = false;
 
-                            if (formData.title.$valid && formData.description.$valid && formData.subjects.$valid)
+                            if ( formData && formData.title.$valid && formData.description.$valid && formData.subjects.$valid)
                                 $scope.doc.validTabs.general = true;
 
-                            if (formData.conference.$valid && formData.expNumPart.$valid && formData.prefDateOne.$valid &&
+                            if (formData && formData.conference.$valid && formData.expNumPart.$valid && formData.prefDateOne.$valid &&
                                 formData.prefTimeOne.$valid && formData.prefDateTwo.$valid && formData.prefTimeTwo.$valid &&
                                 formData.prefDateThree.$valid && formData.prefTimeThree.$valid
                             )
@@ -902,7 +902,7 @@ define(['app', 'lodash',
                                   $scope.doc.responsible.sameAs='';
                             });
 
-                            if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
+                            if (formData && formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
                                 formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
                             )
                               $scope.doc.validTabs.contact = true;
