@@ -416,10 +416,10 @@ define(['app', 'lodash',
                         $scope.error += " Message Detail: " + res.data.message;
                 } else if (res.status == "badSchema") {
                     $scope.error = "Record type is invalid meaning that the data being sent to the server is not in a  supported format.";
-                } else if (res.data.Message)
+                } else  if (res.data && res.data.Message)
                     $scope.error = res.data.Message;
                 else
-                    $scope.error = res.data;
+                    $scope.error = res.data || res;
             }
 
 
