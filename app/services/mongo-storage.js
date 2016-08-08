@@ -789,7 +789,6 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
               if (index === 0) return curr;
               else return prev + '-' + curr;
           }, '');
-
       }
         //=======================================================================
         //
