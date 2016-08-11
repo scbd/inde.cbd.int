@@ -17,6 +17,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/exten
             when('/manage/organizations',      { templateUrl: 'views/admin/organizations.html',              resolveController: true, resolveUser: true,reloadOnSearch : false,resolve : {user : securize(['User','Administrator','IndeAdministrator']) } }).
             when('/manage/organizations/:id',  { templateUrl: 'views/manage/edit-organization.html',          resolveController: true, resolveUser: true,reloadOnSearch : false,resolve : {user : securize(['User','Administrator','IndeAdministrator']) }  }).
             when('/manage',                    { templateUrl: 'views/manage/dash-board.html',                 resolveController: true, resolveUser: true,resolve : {user : securize(['User','Administrator','IndeAdministrator']) }}).
+            when('/manage/:id',                { templateUrl: 'views/side-event.html',                        controllerAs:"sideEventCtrl", resolveController: true, resolveUser: true}).
             when('/:id',                       { templateUrl: 'views/side-event.html',                        controllerAs:"sideEventCtrl", resolveController: true, resolveUser: true}).
             when('/404',                       { templateUrl: 'views/404.html',                               resolveUser: true }).
             otherwise({ redirectTo: '/404' });
