@@ -577,7 +577,7 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                                   <input type="email" id="email_{{$index}}" class="form-control" name="email_{{$index}}" ng-model="doc.responsibleOrgs[$index].email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder=" " required/>
 
                                   <div ng-show="(editForm.$submitted || editForm['email_'+$index].$touched)">
-                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.duplicate">Error: one person cannot be reponsible for more then on host organization association.</p>
+                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.duplicate">Error:  the contact person can only be associated or linked to one organization.</p>
                                       <p class="help-block error" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
                                       <p class="help-block error" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
                                   </div>

@@ -141,9 +141,11 @@ define(['app', 'lodash','directives/mobi-menu'], function(app, _) {
 
                 if (allOrgs && allOrgs.length > 0) {
                     _.each(_ctrl.doc.hostOrgs, function(org) {
-                        _ctrl.doc.orgs.push(_.find(allOrgs, {
-                            '_id': org
-                        })); // findWhere
+                      var o =_.find(allOrgs, {
+                          '_id': org
+                      });
+                      if(o)
+                        _ctrl.doc.orgs.push(o); // findWhere
                     }); // each
 
                 }
