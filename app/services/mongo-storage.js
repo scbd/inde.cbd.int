@@ -28,11 +28,11 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
                 if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
 
-                if (_.isNumber(document.meta.createdOn))
-                    document.meta.createdOn = new Date(moment.utc(document.meta.createdOn));
-
-                if (_.isNumber(document.meta.modifiedOn))
-                    document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
+                // if (_.isNumber(document.meta.createdOn))
+                //     document.meta.createdOn = new Date(moment.utc(document.meta.createdOn));
+                //
+                // if (_.isNumber(document.meta.modifiedOn))
+                //     document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
 
                 return $http.put(url, document, params).then(function(res) {
                     authentication.getUser().then(function(user) {
