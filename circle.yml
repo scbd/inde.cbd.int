@@ -11,7 +11,7 @@ dependencies:
     - docker info
     - docker build -t output .
 
-test:
+test_DISABLED:
   override:
     - sc-4.3-linux/bin/sc -P 4444 -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
         background: true
