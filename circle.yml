@@ -11,14 +11,6 @@ dependencies:
     - docker info
     - docker build -t output .
 
-test_DISABLED:
-  override:
-    - sc-4.3-linux/bin/sc -P 4444 -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
-        background: true
-    - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - docker run -d -p 8000:8000 output
-    - docker run --net host -e SAUCE_USERNAME=$SAUCE_USERNAME -e SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY inde-cbd-int protractor spec/conf.js
-
 deployment:
   master:
     branch: /^master|dev$/
