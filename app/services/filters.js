@@ -1,5 +1,5 @@
 
-define(['app'], function (app) {
+define(['app','moment','lodash'], function (app,moment,_) {
   //============================================================
   //
   //============================================================
@@ -74,6 +74,21 @@ app.filter('schemaName', [function() {
             if(schema.toLowerCase()=='venue') return 'md';
           };
     }]);
+
+    //============================================================
+    //
+    //============================================================
+    app.filter('futureConferences', [function() {
+
+      return function( conf ) {
+        if(!conf ) return false;
+
+                return _.filter(conf,function(c){
+                  return (moment(c.EndDate).format('X')  > moment.utc().format('X'));
+                });
+            };
+      }]);
+
 
     //============================================================
     //

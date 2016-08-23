@@ -90,19 +90,27 @@ border-top-color: transparent !important;
         </div>
       </div>
       <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;">
-        <button ng-show="!showEdit()" class="btn btn-default" type="button"
-          ng-click="saveDoc()">Save</button>
+
+
+        <button ng-show="!showEdit()" class="btn" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
+          <span ng-show="numStepsCompleted()<5">Save</span>
+          <span ng-show="numStepsCompleted()>=5">Cancel Request</span>
+        </button>
         <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
         Save & Validate Step</button>
         <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
       </div>
 
       <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
-        <button ng-show="!showEdit()" class="btn btn-default btn-block" type="button"
-          ng-click="saveDoc()">Save</button>
-        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning btn-block" type="submit">
-        Save & Validate Step</button>
-        <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
+        <button ng-show="!showEdit()" class="btn btn-block" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
+          <span ng-show="numStepsCompleted()<5">Save</span>
+          <span ng-show="numStepsCompleted()>=5">Cancel Request</span>
+        </button>
+        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
+        <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button">
+            <span ng-show="numStepsCompleted()<5">Register Request</span>
+            <span ng-show="numStepsCompleted()>=5">Edit Request</span>
+        </button>
       </div>
   </div>
     <div class="row">
@@ -182,7 +190,7 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
                   <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" required>
-                    <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+                    <option ng-repeat="docObj in options.conferences | futureConferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
                   </select>
                   <p ng-show="editForm.conference.$invalid && editForm.$submitted" class="help-block">A conference is required.</p>
                 </div>
@@ -654,16 +662,21 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
                   </div>
                 </div>
                 <div class="col-lg-6   hidden-md hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;">
-                  <button ng-show="!showEdit()" class="btn btn-default" type="button"
-                    ng-click="saveDoc()">Save</button>
+                  <button ng-show="!showEdit()" class="btn" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
+                    <span ng-show="numStepsCompleted()<5">Save</span>
+                    <span ng-show="numStepsCompleted()>=5">Cancel Request</span>
+                  </button>
                   <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
                   Save & Validate Step</button>
                   <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>
                 </div>
 
                 <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg     text-right text-nowrap" style="padding-bottom:15px;">
-                  <button ng-show="!showEdit()" class="btn btn-default btn-block" type="button"
-                    ng-click="saveDoc()">Save</button>
+
+                    <button ng-show="!showEdit()" class="btn btn-block" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
+                      <span ng-show="numStepsCompleted()<5">Save</span>
+                      <span ng-show="numStepsCompleted()>=5">Cancel Request</span>
+                    </button>
                   <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning btn-block" type="submit">
                   Save & Validate Step</button>
                   <button ng-click="publishRequestDial()" ng-show="!showEdit()" ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button"><span ng-show="numStepsCompleted()<5">Register Request</span><span ng-show="numStepsCompleted()>=5">Edit Request</span></button>

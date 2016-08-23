@@ -14,7 +14,8 @@ define(['app', 'lodash',
     'directives/link-list',
     'services/theasarus', 'ngDialog', 'ngSmoothScroll',
     'directives/fade-in-tab',
-    'directives/bs-progress-bar'
+    'directives/bs-progress-bar',
+    'services/filters'
 ], function(app, _, template, moment, dialogTemplate, rangy) {
     app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
         function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
