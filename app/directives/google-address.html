@@ -1,0 +1,7 @@
+<div class="form-group" ng-class="{ 'has-warning': form.address.$invalid, 'has-error' : form.$submitted && form.address.$invalid }">
+      <label for="address" class="col-sm-3 control-label" required>Address <span ng-if="onlineEvent">of organizer</span></label>
+      <div class="col-sm-6">
+          <input type="text" class="form-control" name="address" id="address" binding="document.address"  ng-required="!document.onlineEvent" placeholder="1000 34th Street, New City" />
+          <p class="help-block error" ng-show="form.address.$invalid">This field is mandatory</p>
+      </div>
+</div>
