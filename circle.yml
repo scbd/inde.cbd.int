@@ -9,12 +9,35 @@ dependencies:
     - tar -xzf sc-4.3-linux.tar.gz
   override:
     - docker info
-    - docker build -t inde-cbd-int .
+    - docker build -t output .
 
 test:
   override:
     - sc-4.3-linux/bin/sc -P 4444 -u $SAUCE_USERNAME -k $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready:
         background: true
     - while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
-    - docker run -d -p 8000:8000 inde-cbd-int
+    - docker run -d -p 8000:8000 output
     - docker run --net host -e SAUCE_USERNAME=$SAUCE_USERNAME -e SAUCE_ACCESS_KEY=$SAUCE_ACCESS_KEY inde-cbd-int protractor spec/conf.js
+
+deployment:
+  master:
+    branch: /^master|dev$/
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag output scbd/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH
+      - docker push scbd/$CIRCLE_PROJECT_REPONAME:$CIRCLE_BRANCH
+  releases:
+    branch: /^release\/.*/
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag output scbd/$CIRCLE_PROJECT_REPONAME:release-${CIRCLE_BRANCH//release\//}
+      - docker push scbd/$CIRCLE_PROJECT_REPONAME:release-${CIRCLE_BRANCH//release\//}
+  tag:
+    tag: /^v?[0-9]+(\.[0-9]+)*$/
+    owner: scbd
+    commands:
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker tag output scbd/$CIRCLE_PROJECT_REPONAME:${CIRCLE_TAG//v/}
+      - docker tag output scbd/$CIRCLE_PROJECT_REPONAME:latest
+      - docker push scbd/$CIRCLE_PROJECT_REPONAME:${CIRCLE_TAG//v/}
+      - docker push scbd/$CIRCLE_PROJECT_REPONAME:latest
