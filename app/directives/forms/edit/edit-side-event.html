@@ -56,7 +56,18 @@ background-color: #ffffff !important;
 border: 1px solid #ddd !important;
 border-top-color: transparent !important;
 }
+.tab-pane {
+    margin-top:0;
+    margin-bottom:0;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
 
+
+    padding: 10px;
+}
+.red-status{
+  color:red !important;
+}
   </style>
 
   <div ng-show="msg" class="alert alert-success alert-dismissable">
@@ -76,9 +87,14 @@ border-top-color: transparent !important;
   <form name="editForm" style="margin-top:10px" ng-submit="submitForm(editForm)" novalidate>
     <legend class="container-subheader">
       <h2>
-        <span ng-if="doc.id">Side Event #{{doc.id}}</span>
+        <span ng-if="doc.id">Side Event ID: {{doc.id}}</span>
+        <span class="pull-right text-nowrap">Status: <span ng-class="{'red-status':(doc.meta.status!=='request' && doc.meta.status!=='published')}"><span ng-if="doc.meta.status!=='request'">{{doc.meta.status.toUpperCase()}}</span> <span ng-if="doc.meta.status==='request'" style="color:black;">Submitted Under Review</span> <span ng-if="!doc.meta.status">NOT SAVED</span></span></span>
       </h2>
     </legend>
+    <div ng-show="registerAlert" class="col-xs-12 alert alert-danger alert-dismissable" ng-if="resubmitWarning()">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+      WARNING: the changes you have made require you to re-validate and re-submit your request, otherwise it will not be considered for scheduling.
+    </div>
     <div></div>
     <div class="row">
 
@@ -117,7 +133,7 @@ border-top-color: transparent !important;
     <div class="row">
 
       <div class="col-xs-12">
-        <ul class="nav nav-tabs" role="tablist" >
+        <ul class="nav nav-tabs" role="tablist" style="margin-bottom:0;">
           <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
           <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
@@ -129,57 +145,59 @@ border-top-color: transparent !important;
         </ul>
       </div>
     </div>
-    <div>
-      <br>
-    </div>
-
-    <div fade-in-tab id="general" class="tab-pane   active text-left" ng-show="tab==='general'">
-      <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
-        <strong>Please note that by registering your request for a side-event you are not registering for entrance into the meetings.
-For meeting registration information please see: <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/>.  It is also required that any speakers or guests attending your side-event will need to be registered for the meetings through your delegation. </strong>
-          </div>
 
 
-          <div class="col-xs-12 col-lg-8">
+      <div fade-in-tab id="general" class="tab-pane   active text-left" ng-show="tab==='general'">
+
+        <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+            <strong>Please note that by registering your request for a side-event you are not registering for entrance into the meetings.
+      For meeting registration information please see: <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/>.  It is also required that any speakers or guests attending your side-event will need to be registered for the meetings through your delegation. </strong>
+        </div>
+
+        <div class="container" style="width:100%;">
             <div class="row">
-              <div class="col-xs-12 col-lg-12">
-                <div name="title" style="padding-bottom:10px;" ng-class="{'has-error': editForm.title.$invalid && editForm.$submitted}">
-                  <label>Title</label>
-                  <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required>
-                  <p ng-show="editForm.title.$invalid && editForm.$submitted" class="help-block">Title is required.</p>
-                </div>
-              </div>
-              <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
-                  <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
-                    <label>Subject(s)</label><br>
-                    <div km-select required multiple name="subjects" ng-model="doc.subjects"  items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
-                    <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
-                  </div>
 
+                <div class="col-xs-12 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-12 col-lg-12">
+                            <div name="title" style="padding-bottom:10px;" ng-class="{'has-error': editForm.title.$invalid && editForm.$submitted}">
+                                <label>Title</label>
+                                <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required>
+                                <p ng-show="editForm.title.$invalid && editForm.$submitted" class="help-block">Title is required.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
+                            <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
+                                <label>Subject(s)</label>
+                                <br>
+                                <div km-select required multiple name="subjects" ng-model="doc.subjects" items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
+                                <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-lg-4">
+                    <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon & Cover Image (Not Org. Logo)" style="padding-bottom:10px;">
+                        <label>Event Icon & Cover Image (Not Org. Logo)</label>
+                        <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
+                        <scbd-file-upload ng-modal="doc.logo" temp-file="doc.tempFile" error="error" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
+
+                    </div>
+                </div>
+
+                <div class="col-xs-12" style="padding-bottom:10px;">
+                    <div name="description" ng-class="{'has-error': editForm.description.$invalid && editForm.$submitted}">
+                        <label>Description</label>
+                        <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular>
+                        <p ng-show="editForm.description.$invalid && editForm.$submitted" class="help-block">Description is required.</p>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-lg-4">
-          <div class="km-control-group nowrap" name="logo" ng-required="!form.logo.$valid" caption="Event Icon & Cover Image (Not Org. Logo)" style="padding-bottom:10px;">
-            <label>Event Icon & Cover Image (Not Org. Logo)</label>
-            <button type="button" class="btn btn-default btn-sm" ng-click="toggleIcon()" style="margin-bottom:10px;">Black and White Generic Only</button>
-            <scbd-file-upload  ng-modal="doc.logo" temp-file="doc.tempFile" error="error" ng-attr-schema="{{schema}}" ng-attr-doc-id="{{_id}}" is-image></scbd-file-upload>
-
-          </div>
-        </div>
-
-
-
-        <div class="col-xs-12" style="padding-bottom:10px;">
-          <div name="description" ng-class="{'has-error': editForm.description.$invalid && editForm.$submitted}">
-            <label>Description</label>
-      <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular>
-            <p ng-show="editForm.description.$invalid && editForm.$submitted" class="help-block">Description is required.</p>
-          </div>
-        </div>
-
-    </div>
+      </div>
 
 
 			<div fade-in-tab id="logistics"  class="tab-pane   active text-left" ng-show="tab==='logistics'" >
@@ -221,7 +239,6 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
               <h2>Preferred Date and Time {{prefDate}}</h2>
             </legend>
             <div class="row">
-
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div id="ssdf" ng-class="{'has-error': (editForm.prefDateOne.$invalid && editForm.$submitted)|| (editForm.prefTimeOne.$invalid && editForm.$submitted) }">
                   <label>First Choice</label>
@@ -314,9 +331,9 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
       </div>
 
 
-              <div fade-in-tab id="orgs" class="row tab-pane   active text-left" ng-show="tab==='orgs'">
-                <div>
-                <div class="col-md-12 col-xs-12">
+              <div fade-in-tab id="orgs" class="tab-pane   active text-left" ng-show="tab==='orgs'">
+
+
                   <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted)}">
                     <legend class="container-subheader">
                       <h2>Host Organization(s)</h2>
@@ -324,20 +341,20 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
 
                     <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && editForm.$submitted" style="color:#a94442">At least one organization is required.</p>
 
+                    <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
 
 
+                        <!-- <div name="hostOrgs" caption="" style="margin-right:20px;"> -->
 
-                        <div name="hostOrgs" caption="" style="margin-right:20px;">
 
-                          <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
-                        </div>
+                        <!-- </div> -->
                       </div>
-                    </div>
-                  </div>
+
+
               </div>
 
         			<div  fade-in-tab id="contact"  class="tab-pane   active text-left" ng-show="tab==='contact'">
-                      <legend class="container-subheader" style="margin-top:15px;">
+                      <legend class="container-subheader" >
                         <h2>Contact Person </h2>
                       </legend>
 
@@ -639,8 +656,8 @@ For meeting registration information please see: <a href="https://www.cbd.int/me
 
               <div class="row">
 
-                <div class="col-xs-12" style="margin-top:15px;">
-                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist" >
+                <div class="col-xs-12" style="margin-top:0;">
+                  <ul class="nav  nav-tabs nav-tabs-bottom" role="tablist" style="margin-top:0;">
                     <li role="presentation" ng-class="{'active':tab==='general'}" ng-click="showTab('general')"><a ng-class="{'success-tab':(doc.validTabs.general && tab!=='general')}" id="general-tab" href="#general" aria-controls="general" role="tab" data-toggle="tab">General <i class="fa fa-check" ng-show="doc.validTabs.general"></i></a> </li>
                     <li role="presentation" ng-class="{'active':tab==='logistics'}" ng-click="showTab('logistics')"><a ng-class="{'success-tab':doc.validTabs.logistics && tab!=='logistics'}" id="logistics-tab" href="#logistics" aria-controls="logistics" role="tab" data-toggle="tab">Logistics <i class="fa fa-check" ng-show="doc.validTabs.logistics"></i></a></li>
                     <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>

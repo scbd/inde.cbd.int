@@ -1196,6 +1196,14 @@ define(['app', 'lodash',
                         $scope.close = function() {
                             history.goBack();
                         };
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        $scope.resubmitWarning= function() {
+                            if(!$scope.doc || !$scope.doc.meta) return false;
+                            return (($scope.doc.meta.status==='request' || $scope.doc.meta.status==='published') && !isTabsValid());
+                        };
                     } //link
             }; //return
         }

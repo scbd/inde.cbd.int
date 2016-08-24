@@ -44,14 +44,19 @@ animation-fill-mode: forwards;
 }
 </style>
 
-<div class="row">
 
-  <div class="col-xs-12" ng-show="!showOrgForm">
+
+
+
+
+
+<div ng-show="!showOrgForm" style="margin-bottom:15px;">
+
+<div class="container">
+<div clarr="row">
+  <div  class="col-xs-10">
     <!-- <i class="fa fa-info-circle"></i> -->
     <label>Search for the host organization(s) or create one:  <button type="button" class="btn btn-default" ng-click="addOrgDial()"><i class="fa fa-plus"></i></button></label>
-  </div>
-
-  <div class="col-xs-10  col-md-6" ng-show="!showOrgForm">
     <div class="form-group">
       <div class="input-group input-group-sm" style="margin-bottom:2px; padding-left: 0px;">
         <input id="editForm.hostOrgs" type="test" class="form-control " ng-model="search" ng-keydown="noEnter($event)" placeholder="Search by Typeing Key Word">
@@ -61,19 +66,15 @@ animation-fill-mode: forwards;
       </div>
     </div>
   </div>
+  <div class="col-xs-5 ">
 
-</div>
-
-<div class="row" ng-show="!showOrgForm">
-
-  <section class="col-sm-12 col-m-12 col-lg-6">
     <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Showing:
       <span class="label label-pill label-primary">{{filtered.length}}</span>
       <span ng-show="search">for '{{search}}'</span>
     </div>
     <div style="height:150px;overflow:auto;border-style:solid;border-width:1px;border-color:#009B48;">
       <div ng-repeat="docObj in filtered =( docs |orderBy:'document.title.en':sortReverse | filter:search)" style="margin-bottom:8px;">
-        <div style="padding:10px;position:relative;width:100%;text-align:left;height:28px;background-color:#fff;" ng-click="select(docObj);" waves>
+        <div style="padding:10px;position:relative;width:100%;text-align:left;height:28px;background-color:#fff;" ng-click="select(docObj);">
           <div class="panel panel-default" style="height:25px; width:100%;line-height:25px;vertical-align:bottom;padding-left:5px;padding-right:5px;white-space: nowrap; overflow:hidden;">
             <i class="fa fa-check-square-o" ng-show="docObj.selected"></i><i class="fa fa-square-o" ng-show="!docObj.selected"></i>
             <img ng-if="docObj.logo" ng-src="{{docObj.logo}}" style="clear:both;height:20px;margin-bottom:4px;"></img>
@@ -93,10 +94,10 @@ animation-fill-mode: forwards;
         <button type="button" class="btn btn-default btn-sm" ng-click="showOrgForm=!showOrgForm;" style="outline:none;display:inline-block;margin-bottom:3px;"><i class="fa fa-plus"></i> Create Organization</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <section class="col-sm-12 col-m-12 col-lg-6">
-    <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Selected and the Display Order:
+  <section class="col-xs-5">
+    <div style="padding:5px;border-style:solid;border-width:1px;border-color:#009B48;">Selected Organizations and the Display Order:
       <span class="label label-pill label-primary">{{binding.length}}</span>
     </div>
     <div dragula='"se-bag"' dragula-model='binding' style="padding:10px;min-height:150px;border-style:solid;border-width:1px;border-color:#009B48;">
@@ -110,11 +111,15 @@ animation-fill-mode: forwards;
       </div>
     </div>
   </section>
+  </div>
+</div>
+</div>
+<div class="container" style="width:100%;">
+<div clarr="row">
+<div class="col-xs-12" ng-show="showOrgForm">
+
+    <edit-organization short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="binding"></edit-organization>
 
 </div>
-
-<div class="col-md-10 col-md-offset-1 col-xs-14" ng-show="showOrgForm">
-  <div style="padding-bottom:8px;border-width:1px;border-color:#109e49;">
-    <edit-organization short locales="doc.meta.locales" hide="showOrgForm" selected-orgs="binding"></edit-organization>
-  </div>
+</div>
 </div>
