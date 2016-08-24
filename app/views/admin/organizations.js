@@ -31,6 +31,7 @@ define(['app', 'lodash',
                     $scope.loadList().catch(onError);
                     getFacits();
                 });
+                $scope.editURL='/manage/organizations/';
             } //init
 
 
