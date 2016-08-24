@@ -1,12 +1,14 @@
 define(['app',
     'lodash',
     'text!./scbd-select-list.html',
+    'text!./add-org-dialog.html',
     'services/filters',
     'services/mongo-storage',
     'css!libs/angular-dragula/dist/dragula.css',
-], function(app, _, template) {
+    'ngDialog'
+], function(app, _, template,dialogTemplate) {
     'use strict';
-    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$q', function($location, $timeout, mongoStorage, $q) {
+    app.directive('scbdSelectList', ["$location", "$timeout", 'mongoStorage', '$q','ngDialog', function($location, $timeout, mongoStorage, $q,ngDialog) {
 
         return {
             restrict: 'E',
@@ -56,7 +58,26 @@ define(['app',
                     }
                 });
 
+                //============================================================
+                //
+                //============================================================
+                $scope.addOrgDial = function() {
 
+                  var dialog = ngDialog.open({
+                      template: dialogTemplate,
+                      className: 'ngdialog-theme-default',
+                      closeByDocument: false,
+                      plain: true,
+                      scope: $scope
+                  });
+
+                  dialog.closePromise.then(function(ret) {
+
+                      if (ret.value === 'no') return;
+                      if (ret.value === 'yes') $scope.showOrgForm=!$scope.showOrgForm;
+
+                  });
+                };
                 //==================================
                 //
                 //==================================
@@ -90,7 +111,7 @@ define(['app',
                                 $scope.mirror[key] = org;
                               }
                             else {
-                                if(val.length>2)
+                                if(val && val.length>2)
                                 mongoStorage.loadDoc('inde-orgs', val).then(
                                     function(res) {
 
@@ -108,6 +129,7 @@ define(['app',
                                         }
                                     }
                                 );
+                                else throw 'Error: org not found to load in list id: '+val;
                             }
 
                         });

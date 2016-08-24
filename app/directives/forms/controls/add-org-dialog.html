@@ -1,0 +1,22 @@
+<div >
+    <p ng-if="doc.meta.status!=='request'">  Are sure your organization does not exist within the <span class="label label-pill label-primary">{{docs.length}}</span> listed organizations?  The best way to find your organization is the text key word search above the list.
+    </p>
+    <div class="bs-callout bs-callout-danger" ng-if="doc.meta.status==='request'">
+<p>
+  <span style="color:red;">Warning</span>:  By adding an organization to your submitted side-event request, it will be automatically removed from the request que and saved as a draft.  <br> <br>
+  <strong>Be sure to validate and save each step then Submit your request again otherwise your side-event will not be considered for scheduling.</strong>
+</p>
+</div>
+    <div class="text-xs-center">
+        <button class="btn btn-default" ng-click="closeThisDialog('no');">
+            No<span ng-if="doc.meta.status!=='request'">, Let Me Search Again</span>
+        </button>
+        <button class="btn btn-primary" ng-click="closeThisDialog('yes');">
+            <i class="fa fa-plus"></i>
+            Yes, Add Organization
+        </button>
+    </div>
+
+</div>
+
+

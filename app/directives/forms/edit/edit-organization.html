@@ -14,7 +14,7 @@
     <i class="fa fa-spinner fa-spin"></i> Loading...
   </div>
 
-  <button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide"><i class="fa fa-times"></i></button>
+  <button type="button" class="pull-right" style="margin-bottom:10px" ng-click="toggleForm();" ng-show="hide && isInForm"><i class="fa fa-times"></i></button>
 
   <form class="editForm" style="margin-top:10px" ng-submit="submitForm(doc)" novalidate>
     <legend class="container-subheader text-center no-wrap" ng-if="hide">

@@ -50,15 +50,12 @@ define(['app', 'lodash',
 
                             if ((!$scope._id || $scope._id === '0' || $scope._id === 'new') && $scope.hide) {
 
-                                mongoStorage.createDoc('inde-orgs').then(
-                                    function(document) {
-                                        $scope._id = document._id;
-                                        $scope.doc = document;
+                                        delete($scope._id);
+                                        $scope.doc = {};
+                                        $scope.doc.meta={};
                                         $scope.doc.logo = 'app/images/ic_business_black_48px.svg';
                                         $scope.isNew = true;
                                         $scope.doc.hostOrgs = [];
-                                    }
-                                ).catch(onError);
 
                             } else {
 
@@ -83,8 +80,12 @@ define(['app', 'lodash',
                         $scope.saveDoc = function() {
                             if(!$scope.doc.meta) $scope.doc.meta={};
                             $scope.doc.meta.status = 'draft';
-                            mongoStorage.save('inde-orgs', $scope.doc, $scope._id).then(function() {
-
+                            mongoStorage.save('inde-orgs', $scope.doc, $scope._id).then(function(d) {
+                                if(!$scope._id){
+                                  $scope.$emit('showSuccess', 'Organization Created');
+                                  $scope._id=d.data.id;
+                                }else
+                                  $scope.$emit('showSuccess', 'Organization Saved');
                                 if ($scope.isInForm) {
                                     if (!_.isArray($scope.selectedOrgs)) $scope.selectedOrgs = [];
                                     $scope.selectedOrgs.push($scope._id);
@@ -93,7 +94,7 @@ define(['app', 'lodash',
                                     $scope._id=null;
 
                                 }
-                                $scope.$emit('showSuccess', 'Organization Created');
+
                             }).catch(onError);
                         };
 
@@ -133,10 +134,14 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         $scope.requestPublish = function() {
-                            //dialogTemplate = $compile(dialogTemplate,$scope);
-
                             $scope.doc.meta.status = 'request';
-                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).catch(onError);
+                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function(d){
+                              if(!$scope._id){
+                                $scope.$emit('showSuccess', 'Organization Created and Under Review for Publication');
+                                $scope._id=d.data.id;
+                              }else
+                                $scope.$emit('showSuccess', 'Organization Saved and Under Review for Publication');
+                            }).catch(onError);
 
                         };
 
@@ -147,9 +152,11 @@ define(['app', 'lodash',
                             $scope.submitted = true;
 
                             if (formData.title && formData.acronym) {
-                                $scope.saveDoc();
+
                                 if (!$scope.isInForm)
                                     $scope.publishRequestDial();
+                                else
+                                    $scope.saveDoc();
                             } else {
 
                                 if (!formData.title && $scope.submitted) {
@@ -219,8 +226,10 @@ define(['app', 'lodash',
 
                             dialog.closePromise.then(function(ret) {
 
-                                if (ret.value == 'draft') $scope.close();
-                                if (ret.value == 'publish') $scope.requestPublish().then($scope.close).catch(onError);
+                                if (ret.value === 'draft') {
+                                  $scope.saveDoc();
+                                }
+                                if (ret.value == 'publish') $scope.requestPublish().catch(onError);
 
                             });
                         };

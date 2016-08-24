@@ -47,13 +47,14 @@ animation-fill-mode: forwards;
 <div class="row">
 
   <div class="col-xs-12" ng-show="!showOrgForm">
-    <label>Search for the host organization(s): <i class="fa fa-info-circle"></i></label>
+    <!-- <i class="fa fa-info-circle"></i> -->
+    <label>Search for the host organization(s) or create one:  <button type="button" class="btn btn-default" ng-click="addOrgDial()"><i class="fa fa-plus"></i></button></label>
   </div>
 
   <div class="col-xs-10  col-md-6" ng-show="!showOrgForm">
     <div class="form-group">
       <div class="input-group input-group-sm" style="margin-bottom:2px; padding-left: 0px;">
-        <input id="editForm.hostOrgs" type="test" class="form-control " ng-model="search" ng-keydown="noEnter($event)">
+        <input id="editForm.hostOrgs" type="test" class="form-control " ng-model="search" ng-keydown="noEnter($event)" placeholder="Search by Typeing Key Word">
         <span class="input-group-btn">
           <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
         </span>

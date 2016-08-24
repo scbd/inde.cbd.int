@@ -1108,7 +1108,7 @@ define(['app', 'lodash',
                             var duplicateFound = false;
                             _.each($scope.doc.hostOrgs, function(resOrg, k) {
 
-                                if($scope.doc.responsibleOrgs[k].email===email && k!=key)
+                                if($scope.doc.responsibleOrgs[k] && $scope.doc.responsibleOrgs[k].email===email && k!=key)
                                 {
                                       formData['email_' + key].$error.duplicate=true;
                                       formData['email_' + key].$invalid=true;
