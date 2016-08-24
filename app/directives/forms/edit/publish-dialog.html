@@ -1,16 +1,17 @@
 <div >
-    <p>  Please note you must register and recieve approval for your side event in order to secure a room for the event.
-         Once approved and all side events have been scheduled into rooms, your side event will then be published and included in the side event schedule.
-         Upon rejection or scheduling you will recieve an email with the details.
+    <p ng-if="doc.meta.status!=='request' && doc.meta.status!=='published'">  Please do not make arrangements for your side-event until you receive a confirmation that your side-event has been scheduled, and that a room has been assigned to it.
+      Once confirmed, your side-event will be published in the side-event schedule <a href="https://www.cbd.int/side-events/">https://www.cbd.int/side-events/</a>. If your side-event is not approved,
+      you will also receive an email with the details.  You will recieve an email upon submission confirming your side-event request was received.
     </p>
-
+    <p ng-if="doc.meta.status==='request' || doc.meta.status==='published'">  The deadline for editing your side-event is September 15th. You will recieve an email upon submission confirming your updated side-event request was received. 
+    </p>
     <div class="text-xs-center">
         <button class="btn btn-default" ng-click="closeThisDialog('draft');">
-            No, Save as draft
+            Save Draft
         </button>
-        <button class="btn btn-primary" ng-click="closeThisDialog('publish');">
+        <button class="btn btn-success" ng-click="closeThisDialog('publish');">
             <i class="fa fa-floppy-o"></i>
-            Register & Request Approval
+            Submit
         </button>
     </div>
 

@@ -88,7 +88,7 @@ border-top-color: transparent !important;
     <legend class="container-subheader">
       <h2>
         <span ng-if="doc.id">Side Event ID: {{doc.id}}</span>
-        <span class="pull-right text-nowrap">Status: <span ng-class="{'red-status':(doc.meta.status!=='request' && doc.meta.status!=='published')}"><span ng-if="doc.meta.status!=='request'">{{doc.meta.status.toUpperCase()}}</span> <span ng-if="doc.meta.status==='request'" style="color:black;">Submitted Under Review</span> <span ng-if="!doc.meta.status">NOT SAVED</span></span></span>
+        <span class="pull-right text-nowrap">Status: <span ng-class="{'red-status':(doc.meta.status!=='request' && doc.meta.status!=='published')}"><span ng-if="doc.meta.status!=='request'">{{doc.meta.status.toUpperCase()}}</span> <span ng-if="doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!doc.meta.status">NOT SAVED</span></span></span>
       </h2>
     </legend>
     <div ng-show="registerAlert" class="col-xs-12 alert alert-danger alert-dismissable" ng-if="resubmitWarning()">
