@@ -363,8 +363,17 @@ border-top-color: transparent !important;
                           <strong>This should be the main contact for Conference Services to communicate with on site during the meetings to address any last minute concerns that may arise.   </strong>
                       </div>
 
-                        <div class="row">
 
+
+
+
+                          <div class="row">
+                            <div class="col-xs-12">
+                              <div   class="text-nowrap">
+                                                <span ng-click="preFill=!preFill;initProfile(preFill)"><i class="fa fa-check-square-o" ng-show="preFill"></i><i class="fa fa-square-o" ng-show="!preFill"></i> I will be the contact.</span>
+                              </div>
+                              <div><hr></div>
+                            </div>
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div   name="personalTitle" caption="Personal Title">
                               <label>Salutation</label>
@@ -511,7 +520,9 @@ border-top-color: transparent !important;
                           </thead>
                           <tbody>
                             <tr>
-                              <td class="text-nowrap">Prinicipal for Side Event <i class="fa fa-info-circle" aria-hidden="true"></i></td>
+                              <td class="text-nowrap">Prinicipal for Side Event
+                                <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
+                              </td>
                               <td>
                                 <select ng-model="doc.responsible.sameAs" ng-change="sameAs(doc.responsible.sameAs,'responsible')">
                                   <option value="" selected>Select a Person</option>
@@ -564,7 +575,9 @@ border-top-color: transparent !important;
 
                                 <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
 
-                                {{getOrgName(org)}} <i class="fa fa-info-circle" aria-hidden="true"></i></td>
+                                {{getOrgName(org)}}
+                                <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
+                              </td>
                               <td>
                                 <select id="res-org" ng-model="doc.responsibleOrgs[$index].sameAs" ng-change="sameAs(doc.responsibleOrgs[$index].sameAs,$index)" ng-disabled="allSameAsOptionsInUse() || document.getElementById('res-org').length===1">
                                   <option value="" selected>Select a Person</option>

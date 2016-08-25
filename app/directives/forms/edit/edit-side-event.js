@@ -495,6 +495,10 @@ define(['app', 'lodash',
                                             else
                                                 numHostOrgs = 0;
                                             $scope.loading=false;
+                                            if($scope.me.email===$scope.doc.contact.email)
+                                              $scope.preFill=true;
+                                            else
+                                              $scope.preFill=false;
                                         }).catch(onError);
                                 } else {
                                             $scope.loading = true;
@@ -503,7 +507,7 @@ define(['app', 'lodash',
                                             $scope.doc.tempFile={};
                                             delete($scope._id);
                                             $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
-                                            initProfile(true);
+                                            //initProfile(true);
 
                                             $scope.doc.validTabs = {
                                                 'general': false,
@@ -533,6 +537,7 @@ define(['app', 'lodash',
                                         $scope.doc.conference=$scope.options.conferences[0]._id;
                                         $scope.options.conferences[0].selected=true;
                                       }
+                                      $scope.preFill=false;
                                       $scope.loading=false;
                                 }
                             }).catch(onError); // load orgs
@@ -605,17 +610,11 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
-                        function initProfile(newDoc) {
-                            var userId;
-                            auth.getUser().then(function(user) {
-                                if (newDoc) {
-                                    $scope.user = user;
-                                    userId = $scope.user.userID;
-                                } else {
-                                    userId = $scope.doc.meta.createdBy;
-                                }
+                        function initProfile(preFill) {
 
-                                return $http.get('/api/v2013/users/' + userId).then(function onsuccess(response) {
+
+                                if(preFill)
+                                return $http.get('/api/v2013/users/' + $scope.me.userID).then(function onsuccess(response) {
                                     if (!$scope.doc) $scope.doc = {};
                                     if (!$scope.doc.contact) $scope.doc.contact = {};
 
@@ -632,9 +631,12 @@ define(['app', 'lodash',
                                     $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
 
                                 }).catch(onError);
-                            });
-                        } // initProfile()
+                                else
+                                  $scope.doc.contact = {};
 
+
+                        } // initProfile()
+                        $scope.initProfile=initProfile;
 
                         //============================================================
                         //
@@ -692,6 +694,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         function postSaveNewDoc (result){
                           $scope._id=$scope.doc._id=result.data.id;
+                          $scope.ignoreDirtyCheck=true;
                           $location.url('/manage/events/'+$scope._id);
                           var tempFile=getTempFile();
 
