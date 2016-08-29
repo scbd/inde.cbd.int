@@ -1,12 +1,14 @@
 define(['app', 'lodash',
     'text!./delete-dialog.html',
+    'moment',
     './menu',
     'services/mongo-storage',
     'services/filters',
     'services/dev-router',
     'ngDialog',
-    'directives/mobi-menu'
-], function(app, _, deleteDialog) {
+    'directives/mobi-menu',
+        'services/filters'
+], function(app, _, deleteDialog, moment) {
 
     app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog',
         function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog) {
@@ -15,24 +17,76 @@ define(['app', 'lodash',
             $scope.schema = "inde-side-events";
             $scope.selectedChip = 'all';
             $scope.docs = [];
-
-
+            $scope.options={};
+            $scope.itemsPerPage=20;
+            $scope.currentPage=0;
+            $scope.onPage      = loadList;
+            $scope.filter={};
+            $scope.filter.status = 'all';
             init();
-
 
             //=======================================================================
             //
             //=======================================================================
             function init() {
+
                 initSlideMenu();
                 authentication.getUser().then(function(user) {
-                    $scope.selectChip('all');
                     $scope.user = user;
-                    $scope.loadList()
-                        .then(getFacits);
+                    var srch = $location.search();
+                    if(srch && srch.chip)
+                      $scope.selectChip(srch.chip);
+                    else
+                      $scope.selectChip('all');
                 });
 
             } //init
+
+
+            //======================================================
+            //
+            //
+            //======================================================
+            function refreshPager(currentPage)
+            {
+                currentPage = currentPage || 0;
+
+                var pageCount = Math.ceil(Math.max($scope.count||0, 0) / Number($scope.itemsPerPage));
+
+                var pages     = [];
+                var start = 0;
+                var end = (pageCount<9)? pageCount:9;
+                if(currentPage > 8 && (pageCount<9)){
+                  start = currentPage-4;
+                  end = currentPage+4;
+                  if(end>pageCount)
+                    end = pageCount;
+                }
+
+                for (var i = start; i < end; i++) {
+                    pages.push({ index : i, text : i+1 });
+                }
+
+                $scope.currentPage = currentPage;
+                $scope.pages       = pages;
+                  $scope.pageCount=pageCount ;
+
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.changePage = function(index) {
+                $scope.prevDate=false;
+                $scope.currentPage=index;
+            };
+
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.isActive = function(index) {
+                return ($scope.currentPage===(index));
+            };
 
 
             //=======================================================================
@@ -83,19 +137,12 @@ define(['app', 'lodash',
             //============================================================
             //
             //============================================================
-            function getFacits(time) {
-                var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
-                $timeout(function() {
-                    if ($location.absUrl().indexOf('manage') > -1) {
-                        mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
-                            $scope.statusFacits = facits;
-                        }).catch(onError);
-                    } else {
-                        mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
-                            $scope.statusFacits = facits;
-                        }).catch(onError);
-                    }
-                }, time);
+              function compareDates(a,b) {
+              if (moment(a.StartDate).isBefore(b.StartDate))
+                return 1;
+              if (moment(a.StartDate).isAfter(b.StartDate))
+                return -1;
+              return 0;
             }
 
             //============================================================
@@ -111,7 +158,8 @@ define(['app', 'lodash',
             //
             //============================================================
             $scope.statusFilter = function(doc) {
-                if (doc.meta.status === $scope.selectedChip)
+                if(!doc ) return false;
+                if (doc.meta && doc.meta.status === $scope.selectedChip)
                     return doc;
                 else if (!$scope.selectedChip || $scope.selectedChip === 'all' || $scope.selectedChip === '' )
                     return doc;
@@ -172,8 +220,8 @@ define(['app', 'lodash',
                         });
 
                     });
+                    loadList($scope.currentPage);
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Under Review');
-                    getFacits(1000);
                 }).catch(onError);
             }; // archiveOrg
 
@@ -185,8 +233,8 @@ define(['app', 'lodash',
                 docObj.meta.status = 'canceled';
                 mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id)
                     .then(function() {
+                      loadList($scope.currentPage);
                         $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now canceled');
-                        getFacits(1000);
                     }).catch(onError);
             }; // archiveOrg
 
@@ -198,8 +246,8 @@ define(['app', 'lodash',
                 docObj.meta.status = 'rejected';
                 mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id)
                     .then(function() {
+                      loadList($scope.currentPage);
                         $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Rejected');
-                        getFacits(1000);
                     }).catch(onError);
             }; // archiveOrg
 
@@ -214,36 +262,6 @@ define(['app', 'lodash',
             };
 
 
-            //=======================================================================
-            //
-            //=======================================================================
-            function archiveList() {
-                return $q.all([loadOrgs(), loadConfrences()]).then(function() {
-
-
-                    var loadDocsFunc = mongoStorage.loadArchives;
-
-                    if ($location.absUrl().indexOf('manage') > -1)
-                        loadDocsFunc = mongoStorage.loadOwnerArchives;
-
-                    loadDocsFunc($scope.schema).then(function(response) {
-                        $scope.docs = response.data;
-                        _.each($scope.docs, function(doc) {
-                            doc.orgs = [];
-                            var foundOrg;
-                            _.each(doc.hostOrgs, function(org) {
-                                foundOrg = _.find($scope.orgs, {
-                                    _id: org
-                                });
-                                if (foundOrg)
-                                    doc.orgs.push(foundOrg);
-                            });
-
-                        });
-                    });
-
-                });
-            } // archiveOrg
 
             //=======================================================================
             //
@@ -256,6 +274,8 @@ define(['app', 'lodash',
                     $scope.selectedChip = '';
                 else
                     $scope.selectedChip = chip;
+                $scope.filter.status=chip;
+                loadList(0);
             } // selectChip
             $scope.selectChip = selectChip;
 
@@ -278,75 +298,49 @@ define(['app', 'lodash',
                 });
             }
 
-
-            //==============================
+            //============================================================
             //
-            //==============================
-            function loadConfrences() {
+            //============================================================
+            function loadConferences() {
+                return mongoStorage.loadConferences().then(function(o) {
+                    $scope.options.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
 
-                return $http.get('/api/v2016/conferences?s={"StartDate":1}', {
-                    cache: true
-                }).then(function(conf) {
-                    $scope.conferences = conf.data;
 
-                }).then(function() {
-                    _.each($scope.conferences, function(conf, key) {
-                        var oidArray = [];
-                        if (!_.isArray(conf.MajorEventIDs)) conf.MajorEventIDs = [];
-
-                        _.each(conf.MajorEventIDs, function(id) {
-                            oidArray.push({
-                                '$oid': id
-                            });
-                        });
-
-                        $http.get("/api/v2016/meetings", {
-                            params: {
-                                q: {
-                                    _id: {
-                                        $in: oidArray
-                                    }
-                                }
-                            }
-                        }, {
-                            cache: true
-                        }).then(function(m) {
-                            $scope.conferences[key].meetings = m.data;
-
-                        });
-                    });
-
-                });
+                    if(!$scope.filter.conference){
+                      $scope.filter.conference=$scope.options.conferences[0]._id;
+                      $scope.options.conferences[0].selected=true;
+                    }
+                }).catch(onError);
             }
 
 
             //=======================================================================
             //
             //=======================================================================
-            $scope.loadList = function() {
+            function loadList  (pageIndex) {
                 $scope.loading = true;
 
-                return $q.all([loadOrgs(), loadConfrences()]).then(function() {
-                    var srch = $location.search();
-                    if (!_.isEmpty(srch)) {
-                        if (srch.chip === 'archived')
-                            toggleArchived();
-                        else
-                            $timeout(function() {
-                                selectChip(srch.chip);
-                            }, 10);
-                    } else {
-                        $timeout(function() {
-                            selectChip('all');
-                        }, 1000);
-                    }
+                return $q.all([loadOrgs(), loadConferences()]).then(function() {
                     var loadDocsFunc = mongoStorage.loadDocs;
 
                     if ($location.absUrl().indexOf('manage') > -1)
                         loadDocsFunc = mongoStorage.loadOwnerDocs;
 
-                    loadDocsFunc($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
-                        $scope.docs = response.data;
+
+                    var q = {
+                      conference:$scope.filter.conference,
+                      'meta.status':$scope.filter.status,
+                    };
+
+                    if($scope.search)  q['$text']= {'$search':$scope.search};
+
+                    if($scope.filter.status==='all')
+                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected','archived']};
+
+
+                    loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
+
+
                         _.each($scope.docs, function(doc) {
                             doc.orgs = [];
                             var foundOrg;
@@ -360,12 +354,14 @@ define(['app', 'lodash',
                                 });
                             });
 
-                            doc.conferenceObj = _.find($scope.conferences, {
+                            doc.conferenceObj = _.find($scope.options.conferences, {
                                 '_id': doc.conference
                             });
 
                             doc.meetingObjs = [];
-                            _.each(doc.meetings, function(meeting) {
+
+                          if(doc.meetings)
+                            doc.meetings.forEach(function(meeting) {
                                 doc.meetingObjs.push(_.find(doc.conferenceObj.meetings, {
                                     '_id': meeting
                                 }));
@@ -373,10 +369,26 @@ define(['app', 'lodash',
 
                         });
 
+                        
+                        $scope.docs = response.data;
+                        $scope.count = response.count;
+                        $scope.statusFacits =  response.facits;
+                        refreshPager(pageIndex);
+                        $scope.loading=false;
                     });
                 });
-            }; // archiveOrg
+            } // archiveOrg
 
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.getNumberPages = function() {
+                if($scope.count && $scope.itemsPerPage && ($scope.count > $scope.itemsPerPage))
+                  return new Array(Math.floor($scope.count/$scope.itemsPerPage)+1);
+                else
+                    return new Array(1);
+
+            };
 
             //=======================================================================
             //
@@ -445,7 +457,7 @@ define(['app', 'lodash',
                         return obj._id === docObj._id;
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now archived');
-                    getFacits(1000);
+                    loadList($scope.currentPage);
                 }).catch(onError);
             }; // archiveDoc
 
@@ -459,7 +471,7 @@ define(['app', 'lodash',
                         return obj._id === docObj._id;
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is deleted permanently');
-                    getFacits(1000);
+                    loadList($scope.currentPage);
                 }).catch(onError);
             }; // deleteDoc
 
@@ -473,7 +485,7 @@ define(['app', 'lodash',
                         return obj._id === docObj._id;
                     });
                     $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is unarchived and saved as a draft');
-                    getFacits(1000);
+                    loadList($scope.currentPage);
                 }).catch(onError);
             }; //unArchiveDoc
 
