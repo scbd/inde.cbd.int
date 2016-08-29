@@ -408,8 +408,8 @@ border-top-color: transparent !important;
                           </div>
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                            <div ng-class="{'has-error': editForm.phone.$invalid }">
-                              <label>Phone Number</label>
+                            <div ng-class="{'has-error': editForm.phone.$invalid && editForm.$submitted}">
+                              <label>Phone Number {{editForm.phone.$invalid}}</label>
                               <input id="editForm.phone" class="form-control" name="phone" type="text" ng-pattern="patterns.phone" ng-model="doc.contact.phone" placeholder=" " required/>
                               <div ng-show="(editForm.$submitted || editForm.phone.$touched)">
                                 <p class="help-block error" ng-show="editForm.phone.$error.required">This field is mandatory</p>
@@ -421,7 +421,7 @@ border-top-color: transparent !important;
                           </div>
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                            <div ng-class="{'has-error': editForm.mobile.$error.pattern}">
+                            <div ng-class="{'has-error': editForm.mobile.$error.pattern && editForm.$submitted}">
                               <label>Mobile</label>
                               <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-pattern="patterns.phone" ng-model="doc.mobile" placeholder=" " />
                               <div ng-show="(editForm.$submitted || editForm.mobile.$touched)">
