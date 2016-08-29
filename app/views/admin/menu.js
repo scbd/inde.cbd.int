@@ -27,19 +27,7 @@ define(['app', 'lodash', 'directives/side-menu/scbd-side-menu'], function(app, _
             mdIcon: 'add_box',
 
         });
-        scbdMenuService.menus.adminOptions.push({
-            name: 'Side Events',
-            type: 'link',
-            mdIcon: 'unarchive',
-            path: '/admin/events/',
 
-        });
-        scbdMenuService.menus.adminOptions.push({
-            name: 'Archives',
-            type: 'link',
-            mdIcon: 'archive',
-            path: '/admin/events/archived',
-        });
         scbdMenuService.menus.adminOptions.push({
             name: 'Sort',
             type: 'link',
