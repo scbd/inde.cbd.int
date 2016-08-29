@@ -54,23 +54,25 @@ background-color: #f5f5f5;
               <h2 style="color:inherit">All Side Events</h2>
             </div>
             <div class="panel-body text-center" style="min-height:110px">
+              <button class="btn btn-default" type="button" ng-click="refreshSE();">Refresh <i class="fa fa-refresh" ng-class="{'fa-spin':refreshingSE}" ></i></button>
+              <button class="btn btn-default" type="button" ng-click="goTo('/manage/events/new','',true)">New <i class="fa fa-plus" ></i></button>
               <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facets.all}" ng-click="goTo('/admin/events','chip=all',facets.all)">
                 <span class="title">All</span>
                 <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facets.all || 0}}</span>
               </div>
-              <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facets.draft}" ng-click="goTo('/admin/events','chip=draft',facets.draft)">
+              <div ng-if="facets.draft" class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facets.draft}" ng-click="goTo('/admin/events','chip=draft',facets.draft)">
                 <span class="title">Drafts</span>
                 <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facets.draft || 0}}</span>
               </div>
-              <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facets.published}" ng-click="goTo('/admin/events','chip=published',facets.published)">
+              <div ng-if="facets.published" class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facets.published}" ng-click="goTo('/admin/events','chip=published',facets.published)">
                 <span class="title">Under Review</span>
                 <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.published || 0}}</span>
               </div>
-              <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/admin/events','chip=request',facets.request)">
+              <div ng-if="facets.request" class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facets.request}"  ng-click="goTo('/admin/events','chip=request',facets.request)">
                 <span class="title">Requests</span>
                 <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facets.request || 0}}</span>
               </div>
-              <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facets.canceled}" ng-click="goTo('/admin/events','chip=canceled',facets.canceled)">
+              <div ng-if="facets.canceled" class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facets.canceled}" ng-click="goTo('/admin/events','chip=canceled',facets.canceled)">
                 <span class="title">Canceled</span>
                 <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facets.canceled || 0}}</span>
               </div>
@@ -78,7 +80,7 @@ background-color: #f5f5f5;
                 <span class="title">Archived</span >
                 <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived || 0}}</span>
               </div>
-              <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/admin/events','chip=rejected',facets.rejected)">
+              <div ng-if="facets.rejected" class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/admin/events','chip=rejected',facets.rejected)">
                 <span class="title">Rejected</span>
                 <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected || 0}}</span>
               </div>
@@ -102,32 +104,33 @@ background-color: #f5f5f5;
             </div>
 
             <div class="panel-body text-center" style="min-height:110px">
-
+              <button class="btn btn-default" type="button" ng-click="refreshORG();">Refresh <i class="fa fa-refresh" ng-class="{'fa-spin':refreshingORG}" ></i></button>
+              <button class="btn btn-default" type="button" ng-click="goTo('/manage/organizations/new','',true)">New <i class="fa fa-plus" ></i></button>
                 <div class="bs-callout bs-callout-default" ng-class="{'bs-callout-btn':facetsO.all}" ng-click="goTo('/admin/organizations','chip=all',facetsO.all)">
                   <span class="title">All</span>
                   <span class="label label-pill label-default pull-right middle" style="margin-top:3px;">{{facetsO.all || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facetsO.draft}" ng-click="goTo('/admin/organizations','chip=draft',facetsO.draft)">
+                <div ng-if="facetsO.drafts" class="bs-callout bs-callout-primary" ng-class="{'bs-callout-btn':facetsO.draft}" ng-click="goTo('/admin/organizations','chip=draft',facetsO.draft)">
                   <span class="title">Drafts</span>
                   <span class="label label-pill label-primary pull-right middle" style="margin-top:3px;">{{facetsO.draft || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facetsO.published}" ng-click="goTo('/admin/organizations','chip=published',facetsO.published)">
+                <div ng-if="facetsO.published" class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facetsO.published}" ng-click="goTo('/admin/organizations','chip=published',facetsO.published)">
                   <span class="title">Under Review</span>
                   <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.published || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/admin/organizations','chip=request',facetsO.request)">
+                <div ng-if="facetsO.request" class="bs-callout bs-callout-warning" ng-class="{'bs-callout-btn':facetsO.request}" ng-click="goTo('/admin/organizations','chip=request',facetsO.request)">
                   <span class="title">Requests</span>
                   <span class="label label-pill label-warning pull-right middle" style="margin-top:3px;">{{facetsO.request || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facetsO.canceled}" ng-click="goTo('/admin/organizations','chip=canceled',facetsO.canceled)">
+                <div ng-if="facetsO.canceled" class="bs-callout bs-callout-danger-little" ng-class="{'bs-callout-btn':facetsO.canceled}" ng-click="goTo('/admin/organizations','chip=canceled',facetsO.canceled)">
                   <span class="title">Canceled</span>
                   <span class="label label-pill label-danger-little pull-right middle" style="margin-top:3px;">{{facetsO.canceled || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facetsO.archived}" ng-click="goTo('/admin/organizations','chip=archived',facetsO.archived)">
+                <div ng-if="facetsO.archived" class="bs-callout bs-callout-info" ng-class="{'bs-callout-btn':facetsO.archived}" ng-click="goTo('/admin/organizations','chip=archived',facetsO.archived)">
                   <span class="title">Archived</span>
                   <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived || 0}}</span>
                 </div>
-                <div class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/admin/organizations','chip=rejected',facetsO.rejected)">
+                <div ng-if="facetsO.rejected" class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/admin/organizations','chip=rejected',facetsO.rejected)">
                   <span class="title">Rejected</span>
                   <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected || 0}}</span>
                 </div>

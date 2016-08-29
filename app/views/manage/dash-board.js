@@ -1,16 +1,17 @@
 define(['app', 'services/mongo-storage','directives/mobi-menu'], function(app) {
-    app.controller("dashBoard", ['$scope', 'authentication', '$location', 'mongoStorage', 'history',
-        function($scope, authentication, $location, mongoStorage, history) {
+    app.controller("dashBoard", ['$scope', 'authentication', '$location', 'mongoStorage', 'history','$timeout',
+        function($scope, authentication, $location, mongoStorage, history,$timeout) {
 
             var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
 
-
+            $scope.refreshing=false;
             init();
             //=======================================================================
             //
             //=======================================================================
             function init() {
                 authentication.getUser().then(function(user) {
+                  $scope.user=user;
                     mongoStorage.getStatusFacits('inde-side-events', statuses, user.userID).then(
                         function(data) {
                             $scope.facets = data;
@@ -25,7 +26,32 @@ define(['app', 'services/mongo-storage','directives/mobi-menu'], function(app) {
                 });
             } //init
 
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.refreshSE = function() {
+              $scope.refreshingSE=true;
+              mongoStorage.getStatusFacits('inde-side-events', statuses, $scope.user.userID,true).then(
+                  function(data) {
+                      $scope.facets = data;
+                      $timeout(function(){$scope.refreshingSE=false;},500);
+                  }
+              );
 
+            }; // archiveOrg
+
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.refreshORG = function() {
+              $scope.refreshingORG=true;
+              mongoStorage.getStatusFacits('inde-orgs', statuses, $scope.user.userID,true).then(
+                  function(data) {
+                      $scope.facetsO = data;
+                        $timeout(function(){$scope.refreshingORG=false;},500);
+                  }
+              );
+            }; // archiveOrg
             //=======================================================================
             //
             //=======================================================================

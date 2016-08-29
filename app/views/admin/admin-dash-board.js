@@ -1,8 +1,8 @@
 define(['app', 'lodash',  'services/mongo-storage','directives/mobi-menu'], function(app, _) {
 
 
-    app.controller("adminDashBoard", ['$scope',  '$location', 'mongoStorage',  'history',
-        function($scope,  $location,  mongoStorage,  history) {
+    app.controller("adminDashBoard", ['$scope',  '$location', 'mongoStorage',  'history','$timeout',
+        function($scope,  $location,  mongoStorage,  history,$timeout) {
 
             var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
 
@@ -24,7 +24,32 @@ define(['app', 'lodash',  'services/mongo-storage','directives/mobi-menu'], func
                     }
                 );
             } //init
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.refreshSE = function() {
+              $scope.refreshingSE=true;
+              mongoStorage.getStatusFacits('inde-side-events', statuses, '',true).then(
+                  function(data) {
+                      $scope.facets = data;
+                      $timeout(function(){$scope.refreshingSE=false;},500);
+                  }
+              );
 
+            }; // archiveOrg
+
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.refreshORG = function() {
+              $scope.refreshingORG=true;
+              mongoStorage.getStatusFacits('inde-orgs', statuses, '',true).then(
+                  function(data) {
+                      $scope.facetsO = data;
+                        $timeout(function(){$scope.refreshingORG=false;},500);
+                  }
+              );
+            }; // archiveOrg
             //=======================================================================
             //
             //=======================================================================
