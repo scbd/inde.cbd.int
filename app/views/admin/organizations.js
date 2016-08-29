@@ -16,7 +16,12 @@ define(['app', 'lodash',
             $scope.schema = "inde-orgs";
             $scope.selectedChip = 'all';
             $scope.docs = [];
-
+            $scope.options={};
+            $scope.itemsPerPage=20;
+            $scope.currentPage=0;
+            $scope.onPage      = loadList;
+            $scope.filter={};
+            $scope.filter.status = 'all';
             init();
 
 
@@ -26,10 +31,12 @@ define(['app', 'lodash',
             function init() {
               initSlideMenu() ;
                 authentication.getUser().then(function(u) {
+                  $scope.user = u;
+                  var srch = $location.search();
+                  if(srch && srch.chip)
+                    $scope.selectChip(srch.chip);
+                  else
                     $scope.selectChip('all');
-                    $scope.user = u;
-                    $scope.loadList().catch(onError);
-                    getFacits();
                 });
                 $scope.editURL='/manage/organizations/';
             } //init
@@ -44,8 +51,6 @@ define(['app', 'lodash',
                 $scope.toggle = dashMenu.toggle;
 
                 dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
-                dashMenu.setPathOfLink($scope.menu, 'Organizations', toggleArchived);
-                dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'All', function() {
                     selectChip('all');
                 });
@@ -64,28 +69,52 @@ define(['app', 'lodash',
                 dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
                     selectChip('rejected');
                 });
-                dashMenu.setPathOfLink($scope.menu, 'List View', listView);
             }
+            //======================================================
+            //
+            //
+            //======================================================
+            function refreshPager(currentPage)
+            {
+                currentPage = currentPage || 0;
 
+                var pageCount = Math.ceil(Math.max($scope.count||0, 0) / Number($scope.itemsPerPage));
 
+                var pages     = [];
+                var start = 0;
+                var end = (pageCount<9)? pageCount:9;
+                if(currentPage > 8 && (pageCount<9)){
+                  start = currentPage-4;
+                  end = currentPage+4;
+                  if(end>pageCount)
+                    end = pageCount;
+                }
+
+                for (var i = start; i < end; i++) {
+                    pages.push({ index : i, text : i+1 });
+                }
+
+                $scope.currentPage = currentPage;
+                $scope.pages       = pages;
+                $scope.pageCount=pageCount ;
+
+            }
 
             //=======================================================================
             //
             //=======================================================================
-            function getFacits(time) {
-              var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
-              return $timeout(function(){ // time out prevent an additional call for facits as they are force updated by save
-                if ($location.absUrl().indexOf('manage') > -1) {
-                    return mongoStorage.getStatusFacits($scope.schema, statuses, $scope.user.userID).then(function(facits) {
-                        $scope.statusFacits = facits;
-                    }).catch(onError);
-                } else {
-                    return mongoStorage.getStatusFacits($scope.schema, statuses).then(function(facits) {
-                        $scope.statusFacits = facits;
-                    }).catch(onError);
-                }
-              },time);
-            }
+            $scope.changePage = function(index) {
+                $scope.prevDate=false;
+                $scope.currentPage=index;
+            };
+
+            //=======================================================================
+            //
+            //=======================================================================
+            $scope.isActive = function(index) {
+                return ($scope.currentPage===(index));
+            };
+
 
             //=======================================================================
             //
@@ -149,22 +178,10 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            $scope.customSearch = function(doc) {
-
-                if (!$scope.search || $scope.search == ' ' || $scope.search.length <= 2) return true;
-                var temp = JSON.stringify(doc);
-
-                return (temp.toLowerCase().indexOf($scope.search.toLowerCase()) >= 0);
-            };
-
-
-            //=======================================================================
-            //
-            //=======================================================================
             $scope.approveDoc = function(docObj) {
                 docObj.meta.status = 'published';
                 mongoStorage.approveDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits(1000);
+                  loadList ($scope.currentPage);
                 }).catch(onError);
             }; // approveDoc
 
@@ -175,7 +192,7 @@ define(['app', 'lodash',
             $scope.cancelDoc = function(docObj) {
                 docObj.meta.status = 'canceled';
                 mongoStorage.cancelDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits(1000);
+                  loadList ($scope.currentPage);
                 }).catch(onError);
             }; // cancelDoc
 
@@ -186,7 +203,7 @@ define(['app', 'lodash',
             $scope.rejectDoc = function(docObj) {
                 docObj.meta.status = 'rejected';
                 mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id).then(function() {
-                    getFacits(1000);
+                  loadList ($scope.currentPage);
                 }).catch(onError);
             }; // archiveOrg
 
@@ -204,21 +221,6 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            function archiveList() {
-                var loadDocsFunc = mongoStorage.loadArchives;
-
-                if ($location.absUrl().indexOf('manage') > -1)
-                    loadDocsFunc = mongoStorage.loadOwnerArchives;
-
-                return loadDocsFunc($scope.schema).then(function(response) {
-                    $scope.docs = response.data;
-                }).catch(onError);
-            } // archiveOrg
-
-
-            //=======================================================================
-            //
-            //=======================================================================
             function selectChip(chip) {
                 $element.find('.chip').removeClass('chip-active');
                 $element.find('#chip-' + chip).addClass('chip-active');
@@ -227,22 +229,35 @@ define(['app', 'lodash',
                     $scope.selectedChip = '';
                 else
                     $scope.selectedChip = chip;
+                $scope.filter.status=chip;
+                loadList (0);
             } // archiveOrg
             $scope.selectChip = selectChip;
-
 
             //=======================================================================
             //
             //=======================================================================
-            $scope.loadList = function() {
+            function loadList (pageIndex) {
                 $scope.loading=true;
                 var loadDocsFunc = mongoStorage.loadDocs;
 
                 if ($location.absUrl().indexOf('manage') > -1)
                     loadDocsFunc = mongoStorage.loadOwnerDocs;
+                    var q = {
+                      conference:$scope.filter.conference,
+                      'meta.status':$scope.filter.status,
+                    };
 
-                return loadDocsFunc($scope.schema, ['draft', 'published', 'request', 'canceled', 'rejected']).then(function(response) {
+                    if($scope.search)  q['$text']= {'$search':$scope.search};
+
+                    if($scope.filter.status==='all')
+                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected','archived']};
+
+                return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
                     $scope.docs = response.data;
+console.log('$scope.docs ',$scope.docs );
+                    $scope.count = response.count;
+                    $scope.statusFacits =  response.facits;
 
                     if ($scope.isAdmin)
                         _.each($scope.docs, function(doc) {
@@ -253,53 +268,13 @@ define(['app', 'lodash',
                                 doc.contact = response.data;
                             }).catch(onError);
                         });
-                          $scope.loading=false;
-                }).then(function() {
-                    var srch = $location.search();
-                    if (!_.isEmpty(srch)) {
-                        if (srch.chip === 'archived') {
-                            $scope.showArchived = !$scope.showArchived;
-                            getFacits(1000);
-                            archiveList().then(function() {
-                                $timeout(function() {
-                                  $scope.loading=false;
-                                    selectChip(srch.chip);
-                                }, 1000).catch(onError);
-                            });
-                        } else
-                            $timeout(function() {
-                                selectChip(srch.chip);
-                            }, 1000);
-                    } else {
-                        $timeout(function() {
-                            selectChip('all');
-                        }, 1000);
-                    }
+                        refreshPager(pageIndex);
+                        $scope.loading=false;
                 }).catch(onError);
             }; // loadList
 
 
-            //=======================================================================
-            //
-            //=======================================================================
-            function toggleListView() {
-                $timeout(function() {
-                    if ($scope.listView === 0)
-                        $scope.listView = 1;
-                    else
-                        $scope.listView = 0;
-                });
-            } //toggleListView
-            $scope.toggleListView = toggleListView;
 
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function listView() {
-                $scope.listView = 0;
-                $scope.toggle('orgOptions');
-            } //toggleListView
 
 
             //=======================================================================
@@ -311,9 +286,9 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits(1000);
-                }).catch(onError);
 
+                }).catch(onError);
+                loadList($scope.currentPage);
             }; // archiveOrg
 
 
@@ -326,7 +301,7 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits(1000);
+                    loadList($scope.currentPage);
                 }).catch(onError);
 
             }; // archiveOrg
@@ -341,7 +316,7 @@ define(['app', 'lodash',
                     _.remove($scope.docs, function(obj) {
                         return obj._id === docObj._id;
                     });
-                    getFacits(1000);
+                    loadList($scope.currentPage);
                 }).catch(onError);
             }; // archiveOrg
 
@@ -361,35 +336,6 @@ define(['app', 'lodash',
                 $location.url($scope.editURL + id);
             }; //
 
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function toggleArchived() {
-                $timeout(function() {
-                    if (!$scope.showArchived) {
-                        selectChip('archived');
-                        getFacits(1000);
-                        archiveList().catch(onError);
-                    } else {
-                        selectChip('all');
-                        getFacits(1000);
-                        $scope.loadList().catch(onError);
-                    }
-
-                    $scope.showArchived = !$scope.showArchived;
-
-
-                    $scope.toggle('adminOrgOptions');
-                });
-                $timeout(function() {
-
-                    if ($scope.selectedChip === 'archived')
-                        $scope.selectedChip = 'all';
-                    else
-                        $scope.selectedChip = 'archived';
-                }, 500);
-            } // archiveOrg
 
 
             //============================================================
