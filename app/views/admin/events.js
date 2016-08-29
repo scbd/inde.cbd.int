@@ -98,8 +98,8 @@ define(['app', 'lodash',
                 $scope.toggle = dashMenu.toggle;
 
                 dashMenu.setPathOfLink($scope.menu, 'Sort', sortOrder);
-                dashMenu.setPathOfLink($scope.menu, 'Side Events', toggleArchived);
-                dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
+                // dashMenu.setPathOfLink($scope.menu, 'Side Events', toggleArchived);
+                // dashMenu.setPathOfLink($scope.menu, 'Archives', toggleArchived);
                 dashMenu.setPathOfLink($scope.menu, 'All', function() {
                     selectChip('all');
                 });
@@ -118,7 +118,6 @@ define(['app', 'lodash',
                 dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
                     selectChip('rejected');
                 });
-                dashMenu.setPathOfLink($scope.menu, 'List View', listView);
             }
 
 
@@ -424,28 +423,6 @@ define(['app', 'lodash',
             } //toggleListView
 
 
-            //=======================================================================
-            //
-            //=======================================================================
-            function toggleListView() {
-                $timeout(function() {
-                    if ($scope.listView === 0)
-                        $scope.listView = 1;
-                    else
-                        $scope.listView = 0;
-                });
-
-            } //toggleListView
-            $scope.toggleListView = toggleListView;
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function listView() {
-                $scope.listView = 0;
-                $scope.toggle('adminOptions');
-            } //listView
 
 
             //=======================================================================
@@ -504,26 +481,6 @@ define(['app', 'lodash',
             $scope.edit = function(id) {
                 $location.url('/manage/events/' + id);
             }; //edit
-
-
-            //=======================================================================
-            //
-            //=======================================================================
-            function toggleArchived() {
-                $scope.showArchived = !$scope.showArchived;
-                if($scope.showArchived){
-                    selectChip('archived');
-                    getFacits(1000);
-                    archiveList().catch(onError);
-                }else{
-                    selectChip('all');
-                    getFacits(1000);
-                    $scope.loadList().catch(onError);
-                }
-
-                if (dashMenu.isOpen('adminOptions'))
-                    $scope.toggle('adminOptions');
-            } //toggleArchived
 
 
             //============================================================
