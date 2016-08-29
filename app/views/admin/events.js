@@ -334,11 +334,13 @@ define(['app', 'lodash',
                     if($scope.search)  q['$text']= {'$search':$scope.search};
 
                     if($scope.filter.status==='all')
-                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected','archived']};
+                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
 
 
                     loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
 
+                      $scope.docs = response.data;
+                      $scope.count = response.count;
 
                         _.each($scope.docs, function(doc) {
                             doc.orgs = [];
@@ -368,9 +370,8 @@ define(['app', 'lodash',
 
                         });
 
-                        
-                        $scope.docs = response.data;
-                        $scope.count = response.count;
+
+
                         $scope.statusFacits =  response.facits;
                         refreshPager(pageIndex);
                         $scope.loading=false;

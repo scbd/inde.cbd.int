@@ -51,7 +51,7 @@
 
           </div>
           <div class="col-xs-3">
-              <select  class="form-control" ng-model="filter.status" name="status" ng-change="onPage(0)">
+              <select  class="form-control" ng-model="filter.status" name="status" ng-change="selectChip(filter.status);">
                 <option  value="all"  ng-selected="filter.status==='all'">All Statuses</option>
                 <option  value="draft"  ng-selected="filter.status==='draft'">Draft</option>
                 <option  value="request"  ng-selected="filter.status==='request'">Request</option>
@@ -82,52 +82,53 @@
 
       <!-- chips -->
       <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">
-        <div ng-show="loading" style="display:inline;">
-          <i class="fa fa-spinner fa-spin"></i> Loading...
-        </div>
-        <div id="chip-all" class="chip chip-active "  ng-show=" ((!loading && statusFacits.all) || (selectedChip==='all'&& !showArchived))" ng-click="selectChip('all')">
+
+        <div id="chip-all" class="chip chip-active "  ng-show=" (!loading && statusFacits.all)" ng-click="selectChip('all')">
           <div>
             <i class="material-icons">&#xEB3D;</i>
           </div>All
           <span class="sqr">{{statusFacits.all}}</span>
         </div>
 
-        <div id="chip-draft" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.draft) || selectedChip==='draft')" ng-click="selectChip('draft')">
+        <div id="chip-draft" class="chip"  ng-show=" (!loading && statusFacits.draft )" ng-click="selectChip('draft')">
           <div>
             <i class="material-icons">&#xE24D;</i>
           </div>Drafts
           <span class="sqr">{{statusFacits.draft}}</span>
         </div>
-        <div id="chip-request" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.request) || selectedChip==='request')" ng-click="selectChip('request')">
+        <div id="chip-request" class="chip"  ng-show=" (!loading && statusFacits.request)" ng-click="selectChip('request')">
           <div>
             <i class="material-icons">&#xE0C6;</i>
           </div>Requests
           <span class="sqr">{{statusFacits.request}}</span>
         </div>
-        <div id="chip-published" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.published) || selectedChip==='published')" ng-click="selectChip('published')">
+        <div id="chip-published" class="chip"  ng-show=" (!loading && statusFacits.published)" ng-click="selectChip('published')">
           <div>
             <i class="material-icons">&#xE8DC;</i>
           </div>Under Review
           <span class="sqr">{{statusFacits.published}}</span>
         </div>
-        <div id="chip-canceled" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.canceled) || selectedChip==='canceled')" ng-click="selectChip('canceled')">
+        <div id="chip-canceled" class="chip"  ng-show=" (!loading  && statusFacits.canceled)" ng-click="selectChip('canceled')">
           <div>
             <i class="material-icons">&#xE8DD;</i>
           </div>Canceled
           <span class="sqr">{{statusFacits.canceled}}</span>
         </div>
-        <div id="chip-rejected" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.rejected) || selectedChip==='rejected')" ng-click="selectChip('rejected')">
+        <div id="chip-rejected" class="chip"  ng-show=" (!loading  && statusFacits.rejected)" ng-click="selectChip('rejected')">
           <div>
             <i class="material-icons">&#xE8DB;</i>
           </div>Rejected
           <span class="sqr">{{statusFacits.rejected}}</span>
         </div>
 
-        <div id="chip-archived" class="chip"  ng-show=" ((!loading && statusFacits.archived) )" ng-click="selectChip('archived')">
+        <div id="chip-archived" class="chip pull-right"  ng-show=" (!loading && statusFacits.archived )" ng-click="selectChip('archived')">
           <div>
             <i class="material-icons">&#xE149;</i>
           </div>Archived
           <span class="sqr">{{statusFacits.archived}}</span>
+        </div>
+        <div ng-show="loading" style="display:inline;">
+          <i class="fa fa-spinner fa-spin"></i> Loading...
         </div>
       </div>
 <div class="container" style="width:100%;">
@@ -145,7 +146,11 @@
                           <span class="badge">{{count}} </span> records
                           <span ng-if="search"> for <span style="color:#009B48;">"{{search}}"</span></span>
                           </span>
+                          <div ng-show="loading" style="display:inline;">
+                            <i class="fa fa-spinner fa-spin"></i> Loading...
+                          </div>
                       </div>
+
                   </div>
 
                   <div class="col-xs-7 ">
@@ -203,7 +208,7 @@
           </div>
         </div>
 
-        <div class="row collection " ng-repeat="doc in filtered = (docs  | filter:customSearch | filter:statusFilter)"  style="margin-bottom:8px;" >
+        <div class="row collection " ng-repeat="doc in filtered = (docs  | filter:customSearch )"  style="margin-bottom:8px;" >
 
           <div class="collection-item " ng-init="setLoading($last)">
 
@@ -276,11 +281,11 @@
                 </span>
                 <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
                 <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
-<br>
+<!-- <br>
                 <span>Created On: {{doc.meta.createdOn}}</span>
                 <span>Modified On: {{doc.meta.modifiedOn}}</span>
                 <span>Created By: {{doc.meta.createdBy}}</span>
-                <span>Modified By: {{doc.meta.modifiedBy}}</span>
+                <span>Modified By: {{doc.meta.modifiedBy}}</span> -->
               </div>
             </div>
 
