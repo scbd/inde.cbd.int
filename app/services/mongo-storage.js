@@ -303,81 +303,73 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //============================================================
         //
         //============================================================
-        function loadDocs(schema, status) {
+        function loadDocs(schema,q, pageNumber,pageLength,count,sort) {
+
             var params = {};
+            if(!sort)
+              sort={'meta.modifiedOn':-1};
+
             if (!schema) throw "Error: failed to indicate schema loadDocs";
-            if (!status) {
-                params = {
-                    q: {
-                        'meta.status': {
-                            $nin: ['archived', 'deleted']
-                        },
-                        'meta.version': {
-                            $ne: 0
-                        }
-                    },
 
-                };
-                return $http.get('/api/v2016/' + schema, {
-                    'params': params
-                });
-            }
-            if (!_.isArray(status)) {
-                params = {
-                    q: {
-                        'meta.status': status,
-                        'meta.version': {
-                            $ne: 0
-                        }
-                    },
+            params = {
+                q: q,
+                sk: pageNumber,
+                l: pageLength,
+                s:sort//{'meta':{'modifiedOn':1}}//{'meta.modifiedOn':1}
+            };
 
-                };
-                return $http.get('/api/v2016/' + schema, {
-                    'params': params
-                });
-            } else {
-                params = {
-                    q: {
-                        'meta.status': {
-                            $in: status
-                        },
-                        'meta.version': {
-                            $ne: 0
-                        }
-                    },
 
-                };
-                return $http.get('/api/v2016/' + schema, {
-                    'params': params
-                });
-            }
+           if(!count)
+              return $http.get('/api/v2016/' + schema, {'params': params});
+           else
+              return injectCount(schema,params);
         }
-
 
         //============================================================
         //
         //============================================================
-        function loadOwnerDocs(schema) {
+        function injectCount(schema,params) {
 
-            if (!schema) throw "Error: failed to indicate schema loadDocs";
-            return $q.when(authentication.getUser().then(function(u) {
-                user = u;
-            }).then(function() {
-                var params = {
-                    q: {
-                        'meta.status': {
-                            $nin: ['archived', 'deleted']
-                        },
-                        'meta.createdBy': user.userID,
-                        'meta.version': {
-                            $ne: 0
-                        }
-                    }
-                };
-                return $http.get('/api/v2016/' + schema, {
-                    'params': params
-                });
-            }));
+            var promises=[];
+
+            promises[0]=$http.get('/api/v2016/' + schema, {'params':_.clone(params)});
+            params.c=1;
+            promises[1]=$http.get('/api/v2016/' + schema, {'params': params});
+
+           if(!params.q['meta.status'] || _.isObject(params.q['meta.status']))
+              _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
+                  var tempP = _.cloneDeep(params);
+                  tempP.q['meta.status']=status;
+                  promises.push($http.get('/api/v2016/' + schema, {'params': tempP}));
+              });
+
+            return $q.all(promises).then(function(res){
+                 res[0].count=res[1].data.count;
+                 res[0].facits={all:res[1].data.count};
+                  var count=2;
+                  if(!params.q['meta.status'] || _.isObject(params.q['meta.status']))
+                    _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
+                        res[0].facits[status]=res[count].data.count;
+                        count++;
+                    });
+                  else
+                    res[0].facits[params.q['meta.status']]=res[1].data.count;
+
+
+                  return res[0];
+            });
+        }
+
+        //============================================================
+        //
+        //============================================================
+        function loadOwnerDocs(schema,q, pageNumber,pageLength,count,sort) {
+
+          return $q.when(loadUser()).then(function(user){
+              q['meta.createdBy']=user.userID;
+            return loadDocs(schema,q, pageNumber,pageLength,count,sort);
+          });
+
         }
 
 
