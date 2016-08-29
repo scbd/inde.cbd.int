@@ -495,7 +495,7 @@ define(['app', 'lodash',
                                             else
                                                 numHostOrgs = 0;
                                             $scope.loading=false;
-                                            if($scope.me.email===$scope.doc.contact.email)
+                                            if($scope.doc.contact && $scope.me.email===$scope.doc.contact.email)
                                               $scope.preFill=true;
                                             else
                                               $scope.preFill=false;
@@ -906,6 +906,7 @@ define(['app', 'lodash',
                                   $scope.doc.responsible.sameAs='';
                             });
 
+                            if(isAdmin())validRows = true;
                             if (formData && formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
                                 formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
                             )
@@ -1027,7 +1028,12 @@ define(['app', 'lodash',
                             }
                         } //submitGeneral
 
-
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function isAdmin(){
+                           return (_.intersection(['Administrator', 'IndeAdministrator','IndeAdminNotify'], $scope.me.roles).length > 0);
+                        }
                         //=======================================================================
                         //
                         //=======================================================================
@@ -1056,6 +1062,7 @@ define(['app', 'lodash',
                                 findScrollFocus('editForm.responsibleLastName');
 
                             var validRows = true;
+                            if(!isAdmin())
                             _.each($scope.doc.hostOrgs, function(resOrg, key) {
 
                                 if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
@@ -1082,7 +1089,7 @@ define(['app', 'lodash',
                                 if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
                                   $scope.doc.responsible.sameAs='';
                             });
-
+                            if(isAdmin())validRows = true;
 
                             if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
                                 formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
