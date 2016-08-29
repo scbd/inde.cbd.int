@@ -25,31 +25,50 @@
     <div class="list-container" >
 
       <div   mobi-menu>
-        <div class="col-xs-5 hidden-xs">
-          <div class="input-group input-group-sm search-bs">
-            <input type="test" class="form-control " ng-model="search">
-            <span class="input-group-btn">
-              <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
-            </span>
-          </div>
-        </div>
+
+
         <span class="container-header-name visible-xs" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Organizations</h1></span>
         <span class="container-header-name hidden-xs" ><h1 style="display:inline;">All <span ng-if="showArchived">Archived</span> Organizations</h1></span>
-        <div class=" pull-right" >
-          <button class="btn btn-default btn-sm" ng-click="toggle('adminOrgOptions')"><i class="fa fa-ellipsis-h"></i></button>
-        </div>
+
+
         <div class="clearfix"></div>
       </div>
-<div class="row">
-      <div  class="col-xs-12 visible-xs">
-        <div class="input-group input-group-sm search-bs">
-          <input type="test" class="form-control " ng-model="search">
-          <span class="input-group-btn">
-            <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
-          </span>
+
+
+
+    <hr>
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="input-group input-group-sm search-bs" style="width:100%">
+                <input type="test" class="form-control " ng-model="search" ng-change="onPage(0)">
+                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search" ></i></button>
+                            </span>
+            </div>
         </div>
-      </div>
+        <div class="col-xs-4">
+
+
+
+        </div>
+        <div class="col-xs-3">
+            <select  class="form-control" ng-model="filter.status" name="status" ng-change="onPage(0)">
+              <option  value="all"  ng-selected="filter.status==='all'">All Statuses</option>
+              <option  value="draft"  ng-selected="filter.status==='draft'">Draft</option>
+              <option  value="request"  ng-selected="filter.status==='request'">Request</option>
+              <option  value="published"  ng-selected="filter.status==='published'">Under Review</option>
+              <option  value="canceled"  ng-selected="filter.status==='canceled'">Canceled</option>
+              <option  value="rejected"  ng-selected="filter.status==='rejected'">Rejected</option>
+              <option  value="archived"  ng-selected="filter.status==='archived'">Archived</option>
+            </select>
+        </div>
+        <div class="col-xs-1">
+            <div class=" pull-right">
+                <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button>
+            </div>
+        </div>
     </div>
+    <hr>
       <!-- chips -->
       <!-- chips -->
       <!-- chips -->
@@ -64,54 +83,107 @@
           <div>
             <i class="material-icons">&#xEB3D;</i>
           </div>All
-          <span class="sqr">{{statusFacits.allNoArchived}}</span>
+          <span class="sqr">{{statusFacits.all}}</span>
         </div>
 
-        <div id="chip-draft" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.draft) || selectedChip==='draft')" ng-click="selectChip('draft')">
+        <div id="chip-draft" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.draft) )" ng-click="selectChip('draft')">
           <div>
             <i class="material-icons">&#xE24D;</i>
           </div>Drafts
           <span class="sqr">{{statusFacits.draft}}</span>
         </div>
-        <div id="chip-request" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.request) || selectedChip==='request')" ng-click="selectChip('request')">
+        <div id="chip-request" class="chip"  ng-show=" ((!loading) &&statusFacits.request )" ng-click="selectChip('request')">
           <div>
             <i class="material-icons">&#xE0C6;</i>
           </div>Requests
           <span class="sqr">{{statusFacits.request}}</span>
         </div>
-        <div id="chip-published" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.published) || selectedChip==='published')" ng-click="selectChip('published')">
+        <div id="chip-published" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.published))" ng-click="selectChip('published')">
           <div>
             <i class="material-icons">&#xE8DC;</i>
           </div>Under Review
           <span class="sqr">{{statusFacits.published}}</span>
         </div>
-        <div id="chip-canceled" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.canceled) || selectedChip==='canceled')" ng-click="selectChip('canceled')">
+        <div id="chip-canceled" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.canceled) )" ng-click="selectChip('canceled')">
           <div>
             <i class="material-icons">&#xE8DD;</i>
           </div>Canceled
           <span class="sqr">{{statusFacits.canceled}}</span>
         </div>
-        <div id="chip-rejected" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.rejected) || selectedChip==='rejected')" ng-click="selectChip('rejected')">
+        <div id="chip-rejected" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.rejected) )" ng-click="selectChip('rejected')">
           <div>
             <i class="material-icons">&#xE8DB;</i>
           </div>Rejected
           <span class="sqr">{{statusFacits.rejected}}</span>
         </div>
 
-        <div id="chip-archived" class="chip chip-active"  ng-show=" ((!loading) &&(showArchived ) || selectedChip==='archived')" ng-click="selectChip('archived')">
+        <div id="chip-archived" class="chip"  ng-show=" ((!loading) &&(!showArchived && statusFacits.archived))" ng-click="selectChip('archived')">
           <div>
             <i class="material-icons">&#xE149;</i>
           </div>Archived
           <span class="sqr">{{statusFacits.archived}}</span>
         </div>
       </div>
+      <div class="container" style="width:100%;">
+            <div class="row" ng-show="count">
+              <div class="col-xs-3 text-no-wrap" style="color:#333;font-size:14px;padding-left:0px;">
+                            <div class="text-no-wrap" style="margin-top:25px;">
+                                <span>
+                                      <span class="badge" >{{((currentPage*itemsPerPage)+1)}}</span>
+          <!-- <span class="badge" ng-if="filtered.length!==itemsPerPage">{{(((currentPage)*itemsPerPage))}}</span> -->
+                                <span ng-if="(Number(filtered.length)===Number(itemsPerPage))">  -  <span class="badge" >{{(currentPage+1)*(filtered.length)}}  </span></span>
+                                <span ng-if="loading && !((currentPage+1)*(filtered.length))">  -  <span class="badge" ><i class="fa fa-spinner fa-spin"></i></span></span>
+                                <span ng-if="((currentPage+1)*(filtered.length))!==((currentPage+1)*(itemsPerPage)) && !loading && (filtered.length===itemsPerPage)">  -  <span class="badge" >{{filtered.length}} </span></span>
+                                <span ng-if="Number(filtered.length)!==Number(itemsPerPage) && !loading">  -  <span class="badge" >{{count}}</span></span>
+                                of
+                                <span class="badge">{{count}} </span> records
+                                <span ng-if="search"> for <span style="color:#009B48;">"{{search}}"</span></span>
+                                </span>
+                            </div>
+                        </div>
 
+                        <div class="col-xs-7 ">
+                            <nav class="pull-right" ng-show="pages.length>1">
+                                <ul class="pagination">
+                                    <li>
+                                        <a ng-click="onPage(currentPage-1)" href="#" aria-label="Previous" ng-if="(currentPage!==0)">
+                                            <span aria-hidden="true">&laquo;</span>
+                                        </a>
+                                    </li>
+                                    <li ng-repeat="page in pages track by $index" ng-class="{ active : currentPage==page.index }">
+                                        <a href="#" ng-click="onPage(page.index)">{{page.text}}</a>
+                                    </li>
+                                    <li ng-diabled="true">
+                                        <a ng-click="onPage(currentPage+1)" href="#" aria-label="Next" ng-if="(currentPage+1<pageCount)">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                        <!-- <span aria-hidden="true" ng-if="(currentPage+1>=pageCount)">&nbsp;</span> -->
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div class="col-xs-2 text-nowrap">
+                            <div class="form-group form-inline" style="color:#333;font-size:14px;margin-top:20px;">
+                                <span style="color:#333;font-size:14px;">Records per page:</span>
+                                <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="onPage(0)" convert-to-number>
+                                    <option ng-value="5" ng-selected="itemsPerPage===5" >5</option>
+                                    <option ng-value="10" ng-selected="itemsPerPage===10">10</option>
+                                    <option ng-value="15" ng-selected="itemsPerPage===15" >15</option>
+                                    <option ng-value="20" ng-selected="itemsPerPage===20">20</option>
+                                    <option ng-value="50" ng-selected="itemsPerPage===50">50</option>
+                                    <option ng-value="100" ng-selected="itemsPerPage===100">100</option>
+                                </select>
+                            </div>
+                        </div>
+            </div>
+      </div>
       <!-- LIST VIEW -->
-      <section ng-if="!listView" style="margin-top:5px;">
+      <section  style="margin-top:5px;">
         <div class="row chips-row hidden-md hidden-sm hidden-xs" ng-if="search">
           showing: <span class="label label-pill label-primary " >{{filtered.length}} </span> for '{{search}}'
         </div>
-        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:customSearch | filter:statusFilter)" style="margin-bottom:8px;">
+        <div class="row collection " ng-repeat="doc in filtered = (docs |orderBy:'document.title.en':sortReverse | filter:statusFilter)" style="margin-bottom:8px;">
           <div class="collection-item ">
             <div style=" position:absolute;top:0px;left:0px;">
               <div class="collection-item-img-cont">
