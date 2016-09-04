@@ -14,8 +14,9 @@ define(['app', 'lodash',
     'services/theasarus', 'ngDialog', 'ngSmoothScroll',
     'directives/fade-in-tab',
     'directives/bs-progress-bar',
-    'services/filters'
-], function(app, _, template, moment, dialogTemplate, rangy) {
+    'services/filters',
+    'ng-ckeditor'
+], function(app, _, template, moment, dialogTemplate) {
     app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
         function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
             return {
@@ -41,6 +42,10 @@ define(['app', 'lodash',
 
                         $scope.document = {};
 
+                        $scope.editorOptions = {
+                            language: 'en',
+                            uiColor: '#069554'
+                        };
                         $scope.patterns = {
                             facebook: /^http[s]?:\/\/(www.)?facebook.com\/.+/i,
                             twitter: /^http[s]?:\/\/twitter.com\/.+/i,
@@ -675,7 +680,7 @@ define(['app', 'lodash',
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
                             validateTabs();
-                            if (!$scope.doc.id && !$scope._id) {
+                            if (!$scope.doc.id || !$scope._id) {
 
                                 return mongoStorage.save($scope.schema, $scope.doc)
                                   .then(postSaveNewDoc)
@@ -693,15 +698,19 @@ define(['app', 'lodash',
                         function postSaveNewDoc (result){
                           $scope._id=$scope.doc._id=result.data.id;
                           $scope.ignoreDirtyCheck=true;
-                          $location.url('/manage/events/'+$scope._id);
-                          var tempFile=getTempFile();
+                          mongoStorage.loadDoc('inde-side-events',$scope._id).then(
+                            function(res){
+                              $location.url('/manage/events/'+$scope._id);
+                              var tempFile=getTempFile();
 
-                            if(!_.isEmpty(tempFile))
-                                  saveLogoNewDoc(tempFile);// move form temporary to perminant on S3
-                            else{
-                              $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
+                                if(!_.isEmpty(tempFile))
+                                      saveLogoNewDoc(tempFile);// move form temporary to perminant on S3
+                                else
+                                  $scope.$emit('showSuccess', 'New Side Event ' + $scope.doc.id + ' Created and Saved as Draft');
 
                             }
+                          );
+
                       }// postSaveNewDoc
 
                       //=======================================================================
