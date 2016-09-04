@@ -1,5 +1,43 @@
 <div ng-controller="adminEvents">
+<style>
+    .bg-white {
+        background-color: white;
+    }
 
+    .bg-white hr {
+        margin: 5px 5px 5px 5px;
+    }
+
+    .bg-eee {
+        background-color: #eeeeee;
+    }
+
+    .bg-ddd {
+        background-color: #dddddd;
+    }
+
+    .bg-ddd hr {
+        margin: 5px 5px 5px 5px;
+    }
+
+    .bg-header {
+        background-color: #dddddd;
+        border-color: #009B48;
+        border-style: solid;
+        border-width: 1px;
+    }
+
+    .bg-header hr {
+        padding: 0 0 0 0;
+        margin: 0 0 0 0;
+    }
+
+    .vcenter {
+        display: inline-block;
+        vertical-align: middle;
+        float: none;
+    }
+</style>
   <div ng-show="msg" class="alert alert-success alert-dismissable">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
     <strong>{{msg}}</strong>
@@ -26,31 +64,34 @@
 
         <span class="container-header-name">
           <h1 style="display:inline;">
-            <span ng-if="showArchived">Archived</span> Side Events</h1>
+               Side Events
+          </h1>
+
+
         </span>
 
-
+          <button class="btn btn-default btn-sm pull-right" type="button" ng-click="search='';"><i class="fa fa-plus" ></i> Add New</button>
         <div class="clearfix"></div>
       </div>
 
       <hr>
       <div class="row">
-          <div class="col-xs-3">
+          <div class="col-lg-3 col-md-3 col-xs-12">
               <div class="input-group input-group-sm search-bs" style="width:100%">
-                  <input type="test" class="form-control " ng-model="search" ng-change="onPage(0)">
+                  <input type="test" class="form-control " ng-model="search" ng-change="onPage(0)" placeholder="phrase search">
                   <span class="input-group-btn">
                                       <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search" ></i></button>
                               </span>
               </div>
           </div>
-          <div class="col-xs-4">
+          <div class="col-lg-4 col-md-4 col-xs-12">
 
               <select  class="form-control" ng-model="filter.conference" name="conference" ng-change="onPage(0)">
                 <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
               </select>
 
           </div>
-          <div class="col-xs-3">
+          <div class="col-lg-3 col-md-3 col-xs-12">
               <select  class="form-control" ng-model="filter.status" name="status" ng-change="selectChip(filter.status);">
                 <option  value="all"  ng-selected="filter.status==='all'">All Statuses</option>
                 <option  value="draft"  ng-selected="filter.status==='draft'">Draft</option>
@@ -61,24 +102,37 @@
                 <option  value="archived"  ng-selected="filter.status==='archived'">Archived</option>
               </select>
           </div>
-          <div class="col-xs-1">
+          <div class="col-lg-2 col-md-2 col-xs-12">
               <div class=" pull-right">
-                  <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button>
+                  <!-- <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button> -->
+                  <button title="Options" class="btn btn-default btn-sm" ng-click="detailView=!detailView"><span ng-show="!detailView" >Details</span><span ng-show="detailView">List View</span></button>
+                  <button title="Options" class="btn btn-default btn-sm" ng-click="expandDesc();" ng-if="detailView"><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll">Shorten All</span></button>
               </div>
+          </div>
+          <div class="col-lg-12 col-md-3 col-xs-12 " style="margin-top:6px;">
+            <ui-select  multiple ng-model="options.filter.hostOrgsSelected" close-on-select="true"  append-to-body="true" title="Choose an Organization" >
+                <ui-select-match  placeholder="Select an org..." >{{$item.acronym || $item.title}}</ui-select-match>
+                <ui-select-choices style="width:100%;" position="down" repeat="org._id as org in options.filter.hostOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
+                  <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px;">
+                      <hr style="margin: 0 0 0 0;">
+                      <small>
+                          <span class="text-nowrap">
+                              <span  >
+                                <img ng-src="{{org.logo}}" style="vertical-align:middle;max-width:40px;max-height:40px;" ng-if="org.logo.length>0 && org._id.length>2" />
+                                <i ng-if="org._id.length===2"   class="flag-icon flag-icon-{{org._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i>
+                              </span>
+                              <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span>
+                              <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} </span>
+                              <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
+                            </span>
+                      </small>
+                 </div>
+                </ui-select-choices>
+              </ui-select>
           </div>
       </div>
       <hr>
 
-      <div class="row">
-            <div  class="col-xs-12 visible-xs">
-              <div class="input-group input-group-sm search-bs">
-                <input type="test" class="form-control " ng-model="search">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="button" ng-click="search='';"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search"></i></button>
-                </span>
-              </div>
-            </div>
-          </div>
 
       <!-- chips -->
       <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">
@@ -131,250 +185,363 @@
           <i class="fa fa-spinner fa-spin"></i> Loading...
         </div>
       </div>
-<div class="container" style="width:100%;">
-      <div class="row" ng-show="count">
-        <div class="col-xs-3 text-no-wrap" style="color:#333;font-size:14px;padding-left:0px;">
-                      <div class="text-no-wrap" style="margin-top:25px;">
-                          <span>
-                                <span class="badge" >{{((currentPage*itemsPerPage)+1)}}</span>
-    <!-- <span class="badge" ng-if="filtered.length!==itemsPerPage">{{(((currentPage)*itemsPerPage))}}</span> -->
-                          <span ng-if="((currentPage+1)*(filtered.length))===((currentPage+1)*(itemsPerPage)) && (filtered.length===itemsPerPage)">  -  <span class="badge" >{{(currentPage+1)*(filtered.length)}} </span></span>
-                          <span ng-if="loading && !((currentPage+1)*(filtered.length))">  -  <span class="badge" ><i class="fa fa-spinner fa-spin"></i></span></span>
-                          <span ng-if="((currentPage+1)*(filtered.length))!==((currentPage+1)*(itemsPerPage)) && !loading && (filtered.length===itemsPerPage)">  -  <span class="badge" >{{filtered.length}} </span></span>
-                          <span ng-if="filtered.length!==itemsPerPage && !loading">  -  <span class="badge" >{{count}} </span></span>
-                          of
-                          <span class="badge">{{count}} </span> records
-                          <span ng-if="search"> for <span style="color:#009B48;">"{{search}}"</span></span>
-                          </span>
-                          <div ng-show="loading" style="display:inline;">
-                            <i class="fa fa-spinner fa-spin"></i> Loading...
-                          </div>
-                      </div>
 
-                  </div>
+      <pagination pages="pages" current-page="currentPage" items-per-page="itemsPerPage" filtered="filtered" search="search" pages="pages" on-page="onPage(pageIndex)" count="count"> </pagination>
 
-                  <div class="col-xs-7 ">
-                      <nav class="pull-right" ng-show="pages.length>1">
-                          <ul class="pagination">
-                              <li>
-                                  <a ng-click="onPage(currentPage-1)" href="#" aria-label="Previous" ng-if="(currentPage!==0)">
-                                      <span aria-hidden="true">&laquo;</span>
-                                  </a>
-                              </li>
-                              <li ng-repeat="page in pages track by $index" ng-class="{ active : currentPage==page.index }">
-                                  <a href="#" ng-click="onPage(page.index)">{{page.text}}</a>
-                              </li>
-                              <li ng-diabled="true">
-                                  <a ng-click="onPage(currentPage+1)" href="#" aria-label="Next" ng-if="(currentPage+1<pageCount)">
-                                      <span aria-hidden="true">&raquo;</span>
-                                  </a>
-                                  <!-- <span aria-hidden="true" ng-if="(currentPage+1>=pageCount)">&nbsp;</span> -->
-                              </li>
-                          </ul>
-                      </nav>
-                  </div>
-
-                  <div class="col-xs-2 text-nowrap">
-                      <div class="form-group form-inline" style="color:#333;font-size:14px;margin-top:20px;">
-                          <span style="color:#333;font-size:14px;">Records per page:</span>
-                          <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="onPage(0)" convert-to-number>
-                              <option ng-value="5" ng-selected="itemsPerPage===5" >5</option>
-                              <option ng-value="10" ng-selected="itemsPerPage===10">10</option>
-                              <option ng-value="15" ng-selected="itemsPerPage===15" >15</option>
-                              <option ng-value="20" ng-selected="itemsPerPage===20">20</option>
-                              <option ng-value="50" ng-selected="itemsPerPage===50">50</option>
-                              <option ng-value="100" ng-selected="itemsPerPage===100">100</option>
-                          </select>
-                      </div>
-                  </div>
-      </div>
-</div>
       <!-- LIST VIEW -->
-      <section ng-show="!listView" style="margin-top:5px;">
+      <section ng-show="!detailView" style="margin-top:5px;">
+            <div class="row collection " ng-if="!count">
+              <div class="collection-item " >
 
+                  <div class="hidden-md hidden-sm hidden-xs" >
+                    No side-events found<span ng-if="search"> for the search "{{search}}". </span>. <span ng-if="filter.conference">You have not yet created any side-events for this conference. </span>
+                  </div>
+                  <div class="hidden-lg hidden-xl" style="width:80%;white-space: normal;position:relative;top:20px;left:-50px;">
+                    No side-events found <span ng-if="search">for the search "{{search}}". </span>. <span ng-if="filter.conference">You have not yet created any side-events for this conference. </span>
+                  </div>
 
-
-
-        <div class="row collection " ng-if="!count">
-          <div class="collection-item " >
-
-              <div class="hidden-md hidden-sm hidden-xs" >
-                No side-events found<span ng-if="search"> for the search "{{search}}". </span>. <span ng-if="filter.conference">You have not yet created any side-events for this conference. </span>
-              </div>
-              <div class="hidden-lg hidden-xl" style="width:80%;white-space: normal;position:relative;top:20px;left:-50px;">
-                No side-events found <span ng-if="search">for the search "{{search}}". </span>. <span ng-if="filter.conference">You have not yet created any side-events for this conference. </span>
-              </div>
-
-          </div>
-        </div>
-
-        <div class="row collection " ng-repeat="doc in filtered = (docs  | filter:customSearch )"  style="margin-bottom:8px;" >
-
-          <div class="collection-item " ng-init="setLoading($last)">
-
-            <div class="collection-item-img-cont pull-right hidden-lg hidden-xl" style="position:relative;right:30px;top:20px;">
-                <span ng-if="doc.logo.length"><img ng-if="doc.logo.length" ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
-              <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
-            </div>
-
-            <div style=" position:absolute;top:0px;left:0px;">
-              <div class="collection-item-img-cont hidden-sm hidden-md hidden-xs">
-                <span ng-if="doc.logo.length"><img  ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
-                <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
               </div>
             </div>
 
-            <div class="event-title-collection">
-              <!-- big title -->
-              <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;layout:inline;">
+            <div class="row collection " ng-repeat="doc in filtered = (docs  | filter:customSearch )"  style="margin-bottom:8px;" >
 
-                  <table style="width:100%;margin-bottom:3px;">
-                    <tr>
-                      <td width="20%">
-                        <b>Conference:</b>
-                      </td>
-                      <td>
-                        {{doc.conferenceObj.Title.en }}
-                      </td>
-                    </tr>
-                    <tr ng-if="doc.meetingObjs.length">
-                      <td width="20%">
-                        <b>Associated Meeting(s): </b>
-                      </td>
-                      <td>
-                        <span>(
-                          <span ng-repeat="meet in doc.meetingObjs track by $index">{{meet.EVT_CD}}
-                            <span ng-if="!$last">,</span>
-                          </span> )</span>
-                        </b>
-                        </span>
-                      </td>
-                    </tr>
-                    <tr ng-if="doc.meetingObjs.length">
-                      <td width="20%">
-                        <b>ID: </b>
-                      </td>
-                      <td>
-                        #{{doc.id}}
-                      </td>
-                    </tr>
-                  </table>
-                  <a style="cursor:pointer;" ng-click="goTo('/'+doc._id);">{{doc.title | characters:225 }} </a>
-              </div>
+              <div class="collection-item " ng-init="setLoading($last)">
 
-              <!-- little title -->
-              <div class="hidden-lg hidden-xl" style="width:80%;white-space: normal;position:relative;top:20px;left:-50px;">
-                <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);"> {{doc.title | characters:100 }} </a>
-              </div>
+                <div class="collection-item-img-cont pull-right hidden-lg hidden-xl" style="position:relative;right:30px;top:20px;">
+                    <span ng-if="doc.logo.length"><img ng-if="doc.logo.length" ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
+                  <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
+                </div>
 
-              <!-- orgs large listview -->
-              <div class="cir hidden-sm hidden-md hidden-xs" style="width:75%;">
-                <span class="hidden-md hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                  <span class="text-nowrap">
-                    <span class="cir">
-                      <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
-                      <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
-                    </span>
-                    <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
-                    <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
-                  </span>
-                </span>
-                <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
-<!-- <br>
-                <span>Created On: {{doc.meta.createdOn}}</span>
-                <span>Modified On: {{doc.meta.modifiedOn}}</span>
-                <span>Created By: {{doc.meta.createdBy}}</span>
-                <span>Modified By: {{doc.meta.modifiedBy}}</span> -->
-              </div>
-            </div>
-
-            <!-- mobi orgs -->
-            <div class="cir hidden-lg hidden-xl" style="position:absolute; left:1px;bottom:1px;width:75%;">
-              <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
-                <span class="text-nowrap">
-                  <span class="cir">
-                    <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
-                    <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
-                  </span>
-                  <span ng-if="org._id.length>2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
-                  <span ng-if="org._id.length===2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
-                </span>
-              </span>
-              <span ng-if="isAdmin()" class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-              <span ng-if="isAdmin()" style="font-size:.8rem;" class="text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
-            </div>
-            <!-- mobi title status-->
-            <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 10px 5px 5px 5px;line-height:1.5rem;">
-              <span style="white-space: normal;padding-top:5px;font-size:1.5rem;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
-              <span class="pull-right" ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
-              <span class="pull-right" ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span class="pull-right" ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
-              <span class="pull-right" ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
-              <span class="pull-right" ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-              <span class="pull-right" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
-            </div>
-
-            <!-- large status -->
-            <div class="hidden-md hidden-sm hidden-xs" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
-              <span ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
-              <span ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
-              <span ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
-              <span ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
-              <span ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
-              <span ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
-            </div>
-
-
-
-            <div style="height:95px;"></div>
-            <div class="hidden-lg hidden-xl" style="height:95px;"></div>
-            <!-- <div>{{doc.acronym  }}</div> -->
-            <div class="collection-action">
-              <span class="collection-action-grp ">
-                {{isAdmin}}
-                <div class="btn-group btn-group-vertical btn-group-xs hidden-xs hidden-sm hidden-md" ng-if="doc.meta.status!=='archived'">
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Actions
-                      <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu">
-                      <li><a ng-click="edit(doc._id);"><i class="fa fa-pencil"></i> Edit</a></li>
-                      <li><a ng-click="archiveDoc(doc);"><i class="material-icons">&#xE149;</i> Archive</a></li>
-
-                      <li ng-if="isAdmin()" role="separator" class="divider"></li>
-                      <li ng-if="isAdmin()"><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Under Review</a></li>
-                      <li ng-if="isAdmin()"><a ng-click="cancelDoc(doc);"><i class="material-icons">&#xE8DD;</i> Cancel</a></li>
-                      <li ng-if="isAdmin()"><a ng-click="rejectDoc(doc);"><i class="material-icons">&#xE8DB;</i> Reject</a></li>
-                    </ul>
+                <div style=" position:absolute;top:0px;left:0px;">
+                  <div class="collection-item-img-cont hidden-sm hidden-md hidden-xs">
+                    <span ng-if="doc.logo.length"><img  ng-src="{{doc.logo}}" class="collection-item-img"></img></span>
+                    <i ng-if="!doc.logo.length" class="material-icons collection-item-i">&#xE0AF;</i>
                   </div>
                 </div>
 
+                <div class="event-title-collection">
+                  <!-- big title -->
+                  <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;layout:inline;">
 
-                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'" style="position:relative;top:-30px;">
+                      <table style="width:100%;margin-bottom:3px;">
+                        <tr>
+                          <td width="20%">
+                            <b>Conference:</b>
+                          </td>
+                          <td>
+                            {{doc.conferenceObj.Title.en }}
+                          </td>
+                        </tr>
+                        <tr ng-if="doc.meetingObjs.length">
+                          <td width="20%">
+                            <b>Associated Meeting(s): </b>
+                          </td>
+                          <td>
+                            <span>(
+                              <span ng-repeat="meet in doc.meetingObjs track by $index">{{meet.EVT_CD}}
+                                <span ng-if="!$last">,</span>
+                              </span> )</span>
+                            </b>
+                            </span>
+                          </td>
+                        </tr>
+                        <tr ng-if="doc.meetingObjs.length">
+                          <td width="20%">
+                            <b>ID: </b>
+                          </td>
+                          <td>
+                            #{{doc.id}}
+                          </td>
+                        </tr>
+                      </table>
+                      <a style="cursor:pointer;" ng-click="goTo('/'+doc._id);">{{doc.title | characters:225 }} </a>
+                  </div>
 
-                  <button title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
-                  <button title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
-                  <button title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='published')&& isAdmin()"><i class="material-icons">&#xE8DC;</i></button>
-                  <button title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='canceled') && isAdmin()"><i class="material-icons">&#xE8DD;</i></button>
-                  <button title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='rejected')&& isAdmin()"><i class="material-icons">&#xE8DB;</i></button>
+                  <!-- little title -->
+                  <div class="hidden-lg hidden-xl" style="width:80%;white-space: normal;position:relative;top:20px;left:-50px;">
+                    <a style="cursor:pointer;" ng-click="goTo('/manage/events/'+doc._id);"> {{doc.title | characters:100 }} </a>
+                  </div>
 
-                  <!-- <button class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button> -->
-                  <!-- <button class="btn btn-default" ng-click="close()"><i class="material-icons">thumbs_up_down</i></button> -->
+                  <!-- orgs large listview -->
+                  <div class="cir hidden-sm  hidden-xs" style="width:75%;">
+                    <span class="hidden-sm hidden-xs" ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
+                      <span class="text-nowrap">
+                        <span class="cir">
+                          <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                          <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
+                        </span>
+                        <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                        <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
+                      </span>
+                    </span>
+                    <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
+                    <span ng-if="isAdmin()" class="hidden-md hidden-sm hidden-xs text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
+                  </div>
                 </div>
-                <div class="btn-group btn-group-vertical btn-group-xs " ng-show="doc.meta.status==='archived'">
 
-                  <button title="Unarchive" class="btn btn-default" ng-click="unArchiveDoc(doc);"><i class="material-icons">&#xE169;</i></button>
-                  <button title="Delete" class="btn btn-default" ng-click="deleteDial(doc);" ng-if="isAdmin()"><i class="material-icons">&#xE872;</i></button>
+                <!-- mobi orgs -->
+                <div class="cir hidden-lg hidden-xl hidden-md" style="position:absolute; left:1px;bottom:1px;width:75%;">
+                  <span ng-repeat="org in doc.orgs" style="margin:0 2px 0 0;">
+                    <span class="text-nowrap">
+                      <span class="cir">
+                        <img ng-src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0 && org._id.length>2" />
+                        <img ng-if="!org.logo.length && org._id.length===2" class="flag-icon flag-icon-{{org._id}}"></img>
+                      </span>
+                      <span ng-if="org._id.length>2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym }} |</span>
+                      <span ng-if="org._id.length===2" style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} |</span>
+                    </span>
+                  </span>
+                  <span ng-if="isAdmin()" class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
+                  <span ng-if="isAdmin()" style="font-size:.8rem;" class="text-nowrap"> {{doc.contact.firstName}} {{doc.contact.lastName}}</span>
+                </div>
+                <!-- mobi title status-->
+                <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 10px 5px 5px 5px;line-height:1.5rem;">
+                  <span style="white-space: normal;padding-top:5px;font-size:1.5rem;">{{doc.confrenceObj.acronym }}/#{{doc.id}}</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
+                  <span class="pull-right" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
                 </div>
 
-              </span>
+                <!-- large status -->
+                <div class="hidden-md hidden-sm hidden-xs" style="color:white;text-align:center;background-color:rgba(0, 0, 0, 0.6) ;position:absolute;left:0px;bottom:0px;width:128px;">
+                  <span ng-if="doc.meta.status==='draft'"><i class="material-icons">&#xE24D;</i> Draft</span>
+                  <span ng-if="doc.meta.status==='request'"><i class="material-icons">&#xE0C6;</i> Request</span>
+                  <span ng-if="doc.meta.status==='published'"><i class="material-icons">&#xE8DC;</i> Under Review</span>
+                  <span ng-if="doc.meta.status==='canceled'"><i class="material-icons">&#xE8DD;</i> Canceled</span>
+                  <span ng-if="doc.meta.status==='rejected'"><i class="material-icons">&#xE8DB;</i> Rejected</span>
+                  <span ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE149;</i> Archived</span>
+                </div>
+
+
+
+                <div style="height:95px;"></div>
+                <div class="hidden-lg hidden-xl" style="height:95px;"></div>
+                <!-- <div>{{doc.acronym  }}</div> -->
+                <div class="collection-action">
+                  <span class="collection-action-grp ">
+                    <!-- {{isAdmin}} -->
+                    <div class="btn-group btn-group-vertical btn-group-xs hidden-xs hidden-sm hidden-md" ng-if="doc.meta.status!=='archived'">
+                      <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Actions
+                          <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a ng-click="edit(doc._id);"><i class="fa fa-pencil"></i> Edit</a></li>
+                          <li><a ng-click="archiveDoc(doc);"><i class="material-icons">&#xE149;</i> Archive</a></li>
+
+                          <li ng-if="isAdmin()" role="separator" class="divider"></li>
+                          <li ng-if="isAdmin()"><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Under Review</a></li>
+                          <li ng-if="isAdmin()"><a ng-click="cancelDoc(doc);"><i class="material-icons">&#xE8DD;</i> Cancel</a></li>
+                          <li ng-if="isAdmin()"><a ng-click="rejectDoc(doc);"><i class="material-icons">&#xE8DB;</i> Reject</a></li>
+                        </ul>
+                      </div>
+                    </div>
+
+
+                    <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'" style="position:relative;top:-30px;">
+
+                      <button title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
+                      <button title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
+                      <button title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='published')&& isAdmin()"><i class="material-icons">&#xE8DC;</i></button>
+                      <button title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='canceled') && isAdmin()"><i class="material-icons">&#xE8DD;</i></button>
+                      <button title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='rejected')&& isAdmin()"><i class="material-icons">&#xE8DB;</i></button>
+
+                      <!-- <button class="btn btn-default"  ng-click="unArchiveDoc(doc);" ng-if="doc.meta.status==='archived'"><i class="material-icons">&#xE169;</i></button> -->
+                      <!-- <button class="btn btn-default" ng-click="close()"><i class="material-icons">thumbs_up_down</i></button> -->
+                    </div>
+                    <div class="btn-group btn-group-vertical btn-group-xs " ng-show="doc.meta.status==='archived'">
+
+                      <button title="Unarchive" class="btn btn-default" ng-click="unArchiveDoc(doc);"><i class="material-icons">&#xE169;</i></button>
+                      <button title="Delete" class="btn btn-default" ng-click="deleteDial(doc);" ng-if="isAdmin()"><i class="material-icons">&#xE872;</i></button>
+                    </div>
+
+                  </span>
+                </div>
+              </div>
+
             </div>
-          </div>
-
-        </div>
       </section>
     </div>
   </section>
+
+  <!-- deatils ugly for admin only-->
+    <section ng-show="detailView" style="position:absolute;left:0;width:100vw;z-index:200;padding: 0 10px 0 10px;">
+
+        <div class="row bg-header" style="z-index:100;">
+            <div class="col-lg-1 col-md-1">
+                <sorter label-name="ID" ng-model="sort" property="id" ng-change="onPage(currentPage)"></sorter>
+                <br>
+                <hr>
+                <sorter label-name="Status" ng-model="sort" property="meta.status" ng-change="onPage(currentPage)"></sorter>
+                <br>
+
+                <hr>
+                <sorter label-name="# of Participants" ng-model="sort" property="expNumPart" ng-change="onPage(currentPage)"></sorter>
+                <br>
+                <hr>
+                <strong>Image: </strong>
+            </div>
+
+            <div class="col-lg-3 col-md-3">
+                <sorter label-name="Title" ng-model="sort" property="title" ng-change="onPage(currentPage)"></sorter>
+                <hr>
+                <strong>Description</strong>
+            </div>
+
+            <div class="col-lg-2 col-md-2">
+                <strong>Date Preferences in Order</strong>
+                <hr>
+                <strong>Requirements</strong>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <strong>Related Subjects</strong>
+                <hr>
+                <strong>Host Orgaizations</strong>
+            </div>
+            <div class="col-lg-2 col-md-2">
+
+                <strong>Contact Person</strong>
+                <hr>
+                <strong>Responsible Person</strong>
+                <hr>
+                <strong>Org. Contacts(s)</strong>
+
+            </div>
+            <div class="col-lg-1 text-nowrap">
+                <label>Created By</label>
+                <hr>
+                <sorter label-name="Created On" ng-model="sort" property="meta.createdOn" ng-change="onPage(currentPage)"></sorter>
+                <hr>
+                <label>Modified By</label>
+                <hr>
+                <sorter label-name="Modified On" ng-model="sort" property="meta.modifiedOn" ng-change="onPage(currentPage)"></sorter>
+            </div>
+            <div class="col-lg-1">
+                <label>Actions</label>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                <hr>
+            </div>
+        </div>
+
+        <div ng-class="{'bg-ddd':!!($index%2),'bg-white':!!!($index%2)}" class="row" ng-repeat="doc in filtered = (docs   )">
+
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                <hr>
+            </div>
+            <div class="col-lg-1 col-md-1">
+                {{doc.id}}
+                <br>
+                <hr> {{doc.meta.status}}
+                <br>
+                <hr>
+
+                <span ng-if="doc.expNumPart">{{doc.expNumPart}}<br><hr></span>
+
+                <img ng-src="{{doc.logo}}" style="vertical-align:middle;max-width:100%;" />
+            </div>
+            <div class="col-lg-3 col-md-3" >
+                <strong ng-if="doc.title"><a href="/{{doc._id}}">{{doc.title}}</a>   <hr></strong>
+
+                <div ng-bind-html="doc.description | truncate:(doc.truncate || 300):' ...' | rawHtml ">
+
+                </div>
+
+                <div ng-show="!expandAll">
+                  <div class="text-right" ng-show="(doc.description).length>300 && (!doc.truncate || doc.truncate===300)" ng-click="doc.truncate=100000;"><a class="text-nowrap pointer"><span style="white-space: nowrap;">more <i class="fa fa-caret-down"></i></span></a></div>
+                  <div class="text-right" ng-show="doc.truncate===100000" ng-click="doc.truncate=300"><a class="text-nowrap pointer"><span style="white-space: nowrap;">less <i class="fa fa-caret-up"></i></span></a></div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                {{doc.prefDate.one}} {{doc.prefDateTime.one}}
+                <br> {{doc.prefDate.two}} {{doc.prefDateTime.one}}
+                <br> {{doc.prefDate.three}} {{doc.prefDateTime.one}}
+                <br>
+                <hr ng-if="doc.prefDate.one && doc.prefDateTime.one">
+                <span ng-repeat="(key,value) in doc.requirements">{{key}}<span ng-show="!$last">, </span></span>
+            </div>
+            <div class="col-lg-2 col-md-2">
+
+                <ul class="list-group ng-scope">
+                    <!-- ngRepeat: link in links -->
+                    <li class="list-group-item text-nowrap" style="overflow:auto;" ng-repeat="sub in doc.subjectObjs" ng-if="($index <= 2 && !doc.moreSubjects) || doc.moreSubjects || expandAll">
+                        <table style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <a ng-href="#">{{sub.name}}</a>
+                                        <span ng-show="link.tag" class="ng-binding ng-hide" aria-hidden="true">()</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </li>
+                    <!-- end ngRepeat: link in links -->
+                </ul>
+                <div ng-show="!expandAll">
+                  <div class="text-right" ng-if="doc.subjectObjs.length >  3 && !doc.moreSubjects" ng-click="doc.moreSubjects=!doc.moreSubjects;"> <a ng-href="#"> more <i class="fa fa-caret-down" aria-hidden="true"></i></a></div>
+                  <div class="text-right" ng-if="doc.subjectObjs.length >  3 && doc.moreSubjects" ng-click="doc.moreSubjects=!doc.moreSubjects;"><a ng-href="#"> less <i class="fa fa-caret-up" aria-hidden="true"></i></a></div>
+                </div>
+                <hr ng-if="doc.subjectObjs.length">
+                <span ng-repeat="org in doc.orgs">{{org.acronym}}<span ng-if="!$last"> | </span></span>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <div ng-if="doc.contact.lastName">
+                    <div>{{doc.contact.title}} {{doc.contact.firstName}} {{doc.contact.lastName}},
+                        <br>{{doc.contact.email}}</div>
+                    <div>{{doc.contact.phone}}</div>
+                    <div>{{doc.contact.address}}</div>
+                    <div><span ng-if="doc.contact.city">{{doc.contact.city}},</span> <span ng-if="doc.contact.state">{{doc.contact.state}},</span> {{doc.contact.country | country}}</div>
+                    <div>{{doc.contact.zip}}</div>
+                    <hr>
+                </div>
+                <div ng-if="doc.responsible.lastName">{{doc.responsible.title}} {{doc.responsible.firstName}} {{doc.responsible.lastName}},
+                    <br>{{doc.responsible.email}}
+                    <hr>
+                </div>
+
+                <div ng-repeat="org in doc.orgs" class="text-nowrap" ng-if="doc.responsibleOrgs[$index].email"><strong>{{org.acronym}}</strong>:
+                    <br> {{doc.responsibleOrgs[$index].title}} {{doc.responsibleOrgs[$index].firstName}} {{doc.responsibleOrgs[$index].lastName}}, {{doc.responsibleOrgs[$index].email}}</div>
+            </div>
+            <div class="col-lg-1 col-md-1 text-nowrap">
+                {{doc.meta.createdByObj.firstName}} {{doc.meta.createdByObj.lastName}}
+                <hr> {{doc.meta.createdOn | date:'yyyy-MM-dd HH:mm'}}
+                <hr> {{doc.meta.modifiedByObj.firstName}} {{doc.meta.modifiedByObj.lastName}}
+                <hr> {{doc.meta.modifiedOn | date:'yyyy-MM-dd HH:mm'}}
+                <hr>
+            </div>
+            <div class="col-lg-1 col-md-1 text-center">
+
+                <!-- {{isAdmin}} -->
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-xs hidden-sm hidden-md " ng-if="doc.meta.status!=='archived'">
+                    <button title="Edit" class="btn btn-default btn-xs" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil fa-2x"></i> Edit</button>
+                    <button title="Archive" class="btn btn-default btn-xs" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i> Archive</button>
+                    <button title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='published')&& isAdmin()"><i class="material-icons">&#xE8DC;</i> Aprove</button>
+                    <button title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='canceled') && isAdmin()"><i class="material-icons">&#xE8DD;</i> Cancel</button>
+                    <button title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='rejected')&& isAdmin()"><i class="material-icons">&#xE8DB;</i> Reject</button>
+                </div>
+
+                <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'" style="position:relative;top:-30px;">
+                    <button title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
+                    <button title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
+                    <button title="Publish/Approve" class="btn btn-default" ng-click="approveDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='published')&& isAdmin()"><i class="material-icons">&#xE8DC;</i></button>
+                    <button title="Cancel" class="btn btn-default" ng-click="cancelDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='canceled') && isAdmin()"><i class="material-icons">&#xE8DD;</i></button>
+                    <button title="Reject" class="btn btn-default" ng-click="rejectDoc(doc);" ng-if="(doc.meta.status!=='archived' && doc.meta.status!=='rejected')&& isAdmin()"><i class="material-icons">&#xE8DB;</i></button>
+                </div>
+                <div class="btn-group btn-group-vertical btn-group-xs " ng-show="doc.meta.status==='archived'">
+                    <button title="Unarchive" class="btn btn-default" ng-click="unArchiveDoc(doc);"><i class="material-icons">&#xE169;</i></button>
+                    <button title="Delete" class="btn btn-default" ng-click="deleteDial(doc);" ng-if="isAdmin()"><i class="material-icons">&#xE872;</i></button>
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-xs-12">
+                <hr>
+            </div>
+        </div>
+        <pagination pages="pages" current-page="currentPage" items-per-page="itemsPerPage" filtered="filtered" search="search" pages="pages" on-page="onPage(pageIndex)" count="count"> </pagination>
+    </section>
+    <!-- end detail view -->
 </div>
