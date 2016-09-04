@@ -189,9 +189,10 @@ border-top-color: transparent !important;
                 </div>
 
                 <div class="col-xs-12" style="padding-bottom:10px;">
-                    <div name="description" ng-class="{'has-error': editForm.description.$invalid && editForm.$submitted}">
+                    <div name="description" ng-class="{'has-error-div': editForm.description.$invalid && editForm.$submitted,'has-error': editForm.description.$invalid && editForm.$submitted}">
                         <label>Description</label>
-                        <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular>
+                        <!-- <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular> -->
+						            <textarea name="description" id="editForm.description" ckeditor="editorOptions" ng-model="doc.description" required placeholder="Briefly describe your side event." ></textarea>
                         <p ng-show="editForm.description.$invalid && editForm.$submitted" class="help-block">Description is required.</p>
                     </div>
                 </div>
