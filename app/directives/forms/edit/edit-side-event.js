@@ -3,7 +3,6 @@ define(['app', 'lodash',
     'moment',
     'text!directives/forms/edit/publish-dialog.html',
     'text!directives/forms/edit/dirty-form.html',
-    'directives/side-menu/scbd-side-menu',
     'directives/km-select',
     'directives/forms/controls/scbd-select-list',
     'services/mongo-storage',
@@ -17,8 +16,8 @@ define(['app', 'lodash',
     'services/filters',
     'ng-ckeditor'
 ], function(app, _, template, moment, dialogTemplate) {
-    app.directive("editSideEvent", ['scbdMenuService', '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
-        function(scbdMenuService, $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
+    app.directive("editSideEvent", [ '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
+        function( $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
             return {
                 restrict: 'E',
                 template: template,
@@ -41,6 +40,27 @@ define(['app', 'lodash',
                         $scope.ignoreDirtyCheck = false;
 
                         $scope.document = {};
+
+                        $scope.errorMap={
+                          title:{tab:'general',label:'Title'},
+                          subjects:{tab:'general',label:'Subjects'},
+                          description:{tab:'general',label:'Description'},
+                          expNumPart:{tab:'logisitics',label:'Expected Number of Participants'},
+                          prefDateOne:{tab:'logisitics',label:'First Date Preference'},
+                          prefDateTwo:{tab:'logisitics',label:'Second Date Preference'},
+                          prefDateThree:{tab:'logisitics',label:'Third Date Preference'},
+                          prefTimeOne:{tab:'logisitics',label:'First Time Preference'},
+                          prefTimeTwo:{tab:'logisitics',label:'Second Time Preference'},
+                          prefTimeThree:{tab:'logisitics',label:'Third Time Preference'},
+                          firstName:{tab:'contact',label:'Contact Person First Name'},
+                          lastName:{tab:'contact',label:'Contact Person Last Name'},
+                          phone:{tab:'contact',label:'Contact Person Phone'},
+                          city:{tab:'contact',label:'Contact Person City'},
+                          emaill:{tab:'contact',label:'Contact Person Email'},
+                          country:{tab:'contact',label:'Contact Person Country'},
+                          responsibleLastName:{tab:'contact',label:'Responsible Person Last Name'},
+                          responsibleEmail:{tab:'contact',label:'Responsible Person Email'},
+                        };
 
                         $scope.editorOptions = {
                             language: 'en',
@@ -929,6 +949,7 @@ define(['app', 'lodash',
                         function submitGeneral(formData) {
                             $scope.doc.validTabs.general = false;
                             $scope.doc.validTabs.logistics = false;
+
                             if (formData.title.$error.required && $scope.submitted)
                                 findScrollFocus('editForm.title');
 
@@ -954,11 +975,21 @@ define(['app', 'lodash',
                             }
                         } //submitGeneral
 
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function goToError(tab,field) {
+                            showTab(tab);
+                            $scope.focused=false;
+                            $timeout(function(){findScrollFocus('editForm.'+field);},500);
+                        }
+                        $scope.goToError=goToError;
 
                         //=======================================================================
                         //
                         //=======================================================================
                         function submitLogistics(formData) {
+
                             $scope.doc.validTabs.logistics = false;
                             var ctrls = ['expNumPart', 'conference', 'prefDateOne', 'prefTimeOne', 'prefDateTwo', 'prefTimeTwo', 'prefDateThree', 'prefTimeThree'];
                             if (formData.conference.$error.required && $scope.submitted) {

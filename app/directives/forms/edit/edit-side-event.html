@@ -95,6 +95,17 @@ border-top-color: transparent !important;
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
       WARNING: the changes you have made require you to re-validate and re-submit your request, otherwise it will not be considered for scheduling.
     </div>
+    <div ng-if="editForm.$invalid  && editForm.$submitted" class="col-xs-12 alert alert-danger alert-dismissable" >
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+      WARNING: You have critical errors or missing information in your form preventing your side event form being submitted.
+      <div ng-repeat="err in editForm.$error.required" ng-if="err.$name!=='editLinkForm'">
+          <a ng-click="goToError(errorMap[err.$name].tab,err.$name)" style="cursor:pointer;">{{errorMap[err.$name].label}}</a>
+          
+      </div>
+      <div ng-if="doc.hostOrgs.length===0">
+          <a ng-click="goToError('orgs','hostOrgs')">Host Organizations</a>
+      </div>
+    </div>
     <div></div>
     <div class="row">
 
@@ -335,7 +346,7 @@ border-top-color: transparent !important;
               <div fade-in-tab id="orgs" class="tab-pane   active text-left" ng-show="tab==='orgs'">
 
 
-                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted)}">
+                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted),'has-error-div': (!doc.hostOrgs.length && editForm.$submitted)}">
                     <legend class="container-subheader">
                       <h2>Host Organization(s)</h2>
                     </legend>
