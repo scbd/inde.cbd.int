@@ -1,4 +1,4 @@
-define(['app', 'lodash','directives/mobi-menu'], function(app, _) {
+define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment) {
     app.filter('fileSize', function() {
         return function(size) {
             if (size < 1024)
@@ -39,9 +39,26 @@ define(['app', 'lodash','directives/mobi-menu'], function(app, _) {
         function loadEditPermisions(doc) {
             return auth.getUser().then(
               function(u){
-                  editable = (_.intersection(['Administrator', 'IndeAdministrator'], u.roles).length > 0) || u.userID===doc.meta.createdBy ;
+                  editable = (_.intersection(['Administrator', 'IndeAdministrator'], u.roles).length > 0 ) ||
+                  (u.userID===doc.meta.createdBy && !isPastConfrence(doc.conference)) ;
               }
             );
+        }
+
+
+        //==============================
+        //
+        //==============================
+        function isPastConfrence(id) {
+
+            var c = _.find(_ctrl.conferences,{'_id':id});
+            if(!c) throw "error: conference not found";
+
+            if(moment(c.EndDate).isAfter(new Date()))
+                return false;
+            else
+               return true;
+
         }
 
         //==============================

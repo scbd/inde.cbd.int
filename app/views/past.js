@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'moment',    'directives/mobi-menu'], function(app, _, moment) {
+define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scroll-directive'], function(app, _, moment) {
 
     return ['mongoStorage', '$route', '$http', '$timeout',function(mongoStorage, $route, $http,$timeout) {
 

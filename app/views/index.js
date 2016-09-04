@@ -1,7 +1,9 @@
 define(['app', 'lodash', 'jquery', 'moment',
-    'css!./index', '../services/mongo-storage',
+    'css!./index', 'services/mongo-storage',
     'services/filters',
-    'directives/mobi-menu'
+    'directives/mobi-menu',
+    'ngSmoothScroll',
+    'scroll-directive'
 ], function(app, _, $, moment) {
 
     app.controller("home", ['$scope', '$http', '$filter', '$route', 'mongoStorage', '$location', '$element', '$timeout', '$window', '$anchorScroll',
