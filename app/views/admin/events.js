@@ -16,8 +16,8 @@ define(['app', 'lodash',
     'ui.select'
 ], function(app, _, deleteDialog, moment) {
 
-    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog','$element',
-        function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog,$element) {
+    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog',
+        function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog) {
 
             $scope.loading = true;
             $scope.schema = "inde-side-events";
@@ -52,16 +52,16 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function init() {
-                $scope.detailView=true;
+
                 initSlideMenu();
 
                 authentication.getUser().then(function(user) {
                     $scope.user = user;
                     var srch = $location.search();
                     if(srch && srch.chip)
-                      $scope.selectChip(srch.chip);
+                      $scope.selectChip(srch.chip).then(function(){if($scope.isAdmin())$scope.detailView=true;});
                     else
-                      $scope.selectChip('all');
+                      $scope.selectChip('all').then(function(){if($scope.isAdmin())$scope.detailView=true;});
                 });
                 $timeout(function(){
                   $('.ui-select-search').addClass('form-control');
