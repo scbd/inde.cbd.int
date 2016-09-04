@@ -125,7 +125,27 @@ define(['app', 'lodash','directives/mobi-menu'], function(app, _) {
 
             }).catch(onError);
         }
+        //==============================
+        //
+        //==============================
+        function getSubjects(keys) {
 
+            return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
+                cache: true
+            }).then(function(res) {
+                if(!_ctrl.doc)_ctrl.doc={};
+
+                _ctrl.doc.subjectObjs = [];
+                _.each(_ctrl.doc.subjects, function(subj) {
+
+                    _ctrl.doc.subjectObjs.push(_.find(res.data, {
+                        'identifier': subj.identifier
+                    }));
+
+                });
+
+            }).catch(onError);
+        }
 
         //==============================
         //
