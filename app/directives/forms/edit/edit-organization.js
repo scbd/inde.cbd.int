@@ -47,7 +47,7 @@ define(['app', 'lodash',
                               $scope._id = $route.current.params.id;
 
                           $scope.doc = {};
-
+                          $scope.doc.tempFile={};                      
                             if ((!$scope._id || $scope._id === '0' || $scope._id === 'new') && $scope.hide) {
 
                                         delete($scope._id);
