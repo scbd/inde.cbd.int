@@ -169,8 +169,7 @@ define(['app', 'lodash',
                 });
 
                 dialog.closePromise.then(function(ret) {
-                    if (ret.value === 'no') $scope.close();
-                    if (ret.value === 'yes') $scope.deleteDoc(doc).then($scope.close);
+                    if (ret.value === 'yes') $scope.deleteDoc(doc);
                 });
             };
 
@@ -251,11 +250,11 @@ define(['app', 'lodash',
                     if($scope.search)  q['$text']= {'$search':$scope.search};
 
                     if($scope.filter.status==='all')
-                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected','archived']};
+                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
 
                 return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
                     $scope.docs = response.data;
-console.log('$scope.docs ',$scope.docs );
+
                     $scope.count = response.count;
                     $scope.statusFacits =  response.facits;
 
