@@ -47,7 +47,7 @@ define(['app', 'lodash',
                               $scope._id = $route.current.params.id;
 
                           $scope.doc = {};
-                          $scope.doc.tempFile={};                      
+                          $scope.doc.tempFile={};
                             if ((!$scope._id || $scope._id === '0' || $scope._id === 'new') && $scope.hide) {
 
                                         delete($scope._id);
@@ -79,26 +79,55 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.saveDoc = function() {
                             if(!$scope.doc.meta) $scope.doc.meta={};
+                            var tempFile=getTempFile();
                             $scope.doc.meta.status = 'draft';
                             mongoStorage.save('inde-orgs', $scope.doc, $scope._id).then(function(d) {
                                 if(!$scope._id){
                                   $scope.$emit('showSuccess', 'Organization Created');
                                   $scope._id=d.data.id;
+                                  if(!_.isEmpty(tempFile))
+                                        saveLogoNewDoc(tempFile);
                                 }else
                                   $scope.$emit('showSuccess', 'Organization Saved');
+
                                 if ($scope.isInForm) {
                                     if (!_.isArray($scope.selectedOrgs)) $scope.selectedOrgs = [];
+
                                     $scope.selectedOrgs.push($scope._id);
                                     $scope.hide = 0;
                                     $scope.doc={};
-                                    $scope._id=null;
 
+                                    if(!_.isEmpty(tempFile))
+                                        saveLogoNewDoc(tempFile).then(function(){$scope._id=null;});
+                                    else
+                                        $scope._id=null;
                                 }
-
                             }).catch(onError);
                         };
 
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function saveLogoNewDoc(tempFile) {
+                            tempFile.metadata.docid = $scope._id;
 
+                            if (tempFile.metadata.schema && tempFile.metadata.docid && tempFile.metadata.filename) {
+
+                                return mongoStorage.moveTempFileToPermanent(tempFile, $scope._id).then(function() {
+
+                                    mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
+                                        $scope.doc = document;
+                                        $scope.doc.logo = 'https://s3.amazonaws.com/mongo.document.attachments/';
+                                        $scope.doc.logo += tempFile.metadata.schema + '/';
+                                        $scope.doc.logo += tempFile.metadata.docid + '/';
+                                        $scope.doc.logo +=   mongoStorage.awsFileNameFix(tempFile.metadata.filename);
+
+                                        return $scope.saveDoc();
+                                    });
+                                }).catch(onError);
+                            } else
+                                throw 'Error: Missing schema or id or filename to move file from temp to perminant';
+                        } //saveLogoNewDoc
                         //============================================================
                         //
                         //============================================================
@@ -135,7 +164,7 @@ define(['app', 'lodash',
                         //============================================================
                         $scope.requestPublish = function() {
                             $scope.doc.meta.status = 'request';
-                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function(d){
+                            return $scope.saveDoc().then(function(d){
                               if(!$scope._id){
                                 $scope.$emit('showSuccess', 'Organization Created and Under Review for Publication');
                                 $scope._id=d.data.id;
@@ -266,6 +295,18 @@ define(['app', 'lodash',
                         }
                         $scope.onError=onError;
 
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function getTempFile(){
+                          if(!_.isEmpty($scope.doc.tempFile)){
+                            var tempFile=$scope.doc.tempFile;
+
+                              delete($scope.doc.tempFile);
+                              return tempFile;
+                          }else
+                            return false;
+                        }//getTempFile
 
                         //============================================================
                         //
