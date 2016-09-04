@@ -69,7 +69,30 @@ define(['app', 'lodash',
               },100);
             } //init
 
+            //==============================
+            //
+            //==============================
+            function isEditable(doc) {
 
+                  return(_.intersection(['Administrator', 'IndeAdministrator'], $scope.user.roles).length > 0 ) ||
+                      ($scope.user.userID===doc.meta.createdBy && !isPastConfrence(doc.conference)) ;
+            }
+            $scope.isEditable= isEditable;
+
+            //==============================
+            //
+            //==============================
+            function isPastConfrence(id) {
+
+                var c = _.find($scope.options.conferences,{'_id':id});
+                if(!c) throw "error: conference not found";
+
+                if(moment(c.EndDate).isAfter(new Date()))
+                    return false;
+                else
+                   return true;
+
+            }
             //======================================================
             //
             //
@@ -402,6 +425,7 @@ define(['app', 'lodash',
                               $scope.users.push(doc.meta.modifiedBy);
                         });
                         $scope.users=_.uniq($scope.users);
+                        if(!_.isEmpty($scope.users))
                         $http.get('/api/v2013/userinfos?query='+JSON.stringify({userIDs:$scope.users})).then(function(res){
                             _.each($scope.docs, function(doc) {
                                  if(!_.find(res.data,{userID:doc.meta.createdBy})) throw 'User not found : '+doc.meta.createdBy;
