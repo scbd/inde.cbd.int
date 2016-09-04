@@ -211,11 +211,12 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 return loadOrgsInProgress;
         } // loadDocs
 
-
+        var countriesData;
         //============================================================
         //
         //============================================================
         function countries() {
+            if (countriesData) return countriesData;
 
             if (!localStorage.getItem('countries'))
                 return $http.get("https://api.cbd.int/api/v2015/countries", {
@@ -228,6 +229,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                         c.identifier = c.code.toLowerCase();
                         c._id = c.identifier;
                     });
+                    countriesData =countries;
                     localStorage.setItem('countries', JSON.stringify(countries));
                     return countries;
                 });
@@ -767,7 +769,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                     headers: {
                         'Content-Type': res.data.contentType
                     }
-                }).then(function(){console.log(res);return res;});
+                }).then(function(){return res;});
             });
         } // touch
 
