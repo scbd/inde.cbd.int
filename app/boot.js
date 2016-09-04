@@ -7,7 +7,6 @@ require.config({
         'angular-animate'          : 'libs/angular-animate/angular-animate.min',
         'angular-loading-bar'      : 'libs/angular-loading-bar/src/loading-bar',
         'angular-route'            : 'libs/angular-route/angular-route',
-        'angular-sanitize'         : 'libs/angular-sanitize/angular-sanitize.min',
         'app-css'                  : 'css/main',
         'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',
         'css'                      : 'libs/require-css/css.min',

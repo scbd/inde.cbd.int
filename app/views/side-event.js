@@ -195,6 +195,9 @@ define(['app', 'lodash','directives/mobi-menu'], function(app, _) {
         function trustSrc(src) {
             return $sce.trustAsResourceUrl(src);
         }
+
+
+
         //============================================================
         //
         //============================================================

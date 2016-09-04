@@ -71,57 +71,57 @@
     </div>
     <hr>
 
-      <!-- chips -->
-      <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">
+    <!-- chips -->
+    <div class="row chips-row hidden-md hidden-sm hidden-xs"  ng-if="!search" style="margin-top:10px;">
 
       <div id="chip-all" class="chip chip-active "  ng-show=" (!loading && statusFacits.all)" ng-click="selectChip('all')">
-          <div>
-            <i class="material-icons">&#xEB3D;</i>
-          </div>All
-          <span class="sqr">{{statusFacits.all}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xEB3D;</i>
+        </div>All
+        <span class="sqr">{{statusFacits.all}}</span>
+      </div>
 
       <div id="chip-draft" class="chip"  ng-show=" (!loading && statusFacits.draft )" ng-click="selectChip('draft')">
-          <div>
-            <i class="material-icons">&#xE24D;</i>
-          </div>Drafts
-          <span class="sqr">{{statusFacits.draft}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE24D;</i>
+        </div>Drafts
+        <span class="sqr">{{statusFacits.draft}}</span>
+      </div>
       <div id="chip-request" class="chip"  ng-show=" (!loading && statusFacits.request)" ng-click="selectChip('request')">
-          <div>
-            <i class="material-icons">&#xE0C6;</i>
-          </div>Requests
-          <span class="sqr">{{statusFacits.request}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE0C6;</i>
+        </div>Requests
+        <span class="sqr">{{statusFacits.request}}</span>
+      </div>
       <div id="chip-published" class="chip"  ng-show=" (!loading && statusFacits.published)" ng-click="selectChip('published')">
-          <div>
-            <i class="material-icons">&#xE8DC;</i>
-          </div>Under Review
-          <span class="sqr">{{statusFacits.published}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE8DC;</i>
+        </div>Under Review
+        <span class="sqr">{{statusFacits.published}}</span>
+      </div>
       <div id="chip-canceled" class="chip"  ng-show=" (!loading  && statusFacits.canceled)" ng-click="selectChip('canceled')">
-          <div>
-            <i class="material-icons">&#xE8DD;</i>
-          </div>Canceled
-          <span class="sqr">{{statusFacits.canceled}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE8DD;</i>
+        </div>Canceled
+        <span class="sqr">{{statusFacits.canceled}}</span>
+      </div>
       <div id="chip-rejected" class="chip"  ng-show=" (!loading  && statusFacits.rejected)" ng-click="selectChip('rejected')">
-          <div>
-            <i class="material-icons">&#xE8DB;</i>
-          </div>Rejected
-          <span class="sqr">{{statusFacits.rejected}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE8DB;</i>
+        </div>Rejected
+        <span class="sqr">{{statusFacits.rejected}}</span>
+      </div>
 
       <div id="chip-archived" class="chip pull-right"  ng-show=" (!loading && statusFacits.archived )" ng-click="selectChip('archived')">
-          <div>
-            <i class="material-icons">&#xE149;</i>
-          </div>Archived
-          <span class="sqr">{{statusFacits.archived}}</span>
-        </div>
+        <div>
+          <i class="material-icons">&#xE149;</i>
+        </div>Archived
+        <span class="sqr">{{statusFacits.archived}}</span>
+      </div>
       <div ng-show="loading" style="display:inline;">
         <i class="fa fa-spinner fa-spin"></i> Loading...
       </div>
-      </div>
+    </div>
 
       <div class="container" style="width:100%;">
             <div class="row" ng-show="count">

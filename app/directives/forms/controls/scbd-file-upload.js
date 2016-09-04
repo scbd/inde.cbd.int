@@ -76,7 +76,7 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
                                     else
                                         $scope.binding.push(pubDoc);
                                 }).catch(function(err){$scope.error=err;});
-                            else if(!file.$error && $attrs.schema &&  !$attrs.docId) {
+                            else if(!file.$error && $attrs.schema &&  !$attrs.docId ) {
                                 mongoStorage.uploadTempFile($attrs.schema, file,{'public':true}).then(function(tempFile) {
                                     $scope.tempFile=tempFile.data;
                                     $scope.binding = 'https://s3.amazonaws.com/mongo.document.attachments.temporary/'+tempFile.data.uid;

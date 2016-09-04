@@ -2,7 +2,6 @@ define(['app', 'lodash',
     'text!./edit-side-event.html',
     'moment',
     'text!directives/forms/edit/publish-dialog.html',
-    'rangy-core',
     'text!directives/forms/edit/dirty-form.html',
     'directives/side-menu/scbd-side-menu',
     'directives/km-select',
@@ -458,8 +457,6 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         function init() {
-                            rangy.init();
-                            window.rangy = rangy;
 
                             $scope.editIndex = false;
 
@@ -618,17 +615,18 @@ define(['app', 'lodash',
                                     if (!$scope.doc) $scope.doc = {};
                                     if (!$scope.doc.contact) $scope.doc.contact = {};
 
-                                    $scope.doc.contact.email = _.clone(response.data.Email);
-                                    $scope.doc.contact.address = _.clone(response.data.Address);
-                                    $scope.doc.contact.city = _.clone(response.data.City);
-                                    $scope.doc.contact.country = _.clone(response.data.Country);
-                                    $scope.doc.contact.personalTitle = _.clone(response.data.Title);
-                                    $scope.doc.contact.state = _.clone(response.data.State);
-                                    $scope.doc.contact.zip = _.clone(response.data.Zip);
-                                    $scope.doc.contact.phone = _.clone(response.data.Phone);
-                                    $scope.doc.contact.firstName = _.clone(response.data.FirstName);
-                                    $scope.doc.contact.lastName = _.clone(response.data.LastName);
-                                    $scope.doc.contact.jobTitle = _.clone(response.data.Designation);
+                                    $scope.doc.contact.email = response.data.Email;
+                                    $scope.doc.contact.address = response.data.Address;
+                                    $scope.doc.contact.city = response.data.City;
+                                    $scope.doc.contact.country = {identifier:response.data.Country};
+
+                                    $scope.doc.contact.personalTitle = response.data.Title;
+                                    $scope.doc.contact.state = response.data.State;
+                                    $scope.doc.contact.zip = response.data.Zip;
+                                    $scope.doc.contact.phone = response.data.Phone;
+                                    $scope.doc.contact.firstName = response.data.FirstName;
+                                    $scope.doc.contact.lastName = response.data.LastName;
+                                    $scope.doc.contact.jobTitle = response.data.Designation;
 
                                 }).catch(onError);
                                 else
@@ -1102,6 +1100,7 @@ define(['app', 'lodash',
                                     $('#documents-tab').tab('show');
                                 });
                                 $scope.saveDoc();
+
                             }else{
                                if($scope.doc.validTabs.contact){
                                 $scope.doc.validTabs.contact = false;
