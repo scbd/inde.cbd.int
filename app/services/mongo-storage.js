@@ -60,12 +60,12 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 });
             } //create
         }
+        var conferences = [];
         //============================================================
         //
         //============================================================
         function loadConferences(force) {
             var allPromises = [];
-            var conferences =[];
             var numPromises= 1;
             var modified = true;
 
@@ -107,7 +107,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                           });
 
                     } else{
-                            conferences=JSON.parse(localStorage.getItem('allConferences'));
+                            if(_.isEmpty(conferences))
+                              conferences=JSON.parse(localStorage.getItem('allConferences'));
                             numPromises++;
                             allPromises.push($q(function(resolve) {resolve(conferences);}));
                     }
