@@ -63,10 +63,7 @@ define(['app', 'lodash',
                     else
                       $scope.selectChip('all').then(function(){if($scope.isAdmin())$scope.detailView=true;});
                 });
-                $timeout(function(){
-                  $('.ui-select-search').addClass('form-control');
-                  $('.ui-select-container').removeClass('form-control');
-              },100);
+
             } //init
 
             //==============================

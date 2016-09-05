@@ -3,7 +3,6 @@ define(['app', 'lodash',
     'moment',
     'text!directives/forms/edit/publish-dialog.html',
     'text!directives/forms/edit/dirty-form.html',
-    'directives/km-select',
     'directives/forms/controls/scbd-select-list',
     'services/mongo-storage',
     'directives/forms/controls/scbd-file-upload',
@@ -570,7 +569,7 @@ define(['app', 'lodash',
 
 
                         //============================================================
-                        //
+                        // preselect meeting in data
                         //============================================================
                         function checkMeeting(index) {
 
