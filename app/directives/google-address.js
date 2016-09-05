@@ -1,4 +1,4 @@
-define(['text!./google-address.html', 'app', ], function(template, app) {
+define(['text!./google-address.html', 'app','lodash' ], function(template, app,_) {
     'use strict';
 
     app.directive('googleAddress', ['$timeout', function($timeout) {
@@ -9,7 +9,7 @@ define(['text!./google-address.html', 'app', ], function(template, app) {
             require:['^ngModel','googleAddress'],
             scope: {
                 binding: '=ngModel',
-document:'=document',
+                document:'=document',
                 form:'=form'
             },
 
@@ -19,54 +19,62 @@ document:'=document',
             },
 
             controller: ['$scope','$element', function($scope,$element) {
-
+                var autoComplete;
                 //=======================================================================
                 //
                 //=======================================================================
                 function init() {
-                  var autoComplete = new google.maps.places.Autocomplete($element.find('#address')[0]);
+                  autoComplete = new google.maps.places.Autocomplete($element.find('#address')[0],{types: ['geocode']});
                   google.maps.event.addListener(autoComplete, 'place_changed', function() {
                     $scope.binding=$element.find('#address')[0].value;
-                   var place = autoComplete.getPlace();
-                   var parsedUrl = parseURL(place.url);
-                   $timeout(function(){$scope.document.googleMaps=parsedUrl.protocol+'://'+parsedUrl.host+'/?q='+parsedUrl.params['?q']+'/@'+place.geometry.location.lat()+','+place.geometry.location.lng()+',18z/&ftid='+parsedUrl.params.ftid;
-                         $scope.document.geoLocation={
-                             lat : parseFloat(place.geometry.location.lat()),
-                             lng : parseFloat(place.geometry.location.lng())
-                          };
-                 });
-                });
-              }// init
-              this.init=init;
-              //=======================================================================
-              //
-              //=======================================================================
-              function parseURL(url) {
-                  var a =  document.createElement('a');
-                  a.href = url;
-                  return {
-                      source: url,
-                      protocol: a.protocol.replace(':',''),
-                      host: a.hostname,
-                      port: a.port,
-                      query: a.search,
-                      params: (function(){
-                          var ret = {},
-                              seg = a.search.replace('/^?/','').split('&'),
-                              len = seg.length, i = 0, s;
-                          for (;i<len;i++) {
-                              if (!seg[i]) { continue; }
-                              s = seg[i].split('=');
-                              ret[s[0]] = s[1];
-                          }
-                          return ret;
-                      })(),
-                      file: a.pathname ,
-                      hash: a.hash.replace('#',''),
-                      path: a.pathname,
-                      segments: a.pathname.split('/')
-                  };
-              }
+                    var place = autoComplete.getPlace();
+                  });
+                  autoComplete.addListener('place_changed', fillInAddress);
+                }// init
+                this.init=init;
+
+                //=======================================================================
+                //
+                //=======================================================================
+                function fillInAddress() {
+                    // Get the place details from the autocomplete object.
+                    $timeout(function() {
+                        var place = autoComplete.getPlace();
+
+                        $scope.document.contact.address = '';
+                        $scope.document.contact.city = '';
+                        $scope.document.contact.state = '';
+                        $scope.document.contact.country = '';
+                        $scope.document.contact.zip = '';
+
+                        place.address_components.forEach(function(component) {
+
+                            if (component.types.indexOf('street_number') >= 0)
+                                $scope.document.contact.address = component.long_name;
+
+                            if (component.types.indexOf('route') >= 0)
+                                $scope.document.contact.address += ' ' + component.long_name;
+
+                            if (component.types.indexOf('sublocality') >= 0)
+                                $scope.document.contact.city = component.long_name + ', ';
+
+                            if (component.types.indexOf('locality') >= 0)
+                                $scope.document.contact.city += component.long_name;
+
+                            if (component.types.indexOf('administrative_area_level_1') >= 0)
+                                $scope.document.contact.state = component.long_name;
+
+                            if (component.types.indexOf('country') >= 0)
+                                $scope.document.contact.country = component.short_name.toLowerCase();
+
+                            if (component.types.indexOf('postal_code') >= 0)
+                                $scope.document.contact.zip = component.long_name;
+
+                        }, 100);
+                    });
+
+                }// fillInAddress
+                this.fillInAddress=fillInAddress;
 
             }],
         }; // return

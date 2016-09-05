@@ -14,7 +14,10 @@ define(['app', 'lodash',
     'directives/fade-in-tab',
     'directives/bs-progress-bar',
     'services/filters',
-    'ng-ckeditor'
+    'ng-ckeditor',
+    'ui.select',
+    'filters/propsFilter',
+    'directives/google-address'
 ], function(app, _, template, moment, dialogTemplate) {
     app.directive("editSideEvent", [ '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
         function( $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {

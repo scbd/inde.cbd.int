@@ -447,11 +447,14 @@ border-top-color: transparent !important;
                         </div>
 
                         <div  class="row"  style="margin-bottom:15px;">
+                          <div class="col-xs-12">
 
+                              <div google-address name="gAddress" id="gAddress"   form="editForm" ng-model="document.gAddress" document="doc"  ></div>
+                          </div>
                             <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
                               <div >
                                 <label for="address">Address</label>
-                                <textarea rows="3" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
+                                <textarea rows="5" class="form-control" id="address" ng-model="doc.contact.address"></textarea>
                               </div>
                             </div>
 
