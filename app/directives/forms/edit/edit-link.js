@@ -1,4 +1,4 @@
-define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoothScroll', ], function(template, app, _) {
+define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoothScroll','directives/on-focus-helper' ], function(template, app, _) {
     'use strict';
 
 
@@ -138,7 +138,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 // saves doc to mongo
                 //=======================================================================
                 function save() {
-
+                    $scope.loading=true;
                     if (!_.isNumber($scope.editIndex)) // if new put in array
                         $scope.documents.push($scope.document);
 
@@ -152,11 +152,13 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                         el.value='';
                           $scope.focused=false;
 
+                        $scope.loading=false;
                     }).catch(function(error) {
                         console.log(error);
                         $scope.onError(error);
                         $scope.documents.pop();
                         $scope.error = error;
+                        $scope.loading=false;
                         throw error;
                     });
                 }
@@ -221,9 +223,11 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //
                 //=======================================================================
                 function upload(files,uri) {
+                  $scope.uploading=true;
                     _.each(files, function(file) {
                             mongoStorage.uploadDocAtt($scope.schema, $scope.doc._id, file).then(function(){
                                       $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' +  mongoStorage.awsFileNameFix(file.name);
+                                      $scope.uploading=false;
                             }).catch($scope.onError);
                    });
                 }
