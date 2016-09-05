@@ -7,7 +7,7 @@ define(['app'], function(app) {
       if (angular.isArray(items)) {
         var keys = Object.keys(props);
 
-        items.forEach(function(item) {
+        items.forEach(function(item,index) {
           var itemMatches = false;
 
           for (var i = 0; i < keys.length; i++) {
@@ -19,7 +19,7 @@ define(['app'], function(app) {
             }
           }
 
-          if (itemMatches) {
+          if (itemMatches || item.identifier===' ' || item._id===' ' ) {
             out.push(item);
           }
         });
