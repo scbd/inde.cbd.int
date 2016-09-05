@@ -47,13 +47,13 @@ define(['app', 'lodash',
                           title:{tab:'general',label:'Title'},
                           subjects:{tab:'general',label:'Subjects'},
                           description:{tab:'general',label:'Description'},
-                          expNumPart:{tab:'logisitics',label:'Expected Number of Participants'},
-                          prefDateOne:{tab:'logisitics',label:'First Date Preference'},
-                          prefDateTwo:{tab:'logisitics',label:'Second Date Preference'},
-                          prefDateThree:{tab:'logisitics',label:'Third Date Preference'},
-                          prefTimeOne:{tab:'logisitics',label:'First Time Preference'},
-                          prefTimeTwo:{tab:'logisitics',label:'Second Time Preference'},
-                          prefTimeThree:{tab:'logisitics',label:'Third Time Preference'},
+                          expNumPart:{tab:'logistics',label:'Expected Number of Participants'},
+                          prefDateOne:{tab:'logistics',label:'First Date Preference'},
+                          prefDateTwo:{tab:'logistics',label:'Second Date Preference'},
+                          prefDateThree:{tab:'logistics',label:'Third Date Preference'},
+                          prefTimeOne:{tab:'logistics',label:'First Time Preference'},
+                          prefTimeTwo:{tab:'logistics',label:'Second Time Preference'},
+                          prefTimeThree:{tab:'logistics',label:'Third Time Preference'},
                           firstName:{tab:'contact',label:'Contact Person First Name'},
                           lastName:{tab:'contact',label:'Contact Person Last Name'},
                           phone:{tab:'contact',label:'Contact Person Phone'},
@@ -133,9 +133,22 @@ define(['app', 'lodash',
                             return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
                                 cache: true
                             }).then(function(o) {
-                              $scope.options.subjects =Thesaurus.buildTree(o.data);
+                              $scope.options.subjectsTree =Thesaurus.buildTree(o.data);
+                              $scope.options.subjects = [];
+                              $scope.options.subjects.push({identifier:' ',name:' '});
+                              $scope.options.subjectsTree.forEach(function(s){
+                                  s.group=true;
+                                  $scope.options.subjects.push(s);
+
+                                  s.narrowerTerms.forEach(function(s2){
+                                    $scope.options.subjects.push(s2);
+                                  });
+                              });
+
                             }).catch(onError);
                         }
+
+
 
                         //============================================================
                         //
@@ -479,11 +492,18 @@ define(['app', 'lodash',
                         }
                         $scope.showTab=showTab;
 
-
+// function hackActive(){
+//   $timeout(function(){
+//     console.log($('ui-select-choices-row'));
+//     $('ui-select-choices-row').removeClass('active');
+//   },1000);
+// }
+// $scope.hackActive=hackActive;
                         //============================================================
                         //
                         //============================================================
                         function init() {
+
 
                             $scope.editIndex = false;
 
@@ -518,6 +538,13 @@ define(['app', 'lodash',
                                               numHostOrgs = $scope.doc.hostOrgs.length;
                                             else
                                                 numHostOrgs = 0;
+                                            if($scope.doc.subjects && $scope.doc.subjects.length)
+                                              $scope.doc.subjects.forEach(function(item,index){
+
+                                                      if(typeof item === 'object')
+                                                        $scope.doc.subjects[index]=item.identifier;
+                                              });
+
                                             $scope.loading=false;
                                             if($scope.doc.contact && $scope.me.email===$scope.doc.contact.email)
                                               $scope.preFill=true;
@@ -681,6 +708,7 @@ define(['app', 'lodash',
                         function loadCountries() {
                             return mongoStorage.getCountries().then(function(o) {
                                 $scope.options.countries = $filter("orderBy")(o, "name.en");
+                                $scope.options.countries =([{_id:' ',identifier:' ',name:' ',title:' '}]).concat($scope.options.countries);
                                 return $scope.options.countries;
                             }).catch(onError);
                         }
@@ -1215,8 +1243,9 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function findScrollFocus(id) {
-
+                            if(id==='editForm.description')id='cke_editForm.description';
                             var el = document.getElementById(id);
+
 
                             if (!$scope.focused) {
 

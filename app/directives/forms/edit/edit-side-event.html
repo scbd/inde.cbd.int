@@ -66,7 +66,7 @@ border-top-color: transparent !important;
     padding: 10px;
 }
 .red-status{
-  color:red !important;
+  color:#a94442 !important;
 }
   </style>
 
@@ -100,7 +100,7 @@ border-top-color: transparent !important;
       WARNING: You have critical errors or missing information in your form preventing your side event form being submitted.
       <div ng-repeat="err in editForm.$error.required" ng-if="err.$name!=='editLinkForm'">
           <a ng-click="goToError(errorMap[err.$name].tab,err.$name)" style="cursor:pointer;">{{errorMap[err.$name].label}}</a>
-          
+
       </div>
       <div ng-if="doc.hostOrgs.length===0">
           <a ng-click="goToError('orgs','hostOrgs')">Host Organizations</a>
@@ -112,7 +112,7 @@ border-top-color: transparent !important;
       <div class="col-lg-6   col-xs-12 text-nowrap">
 
         <div ng-if="showProg">
-          <bs-progress-bar id="form-progress"  steps="doc.validTabs"  class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Step Side Event Request Progress" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
+          <bs-progress-bar id="form-progress"  steps="doc.validTabs"  class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Steps Completed" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
 
         </div>
       </div>
@@ -150,7 +150,7 @@ border-top-color: transparent !important;
           <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
           <li role="presentation" ng-class="{'active':tab==='contact'}" ng-click="showTab('contact')"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
           <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='documents'}" ng-click="showTab('documents')"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
-          <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
+          <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.links.length"></i></a></li>
           <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='images'}" ng-click="showTab('images')"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
           <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='videos'}" ng-click="showTab('videos')"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
         </ul>
@@ -175,15 +175,47 @@ border-top-color: transparent !important;
                             <div name="title" style="padding-bottom:10px;" ng-class="{'has-error': editForm.title.$invalid && editForm.$submitted}">
                                 <label>Title</label>
                                 <input id="editForm.title" class="form-control" name="title" ng-model="doc.title" locales="doc.meta.locales" required>
-                                <p ng-show="editForm.title.$invalid && editForm.$submitted" class="help-block">Title is required.</p>
+                                <p ng-show="editForm.title.$invalid && editForm.title.$touched" class="help-block red-status">Title is required.</p>
                             </div>
                         </div>
-                        <div class="col-md-12 col-xs-12" style="padding-bottom:10px;">
+                        <div class="col-md-12 col-xs-12" style="padding-bottom:10px;" >
                             <div id="editForm.subjects" ng-class="{'has-error-div': editForm.subjects.$invalid && editForm.$submitted,'has-error': editForm.subjects.$invalid && editForm.$submitted}" class="km-control-group" required name="subjects" caption="Related CBD Subject area(s)">
-                                <label>Subject(s)</label>
+                                <label>Subject(s) </label>
                                 <br>
-                                <div km-select required multiple name="subjects" ng-model="doc.subjects" items="options.subjects" binding-type="term[]" ng-class="{'has-error': editForm.subjects.$invalid && editForm.$submitted}"></div>
-                                <p ng-show="editForm.subjects.$error.required && editForm.$submitted" class="help-block">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
+                                <style>
+                                  .group-select-row{
+                                    font-weight: bold;
+                                    font-size: 16px;
+                                  };
+                                  .child-select-row{
+                                    margin-left: 25px;
+                                  };
+                                  .ui-select-choices-row.ng-scope.active>a {
+                                          color: none !important;
+                                          text-decoration: none;
+                                          outline: 0;
+                                          background-color: none !important;
+                                      }
+                                </style>
+                                <!-- <div km-select required multiple name="subjects" ng-model="doc.subjects" items="options.subjects" binding-type="term[]" touched="editForm.subjects.$touched"></div> -->
+                                <ui-select multiple  first-item-active="false" required id="editForm.subjects"  name="subjects"  ng-model="doc.subjects" close-on-select="false"  append-to-body="true" title="Choose subjects" ng-click="editForm.subjects.$touched=true;">
+                                    <ui-select-match  placeholder="Select a subject by typeing the title or browse the drop down" >{{$item.name}}</ui-select-match>
+                                    <ui-select-choices first-item-active="false" style="width:100%;" position="down" repeat="subject.identifier as subject in options.subjects | propsFilter: {name: $select.search}">
+                                      <!--  -->
+                                      <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px; overflow:auto;">
+                                          <hr style="margin: 0 0 0 0;">
+
+                                              <span class="text-nowrap">
+
+                                                  <!-- <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span> -->
+                                                  <span  style="line-height:40px;"> <span ng-class="{'group-select-row':subject.group,'child-select-row':!subject.group}"><span ng-if="!subject.group">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>{{subject.name}}</span></span>
+                                                  <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
+                                                </span>
+
+                                     </div>
+                                    </ui-select-choices>
+                                  </ui-select>
+                                <p ng-show="editForm.subjects.$error.required && (editForm.subjects.$touched|| editForm.$submitted)" class="help-block error red-status">At least one subject area is required, if your subject is not listed, choose the closest related subject and indicate in the message below your request for a new subject in the list.</p>
                             </div>
 
                         </div>
@@ -200,11 +232,11 @@ border-top-color: transparent !important;
                 </div>
 
                 <div class="col-xs-12" style="padding-bottom:10px;">
-                    <div name="description" ng-class="{'has-error-div': editForm.description.$invalid && editForm.$submitted,'has-error': editForm.description.$invalid && editForm.$submitted}">
-                        <label>Description</label>
+                    <div name="description" ng-class="{'has-error-div': editForm.description.$invalid && editForm.$submitted,'has-error': editForm.description.$invalid && editForm.$submitted}" ng-click="editForm.description.$touched=true;">
+                        <label>Description </label>
                         <!-- <text-angular name="description" id="editForm.description" ng-model="doc.description" cols="30" rows="5" required placeholder="Briefly describe your side event."></text-angular> -->
 						            <textarea name="description" id="editForm.description" ckeditor="editorOptions" ng-model="doc.description" required placeholder="Briefly describe your side event." ></textarea>
-                        <p ng-show="editForm.description.$invalid && editForm.$submitted" class="help-block">Description is required.</p>
+                        <p ng-show="editForm.description.$invalid && (editForm.description.$touched || editForm.$submitted) " class="help-block error red-status">Description is required.</p>
                     </div>
                 </div>
             </div>
@@ -221,9 +253,9 @@ border-top-color: transparent !important;
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
                   <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" required>
-                    <option ng-repeat="docObj in options.conferences | futureConferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+                    <option ng-repeat="docObj in options.conferences | futureConferences:doc.conference" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
                   </select>
-                  <p ng-show="editForm.conference.$invalid && editForm.$submitted" class="help-block">A conference is required.</p>
+                  <p ng-show="editForm.conference.$invalid " class="help-block error red-status">A conference is required.</p>
                 </div>
               </div>
               <div class="col-xs-12 col-lg-4">
@@ -240,8 +272,8 @@ border-top-color: transparent !important;
                 <div name="expNumPart" ng-class="{'has-error': (editForm.expNumPart.$invalid && editForm.$submitted) || editForm.expNumPart.$error.number}">
                   <label>Expected Number of Participants</label>
                   <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" placeholder=" " required/>
-                  <p ng-show="editForm.expNumPart.$invalid && editForm.$submitted" class="help-block">Number of participants is required.</p>
-                  <p ng-show="editForm.expNumPart.$error.number" class="help-block"> Not valid number!</p>
+                  <p ng-show="editForm.expNumPart.$invalid && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status">Number of participants is required.</p>
+                  <p ng-show="editForm.expNumPart.$error.number  && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status"> Not valid number!</p>
                 </div>
               </div>
 
@@ -258,15 +290,16 @@ border-top-color: transparent !important;
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
-                  <p ng-show="editForm.prefDateOne.$invalid && editForm.$submitted" class="help-block">First Choice Date required.</p>
+                  <p ng-show="editForm.prefDateOne.$invalid && (editForm.prefDateOne.$touched || editForm.$submitted) " class="help-block error red-status">First Choice Date required.</p>
                   <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>
                   </select>
-                  <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one && editForm.$submitted" class="help-block">First choice time required.</p>
+                  <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one && (editForm.prefTimeOne.$touched || editForm.$submitted)" class="help-block error red-status">First choice time required.</p>
                 </div>
               </div>
+
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div ng-class="{'has-error': (editForm.prefDateTwo.$invalid && editForm.$submitted) || (editForm.prefTimeTwo.$invalid && editForm.$submitted )}">
                   <label>Second Choice</label>
@@ -274,13 +307,13 @@ border-top-color: transparent !important;
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
-                  <p ng-show="editForm.prefDateTwo.$invalid && editForm.$submitted" class="help-block">Second choice date required.</p>
+                  <p ng-show="editForm.prefDateTwo.$invalid && (editForm.prefDateTwo.$touched || editForm.$submitted) " class="help-block error red-status">Second choice date required.</p>
                   <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>
                   </select>
-                  <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && editForm.$submitted" class="help-block">Second choice time required.</p>
+                  <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && (editForm.prefTimeTwo.$touched || editForm.$submitted)" class="help-block error red-status">Second choice time required.</p>
                 </div>
               </div>
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
@@ -290,13 +323,13 @@ border-top-color: transparent !important;
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
-                  <p ng-show="editForm.prefDateThree.$invalid && editForm.$submitted" class="help-block">Third choice date required.</p>
+                  <p ng-show="editForm.prefDateThree.$invalid && (editForm.prefDateThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice date required.</p>
                   <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>
                   </select>
-                  <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && editForm.$submitted" class="help-block">Third choice time required.</p>
+                  <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && (editForm.prefTimeThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice time required.</p>
                 </div>
               </div>
             </div>
@@ -346,12 +379,12 @@ border-top-color: transparent !important;
               <div fade-in-tab id="orgs" class="tab-pane   active text-left" ng-show="tab==='orgs'">
 
 
-                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted),'has-error-div': (!doc.hostOrgs.length && editForm.$submitted)}">
+                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted),'has-error-div': (!doc.hostOrgs.length && editForm.$submitted)}" ng-click="orgsFocused=true;">
                     <legend class="container-subheader">
                       <h2>Host Organization(s)</h2>
                     </legend>
 
-                    <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && editForm.$submitted" style="color:#a94442">At least one organization is required.</p>
+                    <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && (editForm.$submitted || orgsFocused)" style="color:#a94442">At least one organization is required.</p>
 
                     <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
 
@@ -379,7 +412,7 @@ border-top-color: transparent !important;
 
 
 
-                          <div class="row">
+                          <div class="row" style="margin-bottom:15px;">
                             <div class="col-xs-12">
                               <div   class="text-nowrap">
                                                 <span ng-click="preFill=!preFill;initProfile(preFill)"><i class="fa fa-check-square-o" ng-show="preFill"></i><i class="fa fa-square-o" ng-show="!preFill"></i> I will be the contact.</span>
@@ -397,7 +430,7 @@ border-top-color: transparent !important;
                             <div   ng-class="{'has-error': editForm.firstName.$invalid && editForm.$submitted}">
                               <label>First Name</label>
                               <input id="editForm.firstName" class="form-control" type="text" name="firstName" ng-model="doc.contact.firstName" placeholder=" "/ required>
-                              <p ng-show="editForm.firstName.$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                              <p ng-show="editForm.firstName.$invalid && (editForm.firstName.$touched || editForm.$submitted)" class="help-block error red-status">First name is required.</p>
                             </div>
                           </div>
 
@@ -405,12 +438,12 @@ border-top-color: transparent !important;
                             <div   ng-class="{'has-error': editForm.lastName.$invalid && editForm.$submitted}">
                               <label>Last Name</label>
                               <input id="editForm.lastName" class="form-control" name="lastName" type="text" ng-model="doc.contact.lastName" placeholder=" "required/>
-                              <p ng-show="editForm.lastName.$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                              <p ng-show="editForm.lastName.$invalid && (editForm.lastName.$touched || editForm.$submitted)" class="help-block error red-status">Last name is required.</p>
                             </div>
                           </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row" style="margin-bottom:15px;">
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div name="jobTitla" caption="Job Title">
@@ -421,11 +454,11 @@ border-top-color: transparent !important;
 
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div ng-class="{'has-error': editForm.phone.$invalid && editForm.$submitted}">
-                              <label>Phone Number {{editForm.phone.$invalid}}</label>
+                              <label>Phone Number</label>
                               <input id="editForm.phone" class="form-control" name="phone" type="text" ng-pattern="patterns.phone" ng-model="doc.contact.phone" placeholder=" " required/>
                               <div ng-show="(editForm.$submitted || editForm.phone.$touched)">
-                                <p class="help-block error" ng-show="editForm.phone.$error.required">This field is mandatory</p>
-                                <p class="help-block error" ng-show="editForm.phone.$error.pattern">
+                                <p class="help-block error red-status" ng-show="editForm.phone.$error.required">This field is mandatory</p>
+                                <p class="help-block error red-status" ng-show="editForm.phone.$error.pattern">
                                     Please use the following format: + (country code) (city code) (telephone number) (extension, if necessary);<br>Example: <b>+1 514 288-2220 ext 221</b> (where 1 = North America, 514 = Montreal, 288-2220 = CBD Secretariat number, ext 221 = direct extension to the switchboard).
                                 </p>
                             </div>
@@ -437,7 +470,7 @@ border-top-color: transparent !important;
                               <label>Mobile</label>
                               <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-pattern="patterns.phone" ng-model="doc.mobile" placeholder=" " />
                               <div ng-show="(editForm.$submitted || editForm.mobile.$touched)">
-                                <p class="help-block error" ng-show="editForm.mobile.$error.pattern">
+                                <p class="help-block error red-status" ng-show="editForm.mobile.$error.pattern">
                                     Please use the following format: + (country code) (city code) (telephone number) (extension, if necessary);<br>Example: <b>+1 514 288-2220 ext 221</b> (where 1 = North America, 514 = Montreal, 288-2220 = CBD Secretariat number, ext 221 = direct extension to the switchboard).
                                 </p>
                             </div>
@@ -463,7 +496,7 @@ border-top-color: transparent !important;
                                 <div   ng-class="{'has-error': editForm.city.$invalid && editForm.$submitted}">
                                   <label>City</label>
                                 <input id="editForm.city" type="text" name="city" class="form-control"  ng-model="doc.contact.city" required/>
-                                <p ng-show="editForm.city.$invalid && editForm.$submitted" class="help-block">City is required.</p>
+                                <p ng-show="editForm.city.$invalid && (editForm.city.$touched || editForm.$submitted)" class="help-block error red-status">City is required.</p>
                               </div>
                             </div>
                           </div>
@@ -474,39 +507,60 @@ border-top-color: transparent !important;
                               <input type="text" class="form-control" id="state" ng-model="doc.contact.state" />
                             </div>
                           </div>
+                          <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                            <div class="form-group">
+                              <label for="zip">Postal / Zip code</label>
+                              <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip" />
+                            </div>
+                          </div>
+
+                          <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
+                           <div ng-class="{'has-error': editForm.country.$invalid && editForm.$submitted,'has-error-div': editForm.country.$invalid && editForm.$submitted}" >
+                              <div>
+                                <label>Country</label>
+                              </div>
+
+
+                            <ui-select  required id="editForm.country"  name="country"  ng-model="doc.contact.country" close-on-select="true"  append-to-body="true" title="Choose a Country" ng-click="editForm.country.$touched=true;">
+                                <ui-select-match  placeholder="Select a Country by typing name" ><span style="vertical-align:bottom;"><i  class="flag-icon flag-icon-{{$select.selected._id}}" style="width:25px;height:15px;"></i> {{$select.selected.title}} </span></ui-select-match>
+                                <ui-select-choices style="width:100%;" position="down" repeat="country._id as country in options.countries | propsFilter: {title: $select.search, acronym: $select.search}">
+                                  <!--  -->
+                                  <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px; overflow:auto;">
+                                      <hr style="margin: 0 0 0 0;">
+
+                                          <span class="text-nowrap">
+                                              <span  >
+                                                <i  class="flag-icon flag-icon-{{country._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i>
+                                              </span>
+                                              <!-- <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span> -->
+                                              <span  style="padding:0px 0px 0px 1px; vertical-align:middle;line-height:40px;"> {{country.title }} <span ng-if="country._id!==' '">[{{country._id}}]</span></span>
+                                              <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
+                                            </span>
+
+                                 </div>
+                                </ui-select-choices>
+                              </ui-select>
+                              <p ng-show="editForm.country.$invalid && (editForm.country.$touched || editForm.$submitted)" class="help-block error red-status">Country is required.</p>
+                            </div>
+                          </div>
                         </div>
 
                     <div class="row">
 
-                      <div class="col-xl-6 col-lg-6 col-md-12 col-xs-12">
-                        <div ng-class="{'has-error': editForm.emaill.$invalid && editForm.emaill.$touched}">
+                      <div class="col-xs-12">
+                        <div ng-class="{'has-error': editForm.emaill.$invalid && editForm.emaill.$submitted,'has-div': editForm.emaill.$invalid && editForm.emaill.$submitted}">
                           <label>Email</label>
-                          <input type="email" id="editForm.email" class="form-control" name="emaill" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-model="doc.contact.email" placeholder=" " required/>
+                          <input type="email" id="editForm.emaill" class="form-control" name="emaill" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-model="doc.contact.email" placeholder=" " required/>
 
                           <div ng-show="(editForm.$submitted || editForm.emaill.$touched)">
-                              <p class="help-block error" ng-show="editForm.emaill.$error.required">This field is mandatory</p>
-                              <p class="help-block error" ng-show="editForm.emaill.$error.pattern || editForm.emaill.$error.email">This is not a valid email</p>
+                              <p class="help-block error red-status" ng-show="editForm.emaill.$error.required">This field is mandatory</p>
+                              <p class="help-block error red-status" ng-show="editForm.emaill.$error.pattern || editForm.emaill.$error.email">This is not a valid email</p>
 
                           </div>
                         </div>
                       </div>
 
-                      <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-                        <div class="form-group">
-                          <label for="zip">Postal / Zip code</label>
-                          <input type="text" class="form-control" id="zip" ng-model="doc.contact.zip" />
-                        </div>
-                      </div>
 
-                      <div class="col-xl-3 col-lg-3 col-md-12 col-xs-12">
-                        <div ng-class="{'has-error': editForm.country.$invalid && editForm.$submitted}">
-                          <div>
-                            <label>Country</label>
-                          </div>
-                          <div id="editForm.country" km-select name="country" ng-model="doc.contact.country" items="options.countries" required></div>
-                          <p ng-show="editForm.country.$invalid && editForm.$submitted" class="help-block">Country is required.</p>
-                        </div>
-                      </div>
 
                     </div>
 
@@ -549,21 +603,21 @@ border-top-color: transparent !important;
                                 <div ng-class="{'has-error': editForm.responsiblePersonalTitle.$invalid && editForm.$submitted}">
 
                                   <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" />
-                                  <p ng-show="editForm.responsiblePersonalTitle.$invalid && editForm.$submitted" class="help-block">Salutation is required.</p>
+                                  <p ng-show="editForm.responsiblePersonalTitle.$invalid " class="help-block error red-status">Salutation is required.</p>
                                 </div>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm.responsibleFirstName.$invalid && editForm.$submitted}">
 
                                   <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" />
-                                  <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                                  <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block error red-status">First name is required.</p>
                                 </div>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm.responsibleLastName.$invalid && editForm.$submitted}">
 
                                   <input id="editForm.responsibleLastName" class="form-control" type="text" name="responsibleLastName" ng-model="doc.responsible.lastName" required/>
-                                  <p ng-show="editForm.responsibleLastName.$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                                  <p ng-show="editForm.responsibleLastName.$invalid && (editForm.$submitted || editForm.responsibleLastName.$touched)" class="help-block error red-status">Last name is required.</p>
                                 </div>
                               </td>
                               <td>
@@ -571,9 +625,9 @@ border-top-color: transparent !important;
 
                                   <input id="editForm.responsibleEmail" class="form-control" name="responsibleEmail" ng-model="doc.responsible.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder=" " required/>
 
-                                  <div ng-show="(editForm.$submitted || editForm.responsibleEmaill.$touched)">
-                                      <p class="help-block error" ng-show="editForm.responsibleEmail.$error.required">This field is mandatory</p>
-                                      <p class="help-block error" ng-show="editForm.responsibleEmail.$error.pattern || editForm.responsibleEmail.$error.email">This is not a valid email</p>
+                                  <div ng-show="(editForm.$submitted || editForm.responsibleEmail.$touched)">
+                                      <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.required">This field is mandatory</p>
+                                      <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.pattern || editForm.responsibleEmail.$error.email">This is not a valid email</p>
 
                                   </div>
                                 </div>
@@ -608,21 +662,21 @@ border-top-color: transparent !important;
                                 <div ng-class="{'has-error': editForm['personalTitle_'+$index].$invalid && editForm.$submitted}">
 
                                   <input id="personalTitle_{{$index}}" class="form-control" type="text" name="personalTitle_{{$index}}" ng-model="doc.responsibleOrgs[$index].personalTitle" />
-                                  <p ng-show="editForm['personalTitle_'+$index].$invalid && editForm.$submitted" class="help-block">Salutation is required.</p>
+                                  <p ng-show="editForm['personalTitle_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">Salutation is required.</p>
                                 </div>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm['firstName_'+$index].$invalid && editForm.$submitted}">
 
                                   <input id="firstName_{{$index}}" class="form-control" type="text" name="firstName_{{$index}}" ng-model="doc.responsibleOrgs[$index].firstName" />
-                                  <p ng-show="editForm['firstName_'+$index].$invalid && editForm.$submitted" class="help-block">First name is required.</p>
+                                  <p ng-show="editForm['firstName_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">First name is required.</p>
                                 </div>
                               </td>
                               <td>
                                 <div ng-class="{'has-error': editForm['lastName_'+$index].$invalid && editForm.$submitted}">
 
                                   <input id="lastName_{{$index}}" class="form-control" type="text" name="lastName_{{$index}}" ng-model="doc.responsibleOrgs[$index].lastName" required/>
-                                  <p ng-show="editForm['lastName_'+$index].$invalid && editForm.$submitted" class="help-block">Last name is required.</p>
+                                  <p ng-show="editForm['lastName_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">Last name is required.</p>
                                 </div>
                               </td>
                               <td>
@@ -631,9 +685,9 @@ border-top-color: transparent !important;
                                   <input type="email" id="email_{{$index}}" class="form-control" name="email_{{$index}}" ng-model="doc.responsibleOrgs[$index].email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder=" " required/>
 
                                   <div ng-show="(editForm.$submitted || editForm['email_'+$index].$touched)">
-                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.duplicate">Error:  the contact person can only be associated or linked to one organization.</p>
-                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
-                                      <p class="help-block error" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
+                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.duplicate">Error:  the contact person can only be associated or linked to one organization.</p>
+                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
+                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
                                   </div>
                                 </div>
                               </td>
@@ -691,7 +745,7 @@ border-top-color: transparent !important;
                     <li role="presentation" ng-class="{'active':tab==='orgs'}" ng-click="showTab('orgs')"><a ng-class="{'success-tab':doc.validTabs.orgs && tab!=='orgs'}" id="orgs-tab" href="#orgs" aria-controls="orgs" role="tab" data-toggle="tab">Host Organizations <i class="fa fa-check" ng-show="doc.validTabs.orgs"></i></a></li>
                     <li role="presentation" ng-class="{'active':tab==='contact'}" ng-click="showTab('contact')"><a ng-class="{'success-tab':doc.validTabs.contact && tab!=='contact'}" id="contact-tab" href="#contact" aria-controls="contact" role="tab" data-toggle="tab">Contact Persons <i class="fa fa-check" ng-show="doc.validTabs.contact"></i></a></li>
                     <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='documents'}" ng-click="showTab('documents')"><a ng-class="{'success-tab':doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Publications <i class="fa fa-check" ng-show="doc.publications.length"></i></a></li>
-                    <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.validTabs.links.length"></i></a></li>
+                    <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='links'}" ng-click="showTab('links')"><a ng-class="{'success-tab':doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links <i class="fa fa-check" ng-show="doc.links.length"></i></a></li>
                     <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='images'}" ng-click="showTab('images')"><a ng-class="{'success-tab':doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab">Images <i class="fa fa-check" ng-show="doc.images.length"></i></a></li>
                     <li ng-if="doc.id && doc._id" role="presentation" ng-class="{'active':tab==='videos'}" ng-click="showTab('videos')"><a ng-class="{'success-tab':doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab">Videos <i class="fa fa-check" ng-show="doc.videos.length"></i></a></li>
                   </ul>
