@@ -86,7 +86,7 @@
       </div>
       <div class="row" ng-if="false">
         <div style="padding: 10px 20px 0px 20px;">
-          <div class="col-lg-3">
+          <div class="col-lg-3 col-md-3">
             <div>
               <select id="editForm.meeting" class="form-control" ng-model="con.day">
                 <option value="" selected>Day</option>
@@ -94,7 +94,7 @@
               </select>
             </div>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-3 col-md-3">
             <div>
               <select id="editForm.meeting" class="form-control" ng-model="con.time">
                 <option value="" selected> Time</option>
@@ -102,12 +102,12 @@
               </select>
             </div>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-3 col-md-3">
             <div>
 
             </div>
           </div>
-          <div class="col-lg-3">
+          <div class="col-lg-3 col-md-3">
             <div class="input-group input-group-sm search-bs" style="width:100%">
               <input type="test" class="form-control " ng-model="$parent.search">
               <span class="input-group-btn">
@@ -118,11 +118,11 @@
         </div>
       </div>
       <div class="row" style="margin-top:6px;" ng-if="false">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-md-6">
           <span style="padding-left:17px;">Showing
             <span class="badge">{{filtered.length}}</span> Side Events</span>
         </div>
-        <div class="col-lg-6 text-right" style="padding-right:17px;">
+        <div class="col-lg-6 col-md-6 text-right" style="padding-right:17px;">
           <span class="text-right" style="padding-right:17px;">
             <span class="badge">{{con.reservations.length}}</span> Side Events in Total</span>
         </div>
