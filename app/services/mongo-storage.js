@@ -217,7 +217,9 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //
         //============================================================
         function countries() {
-            if (countriesData) return countriesData;
+            if (countriesData) return $q(function(resolve) {
+                return resolve(countriesData);
+            });
 
             if (!localStorage.getItem('countries'))
                 return $http.get("https://api.cbd.int/api/v2015/countries", {
