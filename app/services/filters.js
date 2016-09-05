@@ -75,15 +75,20 @@ app.filter('schemaName', [function() {
           };
     }]);
 
+
+
     //============================================================
     //
     //============================================================
     app.filter('futureConferences', [function() {
 
-      return function( conf ) {
-        if(!conf ) return false;
+              return function( conf, existingConf) {
+
+                if(!conf ) return false;
+
 
                 return _.filter(conf,function(c){
+                  if(c._id === existingConf) return true;
                   return (moment(c.EndDate).format('X')  > moment.utc().format('X'));
                 });
             };
