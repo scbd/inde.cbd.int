@@ -567,7 +567,9 @@ define(['app', 'lodash',
                                                 'contact': false
                                             };
                                             $scope.isNew = true;
+
                                             if (!$scope.doc.hostOrgs) $scope.doc.hostOrgs = [];
+                                            if (!$scope.doc.contact) $scope.doc.contact = {};
                                             if (!$scope.doc.publications) $scope.doc.publications = [];
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
