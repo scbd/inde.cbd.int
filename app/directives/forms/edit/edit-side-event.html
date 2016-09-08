@@ -468,7 +468,7 @@ border-top-color: transparent !important;
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div ng-class="{'has-error': editForm.mobile.$error.pattern && editForm.$submitted}">
                               <label>Mobile</label>
-                              <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-pattern="patterns.phone" ng-model="doc.mobile" placeholder=" " />
+                              <input id="editForm.mobile" class="form-control" name="mobile" type="text" ng-pattern="patterns.phone" ng-model="doc.contact.mobile" placeholder=" " />
                               <div ng-show="(editForm.$submitted || editForm.mobile.$touched)">
                                 <p class="help-block error red-status" ng-show="editForm.mobile.$error.pattern">
                                     Please use the following format: + (country code) (city code) (telephone number) (extension, if necessary);<br>Example: <b>+1 514 288-2220 ext 221</b> (where 1 = North America, 514 = Montreal, 288-2220 = CBD Secretariat number, ext 221 = direct extension to the switchboard).
