@@ -105,8 +105,10 @@
           <div class="col-lg-2 col-md-2 col-xs-12">
               <div class=" pull-right">
                   <!-- <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button> -->
-                  <button title="Options" class="btn btn-default btn-sm" ng-click="detailView=!detailView"><span ng-show="!detailView" >Details</span><span ng-show="detailView">List View</span></button>
-                  <button title="Options" class="btn btn-default btn-sm" ng-click="expandDesc();" ng-if="detailView"><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll">Shorten All</span></button>
+                  <button class="btn btn-default btn-xs" ng-click="detailView=!detailView"><span ng-show="!detailView" ><i class="fa fa-list-alt" aria-hidden="true"></i> Details</span><span ng-show="detailView"><i class="fa fa-list" aria-hidden="true"></i> List View</span></button>
+                  <button  class="btn btn-default btn-xs" ng-click="expandDesc();" ng-if="detailView"><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll"><i class="fa fa-compress" aria-hidden="true"></i> Compress </span></button>
+                  <button cvs-exporter build-file="cvsExport()" class="btn btn-default btn-xs" ng-if="isAdmin()"> <i class="fa fa-download" aria-hidden="true"></i><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export</button>
+
               </div>
           </div>
           <div class="col-lg-12 col-md-3 col-xs-12 " style="margin-top:6px;">
@@ -320,29 +322,24 @@
                 <div style="height:95px;"></div>
                 <div class="hidden-lg hidden-xl" style="height:95px;"></div>
                 <!-- <div>{{doc.acronym  }}</div> -->
+                <div class="btn-group btn-group-vertical hidden-xs hidden-sm" style="position:absolute;top:0px;right:0px;" ng-if="doc.meta.status!=='archived'">
+                    <button title="Edit" class="btn btn-default btn-xs"  ng-if="isEditable(doc)" ng-click="edit(doc._id);">Edit</button>
+                      <button title="Edit" class="btn btn-default btn-xs"  ng-if="isEditable(doc)" ng-click="archiveDoc(doc);"> Archive</button>
+
+                      <!-- <button title="Edit" class="btn btn-default btn-xs"  ng-if="isAdmin()" role="separator" class="divider"></button> -->
+                      <button title="Edit" class="btn btn-default btn-xs"  ng-if="isAdmin()" ng-click="approveDoc(doc);"> Under Review</button>
+                      <button title="Edit" class="btn btn-default btn-xs"  ng-if="isAdmin()" ng-click="cancelDoc(doc);"> Cancel</button>
+                      <button title="Edit" class="btn btn-default btn-xs"  ng-if="isAdmin()" ng-click="rejectDoc(doc);"> Reject</button>
+                    </ul>
+
+                </div>
                 <div class="collection-action">
                   <span class="collection-action-grp ">
                     <!-- {{isAdmin}} -->
-                    <div class="btn-group btn-group-vertical btn-group-xs hidden-xs hidden-sm hidden-md" ng-if="doc.meta.status!=='archived'">
-                      <div class="btn-group">
-                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Actions
-                          <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu">
-                          <li ng-if="isEditable(doc)"><a ng-click="edit(doc._id);"><i class="fa fa-pencil"></i> Edit</a></li>
-                          <li ng-if="isEditable(doc)"><a ng-click="archiveDoc(doc);"><i class="material-icons">&#xE149;</i> Archive</a></li>
-
-                          <li ng-if="isAdmin()" role="separator" class="divider"></li>
-                          <li ng-if="isAdmin()"><a ng-click="approveDoc(doc);"><i class="material-icons">&#xE8DC;</i> Under Review</a></li>
-                          <li ng-if="isAdmin()"><a ng-click="cancelDoc(doc);"><i class="material-icons">&#xE8DD;</i> Cancel</a></li>
-                          <li ng-if="isAdmin()"><a ng-click="rejectDoc(doc);"><i class="material-icons">&#xE8DB;</i> Reject</a></li>
-                        </ul>
-                      </div>
-                    </div>
 
 
-                    <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl" ng-if="doc.meta.status!=='archived'" style="position:relative;top:-30px;">
+
+                    <div class="btn-group btn-group-vertical btn-group-xs hidden-lg hidden-xl hidden-md" ng-if="doc.meta.status!=='archived'" style="position:relative;top:-30px;">
 
                       <button title="Edit" class="btn btn-default" ng-click="edit(doc._id);" ng-if="isEditable(doc) && doc.meta.status!=='archived'"><i class="fa fa-pencil"></i></button>
                       <button title="Archive" class="btn btn-default" ng-click="archiveDoc(doc);" ng-if="isEditable(doc) &&  doc.meta.status!=='archived'"><i class="material-icons">&#xE149;</i></button>
@@ -445,7 +442,7 @@
                 <img ng-src="{{doc.logo}}" style="vertical-align:middle;max-width:100%;" />
             </div>
             <div class="col-lg-3 col-md-3" >
-                <strong ng-if="doc.title"><a href="/{{doc._id}}">{{doc.title}}</a>   <hr></strong>
+                <strong ng-if="doc.title"><a ng-href="{{doc._id}}">{{doc.title}}</a>   <hr></strong>
 
                 <div ng-bind-html="doc.description | truncate:(doc.truncate || 300):' ...' | rawHtml ">
 
@@ -487,7 +484,7 @@
                   <div class="text-right" ng-if="doc.subjectObjs.length >  3 && doc.moreSubjects" ng-click="doc.moreSubjects=!doc.moreSubjects;"><a ng-href="#"> less <i class="fa fa-caret-up" aria-hidden="true"></i></a></div>
                 </div>
                 <hr ng-if="doc.subjectObjs.length">
-                <span ng-repeat="org in doc.orgs">{{org.acronym}}<span ng-if="!$last"> | </span></span>
+                <span ng-repeat="org in doc.orgs"><span ng-if="org._id.length>2">{{org.acronym}}</span> <span ng-if="org._id.length===2">{{org.title}}</span><span ng-if="!$last"> | </span></span>
             </div>
             <div class="col-lg-2 col-md-2">
                 <div ng-if="doc.contact.lastName">
@@ -504,7 +501,7 @@
                     <hr>
                 </div>
 
-                <div ng-repeat="org in doc.orgs" class="text-nowrap" ng-if="doc.responsibleOrgs[$index].email"><strong>{{org.acronym}}</strong>:
+                <div ng-repeat="org in doc.orgs" class="text-nowrap" ng-if="doc.responsibleOrgs[$index].email"><strong><span ng-if="org._id.length>2">{{org.acronym}}</span> <span ng-if="org._id.length===2">{{org.title}}</span></strong>:
                     <br> {{doc.responsibleOrgs[$index].title}} {{doc.responsibleOrgs[$index].firstName}} {{doc.responsibleOrgs[$index].lastName}}, {{doc.responsibleOrgs[$index].email}}</div>
             </div>
             <div class="col-lg-1 col-md-1 text-nowrap">
