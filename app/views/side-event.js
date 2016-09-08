@@ -134,10 +134,14 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
                 _ctrl.doc.subjectObjs = [];
                 _.each(_ctrl.doc.subjects, function(subj) {
 
-                    _ctrl.doc.subjectObjs.push(_.find(res.data, {
-                        'identifier': subj.identifier
-                    }));
-
+                    if(_.isObject(subj))
+                        _ctrl.doc.subjectObjs.push(_.find(res.data, {
+                            'identifier': subj.identifier
+                        }));
+                    else
+                      _ctrl.doc.subjectObjs.push(_.find(res.data, {
+                          'identifier': subj
+                      }));
                 });
 
             }).catch(onError);
@@ -183,6 +187,8 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
                       });
                       if(o)
                         _ctrl.doc.orgs.push(o); // findWhere
+                      else
+                        _ctrl.doc.orgs.push({'_id':org,acronym:'ORG WAITING FOR APPROVAL'});
                     }); // each
 
                 }

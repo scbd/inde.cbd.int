@@ -2,11 +2,18 @@
   <strong>Error as occured...</strong>
   <div>{{error}}</div>
 </div>
-
+<style>
+.red-status{
+  color:#a94442 !important;
+}
+  </style>
 <div class="row">
   <div class="container-header col-xs-12" mobi-menu>
-    <span style="white-space: normal;">
+    <span class="pull-left" style="white-space: normal;">
       <h4>Side Event #{{sideEventCtrl.doc.id}}</h4>
+    </span>
+    <span style="white-space: normal;">
+      <span class="pull-right text-nowrap"><h4>Status:</hr> <span ng-class="{'red-status':(sideEventCtrl.doc.meta.status!=='request' && sideEventCtrl.doc.meta.status!=='published')}"><span ng-if="sideEventCtrl.doc.meta.status!=='request'">{{sideEventCtrl.doc.meta.status.toUpperCase()}}</span> <span ng-if="sideEventCtrl.doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!sideEventCtrl.doc.meta.status">NOT SAVED</span></span></span>
     </span>
     <div class="clearfix"></div>
   </div>
@@ -45,16 +52,16 @@
         <th scope="row">Title</th>
         <td>{{sideEventCtrl.doc.title}}</td>
       </tr>
-      <tr ng-show="sideEventCtrl.doc.orgs.length">
+      <tr ng-show="sideEventCtrl.doc.hostOrgs.length">
         <th scope="row">Hosts</th>
         <td>
           <div class="relative">
-            <span class="relative" ng-repeat="org in sideEventCtrl.doc.orgs track by $index" style="margin:0 2px 0 0;" ng-if="org.acronym">
+            <span class="relative" ng-repeat="org in sideEventCtrl.doc.orgs track by $index" style="margin:0 2px 0 0;" >
               <span class="cir" style="position:relative;">
                 <!-- <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" /> -->
 
               </span>
-              <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} <span ng-hide="$last">|</span></span>
+              <span ng-if="org.acronym" style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym}} <span ng-hide="$last">|</span></span>
             </span>
           </div>
         </td>
