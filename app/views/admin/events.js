@@ -13,11 +13,12 @@ define(['app', 'lodash',
     'filters/country',
     'filters/propsFilter',
     'directives/pagination',
-    'ui.select'
+    'ui.select',
+    'directives/cvs-exporter'
 ], function(app, _, deleteDialog, moment) {
 
-    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog',
-        function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog) {
+    app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog','$filter',
+        function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog,$filter) {
 
             $scope.loading = true;
             $scope.schema = "inde-side-events";
@@ -373,7 +374,252 @@ define(['app', 'lodash',
                 }).catch(onError);
             }
 
+            //=======================================================================
+            //
+            //=======================================================================
+            function buildQuery () {
 
+
+                var q = {
+                  conference:$scope.filter.conference,
+                  'meta.status':$scope.filter.status,
+                };
+
+                if($scope.search)  q['$text']= {'$search':$scope.search};  // jshint ignore:line
+
+                if(!_.isEmpty($scope.options.filter.hostOrgsSelected))  {
+                  q['$and']=[];// jshint ignore:line
+                  $scope.options.filter.hostOrgsSelected.forEach(
+
+                    function(item){
+                        q['$and'].push({'hostOrgs':item});// jshint ignore:line
+                    }
+                  );
+                }
+
+                if ($location.absUrl().indexOf('manage') > -1) // return admin or owners dash
+                  q['meta.createdBy']=$scope.user.userID;
+
+                if($scope.filter.status==='all')
+                  q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
+
+                return q;
+
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function subjectsCVS(subjects) {
+              if(!subjects || !_.isArray(subjects)) return '';
+              var returnString ='';
+
+              subjects.forEach(function(sub,index){
+
+
+                if(!_.isObject(sub))
+                  returnString+=sub;
+                else
+                  returnString+=sub.identifier;
+
+                if(index<subjects.length-1)
+                     returnString+=', ';
+
+              });
+
+              return returnString;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function meetingsCVS(row) {
+
+              if(!row.meetings || !_.isArray(row.meetings)) return;
+              var returnString ='';
+
+              var confObj = _.find($scope.options.conferences,{'_id':row.conference});
+              if(!confObj) throw 'Error: no confrence for side-event';
+
+              row.meetings.forEach(function(meetingId,index){
+                var meetingObj = _.find(confObj.meetings,{'_id':meetingId});
+                  returnString+=meetingObj.EVT_CD;
+                  if(index<row.meetings.length-1)
+                     returnString+=', ';
+              });
+
+              return returnString;
+            }
+            //=======================================================================
+            //
+            //=======================================================================
+            function preferredDatesCVS(row) {
+              if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
+              return row.prefDate.one+' ['+row.prefDateTime.one+'], '+row.prefDate.two+' ['+row.prefDateTime.two+'], '+row.prefDate.three+' ['+row.prefDateTime.three+']';
+            }
+            //=======================================================================
+            //
+            //=======================================================================
+            function requirementsCVS(reqs) {
+                var returnString ='';
+                if(!reqs || _.isEmpty(reqs)) return '';
+
+                _.each(reqs,function(req,index){
+                  if(req)
+                    returnString += index+', ';
+                });
+              returnString=returnString.slice(0, -2);
+              return returnString;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function hostOrgsCVS(hostOrgs) {
+
+              var returnString ='';
+              if(!hostOrgs || _.isEmpty(hostOrgs)) return '';
+
+              _.each(hostOrgs,function(org){
+                  if(!org) return;
+
+                  var orgObj = _.find($scope.orgs,{'_id':org});
+                  if(!orgObj) return returnString += 'Unaproved Org,';
+
+                  if(org.length===2)
+                    returnString += orgObj.title+', ';
+                  else
+                    returnString += orgObj.acronym+', ';
+
+
+              });
+              returnString=returnString.slice(0, -2);
+              return returnString;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function contactCVS(contact) {
+              var returnString ='';
+              if(!contact || _.isEmpty(contact)) return '';
+
+              returnString = (contact.personalTitle || '')+' '+(contact.firstName|| '')+' '+contact.lastName+' '+' '+(contact.jobTitle|| '')+' '+contact.email;
+              returnString +=contact.phone+', mobile:'+contact.mobile+' '+contact.address+', '+contact.city+', '+contact.state+', '+contact.zip+', '+$filter('country')(contact.country);//+' '+
+              return returnString;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function resPersonCVS(responsible) {
+                if(!responsible || _.isEmpty(responsible)) return;
+              return (responsible.personalTitle|| '')+' '+(responsible.firstName|| '')+' '+responsible.lastName+', '+responsible.email;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function orgContactsCVS(row) {
+              var  returnString='';
+              if(!row.responsibleOrgs || _.isEmpty(row.responsibleOrgs)) return '';
+  //console.log(row.responsibleOrgs);
+              row.responsibleOrgs.forEach(function(resOrg,index){
+                  if(!resOrg) return;
+                  var orgObj = _.find($scope.orgs,{'_id':row.hostOrgs[index]});
+                  if(!orgObj){
+                    orgObj={};
+                    orgObj.nameToUse = "Unaproved Org.";
+                  }else
+                    orgObj.nameToUse = orgObj.acronym || orgObj.title;
+//console.log(resOrg);
+                  returnString += orgObj.nameToUse+': '+(resOrg.personalTitle || '')+' '+(resOrg.firstName || '')+' '+resOrg.lastName+' '+resOrg.email+', ';
+              });
+                returnString=returnString.slice(0, -2);
+              return returnString;
+            }
+            //=======================================================================
+            //
+            //=======================================================================
+            function createdCVS(meta) {
+              if(!meta.createdByObj || _.isEmpty(meta.createdByObj)) return '';
+              return (meta.createdByObj.firstName || '')+' '+meta.createdByObj.lastName+' '+meta.createdByObj.email+', '+moment(meta.createdOn).format('DD-MM-YYYY hh:mm')  ;
+            }
+            //=======================================================================
+            //
+            //=======================================================================
+            function modifiedCVS(meta) {
+              if(!meta.modifiedByObj || _.isEmpty(meta.modifiedByObj)) return '';
+              return (meta.modifiedByObj.firstName || '')+' '+meta.modifiedByObj.lastName+' '+meta.modifiedByObj.email+', '+moment(meta.modifiedOn).format('DD-MM-YYYY hh:mm')  ;
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function cleanCell(cell) {
+
+              return jQuery($.parseHTML(jQuery.trim(cell))).text().replace(/(\r\n|\n|\r|\t)/gm,"") || '';
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function cvsRow(row) {
+
+              var cvsRow = [];
+              //mongoStorage.getCountries().then{function(res){$scope.options.countries}}
+              cvsRow.push(row.id);
+              cvsRow.push(cleanCell(row.meta.status));
+              cvsRow.push(cleanCell(row.title));
+              cvsRow.push(cleanCell(subjectsCVS(row.subjects)));
+              cvsRow.push(cleanCell(row.description));
+              cvsRow.push(cleanCell(row.conferenceObj.Title.en));
+              cvsRow.push(cleanCell(meetingsCVS(row)));
+              cvsRow.push(cleanCell(row.expNumPart));
+              cvsRow.push(cleanCell(preferredDatesCVS(row)));
+              cvsRow.push(cleanCell(requirementsCVS(row.requirements)));
+              cvsRow.push(cleanCell(hostOrgsCVS(row.hostOrgs)));
+              cvsRow.push(cleanCell(contactCVS(row.contact)));
+              cvsRow.push(cleanCell(resPersonCVS(row.responsible)));
+              cvsRow.push(cleanCell(orgContactsCVS(row)));
+              cvsRow.push(cleanCell(createdCVS(row.meta)));
+              cvsRow.push(cleanCell(modifiedCVS(row.meta)));
+              cvsRow.push(cleanCell(row.meta.version));
+
+              cvsRow.forEach(function(i){
+                i=_.escape(i);
+              });
+
+              $scope.cvsData.push(_.join(cvsRow,'\t'));
+            }
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function cvsExport() {
+
+              var q = buildQuery ();
+              $scope.exporting=true;
+              return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort).then(
+                function(responce){
+                    var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Conference','Meetings','# Participants',
+                                        'Preferred Dates','Requirements','Host Organizations','Contact','Responsible Person',
+                                        'Org Contacts','Created','Modified','History'];
+                    $scope.cvsDataRaw=responce.data;
+                    $scope.cvsData=[];
+                    $scope.cvsData.push(_.join(cvsRowHeader,'\t'));
+
+                    injectOrgData($scope.cvsDataRaw);
+                    return injectUserData($scope.cvsDataRaw).then(function(){
+                        $scope.cvsDataRaw.forEach(cvsRow);
+                    });
+
+
+                }
+              ).then(function(){return _.join($scope.cvsData,'\r\n');}).catch(onError);
+
+            } //submitGeneral
+            $scope.cvsExport = cvsExport;
             //=======================================================================
             //
             //=======================================================================
@@ -381,79 +627,66 @@ define(['app', 'lodash',
                 $scope.loading = true;
 
                 return $q.all([loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
-                    var loadDocsFunc = mongoStorage.loadDocs;
+                    var q = buildQuery ();
 
-                    if ($location.absUrl().indexOf('manage') > -1)
-                        loadDocsFunc = mongoStorage.loadOwnerDocs;
-
-
-                    var q = {
-                      conference:$scope.filter.conference,
-                      'meta.status':$scope.filter.status,
-                    };
-
-                    if($scope.search)  q['$text']= {'$search':$scope.search};  // jshint ignore:line
-
-                    if(!_.isEmpty($scope.options.filter.hostOrgsSelected))  {
-                      q['$and']=[];// jshint ignore:line
-                      $scope.options.filter.hostOrgsSelected.forEach(
-
-                        function(item){
-                            q['$and'].push({'hostOrgs':item});// jshint ignore:line
-                        }
-                      );
-                    //  q['$and']= {'$and':$scope.options.filter.hostOrgsSelected};  // jshint ignore:line
-
-                    }
-
-                    if($scope.filter.status==='all')
-                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
-
-
-                    return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1,$scope.sort).then(function(response) {
-
-                      $scope.docs = response.data;
-                      $scope.count = response.count;
-                      if($scope.isAdmin()){
-                        if(!$scope.users) $scope.users=[];
-
-                         _.each($scope.docs, function(doc) {
-                              $scope.users.push(doc.meta.createdBy);
-                              $scope.users.push(doc.meta.modifiedBy);
-                        });
-                        $scope.users=_.uniq($scope.users);
-                        if(!_.isEmpty($scope.users))
-                        $http.get('/api/v2013/userinfos?query='+JSON.stringify({userIDs:$scope.users})).then(function(res){
-                            _.each($scope.docs, function(doc) {
-                                 if(!_.find(res.data,{userID:doc.meta.createdBy})) throw 'User not found : '+doc.meta.createdBy;
-                                 doc.meta.createdByObj=_.find(res.data,{userID:doc.meta.createdBy});
-
-                                 if(!_.find(res.data,{userID:doc.meta.modifiedBy})) throw 'User not found : '+doc.meta.modifiedBy;
-                                 doc.meta.modifiedByObj=_.find(res.data,{userID:doc.meta.modifiedBy});
-                           });
-                       });
-                        //'UserID'
-                      }
-
-                        populateDocsWithOrgObjs();
-
-                        if(_.isEmpty($scope.options.filter.hostOrgs))
-                          loadOrgsFilter(loadDocsFunc,q);
-
-
-                        $scope.statusFacits =  response.facits;
+                    return mongoStorage.loadDocs($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1,$scope.sort).then(function(response) {
+                        loadListPostProcess (response);
                         refreshPager(pageIndex);
                         $scope.loading=false;
                     });
                 });
             } // archiveOrg
 
+
             //=======================================================================
             //
             //=======================================================================
-            function populateDocsWithOrgObjs() {
+            function loadListPostProcess (response) {
 
-                  _.each($scope.docs, function(doc) {
+                      $scope.docs = response.data;
+                      $scope.count = response.count;
+
+                      injectUserData($scope.docs);
+                      injectOrgData($scope.docs);
+
+                      if(_.isEmpty($scope.options.filter.hostOrgs))
+                          loadOrgsFilter(buildQuery());
+
+                      $scope.statusFacits =  response.facits;
+            } // loadListPostProcess
+
+            //=======================================================================
+            // import created by and modified by adta for admins
+            //=======================================================================
+            function injectUserData(docs) {
+
+              if($scope.isAdmin()){
+                if(!$scope.users) $scope.users=[];
+
+                 _.each(docs, function(doc) {
+                      $scope.users.push(doc.meta.createdBy);
+                      $scope.users.push(doc.meta.modifiedBy);
+                });
+                $scope.users=_.uniq($scope.users);
+                if(!_.isEmpty($scope.users))
+                return $http.get('/api/v2013/userinfos?query='+JSON.stringify({userIDs:$scope.users})).then(function(res){
+                    _.each(docs, function(doc) {
+                         if(!_.find(res.data,{userID:doc.meta.createdBy})) throw 'User not found : '+doc.meta.createdBy;
+                         doc.meta.createdByObj=_.find(res.data,{userID:doc.meta.createdBy});
+
+                         if(!_.find(res.data,{userID:doc.meta.modifiedBy})) throw 'User not found : '+doc.meta.modifiedBy;
+                         doc.meta.modifiedByObj=_.find(res.data,{userID:doc.meta.modifiedBy});
+                   });
+               });
+              }
+            } //importUserData
+
+            //=======================================================================
+            //
+            //=======================================================================
+            function injectOrgData(docs) {
+
+                  _.each(docs, function(doc) {
                       doc.orgs = [];
 
                       var foundOrg;
@@ -492,8 +725,8 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            function loadOrgsFilter(loadDocsFunc,q) {
-                  loadDocsFunc($scope.schema,_.clone(q), 0,1000000,1,$scope.sort).then(
+            function loadOrgsFilter(q) {
+                  mongoStorage.loadDocs($scope.schema,_.clone(q), 0,1000000,1,$scope.sort).then(
                     function(r){
 
                       if(!$scope.options.filter.hostOrgs)$scope.options.filter.hostOrgs=[];
@@ -509,7 +742,7 @@ define(['app', 'lodash',
                           });
                     });
                   });
-            } //toggleListView
+            } //loadOrgsFilter
             //=======================================================================
             //
             //=======================================================================
@@ -632,7 +865,7 @@ define(['app', 'lodash',
                 $scope.status = "error";
                 if (res.status === -1) {
                     $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
-                    if (res.data.message)
+                    if (es.data &&res.data.message)
                         $scope.error += " Message Detail: " + res.data.message;
                 }
                 if (res.status == "notAuthorized") {
