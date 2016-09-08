@@ -19,14 +19,8 @@ define(['app','lodash','services/locale'], function(app,_) {
           if(!countries) throw 'Error no countries loaded';
           if(country)
               return country.name[locale];
-          else{
-            console.log('no country found',text);
-            console.log('no country found',countries);
+          else
             return 'NO COUNTRY FOUND';
-          }
-
-
-
   	};
   }]);
 });
