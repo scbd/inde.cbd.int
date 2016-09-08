@@ -48,7 +48,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                                                 if (res.sideEvent) {
                                                     res.sideEvent.orgs = [];
                                                     _.each(res.sideEvent.hostOrgs, function(org) {
-                                                        res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                                        res.sideEvent.orgs.push(_.find(allOrgs, {
                                                             '_id': org
                                                         })); // findWhere
 
@@ -170,7 +170,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                         res.conf = conf;
                         if (res.link && res.link._id && res.sideEvent && res.sideEvent.meta.status === 'published') {
 
-                            if (!_.findWhere(conf.times, {
+                            if (!_.find(conf.times, {
                                     'title': res.tier.title
                                 }))
 
@@ -180,7 +180,7 @@ define(['app', 'lodash', 'jquery', 'moment',
                                     'title': res.tier.title
                                 });
 
-                            if (!_.findWhere(conf.days, {
+                            if (!_.find(conf.days, {
                                     'value': res.daySeconds
                                 }))
                                 conf.days.push({

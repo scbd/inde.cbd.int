@@ -53,7 +53,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
 
                             res.sideEvent.orgs = [];
                             _.each(res.sideEvent.hostOrgs, function(org) {
-                                res.sideEvent.orgs.push(_.findWhere(allOrgs, {
+                                res.sideEvent.orgs.push(_.find(allOrgs, {
                                     '_id': org
                                 })); // findWhere
                             }); // each

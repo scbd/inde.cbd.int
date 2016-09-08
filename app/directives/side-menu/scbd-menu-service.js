@@ -23,7 +23,7 @@ define(['app','lodash'],function(app,_) {
       //============================================================
       function validateMenus() {
         _.each(menus, function(menu) {
-          var config = _.findWhere(menu, {
+          var config = _.find(menu, {
             'type': 'config'
           });
           _.each(menu, function(menuItem) {
