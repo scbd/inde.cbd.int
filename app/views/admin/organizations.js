@@ -239,18 +239,19 @@ define(['app', 'lodash',
             function loadList (pageIndex) {
                 $scope.loading=true;
                 var loadDocsFunc = mongoStorage.loadDocs;
-
+                var q ={};
                 if ($location.absUrl().indexOf('manage') > -1)
                     loadDocsFunc = mongoStorage.loadOwnerDocs;
-                    var q = {
-                      conference:$scope.filter.conference,
-                      'meta.status':$scope.filter.status,
-                    };
+                    if($scope.filter.status) q['meta.status']=$scope.filter.status;// jshint ignore:line
 
-                    if($scope.search)  q['$text']= {'$search':$scope.search};
 
-                    if($scope.filter.status==='all')
-                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
+                    if($scope.search)
+                        q['$text'] = {'$search':$scope.search};  // jshint ignore:line
+                      //q['$or'] = [{'acronym':{'$regex': $scope.search}},{'title':{'$regex': '/'+$scope.search+'/'}}];  // jshint ignore:line
+
+
+                   if($scope.filter.status==='all')
+                     q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']}; // jshint ignore:line
 
                 return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
                     $scope.docs = response.data;
