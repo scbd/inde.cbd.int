@@ -16,10 +16,11 @@ define(['app', 'lodash',
     'ng-ckeditor',
     'ui.select',
     'filters/propsFilter',
-    'directives/google-address'
+    'directives/google-address',
+    'services/reloader'
 ], function(app, _, template, moment, dialogTemplate) {
-    app.directive("editSideEvent", [ '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus', //"$http", "$filter", "Thesaurus",
-        function( $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus) {
+    app.directive("editSideEvent", [ '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus','$routeParams','reloader', //"$http", "$filter", "Thesaurus",
+        function( $q, $http, $filter, $route, mongoStorage, $location, auth, $window, ngDialog, $compile, $timeout, smoothScroll, history, $rootScope, Thesaurus,$routeParams,reloader) {
             return {
                 restrict: 'E',
                 template: template,
@@ -517,7 +518,7 @@ define(['app', 'lodash',
                                         mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
 
                                             $scope.loading = true;
-                                            $scope._id = document._id;
+                                            //$scope._id = document._id;
                                             $scope.doc = document;
                                             $scope.isNew = false;
                                             if (!$scope.doc.hostOrgs)
@@ -577,19 +578,10 @@ define(['app', 'lodash',
                                             if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
                                             if (!$scope.doc.prefDate)$scope.doc.prefDate={};
 
-                                      if($location.search().c)
-                                      _.each($scope.options.conferences, function(conf) {
-                                          if (conf._id === $location.search().c)
-                                            {  conf.selected = true;
-                                              $scope.doc.conference=conf._id;}
-                                          else
-                                              conf.selected = false;
 
-                                      });
-                                      else{
                                         $scope.doc.conference=$scope.options.conferences[0]._id;
                                         $scope.options.conferences[0].selected=true;
-                                      }
+
                                       $scope.preFill=false;
                                       $scope.loading=false;
                                 }
@@ -752,7 +744,15 @@ define(['app', 'lodash',
                           $scope.ignoreDirtyCheck=true;
                           mongoStorage.loadDoc('inde-side-events',$scope._id).then(
                             function(res){
+                              //$location.url('/manage/events/'+$scope._id,true);
+                              $scope.routeParams = $scope._id;
                               $location.url('/manage/events/'+$scope._id);
+                              reloader.preventReload($scope, function(newParams) {
+                                 $scope.routeParams = $scope._id;
+                                 $routeParams=$scope._id;
+
+                              });
+                              $scope.doc=res;
                               var tempFile=getTempFile();
 
                                 if(!_.isEmpty(tempFile))
