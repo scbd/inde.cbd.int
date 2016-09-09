@@ -81,7 +81,7 @@ define(['app', 'lodash',
                             if(!$scope.doc.meta) $scope.doc.meta={};
                             var tempFile=getTempFile();
                             $scope.doc.meta.status = 'draft';
-                            mongoStorage.save('inde-orgs', $scope.doc, $scope._id).then(function(d) {
+                            return mongoStorage.save('inde-orgs', $scope.doc, $scope._id).then(function(d) {
                                 if(!$scope._id){
                                   $scope.$emit('showSuccess', 'Organization Created');
                                   $scope._id=d.data.id;
