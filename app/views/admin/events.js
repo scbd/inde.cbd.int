@@ -49,6 +49,8 @@ define(['app', 'lodash',
 
               }
             },true);
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -67,6 +69,8 @@ define(['app', 'lodash',
 
             } //init
 
+
+
             //==============================
             //
             //==============================
@@ -76,6 +80,8 @@ define(['app', 'lodash',
                       ($scope.user.userID===doc.meta.createdBy && !isPastConfrence(doc.conference)) ;
             }
             $scope.isEditable= isEditable;
+
+
 
             //==============================
             //
@@ -91,6 +97,8 @@ define(['app', 'lodash',
                    return true;
 
             }
+
+
             //======================================================
             //
             //
@@ -136,6 +144,8 @@ define(['app', 'lodash',
             $scope.isActive = function(index) {
                 return ($scope.currentPage===(index));
             };
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -147,9 +157,8 @@ define(['app', 'lodash',
                   else
                     doc.truncate=300;
                 });
-
-
             };
+
 
             //=======================================================================
             //
@@ -323,7 +332,6 @@ define(['app', 'lodash',
             };
 
 
-
             //=======================================================================
             //
             //=======================================================================
@@ -359,6 +367,7 @@ define(['app', 'lodash',
                 });
             }
 
+
             //============================================================
             //
             //============================================================
@@ -374,18 +383,22 @@ define(['app', 'lodash',
                 }).catch(onError);
             }
 
+
             //=======================================================================
             //
             //=======================================================================
             function buildQuery () {
+                var q = {};
 
+                if($scope.filter.conference) q.conference=$scope.filter.conference;
+                if($scope.filter.status) q['meta.status']=$scope.filter.status;// jshint ignore:line
 
-                var q = {
-                  conference:$scope.filter.conference,
-                  'meta.status':$scope.filter.status,
-                };
-
-                if($scope.search)  q['$text']= {'$search':$scope.search};  // jshint ignore:line
+                if($scope.search){
+                    if(!Number($scope.search))
+                      q['$text'] = {'$search':$scope.search};  // jshint ignore:line
+                    else
+                      q.id = Number($scope.search);  // jshint ignore:line
+                }
 
                 if(!_.isEmpty($scope.options.filter.hostOrgsSelected))  {
                   q['$and']=[];// jshint ignore:line
@@ -404,8 +417,8 @@ define(['app', 'lodash',
                   q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
 
                 return q;
-
             }
+
 
             //=======================================================================
             //
@@ -415,8 +428,6 @@ define(['app', 'lodash',
               var returnString ='';
 
               subjects.forEach(function(sub,index){
-
-
                 if(!_.isObject(sub))
                   returnString+=sub;
                 else
@@ -424,11 +435,10 @@ define(['app', 'lodash',
 
                 if(index<subjects.length-1)
                      returnString+=', ';
-
               });
-
               return returnString;
             }
+
 
             //=======================================================================
             //
@@ -450,6 +460,8 @@ define(['app', 'lodash',
 
               return returnString;
             }
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -457,6 +469,8 @@ define(['app', 'lodash',
               if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
               return row.prefDate.one+' ['+row.prefDateTime.one+'], '+row.prefDate.two+' ['+row.prefDateTime.two+'], '+row.prefDate.three+' ['+row.prefDateTime.three+']';
             }
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -471,6 +485,7 @@ define(['app', 'lodash',
               returnString=returnString.slice(0, -2);
               return returnString;
             }
+
 
             //=======================================================================
             //
@@ -490,12 +505,11 @@ define(['app', 'lodash',
                     returnString += orgObj.title+', ';
                   else
                     returnString += orgObj.acronym+', ';
-
-
               });
               returnString=returnString.slice(0, -2);
               return returnString;
             }
+
 
             //=======================================================================
             //
@@ -509,6 +523,7 @@ define(['app', 'lodash',
               return returnString;
             }
 
+
             //=======================================================================
             //
             //=======================================================================
@@ -517,13 +532,13 @@ define(['app', 'lodash',
               return (responsible.personalTitle|| '')+' '+(responsible.firstName|| '')+' '+responsible.lastName+', '+responsible.email;
             }
 
+
             //=======================================================================
             //
             //=======================================================================
             function orgContactsCVS(row) {
               var  returnString='';
               if(!row.responsibleOrgs || _.isEmpty(row.responsibleOrgs)) return '';
-  //console.log(row.responsibleOrgs);
               row.responsibleOrgs.forEach(function(resOrg,index){
                   if(!resOrg) return;
                   var orgObj = _.find($scope.orgs,{'_id':row.hostOrgs[index]});
@@ -532,12 +547,14 @@ define(['app', 'lodash',
                     orgObj.nameToUse = "Unaproved Org.";
                   }else
                     orgObj.nameToUse = orgObj.acronym || orgObj.title;
-//console.log(resOrg);
+
                   returnString += orgObj.nameToUse+': '+(resOrg.personalTitle || '')+' '+(resOrg.firstName || '')+' '+resOrg.lastName+' '+resOrg.email+', ';
               });
                 returnString=returnString.slice(0, -2);
               return returnString;
             }
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -545,6 +562,8 @@ define(['app', 'lodash',
               if(!meta.createdByObj || _.isEmpty(meta.createdByObj)) return '';
               return (meta.createdByObj.firstName || '')+' '+meta.createdByObj.lastName+' '+meta.createdByObj.email+', '+moment(meta.createdOn).format('DD-MM-YYYY hh:mm')  ;
             }
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -553,6 +572,7 @@ define(['app', 'lodash',
               return (meta.modifiedByObj.firstName || '')+' '+meta.modifiedByObj.lastName+' '+meta.modifiedByObj.email+', '+moment(meta.modifiedOn).format('DD-MM-YYYY hh:mm')  ;
             }
 
+
             //=======================================================================
             //
             //=======================================================================
@@ -560,6 +580,7 @@ define(['app', 'lodash',
 
               return jQuery($.parseHTML(jQuery.trim(cell))).text().replace(/(\r\n|\n|\r|\t)/gm,"") || '';
             }
+
 
             //=======================================================================
             //
@@ -593,6 +614,7 @@ define(['app', 'lodash',
               $scope.cvsData.push(_.join(cvsRow,'\t'));
             }
 
+
             //=======================================================================
             //
             //=======================================================================
@@ -620,6 +642,8 @@ define(['app', 'lodash',
 
             } //submitGeneral
             $scope.cvsExport = cvsExport;
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -655,6 +679,7 @@ define(['app', 'lodash',
                       $scope.statusFacits =  response.facits;
             } // loadListPostProcess
 
+
             //=======================================================================
             // import created by and modified by adta for admins
             //=======================================================================
@@ -680,6 +705,7 @@ define(['app', 'lodash',
                });
               }
             } //importUserData
+
 
             //=======================================================================
             //
@@ -721,7 +747,9 @@ define(['app', 'lodash',
                           }));
                       });
                   });
-            } //toggleListView
+            } //
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -742,7 +770,9 @@ define(['app', 'lodash',
                           });
                     });
                   });
-            } //loadOrgsFilter
+            } //
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -754,6 +784,7 @@ define(['app', 'lodash',
 
             };
 
+
             //=======================================================================
             //
             //=======================================================================
@@ -761,6 +792,8 @@ define(['app', 'lodash',
 
                 $scope.sort= {name:direction};
             };
+
+
             //=======================================================================
             //
             //=======================================================================
@@ -795,8 +828,6 @@ define(['app', 'lodash',
                 delete(cDoc.meta.createdByObj);
                 return cDoc;
             } //toggleListView
-
-
 
 
             //=======================================================================
@@ -865,7 +896,7 @@ define(['app', 'lodash',
                 $scope.status = "error";
                 if (res.status === -1) {
                     $scope.error = "The URI " + res.config.url + " could not be resolved.  This could be caused form a number of reasons.  The URI does not exist or is erroneous.  The server located at that URI is down.  Or lastly your internet connection stopped or stopped momentarily. ";
-                    if (es.data &&res.data.message)
+                    if (res.data &&res.data.message)
                         $scope.error += " Message Detail: " + res.data.message;
                 }
                 if (res.status == "notAuthorized") {
