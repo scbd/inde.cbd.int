@@ -413,7 +413,7 @@ define(['app', 'lodash',
 
                             $scope.ignoreDirtyCheck = true;
                             $scope.doc.meta.status = 'request';
-                            return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+                            return mongoStorage.save($scope.schema, cleanDoc($scope.doc), $scope._id).then(function() {
 
                                 $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' is Now Registered as a Request');
                                 _.each($scope.doc.hostOrgs, function(org) {
@@ -724,15 +724,26 @@ define(['app', 'lodash',
                             validateTabs();
                             if (!$scope.doc.id || !$scope._id) {
 
-                                return mongoStorage.save($scope.schema, $scope.doc)
+                                return mongoStorage.save($scope.schema, cleanDoc($scope.doc))
                                   .then(postSaveNewDoc)
                                     .catch(onError);
                             } else
-                                return mongoStorage.save($scope.schema, $scope.doc, $scope._id).then(function() {
+                                return mongoStorage.save($scope.schema, cleanDoc($scope.doc), $scope._id).then(function() {
                                     $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' Saved as Draft');
                                 }).catch(onError);
                         };
 
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function cleanDoc(doc) {
+                            var cDoc = _.cloneDeep(doc);
+                            delete(cDoc.subjectObjs);
+                            delete(cDoc.conferenceObjs);
+                            delete(cDoc.meetingObjs);
+                            delete(cDoc.history);
+                            return cDoc;
+                        } //toggleListView
 
                         //=======================================================================
                         //
