@@ -752,6 +752,33 @@ border-top-color: transparent !important;
                 </div>
               </div>
 
+              <div class="row" style="margin-top:10px;">
+                <div ng-show="msg" class="col-xs-12 alert alert-success alert-dismissable">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
+                  <strong>{{msg}}</strong>
+                </div>
+                <div ng-show="registerAlert" class="col-xs-12 alert alert-danger alert-dismissable" ng-if="resubmitWarning()">
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+                  WARNING: the changes you have made require you to re-validate and re-submit your request, otherwise it will not be considered for scheduling.
+                </div>
+                <div ng-if="editForm.$invalid  && editForm.$submitted" class="col-xs-12 alert alert-danger alert-dismissable" >
+                              <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
+                  WARNING: You have critical errors or missing information in your form preventing your side event form being submitted.
+                  <div ng-repeat="err in editForm.$error.required" ng-if="err.$name!=='editLinkForm'">
+                      <a ng-click="goToError(errorMap[err.$name].tab,err.$name)" style="cursor:pointer;">{{errorMap[err.$name].label}}</a>
+
+                  </div>
+                </div>
+                <div class="alert alert-danger" ng-show="hasError()">
+                  <strong>Error as occured...</strong>
+                  <div>{{error}}</div>
+                </div>
+
+                <div ng-show="loading" class="text-center">
+                  <i class="fa fa-spinner fa-spin fa-3x"></i> <span style="font-size:18px;">Loading...</span>
+                </div>
+              </div>
+
               <div class="row" style="padding-top:20px;">
 
                 <div class="col-lg-6   col-xs-12 text-nowrap">
