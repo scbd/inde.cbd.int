@@ -491,13 +491,7 @@ define(['app', 'lodash',
                         }
                         $scope.showTab=showTab;
 
-// function hackActive(){
-//   $timeout(function(){
-//     console.log($('ui-select-choices-row'));
-//     $('ui-select-choices-row').removeClass('active');
-//   },1000);
-// }
-// $scope.hackActive=hackActive;
+
                         //============================================================
                         //
                         //============================================================
@@ -779,8 +773,7 @@ define(['app', 'lodash',
                       //=======================================================================
                       function getTempFile(){
                         if(!_.isEmpty($scope.doc.tempFile)){
-                          var tempFile=$scope.doc.tempFile;
-
+                            var tempFile=$scope.doc.tempFile;
                             delete($scope.doc.tempFile);
                             return tempFile;
                         }else
