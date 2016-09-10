@@ -235,9 +235,7 @@ define(['app', 'lodash',
                                 if (ret.value === 'draft') $scope.saveDoc().then(function() {
                                     $scope.goTo('/manage');
                                 });
-                                if (ret.value === 'publish') $scope.requestPublish().then(function() {
-                                    $scope.goTo('/manage');
-                                }).catch(onError);
+                                if (ret.value === 'publish') $scope.requestPublish().catch(onError);
 
                             });
                         };
