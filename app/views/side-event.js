@@ -10,7 +10,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         };
     });
 
-    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication', function(mongoStorage, $route, $http, $sce, $location, $q, auth) {
+    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter', function(mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter) {
 
         var _ctrl = this;
         var allOrgs;
@@ -39,8 +39,13 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         function loadEditPermisions(doc) {
             return auth.getUser().then(
               function(u){
-                  editable = (_.intersection(['Administrator', 'IndeAdministrator'], u.roles).length > 0 ) ||
-                  (u.userID===doc.meta.createdBy && !isPastConfrence(doc.conference)) ;
+                  if(doc && doc.meta)
+                    editable = (_.intersection(['Administrator', 'IndeAdministrator'], u.roles).length > 0 ) ||
+                    (u.userID===doc.meta.createdBy && !isPastConfrence(doc.conference)) ;
+                  else
+                    editable =  false;
+
+                  return editable ;
               }
             );
         }
@@ -114,9 +119,16 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         //==============================
         function loadDoc() {
             var _id = $route.current.params.id;
+            var returnUri = $window.encodeURIComponent($window.location.href);
+
             return mongoStorage.loadDoc('inde-side-events', _id).then(function(se) {
                 _ctrl.doc = se;
                 _ctrl.doc.orgs = [];
+            }).catch(function(error){
+
+              if(error.status===403){
+                  $window.location.href = devRouter.ACCOUNTS_URI+'/signin?returnUrl=' + returnUri;  // force sign in
+              }
             });
         }
 

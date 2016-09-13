@@ -17,6 +17,7 @@ define(['app', 'jquery',
         });
 
         $scope.$on("$routeChangeSuccess", function(evt, current) {
+          if(current.$$route)
             $("head > title").text(current.$$route.label || "Side Event Registration");
         });
 

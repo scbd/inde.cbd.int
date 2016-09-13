@@ -73,7 +73,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 function(isModified) {
                     modified = (!localStorage.getItem('allConferences') || isModified || force);
                     var params = {};
-                    if (modified) {
+                    if (isModified) {
                         params = {
                             q: {}
                           };
@@ -84,7 +84,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                               var oidArray = [];
                               conferences=res.data;
                               numPromises+=conferences.length;
-                              _.each(conferences,function(conf,key){
+                              _.each(conferences,function(conf){
                                 oidArray=[];
                                       _.each(conf.MajorEventIDs, function(id) {
                                           oidArray.push({
@@ -101,9 +101,10 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                                               }
                                           }
                                       }).then(function(m) {
-                                          conferences[key].meetings = m.data;
+                                          conf.meetings = m.data;
                                       }));
                               });
+
                           });
 
                     } else{
