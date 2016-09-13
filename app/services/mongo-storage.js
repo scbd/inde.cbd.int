@@ -73,7 +73,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 function(isModified) {
                     modified = (!localStorage.getItem('allConferences') || isModified || force);
                     var params = {};
-                    if (isModified) {
+                    if (modified) {
                         params = {
                             q: {}
                           };
