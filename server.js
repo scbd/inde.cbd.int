@@ -20,14 +20,16 @@ app.set('port', process.env.PORT || 2050);
 // CONFIGURE /APP/* ROUTES
 
 app.use('/app',   require('serve-static')(__dirname + '/app_build'));
-app.use('/app',   require('serve-static')(__dirname + '/app'));
+app.use('/app',   require('serve-static')(__dirname + '/app', { maxAge: 0 }));
 app.all('/api/*', (req, res) => proxy.web(req, res, { target: 'https://api.cbddev.xyz', changeOrigin: true, secure:false }));
-
 //app.all('/app/*', function(req, res) { res.status(404).send(); } );
 
 // CONFIGURE TEMPLATE
-
-app.get('/*', function (req, res) { res.render('template', { baseUrl: req.headers.base_url || '/' }); });
+app.get('/*', function (req, res) {
+	res.cookie('VERSION', process.env.VERSION);
+	res.setHeader('Cache-Control', 'public, max-age=0');
+	res.render('template', { baseUrl: req.headers.base_url || '/' });
+});
 
 // START SERVER
 
