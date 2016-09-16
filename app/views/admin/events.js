@@ -606,8 +606,9 @@ define(['app', 'lodash',
               cvsRow.push(row.id);
               cvsRow.push(cleanCell(row.meta.status));
               cvsRow.push(cleanCell(row.title));
-              cvsRow.push(cleanCell(subjectsCVS(row.subjects)));
               cvsRow.push(cleanCell(row.description));
+              cvsRow.push(cleanCell(subjectsCVS(row.subjects)));
+
               //cvsRow.push(cleanCell(row.conferenceObj.Title.en));
               cvsRow.push(cleanCell(meetingsCVS(row)));
               cvsRow.push(cleanCell(row.expNumPart));
