@@ -624,7 +624,10 @@ define(['app', 'lodash',
               cvsRow.push(cleanCell(createdCVS(row.meta)));
               cvsRow.push(cleanCell(modifiedCVS(row.meta)));
               cvsRow.push(cleanCell(row.meta.version));
-              cvsRow.push(cleanCell('   '));
+              if(row.requirements && row.requirements.other)
+                  cvsRow.push(cleanCell(row.requirements.other));
+              else
+                  cvsRow.push(cleanCell('   '));
               cvsRow.forEach(function(i){
                 i=_.escape(i);
               });
