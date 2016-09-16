@@ -70,7 +70,7 @@
 
         </span>
 
-          <button class="btn btn-default btn-sm pull-right" type="button" ng-click="search='';"><i class="fa fa-plus" ></i> Add New</button>
+          <!-- <button class="btn btn-default btn-sm pull-right" type="button" ng-click="search='';"><i class="fa fa-plus" ></i> Add New</button> -->
         <div class="clearfix"></div>
       </div>
 
@@ -105,8 +105,8 @@
           <div class="col-lg-2 col-md-2 col-xs-12">
               <div class=" pull-right">
                   <!-- <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button> -->
-                  <button class="btn btn-default btn-xs" ng-click="detailView=!detailView"><span ng-show="!detailView" ><i class="fa fa-list-alt" aria-hidden="true"></i> Details</span><span ng-show="detailView"><i class="fa fa-list" aria-hidden="true"></i> List View</span></button>
-                  <button  class="btn btn-default btn-xs" ng-click="expandDesc();" ng-if="detailView"><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll"><i class="fa fa-compress" aria-hidden="true"></i> Compress </span></button>
+                  <button class="btn btn-default btn-xs" ng-click="detailView=!detailView" ng-if="isAdmin()"><span ng-show="!detailView" ><i class="fa fa-list-alt" aria-hidden="true"></i> Details</span><span ng-show="detailView"><i class="fa fa-list" aria-hidden="true"></i> List View</span></button>
+                  <button  class="btn btn-default btn-xs" ng-click="expandDesc();" ng-if="detailView" ><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll"><i class="fa fa-compress" aria-hidden="true"></i> Compress </span></button>
                   <button cvs-exporter build-file="cvsExport()" class="btn btn-default btn-xs" ng-if="isAdmin()"> <i class="fa fa-download" aria-hidden="true"></i><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export</button>
 
               </div>

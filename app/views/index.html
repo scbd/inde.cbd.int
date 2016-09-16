@@ -24,15 +24,26 @@
       <div class="clearfix"></div>
     </div>
   </div>
-  <div class="bs-callout bs-callout-danger">
-    Registration is closing  <strong> September 15th 23:59 (EDT)</strong> , 2016 for COP-13 / COP-MOP-8 / COP-MOP-2.
-  </div>
+  
+    <div class="row">
+        <div>&nbsp;</div>
+        <div class="col-xs-8 col-xs-offset-2">
+            <div class="bs-callout bs-callout-danger">
+                <br>
+                <br> Side-Event registration <strong>is now closed</strong> ,for 2016 for COP-13 / COP-MOP-8 / COP-MOP-2.
+                <br>
+                <br>
+            </div>
+        </div>
+        <div>&nbsp;</div>
+    </div>
+
 
   <div class="alert alert-danger" ng-show="hasError()">
     <strong>Error as occured...</strong>
     <div>{{error}}</div>
   </div>
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="con in filCon = (conferences )">
 
       <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
@@ -43,9 +54,9 @@
         <div class="panel-body text-center" style="min-height:110px">
           <div class="btn-group-vertical">
             <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button>
-            <!-- <button class="btn btn-sm btn-info disabled">Register a Side Event (under maintenance 2 hours)</button> -->
+
             <button class="btn btn-sm btn-info" ng-click="registerNew(con._id);">Register a Side Event</button>
-            <!-- ng-click="goTo(con._id);" -->
+
           </div>
         </div>
         <div class="panel-footer text-right">
@@ -54,7 +65,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- venue-->
 
   <section ng-repeat="con in conferences ">
@@ -82,8 +93,9 @@
       </style>
       <div>&nbsp;</div>
       <div class="col-xs-8 col-xs-offset-2">
-        <div class="bs-callout bs-callout-info">
-          You will recieve an email when your side-event has been scheduled.  The schedule will be posted here in October.
+        <div class="bs-callout bs-callout-info"><br><br>
+          You will recieve an email when your side-event has been scheduled or if we were unable to accomidate your request.  The schedule will be posted here in October.
+          <br><br>
         </div>
       </div>
       <div class="row" ng-if="false">

@@ -15,8 +15,8 @@
       <nav  class="collapse navbar-collapse1" role="navigation">
         <ul class="nav navbar-nav">
           <li class="active"  ng-click="goTo('/');setActivePath();"><a href="#">Side Events</a></li>
-          <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Register a S.E.</a></li>
-          <li class="active" ng-click="goTo('/past');setActivePath();"><a href="#">Past Events</a></li>
+          <!-- <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Register a S.E.</a></li> -->
+          <!-- <li class="active" ng-click="goTo('/past');setActivePath();"><a href="#">Past Events</a></li> -->
           <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Dashboard</a></li>
           <li class="active" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin"><a href="#">Admin</a></li>
         </ul>
@@ -30,9 +30,9 @@
       <span class="cl-effect-14">
         <a id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
 
-        <a id="request" ng-click="goTo('/manage');setActivePath();" >Register a Side Event</a>
-        <a id="past" ng-click="goTo('/past');setActivePath();">Past Events </a>
-        <a id="dash" ng-click="goTo('/manage');setActivePath();" ng-if="isAuthenticated">Dashboard</a>
+        <!-- <a id="request" ng-click="goTo('/manage');setActivePath();" >Register a Side Event</a> -->
+        <!-- <a id="past" ng-click="goTo('/past');setActivePath();">Past Events </a> -->
+        <a id="dash" ng-click="goTo('/manage');setActivePath();" >Dashboard</a>
         <a id="admin" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</a>
       </span>
     </section>

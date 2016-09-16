@@ -1106,6 +1106,16 @@ define(['app', 'lodash',
                         function isAdmin(){
                            return (_.intersection(['Administrator', 'IndeAdministrator','IndeAdminNotify'], $scope.me.roles).length > 0);
                         }
+                        $scope.isAdmin = isAdmin;
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
+                        function isNeww(){
+                           return (((!$scope._id ||  $scope._id==='new' ) || Number($scope.doc.id) > 2292) && moment($scope.doc.meta.status.createdOn).add(1,'day').isAfter());
+                        }
+                        $scope.isNeww=isNeww;
+
                         //=======================================================================
                         //
                         //=======================================================================
