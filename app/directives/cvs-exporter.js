@@ -14,7 +14,7 @@ define(['app'], function(app) {
 
                 if(!cvsData) throw 'Error, no cvs data passed for downlaod';
 
-                var fileName = $attrs.fileName || 'export.cvs';
+                var fileName = $attrs.fileName || 'export.csv';
                 var linkEl = angular.element('<a/>');
                 var aElAttr = {
                                 href: 'data:attachment/csv;base64,' + $window.btoa(unescape(encodeURIComponent(cvsData))),
