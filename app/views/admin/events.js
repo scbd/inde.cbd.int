@@ -465,12 +465,26 @@ define(['app', 'lodash',
             //=======================================================================
             //
             //=======================================================================
-            function preferredDatesCVS(row) {
+            function preferredDate1CVS(row) {
               if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
-              return row.prefDate.one+' ['+row.prefDateTime.one+'], '+row.prefDate.two+' ['+row.prefDateTime.two+'], '+row.prefDate.three+' ['+row.prefDateTime.three+']';
+              return row.prefDate.one+' ['+row.prefDateTime.one+']';
             }
 
+            //=======================================================================
+            //
+            //=======================================================================
+            function preferredDate2CVS(row) {
+              if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
+              return row.prefDate.two+' ['+row.prefDateTime.two+']';
+            }
 
+            //=======================================================================
+            //
+            //=======================================================================
+            function preferredDate3CVS(row) {
+              if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
+              return row.prefDate.three+' ['+row.prefDateTime.three+']';
+            }
             //=======================================================================
             //
             //=======================================================================
@@ -594,10 +608,14 @@ define(['app', 'lodash',
               cvsRow.push(cleanCell(row.title));
               cvsRow.push(cleanCell(subjectsCVS(row.subjects)));
               cvsRow.push(cleanCell(row.description));
-              cvsRow.push(cleanCell(row.conferenceObj.Title.en));
+              //cvsRow.push(cleanCell(row.conferenceObj.Title.en));
               cvsRow.push(cleanCell(meetingsCVS(row)));
               cvsRow.push(cleanCell(row.expNumPart));
-              cvsRow.push(cleanCell(preferredDatesCVS(row)));
+
+              cvsRow.push(cleanCell(preferredDate1CVS(row)));
+              cvsRow.push(cleanCell(preferredDate2CVS(row)));
+              cvsRow.push(cleanCell(preferredDate3CVS(row)));
+
               cvsRow.push(cleanCell(requirementsCVS(row.requirements)));
               cvsRow.push(cleanCell(hostOrgsCVS(row.hostOrgs)));
               cvsRow.push(cleanCell(contactCVS(row.contact)));
@@ -606,7 +624,7 @@ define(['app', 'lodash',
               cvsRow.push(cleanCell(createdCVS(row.meta)));
               cvsRow.push(cleanCell(modifiedCVS(row.meta)));
               cvsRow.push(cleanCell(row.meta.version));
-
+              cvsRow.push(cleanCell('   '));
               cvsRow.forEach(function(i){
                 i=_.escape(i);
               });
@@ -624,9 +642,9 @@ define(['app', 'lodash',
               $scope.exporting=true;
               return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort).then(
                 function(responce){
-                    var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Conference','Meetings','# Participants',
-                                        'Preferred Dates','Requirements','Host Organizations','Contact','Responsible Person',
-                                        'Org Contacts','Created','Modified','History'];
+                    var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Meetings','# Participants',
+                                        'Preferred Date 1','Preferred Date 2','Preferred Date 3','Requirements','Host Organizations','Contact','Responsible Person',
+                                        'Org Contacts','Created','Modified','History','Notes'];
                     $scope.cvsDataRaw=responce.data;
                     $scope.cvsData=[];
                     $scope.cvsData.push(_.join(cvsRowHeader,'\t'));
