@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) {
+define(['app', 'lodash',  'services/locale'], function(app, _ ){
 
     app.factory("mongoStorage", ['$http', 'authentication', '$q', 'locale', '$filter', 'devRouter','$timeout', function($http, authentication, $q, locale, $filter, devRouter,$timeout) {
 
@@ -11,7 +11,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //============================================================
         function loadUser() {
             return authentication.getUser().then(function(u) {
-                return user = u;
+                user = u;
+                return user;
             });
         }
 
@@ -28,13 +29,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
                 if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
 
-                // if (_.isNumber(document.meta.createdOn))
-                //     document.meta.createdOn = new Date(moment.utc(document.meta.createdOn));
-                //
-                // if (_.isNumber(document.meta.modifiedOn))
-                //     document.meta.modifiedOn = new Date(moment.utc(document.meta.modifiedOn));
-
-                return $http.put(url, document, params).then(function(res) {
+                delete(document.history);
+                return $http.patch(url, cleanDoc(document), params).then(function(res) {
                     authentication.getUser().then(function(user) {
                         var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
                         getStatusFacits(schema, statuses, user.userID, true);
@@ -48,7 +44,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                     'clientOrg': clientOrg
                 };
                 if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
-                return $http.post(url, document).then(function(res) {
+                return $http.post(url, cleanDoc(document)).then(function(res) {
                     authentication.getUser().then(function(user) {
                         var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
                         getStatusFacits(schema, statuses, user.userID, true);
@@ -60,6 +56,62 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 });
             } //create
         }
+
+        var types = {};
+        //============================================================
+        //
+        //============================================================
+        function loadTypes(schema,force) {
+            var allPromises = [];
+            var numPromises= 1;
+            var modified = true;
+
+            allPromises[0] = isModified('types').then(
+                function(isModified) {
+
+                    modified = Boolean(!localStorage.getItem(schema+'-types') | isModified | force);
+                    var params = {};
+                    if (modified) {
+                        params = {
+                            q: {'schema':schema,'meta.status':{'$nin':['deleted','archived']}}
+                          };
+                        numPromises++;
+                        allPromises[1]= $http.get('/api/v2016/types', {
+                            'params': params
+                        }).then(function(res) {
+
+                              types[schema]=res.data;
+                              _.each(types[schema], function(type, key) {
+                                  type.showChildren = true;
+                                  if (type.parent) {
+                                      var parentObj = _.find(types[schema], {'_id': type.parent});
+
+                                      if (!parentObj) throw "error ref to parent res type not found.";
+
+                                      if (!parentObj.children) parentObj.children = [];
+                                      parentObj.children.push(type);
+                                      delete(types[schema][key]);
+                                  }
+                              });
+                        });
+                    } else if(!_.isEmpty(types[schema])){
+                            numPromises++;
+                            return allPromises.push($q(function(resolve) {resolve(types[schema]);}));
+                    }else{
+                            types[schema]=JSON.parse(localStorage.getItem(schema+'-types'));
+                            numPromises++;
+                            return allPromises.push($q(function(resolve) {resolve(types[schema]);}));
+                    }
+                });
+                return $q.all(allPromises).then(function() {
+                            if(modified && types[schema])
+                                localStorage.setItem(schema+'-types', JSON.stringify(types[schema]));
+                    //  console.log('retunr',localStorage.getItem(schema+'-types'));
+                            return types[schema];
+                        });
+
+        } // loadTypes
+
         var conferences = [];
         //============================================================
         //
@@ -309,7 +361,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
         //============================================================
         //
         //============================================================
-        function loadDocs(schema,q, pageNumber,pageLength,count,sort) {
+        function loadDocs(schema,q, pageNumber,pageLength,count,sort,fields) {
 
             var params = {};
             if(!sort)
@@ -321,7 +373,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
                 q: q,
                 sk: pageNumber,
                 l: pageLength,
-                s:sort//{'meta':{'modifiedOn':1}}//{'meta.modifiedOn':1}
+                s:sort,//{'meta':{'modifiedOn':1}}//{'meta.modifiedOn':1},
+                f:fields
             };
 
 
@@ -340,6 +393,7 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
 
             promises[0]=$http.get('/api/v2016/' + schema, {'params':_.clone(params)});
             params.c=1;
+
             promises[1]=$http.get('/api/v2016/' + schema, {'params': params});
 
            if(!params.q['meta.status'] || _.isObject(params.q['meta.status']))
@@ -443,12 +497,11 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             var params = {};
             params = {
                 q: {
-
                     'meta.status': {
                         $nin: ['archived', 'deleted']
                     },
-                    'sideEvent.meta.status': {
-                        $nin: ['archived', 'deleted']
+                    'sideEvent': {
+                        $exists: true
                     }
                 }
             };
@@ -547,10 +600,11 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             types.push(type);
             var params = {
                 q: {
-                    'parent': type
+                    'parent': type,
+                    'schema':'reservations'
                 }
             };
-            return $http.get('/api/v2016/reservation-types', {
+            return $http.get('/api/v2016/reservations', {
                 'params': params
             }).then(function(responce) {
                 _.each(responce.data, function(t) {
@@ -587,7 +641,19 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             docObj.meta.status = 'draft';
             return save(schema, docObj, _id);
         }
+        //=======================================================================
+        //
+        //=======================================================================
+        function cleanDoc(docObj) {
+            delete(docObj.history);
+            delete(docObj.conferenceObj);
+            delete(docObj.meetingObjs);
+            delete(docObj.subjectObjs);
+            if(docObj.logo && docObj.logo.indexOf('mongo.document.attachments.temporary')>-1)
+                    docObj.logo = 'app/images/ic_event_black_48px.svg';
 
+            return docObj;
+        }
         var isModifiedInProgress =null;
         //=======================================================================
         //
@@ -938,7 +1004,8 @@ define(['app', 'lodash', 'moment', 'services/locale'], function(app, _, moment) 
             loadArchives: loadArchives,
             loadDocs: loadDocs,
             unArchiveDoc: unArchiveDoc,
-            loadOwnerArchives: loadOwnerArchives
+            loadOwnerArchives: loadOwnerArchives,
+            loadTypes:loadTypes
         };
     }]);
 
