@@ -26,6 +26,13 @@ define(['app','moment','lodash'], function (app,moment,_) {
           return input;
       };
   })
+  app.filter('htmlToPlaintext', function() {
+      return function(text) {
+        return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
+      };
+    }
+  );
+
 
 //============================================================
 //

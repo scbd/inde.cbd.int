@@ -5,7 +5,8 @@ define(['app', 'jquery',
     'services/authentication',
     'directives/portal/portal-nav',
     'services/history',
-    'services/dev-router'
+    'services/dev-router',
+    'services/mongo-storage'
 ], function(app, $, _, toastTemplate) {
     'use strict';
 

@@ -776,7 +776,8 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function loadOrgsFilter(q) {
-                  mongoStorage.loadDocs($scope.schema,_.clone(q), 0,1000000,1,$scope.sort).then(
+                  var fields = {'hostOrgs':1};
+                  mongoStorage.loadDocs($scope.schema,_.clone(q), 0,1000000,false,$scope.sort,fields).then(
                     function(r){
 
                       if(!$scope.options.filter.hostOrgs)$scope.options.filter.hostOrgs=[];

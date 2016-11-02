@@ -1,4 +1,4 @@
-<div ng-controller="home">
+<div >
 
   <div scroll-to="top" class="hidden-md hidden-sm hidden-xs">
     <div ani-scroll="550" class="float-button" style="padding-top:5px;">
@@ -43,38 +43,60 @@
           }
         }
       </style>
-      <div class="row">
-        <div style="padding: 10px 20px 0px 20px;">
-          <div class="col-lg-3 col-md-3">
+
+      <div class="row"><br>
+          <div class="col-lg-3 col-md-3 col-xs-12">
+              <div class="input-group input-group-sm search-bs" style="width:100%">
+                  <input type="test" class="form-control " ng-model="pastCtrl.search" ng-change="onPage(0)" placeholder="phrase search">
+                  <span class="input-group-btn">
+                      <button class="btn btn-default" type="button" ng-click="search='';onPage(0);"><i class="fa fa-search" ng-if="!search"></i><i class="fa fa-times" ng-if="search" ></i></button>
+                  </span>
+              </div>
+          </div>
+          <div class="col-lg-4 col-md-4 col-xs-12">
+
+              <select  class="form-control" ng-model="pastCtrl.conference" name="conference" ng-change="onPage(0)">
+                <option ng-repeat="docObj in pastCtrl.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+              </select>
 
           </div>
-          <div class="col-lg-3 col-md-3">
+          <div class="col-lg-5 col-md-5 col-xs-12">
+            <ui-select  multiple ng-model="pastCtrl.hostOrgsSelected" close-on-select="true"  append-to-body="true" title="Choose an Organization" >
+                <ui-select-match  placeholder="Select an org..." >{{$item.acronym || $item.title}}</ui-select-match>
+                <ui-select-choices style="width:100%;" position="down" repeat="org._id as org in pastCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
+                  <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px;">
+                      <hr style="margin: 0 0 0 0;">
+                      <small>
+                          <span class="text-nowrap">
+                              <span  >
+                                <img ng-src="{{org.logo}}" style="vertical-align:middle;max-width:40px;max-height:40px;" ng-if="org.logo.length>0 && org._id.length>2" />
+                                <i ng-if="org._id.length===2"   class="flag-icon flag-icon-{{org._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i>
+                              </span>
+                              <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span>
+                              <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} </span>
+                              <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
+                            </span>
+                      </small>
+                 </div>
+                </ui-select-choices>
+              </ui-select>
+
 
           </div>
-          <div class="col-lg-3 col-md-3">
-            <div>
 
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-3">
-            <div class="input-group input-group-sm search-bs" style="width:100%">
-              <input type="test" class="form-control " ng-model="pastCtrl.search">
-              <span class="input-group-btn">
-                <button class="btn btn-default" type="button" ng-click="pastCtrl.search='';"><i class="fa fa-search" ng-if="!pastCtrl.search"></i><i class="fa fa-times" ng-if="pastCtrl.search"></i></button>
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
-      <div class="row" style="margin-top:6px;">
+      <hr>
+
+      <div  style="margin-top:6px;">
         <!-- <div class="col-xs-12 col-lg-6">
           <span style="padding-left:17px;">Showing
             <span class="badge">{{filtered.length}}</span> Side Events</span>
         </div> -->
-        <div class="col-xs-12  col-md-6 col-lg-6" style="padding-right:17px;">
+        <!-- <div class="col-xs-12  col-md-6 col-lg-6" style="padding-right:17px;">
           <span class="text-right" style="padding-right:17px;">
             <span class="badge">{{filtered.length}}</span> Side Events in Total</span>
-        </div>
+        </div> -->
+        <pagination pages="pastCtrl.pages" current-page="pastCtrl.currentPage" items-per-page="pastCtrl.itemsPerPage" filtered="filtered" search="pastCtrl.search" pages="pastCtrl.pages" on-page="pastCtrl.onPage(pageIndex)" count="pastCtrl.count"> </pagination>
       </div>
       <table class="table table-hover table-striped" style="margin-top:10px;">
         <thead>
@@ -86,30 +108,39 @@
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="doc in filtered = (pastCtrl.reservations |filter:pastCtrl.customSearch ) track by $index" ng-if="doc.sideEvent.meta.status==='published'">
+          <tr ng-repeat="doc in filtered = (pastCtrl.reservations  ) track by $index" ng-if="doc.sideEvent.meta.status==='published'">
             <!--  -->
             <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
             </td>
             <td style="cursor:pointer;" nowrap>{{doc.dayOfWeek}}
-              <br>{{doc.tier.title}}
-              <br>
-              <hr style="margin: 5px 0 5px 0;">{{doc.day}}
-              <br>{{doc.time}}</td>
+              {{doc.start | momentTZ:timezone:'format':'dddd'}}
+              <br>{{doc.start | momentTZ:timezone:'format':'YYYY.MM.DD'}}
+              <hr style="margin: 5px 0 5px 0;">
+              {{doc.start | momentTZ:timezone:'format':'HH:mm'}}
+            </td>
             <!-- <td style="cursor:pointer;" nowrap>
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>-->
-            <td>
+            <td >
               <span  ><a href="{{doc.sideEvent._id}}">{{doc.sideEvent.title}}</a></span>
               <br>
+              <hr ng-if="doc.sideEvent.description">
+              <span ng-if="doc.sideEvent.description">
+                {{doc.sideEvent.description | htmlToPlaintext | truncate:(doc.truncate||425):' ...' }}
+                <a ng-hide="doc.truncate || (doc.sideEvent.description).length<=425" href="#" ng-click="doc.truncate=100000">more <i class="fa fa-caret-down"></i></a>
+                <a ng-show="doc.truncate" href="#" ng-click="doc.truncate=undefined">less <i class="fa fa-caret-up"></i></a></p>
+              </span>
               <hr>
               <div class="relative" >
-                <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.sideEvent.orgs" style="margin:0 2px 0 0;">
+                <span class="hidden-md hidden-sm hidden-xs relative" ng-repeat="org in doc.orgs track by $index" style="margin:0 2px 0 0;">
                   <span class="cir" style="position:relative;">
-                    <!-- <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" />
-                    <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button> -->
+                    <img ng-src="app/images/ic_business_black_48px.svg" style="vertical-align:middle;" ng-if="org.logo.length>0" />
+                    <!-- <scbd-icon-button type="md" icon-name="&#xE872;" ng-if="!org.logo"></scbd-icon-button> -->
+
                   </span>
-                  <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym }} <span ng-hide="$last">|</span></span>
+                  <i ng-if="org._id.length===2"   class="flag-icon flag-icon-{{org._id}}" style="width:20px;height:13.5px;margin-bottom:5px;"></i>
+                  <span style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym || org.name.en}} <span ng-hide="$last">|</span></span>
                 </span>
               </div>
             </td>

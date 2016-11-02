@@ -17,6 +17,7 @@ require.config({
         'linqjs'                   : 'libs/linqjs/linq.min',
         'lodash'                   : 'libs/lodash/lodash',
         'moment'                   : 'libs/moment/moment',
+        'moment-timezone'          : 'libs/moment-timezone/builds/moment-timezone-with-data.min',        
         'ngFileUpload'             : 'libs/ng-file-upload/ng-file-upload',
         'ngDialog'                 : 'libs/ng-dialog/js/ngDialog.min',
         'ngRoute'                  : 'libs/angular-route/angular-route.min',
@@ -26,7 +27,7 @@ require.config({
         'text'                     : 'libs/requirejs-text/text',
         'ng-ckeditor'              : 'libs/ng-ckeditor/ng-ckeditor',
         'ckeditor'                 : 'libs/ng-ckeditor/libs/ckeditor/ckeditor',
-        'ui.select'        : 'libs/angular-ui-select/dist/select',
+        'ui.select'                : 'libs/angular-ui-select/dist/select',
     },
     shim: {
         'libs/angular/angular'      : { deps: ['jquery'] },

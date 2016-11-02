@@ -16,6 +16,7 @@
     "linqjs": "https://github.com/madington/linq.git#2.2.0",
     "lodash": "4.15.0",
     "moment": "2.11.1",
+    "moment-timezone": "0.5.3",    
     "requirejs": "2.1.18",
     "require-css": "0.1.8",
     "requirejs-plugins": "1.0.3",

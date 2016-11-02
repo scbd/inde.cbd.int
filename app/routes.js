@@ -6,7 +6,7 @@ define(['app', 'lodash', 'text!views/index.html', 'views/index', 'services/exten
         $locationProvider.hashPrefix('!');
 
         $routeProvider.
-            when('/',                          { template:    rootTemplate,  label:'Home',  resolveController: 'views/index', reloadOnSearch : false }).
+            when('/',                          { template:    rootTemplate,  label:'Home',  controllerAs:"indexCtrl", resolveController: 'views/index', reloadOnSearch : false }).
             when('/home',                      { redirectTo: '/' }).
             when('/past',                      { templateUrl: 'views/past.html',  controllerAs:'pastCtrl',    resolveController: true, resolveUser: true }).
             when('/admin',                     { templateUrl: 'views/admin/admin-dash-board.html',            resolveController: true, resolveUser: true,resolve : { securized : securize(['Administrator','IndeAdministrator']) } }).
