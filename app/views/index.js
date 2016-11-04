@@ -45,7 +45,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         //
         //==============================
         function load() {
-            $("head > title").text("Past Side Events");
+            $("head > title").text("CBD Side-events ");
             loadList(0).then(initWatches);
         }
         //==============================
