@@ -14,11 +14,12 @@
     <div>
       <nav  class="collapse navbar-collapse1" role="navigation">
         <ul class="nav navbar-nav">
-          <li class="active"  ng-click="goTo('/');setActivePath();"><a href="#">Side-events</a></li>
-          <!-- <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Register a S.E.</a></li> -->
-          <li class="active" ng-click="goTo('/past');setActivePath();"><a href="#">Past Events</a></li>
-          <li class="active" ng-click="goTo('/manage');setActivePath();"><a href="#">Dashboard</a></li>
-          <li class="active" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin"><a href="#">Admin</a></li>
+          <li class="active"  ng-click="goTo('/');setActivePath();"setScrollTo('');><a href="#">Side-events</a></li>
+          <li class="active"  ng-click="goTo('/');setActivePath();setScrollTo('rooms');" scroll-to="faq"><a href="#">faq</a></li>
+          <li class="active" ng-click="goTo('/past');setActivePath();setScrollTo('');"><a href="#">Past Events</a></li>
+          <li class="active"  ng-click="goTo('/');setActivePath();setScrollTo('rooms');" scroll-to="rooms"><a href="#">Rooms</a></li>
+          <li class="active" ng-click="goTo('/manage');setActivePath();setScrollTo('');"><a href="#">Dashboard</a></li>
+          <li class="active" ng-click="goTo('/admin');setActivePath();setScrollTo('');" ng-if="isAdmin"><a href="#">Admin</a></li>
         </ul>
       </nav>
     </div>
@@ -28,12 +29,12 @@
   <div ng-cloak>
     <section class="lg-menu  hidden-xs">
       <span class="cl-effect-14">
-        <a id="home" ng-click="goTo('/');setActivePath();">Side Events </a>
-
-        <!-- <a id="request" ng-click="goTo('/manage');setActivePath();" >Register a Side Event</a> -->
-        <a id="past" ng-click="goTo('/past');setActivePath();">Past Events </a>
-        <a id="dash" ng-click="goTo('/manage');setActivePath();" >Dashboard</a>
-        <a id="admin" ng-click="goTo('/admin');setActivePath();" ng-if="isAdmin">Admin</a>
+        <a id="home" ng-click="goTo('/');setActivePath();setScrollTo('');">Side Events </a>
+        <a ng-click="goTo('/');setActivePath();setScrollTo('faq');" scroll-to="faq">FAQ </a>
+        <a ng-click="goTo('/');setActivePath();setScrollTo('rooms');" scroll-to="rooms">Rooms </a>
+        <a id="past" ng-click="goTo('/past');setActivePath();setScrollTo('');">Past Events </a>
+        <a id="dash" ng-click="goTo('/manage');setActivePath();setScrollTo('');" >Dashboard</a>
+        <a id="admin" ng-click="goTo('/admin');setActivePath();setScrollTo('');" ng-if="isAdmin">Admin</a>
       </span>
     </section>
   </div>
