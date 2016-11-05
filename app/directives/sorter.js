@@ -1,11 +1,11 @@
-define(['app'], function(app) {
+define(['app','lodash'], function(app,_) {
   'use strict';
 
-  app.directive('sorter',['$timeout', function($timeout) {
+  app.directive('sorter',['$timeout', function() {
   return {
    restrict: 'E',
-   scope:{binding:'=ngModel'},
-   template:'<span ng-click="setSort()" ><a ><label style="cursor:pointer;"> {{name}}:</label></a> <a ng-if="direction && isSelected()" style="cursor:pointer;"><span><i ng-if="direction===1 && isSelected()"  class="fa fa-caret-down"></i><i ng-if="direction===-1" class="fa fa-caret-up"></i></a></span></span>',
+   scope:{binding:'=ngModel', direction:'=?direction'},
+   template:'<span ng-click="setSort()" ><a ><label style="cursor:pointer;"> {{name}} </label></a> <a ng-if="isSelected()" style="cursor:pointer;"><span><i ng-show="getDirection()"  class="fa fa-caret-down"></i><i ng-show="!getDirection()" class="fa fa-caret-up"></i></a></span></span>',
    link: function($scope,$element,$attrs) {
 
         $scope.name=$attrs.labelName;
@@ -16,10 +16,23 @@ define(['app'], function(app) {
         //
         //============================================================
         $scope.setSort =  function (){
-          if(!$scope.direction)
+          if(typeof $scope.direction === 'undefined')
             $scope.direction=1;
-          else
-          $scope.direction=-$scope.direction;
+
+          if(($attrs.source && $attrs.source==='mongo') || !$attrs.source)
+              $scope.direction=-$scope.direction;
+
+          if($attrs.source && $attrs.source==='angular'){
+              $scope.direction=!$scope.direction;
+          }
+
+          if($attrs.source && $attrs.source==='solr'){
+              if($scope.direction)
+                  $scope.direction='ASC';
+              else
+                  $scope.direction='DESC';
+          }
+
           $scope.binding={};
           $scope.binding[$scope.property]=$scope.direction;
         };
@@ -27,10 +40,33 @@ define(['app'], function(app) {
         //============================================================
         //
         //============================================================
+        function getDirection() {
+          if(($attrs.source && $attrs.source==='mongo') || !$attrs.source){
+              if($scope.direction > 0) return true;
+              else return false;
+          }
+          if($attrs.source && $attrs.source==='angular'){
+              if($scope.direction) return true;
+              else return false;
+          }
+
+          if($attrs.source && $attrs.source==='solr'){
+              if($scope.direction ==='ASC')
+                  return true;
+              else
+                  return false;
+          }
+        }
+        $scope.getDirection=getDirection;
+
+        //============================================================
+        //
+        //============================================================
         function isSelected() {
-            if(!!$scope.binding[$scope.property] && !$scope.direction)
-              $scope.direction=$scope.binding[$scope.property];
-          return !!$scope.binding[$scope.property];
+
+          if(!_.isObject($scope.binding)) return false;
+
+          return (Object.keys($scope.binding)[0] === $attrs.property);
         }
         $scope.isSelected=isSelected;
 
