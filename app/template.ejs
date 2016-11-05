@@ -187,6 +187,42 @@
     #toast-container> div .title {
       padding: 15px 15px 15px 15px;
     }
+    @keyframes fadeOutUp {
+    0% {
+       opacity: 1;
+       transform: translateY(0);
+    }
+    100% {
+       opacity: 0;
+       transform: translateY(-20px);
+    }
+ }
+
+    .float-button {
+      background-color: black;
+      opacity: 0.6;
+      width: 100px;
+      height: 50px;
+      color: white;
+      font-weight: 1.5px;
+      text-align: center;
+      line-height: 50px;
+      position: fixed;
+      bottom: 30px;
+      right: 130px;
+      z-index: 300;
+    }
+    .float-button:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+    .float-button.ng-hide-add {
+      -webkit-animation: fadeOutUp 0.4s;
+      -moz-animation: fadeOutUp 0.4s;
+      animation: fadeOutUp 0.4s;
+      visibility: visible;
+    }
+
   </style>
 </head>
 
