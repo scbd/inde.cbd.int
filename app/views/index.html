@@ -61,22 +61,22 @@
 &nbsp;
           </div>
           <div class="col-lg-4 col-md-4 col-xs-12" >
+            <div class="input-group input-group-sm search-bs" style="width:100%">
+                <input type="test" class="form-control " ng-model="indexCtrl.search" ng-change="onPage(0)" placeholder="phrase search">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" ng-click="indexCtrl.search='';"><i class="fa fa-search" ng-if="!indexCtrl.search"></i><i class="fa fa-times" ng-if="indexCtrl.search" ></i></button>
+                </span>
+            </div>
 
-              <select  class="form-control" ng-model="indexCtrl.conference" name="conference" ng-change="onPage(0)">
-                <option ng-repeat="docObj in indexCtrl.conferences" value="{{docObj._id}}" ng-if="indexCtrl.isPastConfrence(docObj._id)" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
-              </select>
 <span class="pull-right pointer" ng-if="!indexCtrl.advanced"><a ng-src="#" ng-click="indexCtrl.toggleAdvanced()"><i class="fa fa-search"></i> Advanced Search</a></span>
 <span class="pull-right pointer" ng-if="indexCtrl.advanced"><a ng-src="#" ng-click="indexCtrl.toggleAdvanced()"><i class="fa fa-times"></i> </a></span>
           </div>
       </div>
       <div class="row" ng-hide="!indexCtrl.advanced" style="padding: 0 10px 0 10px;"><br>
           <div class="col-lg-3 col-md-3 col-xs-12">
-              <div class="input-group input-group-sm search-bs" style="width:100%">
-                  <input type="test" class="form-control " ng-model="indexCtrl.search" ng-change="onPage(0)" placeholder="phrase search">
-                  <span class="input-group-btn">
-                      <button class="btn btn-default" type="button" ng-click="indexCtrl.search='';"><i class="fa fa-search" ng-if="!indexCtrl.search"></i><i class="fa fa-times" ng-if="indexCtrl.search" ></i></button>
-                  </span>
-              </div>
+            <select  class="form-control" ng-model="indexCtrl.conference" name="conference" ng-change="onPage(0)">
+              <option ng-repeat="docObj in indexCtrl.conferences" value="{{docObj._id}}" ng-if="indexCtrl.isPastConfrence(docObj._id)" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+            </select>
           </div>
           <div class="col-lg-4 col-md-4 col-xs-12">
 
@@ -84,20 +84,14 @@
 
           </div>
           <div class="col-lg-5 col-md-5 col-xs-12">
-            <ui-select  multiple ng-model="indexCtrl.hostOrgsSelected" close-on-select="true"  append-to-body="true" title=" " >
+            <ui-select  multiple ng-model="indexCtrl.hostOrgsSelected"  close-on-select="true"  append-to-body="true" title=" "          spinner-enabled="true">
                 <ui-select-match  placeholder="Host Party or Org. Search" >{{$item.acronym || $item.title}}</ui-select-match>
-                <ui-select-choices style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
-                  <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px;">
+                <ui-select-choices  minimum-input-length="3"  style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
+                  <div >
                       <hr style="margin: 0 0 0 0;">
                       <small>
                           <span class="text-nowrap">
-                              <span  >
-                                <img ng-src="{{org.logo}}" style="vertical-align:middle;max-width:40px;max-height:40px;" ng-if="org.logo.length>0 && org._id.length>2" />
-                                <i ng-if="org._id.length===2"   class="flag-icon flag-icon-{{org._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i>
-                              </span>
-                              <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span>
-                              <span ng-if="org._id.length===2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.title }} </span>
-                              <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
+                              <span  style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym || org.code}}] {{org.title || org.name}} </span>
                             </span>
                       </small>
                  </div>
@@ -161,7 +155,7 @@
               </span>
             </div>
             <div class="col-xs-4 text-center" ng-if="indexCtrl.hasImage(doc.sideEvent.logo)">
-<img ng-src="{{doc.sideEvent.logo}}" style="max-width:100%;">
+                <img ng-src="{{doc.sideEvent.logo}}" style="max-width:100%;">
           </div>
         </div>
           <hr style="margin: 5px 0 5px 0;">
@@ -185,6 +179,136 @@
 
         </tbody>
       </table>
+      <div  style="margin-top:6px;">
+        <pagination pages="indexCtrl.pages" page-count="5" current-page="indexCtrl.currentPage" items-per-page="indexCtrl.itemsPerPage" filtered="filtered" search="indexCtrl.search" pages="indexCtrl.pages" on-page="indexCtrl.onPage(pageIndex)" count="indexCtrl.count"> </pagination>
+     </div>
     </div>
+<div class="row" id="rooms">
+    <div class="col-xs-12 text-center">
+                <h3 style="background-color:#fff;">Rooms</h3>
+                <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
+                <hr>
+    </div>
+  </div>
+    <room-table conf-obj="indexCtrl.confObj"> </room-table>
 
+    <div class="row" id="faq">
+        <div class="col-xs-12 text-center">
+                    <h3 style="background-color:#fff;">FAQ</h3>
+                    <h5 style="background-color:#fff;">({{indexCtrl.confObj.Title.en}})</h5>
+                    <hr>
+        </div>
+      </div>
+      <div>
+        <table class="table table-hover table-striped" style="margin-top:10px;">
+          <thead>
+            <tr class="info">
+              <th width="100%">Question / Answer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-click="q1=!q1" style="cursor:pointer;">
+              <td>
+                <span><a href="#">When will the schedule be posted?</a></span>
+                <div ng-if="q1" style="padding-left:50px;">
+                  <hr>
+                  <p>We have received and overwhelming amount of requests for side-events for COP-13.  A total of 475 requests were received and two hundred requests were for spaces on the first 2 days of COP.  We would like to thank everyone for their patience and those for their assistance with reducing the amount of side-events taking place at COP-13.  </p>
+                </div>
+              </td>
+            </tr>
+
+            <tr id="q2" ng-click="q2=!q2" style="cursor:pointer;">
+              <td>
+                <span><a href="#">Who do I contact about catering?</a></span>
+                <div ng-if="q2" style="padding-left:50px;">
+                  <hr>
+                  <p>The <a href="https://s3.amazonaws.com/mongo.document.attachments/inde-side-events/catering.pdf">catering form</a> is in Annex D of the information note for participants, please <a href="https://s3.amazonaws.com/mongo.document.attachments/inde-side-events/catering.pdf">download it</a>, complete  and return to:<br>
+<p style="padding-left:50px;">Ms. Margarita Luna<br>
+Moon Palace Resort Cancun<br>
+Carretera Cancun-Chetumal Km. 36.5<br>
+Cancún, Quintana Roo<br>
+CP. 77500 – México<br>
+E-mail:  <ahref="mailto:marluna@palaceresorts.com">marluna@palaceresorts.com</a></p></p>
+                </div>
+              </td>
+            </tr>
+            <tr ng-click="q3=!q3" style="cursor:pointer;">
+              <td>
+                <span><a href="#">How do I cancel my side-event?</a></span>
+                <div ng-if="q3" style="padding-left:50px;">
+                  <hr>
+                    <p>Please email us at <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a> indicateing your cancelation request.  Ensure the sending email matches the email of the requester/creater of the side-event request or the person indicated as the principal for the side-event within the form. </p>
+                </div>
+              </td>
+            </tr>
+            <tr ng-click="q4=!q4" style="cursor:pointer;">
+              <td>
+                <span><a href="#">How do I ship my promotional materials?</a></span>
+                <div ng-if="q4" style="padding-left:50px;">
+                  <hr>
+<p>
+  Kindly make arrangements to ensure that your service provider delivers the shipment to the Moon Palace to the address below between 20-27 November 2016 only.  No shipments will be allowed in the venue thereafter.
+<p style="padding-left:50px;">Attention: Grupos y Convenciones / Mr. Rene Palavicini<br>
+Hotel Moon Palace Golf & Spa Resort<br>
+Carretera Federal 307 / Km. 340 Chetumal<br>
+Cancún, Quintana Roo. C.P. 77500 México<br>
+Mobile: +52 1 (55) 9185 1677<br>
+Tel.: +52 (998) 8816000<br></p>
+Please take note of the following:<br>
+
+<ul><li>Boxes must be numbered in a “1 of X format”.  Whenever possible, a copy of the publication should be affixed to each box. </li>
+<li>Shipments will be available for collection as of 29 November 2016 at 3:30 p.m. at the shipping counter located in the Arena building.</li>
+<li>Storage and handling fees will apply and will be payable upon collection of the shipment:</li>
+<ul><li>Shipments smaller than a pallet are subject to 75.00 USD each.</li>
+<li>Pallets are subject to 125.00 USD each.</li></ul></ul>
+
+</p>                </div>
+              </td>
+            </tr>
+
+            <tr ng-click="q5=!q5" style="cursor:pointer;">
+              <td>
+                <span><a href="#">How to I change the title, description or image of my side-event?</a></span>
+                <div ng-if="q5" style="padding-left:50px;">
+                  <hr>
+<p> <ol>
+  <li>Go to your dashbord from the very top menu.</li>
+  <li>Press the blue button "Go to Your Side-Events".</li>
+  <li>Locate the side-event you want to edit and press the edit button  on the far right of the row.</li>
+  <li>Make the changes you want, then ensure to press the button "Edit Request" once finnished.  This will send the change request to the Secretariat for approval. Once Approved the changes will be visible to the public.</li>
+</ol></p>
+                </div>
+              </td>
+            </tr>
+            <tr ng-click="q6=!q6" style="cursor:pointer;">
+              <td>
+                <span><a href="#">If I am having a tecknical issue with the form or the web-site what do I do?</a></span>
+                <div ng-if="q6" style="padding-left:50px;">
+                  <hr>
+<p> Use our live chat to get support from our IT help desk.</p>
+                </div>
+              </td>
+            </tr>
+
+
+            <tr ng-click="q7=!q7" style="cursor:pointer;">
+              <td>
+                <span><a href="#">Who do I contact with all non-technical related questions about side-events ?</a></span>
+                <div ng-if="q7" style="padding-left:50px;">
+                  <hr>
+<p> <strong>Lisa Pedicelli</strong><br>
+Conference Services<br>
+Secretariat of the Convention on Biological Diversity<br>
+413 St-Jacques Street West, Suite 800<br>
+Montreal, Quebec<br>
+H2Y 1N9<br>
+Direct tel:  +1-514-287-7058<br>
+E-mail:  <a href="mailto:lisa.pedicelli@cbd.int">lisa.pedicelli@cbd.int</a><br>
+Web site:  <a href="https://www.cbd.int">www.cbd.int</a> </p>
+                </div>
+              </td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
 </div>

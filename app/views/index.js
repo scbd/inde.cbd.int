@@ -4,11 +4,12 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
     'filters/truncate',
     'services/filters',
     'directives/pagination',
+    'directives/room-table',
     'ui.select',
     'directives/mobi-menu',
 ], function(app, _, moment) {
 
-    return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location',function($scope,mongoStorage, $route, $http,$timeout,$q,$location) {
+    return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache) {
 
         var _ctrl = this;
         _ctrl.hasError = hasError;
@@ -41,21 +42,26 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             _ctrl.hostOrgsSelected=[];
             _ctrl.advanced=!_ctrl.advanced;
         }
+
         //==============================
         //
         //==============================
         function load() {
             $("head > title").text("CBD Side-events ");
+            $templateCache.put("bootstrap/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control\" ng-class=\"{open: $select.open}\"><div><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" class=\"ui-select-search input-xs\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" ng-model=\"$select.search\" ng-model=\"$select.search\" ng-model-options=\"{debounce: 1000}\" role=\"combobox\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
+
             loadList(0).then(initWatches);
         }
+
         //==============================
         //
         //==============================
         function roomDisplay(id,property) {
-
+            if(!_ctrl.rooms)return;
             return  _.find(_ctrl.rooms,{'_id':id})[property];
 
         }
+
         //==============================
         //
         //==============================
@@ -72,20 +78,41 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         //
         //==============================
         function loadSubjects() {
+
+           if(!_ctrl.subjects)
             return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
                 cache: true
             }).then(function(res){_ctrl.subjects = res; });
-
+          else
+            return $q.resolve(_ctrl.subjects);
         }
+
         //==============================
         //
         //==============================
         function loadRooms() {
+
+          if(!_ctrl.rooms)
             return $http.get("/api/v2016/conferences/"+_ctrl.confObj._id+"/rooms", {
                 cache: true
             }).then(function(res){_ctrl.rooms = res.data; });
-
+          else
+            return $q.resolve(_ctrl.rooms);
         }
+
+        //==============================
+        //
+        //==============================
+        function loadVenue() {
+          console.log(_ctrl.confObj);
+          if(!_ctrl.venueObj)
+            return $http.get("/api/v2016/venues/"+_ctrl.confObj.venueId, {
+                cache: true
+            }).then(function(res){_ctrl.venueObj = res.data; console.log(res.data);});
+            else
+              return $q.resolve(_ctrl.venueObj);
+        }
+
         //============================================================
         //
         //============================================================
@@ -102,7 +129,10 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             $scope.$watch('indexCtrl.conference', function() {
                 if(typeof _ctrl.conference !== "undefined"){
                   _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
+                  delete(_ctrl.rooms);
+                  delete(_ctrl.venueObj);
                   loadRooms();
+                  loadVenue();
                   loadList(0);
                 }
             });
@@ -116,19 +146,21 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         //
         //============================================================
         function loadOrgs() {
-            return  mongoStorage.loadOrgs().then(function(orgs) {
-                        _ctrl.allOrgs = orgs;
-                        $timeout(function(){
-                          _.each(_ctrl.allOrgs, function(org) {
-                              var image = new Image();
-                              if(org.logo && org.logo.indexOf('mongo.document.attachments.temporary')==-1){
-                                  image.src = org.logo;
-                                  _ctrl.preLoadImages.push(image);
-                              }
+            if(!_ctrl.allOrgs || _.isEmpty(_ctrl.allOrgs))
+              return  mongoStorage.loadOrgs().then(function(orgs) {
+                          _ctrl.allOrgs = orgs;
+                          $timeout(function(){
+                            _.each(_ctrl.allOrgs, function(org) {
+                                var image = new Image();
+                                if(org.logo && org.logo.indexOf('mongo.document.attachments.temporary')==-1){
+                                    image.src = org.logo;
+                                    _ctrl.preLoadImages.push(image);
+                                }
+                            });
                           });
-                        });
 
-                    });
+                      });
+            else return $q.resolve(_ctrl.allOrgs);
         }
 
 
@@ -189,6 +221,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             _ctrl.prevDate=false;
             _ctrl.currentPage=index;
         };
+
         //=======================================================================
         //
         //=======================================================================
@@ -207,6 +240,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
                 });
             });
         } // archiveOrg
+
         //=======================================================================
         //
         //=======================================================================
@@ -288,15 +322,19 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         //
         //============================================================
         function loadConferences() {
-            return mongoStorage.loadConferences().then(function(o) {
-                _ctrl.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
+
+            if(!_ctrl.conferences || _.isEmpty(_ctrl.conferences))
+              return mongoStorage.loadConferences().then(function(o) {
+                  _ctrl.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
 
 
-                if(!_ctrl.conference){
-                  _ctrl.conference=_ctrl.conferences[0]._id;
-                  _ctrl.conferences[0].selected=true;
-                }
-            }).then(loadDates).catch(onError);
+                  if(!_ctrl.conference){
+                    _ctrl.conference=_ctrl.conferences[0]._id;
+                    _ctrl.conferences[0].selected=true;
+                  }
+              }).then(loadDates).catch(onError);
+
+            else return $q.resolve(_ctrl.conferences);
         }
 
         //============================================================
@@ -317,7 +355,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             for(var i=1; i<=numDays; i++)
             {
               _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
-              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
+              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
             }
 
         }
@@ -370,6 +408,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             q.type={'$in':_ctrl.seTypes};
             return q;
         }
+
         //============================================================
         //
         //============================================================
@@ -381,19 +420,24 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
                     'schema': 'reservations'
                 }
             };
-            return $http.get('/api/v2016/types', {
-                'params': params
-            }).then(function(responce) {
-                _ctrl.seTypes = [];
-                _ctrl.seTypes.push('570fd0a52e3fa5cfa61d90ee');
-                _.each(responce.data, function(type) {
-                    _ctrl.seTypes.push(type._id);
-                });
-                _ctrl.seTypes.push('572bcfa4240149400a234903');
-                return responce.data;
-            });
+            if(!_ctrl.seTypes || _.isEmpty(_ctrl.seTypes))
+              return $http.get('/api/v2016/types', {
+                  'params': params
+              }).then(function(responce) {
+                  _ctrl.seTypes = [];
+                  _ctrl.seTypes.push('570fd0a52e3fa5cfa61d90ee');
+                  _.each(responce.data, function(type) {
+                      _ctrl.seTypes.push(type._id);
+                  });
+                  _ctrl.seTypes.push('572bcfa4240149400a234903');
+                  return responce.data;
+              });
+            else return $q.resolve(_ctrl.seTypes);
 
         } //loadSideEventTypes
+
+
+
         //============================================================
         //
         //============================================================
