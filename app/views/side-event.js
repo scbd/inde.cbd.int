@@ -139,7 +139,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         function loadSubjects() {
 
             return $http.get("/api/v2013/thesaurus/domains/CBD-SUBJECTS/terms", {
-                cache: true
+
             }).then(function(res) {
                 if(!_ctrl.doc)_ctrl.doc={};
 
@@ -155,7 +155,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
                           'identifier': subj
                       }));
                 });
-
+console.log(_ctrl.doc.subjectObjs);
             }).catch(onError);
         }
         //==============================
@@ -185,8 +185,8 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         //==============================
         function init() {
 
-            $q.all([loadConfrences(), loadDoc(), loadOrgs(), loadSubjects()]).then(function() {
-
+            $q.all([loadConfrences(), loadOrgs()]).then(loadDoc).then(function() {
+                loadSubjects();
                 _ctrl.doc.conferenceObj = _.find(_ctrl.conferences, {
                     '_id': _ctrl.doc.conference
                 });

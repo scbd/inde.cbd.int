@@ -1,6 +1,6 @@
 define(['text!./pagination.html', 'app'], function(template, app) {
     'use strict';
-    app.directive('pagination', [function() {
+    app.directive('pagination', ['$timeout',function($timeout) {
         return {
             restrict: 'E',
             template: template,
@@ -20,6 +20,12 @@ define(['text!./pagination.html', 'app'], function(template, app) {
                   return Math.ceil($scope.count/5);
                 }
                 $scope.getPageCount =getPageCount;
+
+                $scope.reload=function(){
+                  $timeout(function(){
+                      $scope.onPage({pageIndex:0});
+                  });
+                };
             }],
         }; // return
     }]);

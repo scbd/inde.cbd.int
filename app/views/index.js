@@ -229,10 +229,12 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             _ctrl.loading = true;
             if(!pageIndex) pageIndex=0;
 
+            _ctrl.itemsPerPage=Number(_ctrl.itemsPerPage);
+
             return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                 var q = buildQuery ();
 
-                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * _ctrl.itemsPerPage),_ctrl.itemsPerPage,1,_ctrl.sort).then(function(response) {
+                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort).then(function(response) {
 
                     loadListPostProcess (response);
                     refreshPager(pageIndex);

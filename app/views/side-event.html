@@ -57,11 +57,8 @@
         <td>
           <div class="relative">
             <span class="relative" ng-repeat="org in sideEventCtrl.doc.orgs track by $index" style="margin:0 2px 0 0;" >
-              <span class="cir" style="position:relative;">
-                <!-- <img src="{{org.logo}}" style="vertical-align:middle;" ng-if="org.logo.length>0" /> -->
-
-              </span>
-              <span ng-if="org.acronym" style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym}} <span ng-hide="$last">|</span></span>
+              <span><i ng-if="org._id.length===2"   class="flag-icon flag-icon-{{org._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i></span>
+              <span ng-if="org.acronym" style="padding:0px 10px px 0px 1px; vertical-align:middle;"> {{org.acronym || org._id}} <span ng-hide="$last">|</span></span>
             </span>
           </div>
         </td>

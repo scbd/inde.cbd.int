@@ -29,7 +29,6 @@
                     </li>
                     <li ng-repeat="page in pages track by $index" ng-class="{ active : currentPage==page.index }" ng-if="page.text>0">
                         <a href="#" ng-click="onPage({pageIndex:page.index})">{{page.text}}</a>
-                        {{}}
                     </li>
                     <li >
                         <a ng-click="onPage({pageIndex:currentPage+1})" href="#" aria-label="Next" ng-if="(currentPage+1<getPageCount())">
@@ -43,7 +42,7 @@
         <div class="col-lg-2 col-md-2 col-xs-3 text-nowrap">
             <div class="form-group form-inline" style="color:#333;font-size:14px;margin-top:20px;">
                 <span style="color:#333;font-size:14px;">Records per page:</span>
-                <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="onPage({pageIndex:0})" convert-to-number>
+                <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="reload()" convert-to-number>
                     <option ng-value="5" ng-selected="itemsPerPage===5">5</option>
                     <option ng-value="10" ng-selected="itemsPerPage===10">10</option>
                     <option ng-value="15" ng-selected="itemsPerPage===15">15</option>

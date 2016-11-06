@@ -507,7 +507,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
             };
             if (text)
                 params.q.$text = {
-                    '$serch': text
+                    '$search': text
                 };
 
             if (page) {
