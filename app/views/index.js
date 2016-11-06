@@ -104,11 +104,10 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         //
         //==============================
         function loadVenue() {
-          console.log(_ctrl.confObj);
           if(!_ctrl.venueObj)
             return $http.get("/api/v2016/venues/"+_ctrl.confObj.venueId, {
                 cache: true
-            }).then(function(res){_ctrl.venueObj = res.data; console.log(res.data);});
+            }).then(function(res){_ctrl.venueObj = res.data; });
             else
               return $q.resolve(_ctrl.venueObj);
         }

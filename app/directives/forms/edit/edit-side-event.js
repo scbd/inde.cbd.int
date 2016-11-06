@@ -431,6 +431,18 @@ define(['app', 'lodash',
                         //=======================================================================
                         //
                         //=======================================================================
+                        function isEditable() {
+
+                            if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request')
+                                return true;
+                            else
+                                return false;
+                        }
+                        $scope.isEditable = isEditable;
+
+                        //=======================================================================
+                        //
+                        //=======================================================================
                         function showEdit() {
 
                             if ((_.isBoolean($scope.editIndex) && $scope.editIndex) || _.isNumber($scope.editIndex))

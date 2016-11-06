@@ -10,7 +10,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         };
     });
 
-    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter', function(mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter) {
+    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter','$timeout', function(mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter,$timeout) {
 
         var _ctrl = this;
         var allOrgs;
@@ -19,6 +19,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         _ctrl.hasError = hasError;
         _ctrl.trustSrc = trustSrc;
         _ctrl.isEditable= isEditable;
+        _ctrl.notAuth = true;
         _ctrl.goTo = goTo;
         init();
         return this;
@@ -119,19 +120,52 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         //==============================
         function loadDoc() {
             var _id = $route.current.params.id;
-            var returnUri = $window.encodeURIComponent($window.location.href);
 
             return mongoStorage.loadDoc('inde-side-events', _id).then(function(se) {
-                _ctrl.doc = se;
-                _ctrl.doc.orgs = [];
+
+                return loadEditPermisions(se).then(function(){
+
+                  if(isEditable() || se.meta.status==='published'){
+                    _ctrl.notAuth=false;
+                    _ctrl.doc = se;
+                    _ctrl.doc.orgs = [];
+                  }else if(Number(_id))
+                      return loadSideEventFromRes();
+
+                });
             }).catch(function(error){
 
-              if(error.status===403){
-                  $window.location.href = devRouter.ACCOUNTS_URI+'/signin?returnUrl=' + returnUri;  // force sign in
-              }
+              if(error.status===403 || (_ctrl.doc && _ctrl.doc.meta.status!=='published'))
+                loadSideEventFromRes();
+
+
             });
         }
 
+        //==============================
+        //
+        //==============================
+        function loadSideEventFromRes(){
+            var _id = $route.current.params.id;
+          return $http.get("/api/v2016/reservations", {
+              params: {
+                  q: {
+                      'sideEvent.id': Number(_id),
+                      '$and':[{start:{$exists:true}},{start:{$ne:null}}]
+                  }
+              }
+          }).then(function(se) {
+
+              if(se.data.length){
+
+                _ctrl.doc = se.data[0].sideEvent;
+                _ctrl.doc.orgs = [];
+                _ctrl.notAuth=false;
+              }
+
+              //wasPrevPub(_ctrl.doc );
+          });
+        }
 
         //==============================
         //
@@ -155,7 +189,6 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
                           'identifier': subj
                       }));
                 });
-console.log(_ctrl.doc.subjectObjs);
             }).catch(onError);
         }
         //==============================
@@ -179,14 +212,29 @@ console.log(_ctrl.doc.subjectObjs);
 
             }).catch(onError);
         }
+        //============================================================
+        //
+        //============================================================
+        function wasPrevPub(body) {
+          var wasReqOrPub = false;
+          if(!body.history || body.history.length===0) return wasReqOrPub;
 
+          body.history.forEach(function(d,index){
+
+                if(d.meta.status==='published' )
+                  wasReqOrPub = d;
+          });
+          return wasReqOrPub;
+        }
         //==============================
         //
         //==============================
         function init() {
 
-            $q.all([loadConfrences(), loadOrgs()]).then(loadDoc).then(function() {
+            $q.all([loadConfrences(), loadOrgs(),loadDoc()]).then(function() {
                 loadSubjects();
+
+                if(!_ctrl.doc) return;
                 _ctrl.doc.conferenceObj = _.find(_ctrl.conferences, {
                     '_id': _ctrl.doc.conference
                 });
@@ -204,7 +252,7 @@ console.log(_ctrl.doc.subjectObjs);
                     }); // each
 
                 }
-                loadEditPermisions(_ctrl.doc);
+
             }).catch(onError);
         }
 

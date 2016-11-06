@@ -107,7 +107,7 @@ border-top-color: transparent !important;
       </div>
     </div>
     <div></div>
-    <div class="row">
+    <div class="row" ng-show="isEditable()">
 
       <div class="col-lg-6   col-xs-12 text-nowrap">
 
@@ -271,7 +271,7 @@ border-top-color: transparent !important;
               <div class="col-xs-12 col-lg-4">
                 <div name="expNumPart" ng-class="{'has-error': (editForm.expNumPart.$invalid && editForm.$submitted) || editForm.expNumPart.$error.number}">
                   <label>Expected Number of Participants</label>
-                  <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" placeholder=" " required/>
+                  <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" ng-disabled="(!isAdmin() && !isNeww())" placeholder=" " required/>
                   <p ng-show="editForm.expNumPart.$invalid && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status">Number of participants is required.</p>
                   <p ng-show="editForm.expNumPart.$error.number  && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status"> Not valid number!</p>
                 </div>
@@ -779,7 +779,7 @@ border-top-color: transparent !important;
                 </div>
               </div>
 
-              <div class="row" style="padding-top:20px;">
+              <div class="row" style="padding-top:20px;" ng-show="isEditable()">
 
                 <div class="col-lg-6   col-xs-12 text-nowrap">
 
