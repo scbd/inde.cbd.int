@@ -200,10 +200,13 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             if(end>pageCount)
               end = pageCount;
 
+
+
             for (var i = start; i <= end; i++) {
                 pages.push({ index : i, text : i+1 });
             }
           }else{
+            if(pageCount<5) end++;
             for (var i = start; i < end; i++) {  //jshint ignore:line
                 pages.push({ index : i, text : i+1 });
             }
