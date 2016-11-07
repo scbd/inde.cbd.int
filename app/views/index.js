@@ -7,6 +7,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
     'directives/room-table',
     'ui.select',
     'directives/mobi-menu',
+    'directives/share'
 ], function(app, _, moment) {
 
     return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache) {

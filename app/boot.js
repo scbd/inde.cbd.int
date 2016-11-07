@@ -27,6 +27,7 @@ require.config({
         'text'                     : 'libs/requirejs-text/text',
         'ng-ckeditor'              : 'libs/ng-ckeditor/ng-ckeditor',
         'ckeditor'                 : 'libs/ng-ckeditor/libs/ckeditor/ckeditor',
+        '720kb.socialshare'        : 'libs/angular-socialshare/dist/angular-socialshare.min',
         'ui.select'                : 'libs/angular-ui-select/dist/select',
     },
     shim: {
@@ -45,7 +46,8 @@ require.config({
         'dragula'                   : { deps: ['angular','jquery'] },
         'linqjs'                    : { deps: [], exports : 'Enumerable' },
         'toastr'                    : { deps: ['angular']},
-        'ng-ckeditor'               : { deps: ['angular','ckeditor']}
+        'ng-ckeditor'               : { deps: ['angular','ckeditor']},
+        '720kb.socialshare'         : { deps: ['angular']}
     }
 
 });

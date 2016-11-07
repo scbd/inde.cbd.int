@@ -735,12 +735,12 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         $scope.saveDoc = function() {
-
+console.log($scope.doc);
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
                             validateTabs();
                             if (!$scope.doc.id || !$scope._id) {
-
+console.log($scope.doc);
                                 return mongoStorage.save($scope.schema, cleanDoc($scope.doc))
                                   .then(postSaveNewDoc)
                                     .catch(onError);

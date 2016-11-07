@@ -1,4 +1,4 @@
-define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-list'], function(app, _,moment) {
+define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-list','directives/share'], function(app, _,moment) {
     app.filter('fileSize', function() {
         return function(size) {
             if (size < 1024)
