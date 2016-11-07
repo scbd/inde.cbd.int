@@ -149,7 +149,18 @@ define(['app', 'lodash',
                             }).catch(onError);
                         }
 
+                        //============================================================
+                        //
+                        //============================================================
+                        function loadTargets()
+                        {
+                            return $http.get("/api/v2013/thesaurus/domains/AICHI-TARGETS/terms", {
+                                cache: true
+                            }).then(function(o) {
+                              $scope.options.targets = o.data;
 
+                            }).catch(onError);
+                        }
 
                         //============================================================
                         //
@@ -432,7 +443,7 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isEditable() {
-
+                            if($scope.doc.meta)
                             if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request')
                                 return true;
                             else
@@ -512,7 +523,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets()]).then(function() {
                               showProgress();
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 

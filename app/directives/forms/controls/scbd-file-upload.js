@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','services/filters'], function(app, _, template) {
+define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','services/filters','ngFileUpload'], function(app, _, template) {
     'use strict';
     app.directive('scbdFileUpload', ["$http", "Upload", "$timeout", 'mongoStorage','$sce','devRouter', function($http, Upload, $timeout, mongoStorage,$sce,devRouter) {
         return {
@@ -7,6 +7,7 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
             transclude: false,
             scope: {
                 binding: "=ngModal",
+                pattern: "=?pattern",                
                 tempFile: "=tempFile",
                 error  : "=?error"
             },
