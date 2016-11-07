@@ -86,10 +86,61 @@
           <div ng-repeat="subj in sideEventCtrl.doc.subjectObjs">{{subj.name}}</div>
         </td>
       </tr>
-      <tr ng-if="sideEventCtrl.doc.description">
-        <th scope="row">Description</th>
-        <td colspan="2" ng-bind-html="sideEventCtrl.doc.description | rawHtml"></td>
+      <tr >
+        <!-- <th scope="row">Description</th> -->
+        <td colspan="3" >
+          &nbsp;
+
+
+
+
+        </td>
       </tr>
+      <tr >
+        <!-- <th scope="row">Description</th> -->
+        <td colspan="3" >
+          <div class="row">
+
+            <div class="col-xs-12">
+              <ul class="nav nav-tabs" role="tablist" style="margin-bottom:0;">
+                <li role="presentation" ng-class="{'active':sideEventCtrl.tab==='description'}" ng-click="sideEventCtrl.tab='description'"><a  id="description-tab" href="#description" aria-controls="description" role="tab" data-toggle="tab">Description </a></li>
+                <li role="presentation" ng-class="{'active':sideEventCtrl.tab==='documents'}" ng-click="sideEventCtrl.tab='documents'" ng-show="sideEventCtrl.doc.publications.length"><a ng-class="{'success-tab':sideEventCtrl.doc.publications.length && tab!=='documents'}" id="documents-tab" href="#documents" aria-controls="documents" role="tab" data-toggle="tab">Publications </a></li>
+                <li role="presentation" ng-class="{'active':sideEventCtrl.tab==='links'}" ng-click="sideEventCtrl.tab='links'" ng-show="sideEventCtrl.doc.links.length"><a ng-class="{'success-tab':sideEventCtrl.doc.links.length && tab!=='links'}" id="links-tab" href="#links" aria-controls="links" role="tab" data-toggle="tab">Links </a></li>
+                <li  role="presentation" ng-class="{'active':sideEventCtrl.tab==='images'}" ng-click="sideEventCtrl.tab='images'" ng-show="sideEventCtrl.doc.images.length"><a ng-class="{'success-tab':sideEventCtrl.doc.images.length && tab!=='images'}" id="images-tab" href="#images" aria-controls="images" role="tab" data-toggle="tab">Images </a></li>
+                <li  role="presentation" ng-class="{'active':sideEventCtrl.tab==='videos'}" ng-click="sideEventCtrl.tab='videos'" ng-show="sideEventCtrl.doc.videos.length"><a ng-class="{'success-tab':sideEventCtrl.doc.videos.length && tab!=='videos'}" id="videos-tab" href="#videos" aria-controls="videos" role="tab" data-toggle="tab">Videos </a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div fade-in-tab id="description"  class="tab-pane   active text-left" ng-show="sideEventCtrl.tab==='description'">
+            <p>&nbsp;</p>
+            <span ng-bind-html="sideEventCtrl.doc.description | rawHtml">
+
+            </span>
+          </div>
+          <div fade-in-tab id="documents"  class="tab-pane   active text-left" ng-show="sideEventCtrl.tab==='documents'">
+            <div>
+              <link-list  fa-class="fa-book" index="editIndex" name="publications" document="sideEventCtrl.doc" links="sideEventCtrl.doc.publications" ></link-list>
+            </div>
+          </div>
+          <div  fade-in-tab  id="links" class="tab-pane    active text-left" ng-show="sideEventCtrl.tab==='links'">
+            <div>
+              <link-list  fa-class="fa-link" index="editIndex" name="links" document="sideEventCtrl.doc" links="sideEventCtrl.doc.links" ></link-list>
+            </div>
+          </div>
+          <div  fade-in-tab  id="images" class="tab-pane    active text-left" ng-show="sideEventCtrl.tab==='images'">
+            <div>
+              <link-list fa-class="fa-image" index="editIndex" name="images" document="sideEventCtrl.doc" links="sideEventCtrl.doc.images"></link-list>
+            </div>
+          </div>
+          <div fade-in-tab  id="videos" class="tab-pane    active text-left" ng-show="sideEventCtrl.tab==='videos'">
+            <div>
+              <link-list  fa-class="fa-video-camera" index="editIndex" name="videos" document="sideEventCtrl.doc" links="sideEventCtrl.doc.videos" ></link-list>
+            </div>
+          </div>
+        </td>
+      </tr>
+
       <tr ng-show="sideEventCtrl.doc.documents.length">
         <th scope="row">Documents</th>
         <td colspan="2">

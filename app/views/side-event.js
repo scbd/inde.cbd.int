@@ -1,4 +1,4 @@
-define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment) {
+define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-list'], function(app, _,moment) {
     app.filter('fileSize', function() {
         return function(size) {
             if (size < 1024)
@@ -21,6 +21,7 @@ define(['app', 'lodash','moment','directives/mobi-menu'], function(app, _,moment
         _ctrl.isEditable= isEditable;
         _ctrl.notAuth = true;
         _ctrl.goTo = goTo;
+        _ctrl.tab = 'description';
         init();
         return this;
 
