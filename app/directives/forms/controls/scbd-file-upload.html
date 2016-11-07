@@ -56,7 +56,8 @@
         </table>
       </li>
     </ul>
-    <p ng-show="uploadForm.logo.$error.pattern" style="color:#a94442">This file type is not supported.  Please upload an image file JPG, GIF, PNG or SVG</p>
+    <p ng-show="uploadForm.logo.$error.pattern && pattern==='image/*'" style="color:#a94442">This file type is not supported.  Please upload an image file JPG, GIF, PNG or SVG</p>
+    <p ng-show="uploadForm.logo.$error.pattern && pattern==='application/*'" style="color:#a94442">This file type is not supported.  Please upload a file type such as .bz2, .dtd, .doc, .docx, .dotx, .es  .html, .pdf, .potx, .ppsx, .ppt, .pptx, .ps, .txt, .xls, .xlsb, .xlsx, .xltx or .zip </p>
     <p ng-show="uploadForm.logo.$error.maxSize" style="color:#a94442">Error: your image must be less then 2MB</p>
   </span>
 </form>

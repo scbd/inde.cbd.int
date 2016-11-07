@@ -94,6 +94,15 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 if ($attr.schema)
                     $scope.schema = $attr.schema;
 
+                if($attr.hasFileUpload)
+                    $scope.hasFileUpload = $attr.hasFileUpload;
+                else
+                    $scope.hasFileUpload = false;
+
+                if($attr.fileTypes)
+                    $scope.fileTypes = $attr.fileTypes;
+                else
+                    $scope.fileTypes = false;
                 if (!$scope.documents)
                     $scope.documents = [];
 
@@ -139,6 +148,7 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 //=======================================================================
                 function save() {
                     $scope.loading=true;
+
                     if (!_.isNumber($scope.editIndex)) // if new put in array
                         $scope.documents.push($scope.document);
 
@@ -215,20 +225,40 @@ define(['text!./edit-link.html', 'app', 'lodash', 'directives/on-file', 'ngSmoot
                 function close() {
 
                     $scope.editIndex = false;
+                    $scope.document = {};
                     delete($scope.error);
+                    delete($scope.mimeErrorTxt);
                 }
                 $scope.close = close;
+
+function checkMime(file){
+  if(!$scope.fileTypes) return true;
+  if(file.type.indexOf($scope.fileTypes.slice(0, -2))>-1) return true;
+  else
+    return false;
+}
+
+function mimeError(file){
+  if($scope.fileTypes.indexOf('image')>-1)
+    $scope.mimeErrorTxt= "This file type is not supported.  Please upload an image file JPG, GIF, PNG or SVG";
+  else
+  $scope.mimeErrorTxt= "This file type is not supported.  Please upload a file type such as .bz2, .dtd, .doc, .docx, .dotx, .es  .html, .pdf, .potx, .ppsx, .ppt, .pptx, .ps, .txt, .xls, .xlsb, .xlsx, .xltx or .zip"
+  $scope.uploading=false;
+}
 
                 //=======================================================================
                 //
                 //=======================================================================
                 function upload(files,uri) {
                   $scope.uploading=true;
+
                     _.each(files, function(file) {
+                            if(checkMime(file))
                             mongoStorage.uploadDocAtt($scope.schema, $scope.doc._id, file).then(function(){
                                       $scope.document[uri] = 'https://s3.amazonaws.com/mongo.document.attachments/'+$scope.schema+'/' + $scope.doc._id + '/' +  mongoStorage.awsFileNameFix(file.name);
                                       $scope.uploading=false;
                             }).catch($scope.onError);
+                            else mimeError(file);
                    });
                 }
                 $scope.upload = upload;

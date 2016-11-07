@@ -749,7 +749,7 @@ border-top-color: transparent !important;
                   <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
                 </div>
                 <div class="text-left">
-                  <edit-link ng-show="showEdit()" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
+                  <edit-link ng-show="showEdit()" has-file-upload="true" file-types="application/*" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
                 </div>
               </div>
               <div  fade-in-tab  id="links" class="tab-pane    active text-left" ng-show="tab==='links'">
@@ -765,7 +765,7 @@ border-top-color: transparent !important;
                   <link-list ng-show="!showEdit()" fa-class="fa-image" index="editIndex" name="images" document="doc" links="doc.images" save="saveDoc()"></link-list>
                 </div>
                 <div class="text-left">
-                  <edit-link ng-show="showEdit()" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="images" document="doc" links="doc.images" save="saveDoc()"></edit-link>
+                  <edit-link ng-show="showEdit()" has-file-upload="true" file-types="image/*" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="images" document="doc" links="doc.images" save="saveDoc()"></edit-link>
                 </div>
               </div>
               <div fade-in-tab  id="videos" class="tab-pane    active text-left" ng-show="tab==='videos'">
