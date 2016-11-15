@@ -381,7 +381,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             }
             if(_ctrl.search ){
                 if(_ctrl.search && _ctrl.search.length>0 && !Number(_ctrl.search))
-                  q['$text'] = {'$search':_ctrl.search};  // jshint ignore:line
+                  q['$text'] = {'$search':'"'+_ctrl.search+'"'};  // jshint ignore:line
                 else if(_ctrl.search.length>0 && Number(_ctrl.search))
                   q['sideEvent.id'] = Number(_ctrl.search);  // jshint ignore:line
             }
