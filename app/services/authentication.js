@@ -3,11 +3,22 @@
 define(['app', 'angular', 'jquery'], function(app, ng, $) {
     'use strict';
 
-    app.factory('apiToken', ['$q', '$rootScope', '$window', '$document', '$timeout','devRouter', function($q, $rootScope, $window, $document, $timeout,devRouter) {
+    app.factory('apiToken', ['$q', '$rootScope', '$window', '$document', '$timeout', function($q, $rootScope, $window, $document, $timeout) {
 
+
+          var accountsBaseUrl = (function(){
+
+              var domain = window.location.hostname.replace(/[^\.]+\./, '');
+
+              if(domain=='localhost')
+                  domain = 'staging.cbd.int';
+
+              return 'https://accounts.'+domain;
+
+          })();
         var authenticationFrameQ = $q(function(resolve, reject) {
 
-            var frame = $('<iframe src="' + devRouter.ACCOUNTS_URI + '/app/authorize.html" style="display:none"></iframe>');
+            var frame = $('<iframe src="' + accountsBaseUrl + '/app/authorize.html" style="display:none"></iframe>');
 
             $('body').prepend(frame);
 
@@ -50,7 +61,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
                 var receiveMessage = function(event) {
                     $timeout.cancel(unauthorizedTimeout);
 
-                    if (event.origin != devRouter.ACCOUNTS_URI)
+                    if (event.origin != accountsBaseUrl)
                         return;
 
                     var message = JSON.parse(event.data);
@@ -81,7 +92,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
 
                 authenticationFrame.contentWindow.postMessage(JSON.stringify({
                     type: 'getAuthenticationToken'
-                }), devRouter.ACCOUNTS_URI);
+                }), accountsBaseUrl);
 
                 return pToken;
 
@@ -113,7 +124,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
                         authenticationEmail: email
                     };
 
-                    authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), devRouter.ACCOUNTS_URI);
+                    authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), accountsBaseUrl);
                 }
 
                 if (email) {
@@ -198,7 +209,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
         //============================================================
         function signIn(email, password) {
 
-            return $http.post(devRouter.ACCOUNTS_URI + '/api/v2013/authentication/token', {
+            return $http.post(accountsBaseUrl + '/api/v2013/authentication/token', {
 
                 "email": email,
                 "password": password

@@ -1,38 +1,42 @@
-/* jshint node: true, browser: false, esnext: true */
 'use strict';
 
 process.on('SIGTERM', ()=>process.exit());
 
 // CREATE HTTP SERVER AND PROXY
-
-var app = require('express')();
+var express = require('express');
+var app     = express();
 var proxy   = require('http-proxy').createProxyServer({});
+var apiUrl  = process.env.API_URL || 'https://api.cbd.int:443';
+
+if(!process.env.API_URL)
+    console.error(`WARNING: evironment API_URL not set. USING default`);
+
+console.log("API url: ", apiUrl);
 
 app.set('views', __dirname + '/app');
 app.set('view engine', 'ejs');
 
 app.use(require('morgan')('dev'));
 
-// LOAD CONFIGURATION
+// CONFIGURE ROUTES
 
-app.set('port', process.env.PORT || 2050);
-
-// CONFIGURE /APP/* ROUTES
-
-app.use('/app',   require('serve-static')(__dirname + '/app_build'));
-app.use('/app',   require('serve-static')(__dirname + '/app', { maxAge: 0 }));
-app.all('/api/*', (req, res) => proxy.web(req, res, { target: 'https://api.cbddev.xyz', changeOrigin: true, secure:false }));
-//app.all('/app/*', function(req, res) { res.status(404).send(); } );
+app.use('/app',   express.static(__dirname + '/app'));
+app.all('/app/*', (req, res) => res.status(404).send());
+app.all('/api/*', (req, res) => proxy.web(req, res, { target: apiUrl, changeOrigin: true } ));
 
 // CONFIGURE TEMPLATE
-app.get('/*', function (req, res) {
-	res.cookie('VERSION', process.env.VERSION);
-	res.setHeader('Cache-Control', 'public, max-age=0');
-	res.render('template', { baseUrl: req.headers.base_url || '/' });
-});
+
+app.get('/*', (req, res) => res.render('template', { baseUrl: process.env.BASE_PATH || req.headers.base_url || '/' }));
 
 // START SERVER
 
-app.listen(app.get('port'), function () {
+app.listen(process.env.PORT || 2000, function () {
 	console.log('Server listening on %j', this.address());
+});
+
+// Handle proxy errors ignore
+
+proxy.on('error', function (e,req, res) {
+    console.error('proxy error:', e);
+    res.status(502).send();
 });
