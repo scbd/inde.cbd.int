@@ -1,18 +1,25 @@
 define(['app', 'jquery',
     'lodash',
     'text!./toast.html',
+    'angular',
     'toastr',
     'services/authentication',
     'directives/portal/portal-nav',
     'services/history',
     'services/dev-router',
     'services/mongo-storage'
-], function(app, $, _, toastTemplate) {
+], function(app, $, _, toastTemplate,ng) {
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
 
-        $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
+       $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
+       var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+
+       $rootScope.$on("$routeChangeSuccess", function(){
+           $window.ga('set',  'page', basePath+$location.path());
+           $window.ga('send', 'pageview');
+       });
         $q.when(authentication.getUser()).then(function(u) {
             $rootScope.user = u;
         });

@@ -3,7 +3,15 @@
 
 <head>
   <base href="<%=baseUrl%>">
-
+  <script> //Analytics
+    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+    ga('create', 'UA-1996573-1', 'auto');
+    ga('set',    'hostname', window.location.hostname);
+    ga('set',    'location', undefined);
+</script>
+<script src="/app/libs/requirejs/require.js"></script>
+<script src="/app/boot.js"></script>
+<script async src='https://www.google-analytics.com/analytics.js'></script>
   <title>Side Events - Convention on Biological Diversity</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -229,7 +237,7 @@
 
 <body class="ltr" id="top">
   <!-- HEADER (MOBILE) -->
-  <header class="mobile navbar visible-xs hidden-print" role="banner">
+  <header class="mobile navbar visible-xs " role="banner">
     <div class="container">
 
       <div class="navbar-header">
@@ -345,7 +353,7 @@
   </div>
 
   <!--  FOOTER   -->
-  <footer class="container whitebg hidden-print" ng-show="routeLoaded">
+  <footer class="container whitebg" ng-show="routeLoaded">
     <div class="greybg">
       <div class="col-sm-4 fleft">
         <h4>Quick Links</h4>
@@ -386,7 +394,7 @@
     </div>
   </footer>
 
-  <footer class="container standard whitebg hidden-print">
+  <footer class="container standard whitebg">
     <div class="col-md-9">
       <ul class="list-inline">
         <li><a href="/feedback">Feedback</a></li>
@@ -434,8 +442,6 @@
 
   </script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCyD6f0w00dLyl1iU39Pd9MpVVMOtfEuNI&libraries=places"></script>
-
-  <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
 
 </body>
 
