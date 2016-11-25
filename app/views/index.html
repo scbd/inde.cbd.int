@@ -1,12 +1,12 @@
 <div>
 
-  <div scroll-to="top" class="hidden-md hidden-sm hidden-xs">
+  <div scroll-to="top" class="hidden-md hidden-sm hidden-xs hidden-print">
     <div ani-scroll="550" class="float-button" style="padding-top:5px;">
       <i class="fa fa-arrow-circle-up" style="font-size:40px;color:white;"></i>
     </div>
   </div>
 
-  <div scroll-to="top" class="hidden-lg hidden-xl">
+  <div scroll-to="top" class="hidden-lg hidden-xl hidden-print">
     <div ani-scroll="550" class="float-button">
       <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
     </div>
@@ -17,7 +17,7 @@
   </div>
 
   <div class="row">
-    <div class="container-header" mobi-menu>
+    <div class="container-header " mobi-menu>
       <span class="container-header-name hidden-xs">
         <h1 style="display:inline;">Side Events</h1>
       </span>
@@ -43,7 +43,7 @@
           }
         }
       </style>
-      <div class="row" style="padding: 0 10px 0 10px;">
+      <div class="row hidden-print" style="padding: 0 10px 0 10px;">
           <div class="col-xs-12 text-center">
                       <h3 style="background-color:#fff;">{{indexCtrl.confObj.Title.en}}</h3>
                       <h5 style="background-color:#fff;">(Timezone: {{indexCtrl.confObj.timezone}})</h5>
@@ -72,18 +72,18 @@
 <span class="pull-right pointer" ng-if="indexCtrl.advanced"><a ng-src="#" ng-click="indexCtrl.toggleAdvanced()"><i class="fa fa-times"></i> </a></span>
           </div>
       </div>
-      <div class="row" ng-hide="!indexCtrl.advanced" style="padding: 0 10px 0 10px;"><br>
+      <div class="row hidden-print" ng-hide="!indexCtrl.advanced" style="padding: 0 10px 0 10px;"><br>
           <div class="col-lg-3 col-md-3 col-xs-12">
             <select  class="form-control" ng-model="indexCtrl.conference" name="conference" ng-change="onPage(0)">
               <option ng-repeat="docObj in indexCtrl.conferences" value="{{docObj._id}}" ng-if="indexCtrl.isPastConfrence(docObj._id)" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
             </select>
           </div>
-          <div class="col-lg-4 col-md-4 col-xs-12">
+          <div class="col-lg-4 col-md-4 col-xs-12 hidden-print">
 
 &nbsp;
 
           </div>
-          <div class="col-lg-5 col-md-5 col-xs-12">
+          <div class="col-lg-5 col-md-5 col-xs-12 hidden-print">
             <ui-select  multiple ng-model="indexCtrl.hostOrgsSelected"  close-on-select="true"  append-to-body="true" title=" "          spinner-enabled="true">
                 <ui-select-match  placeholder="Host Party or Org. Search" >{{$item.acronym || $item.title}}</ui-select-match>
                 <ui-select-choices  minimum-input-length="3"  style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
@@ -102,9 +102,9 @@
           </div>
 
       </div>
-      <hr>
+      <hr class="hidden-print">
 
-      <div  style="margin-top:6px;">
+      <div   style="margin-top:6px;">
         <!-- <div class="col-xs-12 col-lg-6">
           <span style="padding-left:17px;">Showing
             <span class="badge">{{filtered.length}}</span> Side Events</span>
@@ -187,16 +187,16 @@
         <pagination pages="indexCtrl.pages" page-count="5" current-page="indexCtrl.currentPage" items-per-page="indexCtrl.itemsPerPage" filtered="filtered" search="indexCtrl.search" pages="indexCtrl.pages" on-page="indexCtrl.onPage(pageIndex)" count="indexCtrl.count"> </pagination>
      </div>
     </div>
-<div class="row" id="rooms">
+<div class="row hidden-print" id="rooms">
     <div class="col-xs-12 text-center">
                 <h3 style="background-color:#fff;">Rooms</h3>
                 <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
                 <hr>
     </div>
   </div>
-    <room-table conf-obj="indexCtrl.confObj"> </room-table>
+    <room-table class="hidden-print" conf-obj="indexCtrl.confObj"> </room-table>
 
-    <div class="row" id="faq">
+    <div class="row hidden-print" id="faq">
         <div class="col-xs-12 text-center">
                     <h3 style="background-color:#fff;">FAQ</h3>
                     <h5 style="background-color:#fff;">({{indexCtrl.confObj.Title.en}})</h5>
@@ -204,7 +204,7 @@
         </div>
       </div>
       <div>
-        <table class="table table-hover table-striped" style="margin-top:10px;">
+        <table class="table table-hover table-striped hidden-print" style="margin-top:10px;">
           <thead>
             <tr class="info">
               <th width="100%">Question / Answer</th>
@@ -232,7 +232,7 @@ Moon Palace Resort Cancun<br>
 Carretera Cancun-Chetumal Km. 36.5<br>
 Cancún, Quintana Roo<br>
 CP. 77500 – México<br>
-E-mail:  <ahref="mailto:marluna@palaceresorts.com">marluna@palaceresorts.com</a></p></p>
+E-mail:  <a href="mailto:marluna@palaceresorts.com">marluna@palaceresorts.com</a></p></p>
                 </div>
               </td>
             </tr>

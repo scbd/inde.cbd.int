@@ -8,7 +8,7 @@ define(['app'], function(app) {
                 onFileChange: "&onFile"
             },
             link: function($scope, $element) {
-                var template = '<span class="visible-xs" ><button class="collapsed" type="button" data-toggle="collapse" data-target=".navbar-collapse1" ><i id="mobi-menu-icon" class="fa fa-bars" style="font-size:1.66em;"></i></button></span>';
+                var template = '<span class="visible-xs hidden-print" ><button class="collapsed hidden-print" type="button" data-toggle="collapse" data-target=".navbar-collapse1" ><i id="mobi-menu-icon" class="fa fa-bars " style="font-size:1.66em;"></i></button></span>';
 
                 $scope.mobiMenuOpen = false;
 

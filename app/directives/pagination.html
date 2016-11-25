@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <div class="col-lg-7 col-md-7 col-xs-10">
+        <div class="col-lg-7 col-md-7 col-xs-10 hidden-print">
             <nav class="pull-right" ng-show="pages.length>1">
                 <ul class="pagination">
                     <li>
@@ -39,7 +39,7 @@
             </nav>
         </div>
 
-        <div class="col-lg-2 col-md-2 col-xs-3 text-nowrap">
+        <div class="col-lg-2 col-md-2 col-xs-3 text-nowrap hidden-print">
             <div class="form-group form-inline" style="color:#333;font-size:14px;margin-top:20px;">
                 <span style="color:#333;font-size:14px;">Records per page:</span>
                 <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="reload()" convert-to-number>
