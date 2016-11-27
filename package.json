@@ -7,9 +7,10 @@
     "bower": "1.7.0",
     "ejs": "2.3.4",
     "express": "4.13.3",
+    "googleapis": "^14.2.0",
+    "http-proxy": "1.12.0",
     "morgan": "1.6.1",
-    "serve-static": "1.10.0",
-    "http-proxy": "1.12.0"
+    "serve-static": "1.10.0"
   },
   "engine": "node >= 0.10.36",
   "devDependencies": {},
