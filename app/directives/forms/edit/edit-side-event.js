@@ -423,7 +423,12 @@ define(['app', 'lodash',
                         $scope.requestPublish = function() {
 
                             $scope.ignoreDirtyCheck = true;
-                            $scope.doc.meta.status = 'request';
+
+                            if($scope.doc.meta.status==='published' || $scope.scheduled)
+                              $scope.doc.meta.status = 'published';
+                            else
+                              $scope.doc.meta.status = 'request';
+
                             return mongoStorage.save($scope.schema, cleanDoc($scope.doc), $scope._id).then(function() {
 
                                 $scope.$emit('showSuccess', 'Side Event ' + $scope.doc.id + ' is Now Registered as a Request');
@@ -566,6 +571,21 @@ define(['app', 'lodash',
                                               $scope.preFill=true;
                                             else
                                               $scope.preFill=false;
+
+                                              $http.get('/api/v2016/' + 'inde-side-events/prev-published/'+$scope.doc._id, {}).then(
+                                                function(res){
+                                                  $scope.prevPublished=res.data;
+                                                }
+                                              );
+                                              $http.get('/api/v2016/' + 'inde-side-events/scheduled/'+$scope.doc._id, {}).then(
+                                                function(res){
+                                                  if(res.data)
+                                                    $scope.scheduled=true;
+                                                  else
+                                                    $scope.scheduled=false;
+
+                                                }
+                                              );
                                         }).catch(onError);
                                 } else {
                                             $scope.loading = true;
@@ -604,6 +624,12 @@ define(['app', 'lodash',
                         } // init
 
 
+                        //============================================================
+                        //
+                        //============================================================
+                        function prevPublished() {
+                            return $scope.prevPublished;
+                        }
                         //============================================================
                         // preselect meeting in data
                         //============================================================
@@ -735,12 +761,12 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         $scope.saveDoc = function() {
-console.log($scope.doc);
+
                             $scope.doc.meta.status = 'draft';
                             numHostOrgs = $scope.doc.hostOrgs.length;
                             validateTabs();
                             if (!$scope.doc.id || !$scope._id) {
-console.log($scope.doc);
+
                                 return mongoStorage.save($scope.schema, cleanDoc($scope.doc))
                                   .then(postSaveNewDoc)
                                     .catch(onError);
