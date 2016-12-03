@@ -762,8 +762,13 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.saveDoc = function() {
 
+
                             $scope.doc.meta.status = 'draft';
+                            if($scope.prevPublished)
+                              $scope.doc.meta.status = 'published';
+
                             numHostOrgs = $scope.doc.hostOrgs.length;
+                            if(!$scope.prevPublished)
                             validateTabs();
                             if (!$scope.doc.id || !$scope._id) {
 
