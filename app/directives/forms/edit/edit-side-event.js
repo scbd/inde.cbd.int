@@ -108,8 +108,10 @@ define(['app', 'lodash',
                                 $(document.getElementById('hostOrgMsg')).css('display', 'none');
                                 loadHostOrgs();
                                 if(numHostOrgs < $scope.doc.hostOrgs.length){
-                                  $scope.doc.validTabs.orgs=false;
-                                  $scope.doc.validTabs.contact=false;
+                                  if(!$scope.prevPublished){
+                                    $scope.doc.validTabs.orgs=false;
+                                    $scope.doc.validTabs.contact=false;
+                                  }
                                 }else{
                                   $scope.doc.validTabs.orgs=true;
                                   if(validateResponsibleOrgs() && $scope.doc.validTabs.contact)
@@ -769,7 +771,7 @@ define(['app', 'lodash',
 
                             numHostOrgs = $scope.doc.hostOrgs.length;
                             if(!$scope.prevPublished)
-                            validateTabs();
+                              validateTabs();
                             if (!$scope.doc.id || !$scope._id) {
 
                                 return mongoStorage.save($scope.schema, cleanDoc($scope.doc))
@@ -982,11 +984,12 @@ define(['app', 'lodash',
                         //=======================================================================
                         function validateTabs() {
                           var formData = $scope.editForm;
-                            $scope.doc.validTabs.general = false;
-                            $scope.doc.validTabs.logistics = false;
-                            $scope.doc.validTabs.orgs = false;
-                            $scope.doc.validTabs.contact = false;
-
+                            if(!$scope.prevPublished){
+                                $scope.doc.validTabs.general = false;
+                                $scope.doc.validTabs.logistics = false;
+                                $scope.doc.validTabs.orgs = false;
+                                $scope.doc.validTabs.contact = false;
+                            }
                             if ( formData && formData.title.$valid && formData.description.$valid && formData.subjects.$valid)
                                 $scope.doc.validTabs.general = true;
 
@@ -1035,9 +1038,10 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function submitGeneral(formData) {
-                            $scope.doc.validTabs.general = false;
-                            $scope.doc.validTabs.logistics = false;
-
+                            if(!$scope.prevPublished){
+                              $scope.doc.validTabs.general = false;
+                              $scope.doc.validTabs.logistics = false;
+                            }
                             if (formData.title.$error.required && $scope.submitted)
                                 findScrollFocus('editForm.title');
 
@@ -1077,8 +1081,9 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function submitLogistics(formData) {
+                            if(!$scope.prevPublished)
+                              $scope.doc.validTabs.logistics = false;
 
-                            $scope.doc.validTabs.logistics = false;
                             var ctrls = ['expNumPart', 'conference', 'prefDateOne', 'prefTimeOne', 'prefDateTwo', 'prefTimeTwo', 'prefDateThree', 'prefTimeThree'];
                             if (formData.conference.$error.required && $scope.submitted) {
                                 findScrollFocus('formData.conference');
@@ -1125,7 +1130,8 @@ define(['app', 'lodash',
                         function submitOrgs(formData) {
 
                             var ctrls = ['hostOrgs'];
-                            $scope.doc.validTabs.orgs = false;
+                            if(!$scope.prevPublished)
+                              $scope.doc.validTabs.orgs = false;
                             if (!$scope.doc.hostOrgs || $scope.doc.hostOrgs.length === 0) {
                                 formData.$valid = false;
                             } else {
@@ -1150,6 +1156,7 @@ define(['app', 'lodash',
                                     $scope.tab = 'contact';
                                     $('#contact-tab').tab('show');
                                 });
+
                                 $scope.saveDoc();
                             }
                         } //submitGeneral
@@ -1174,7 +1181,8 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function submitContact(formData) {
-                            $scope.doc.validTabs.contact = false;
+                            if(!$scope.prevPublished)
+                              $scope.doc.validTabs.contact = false;
 
                             var ctrls = ['firstName', 'lastName', 'phone', 'city', 'country', 'email'];
 
@@ -1349,7 +1357,8 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         $scope.resubmitWarning= function() {
-                            if(!$scope.doc || !$scope.doc.meta) return false;
+
+                            if(!$scope.doc || !$scope.doc.meta || $scope.prevPublished) return false;
                             return (($scope.doc.meta.status==='request' || $scope.doc.meta.status==='published') && !isTabsValid());
                         };
                     } //link
