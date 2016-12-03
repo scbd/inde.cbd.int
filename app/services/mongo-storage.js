@@ -361,13 +361,14 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
         //============================================================
         //
         //============================================================
-        function loadDocs(schema,q, pageNumber,pageLength,count,sort,fields) {
+        function loadDocs(schema,q, pageNumber,pageLength,count,sort,fields,all) {
 
             var params = {};
             if(!sort)
               sort={'meta.modifiedOn':-1};
 
             if (!schema) throw "Error: failed to indicate schema loadDocs";
+            if(!fields)fields=null;
 
             params = {
                 q: q,
@@ -381,13 +382,13 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
            if(!count)
               return $http.get('/api/v2016/' + schema, {'params': params});
            else
-              return injectCount(schema,params);
+              return injectCount(schema,params,all);
         }
 
         //============================================================
         //
         //============================================================
-        function injectCount(schema,params) {
+        function injectCount(schema,params,all) {
 
             var promises=[];
 
@@ -396,7 +397,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
 
             promises[1]=$http.get('/api/v2016/' + schema, {'params': params});
 
-           if(!params.q['meta.status'] || _.isObject(params.q['meta.status']))
+           if((!params.q['meta.status'] || _.isObject(params.q['meta.status'])) && all)
               _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
                   var tempP = _.cloneDeep(params);
                   tempP.q['meta.status']=status;
@@ -407,14 +408,13 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                  res[0].count=res[1].data.count;
                  res[0].facits={all:res[1].data.count};
                   var count=2;
-                  if(!params.q['meta.status'] || _.isObject(params.q['meta.status']))
+                  if((!params.q['meta.status'] || _.isObject(params.q['meta.status'])) && all)
                     _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
                         res[0].facits[status]=res[count].data.count;
                         count++;
                     });
                   else
                     res[0].facits[params.q['meta.status']]=res[1].data.count;
-
 
                   return res[0];
             });

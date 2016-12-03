@@ -253,7 +253,7 @@ define(['app', 'lodash',
                    if($scope.filter.status==='all')
                      q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']}; // jshint ignore:line
 
-                return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1).then(function(response) {
+                return loadDocsFunc($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage).then(function(response) {
                     $scope.docs = response.data;
 
                     $scope.count = response.count;

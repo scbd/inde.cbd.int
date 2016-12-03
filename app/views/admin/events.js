@@ -644,7 +644,7 @@ define(['app', 'lodash',
 
               var q = buildQuery ();
               $scope.exporting=true;
-              return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort).then(
+              return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort,false,true).then(
                 function(responce){
                     var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Meetings','# Participants',
                                         'Preferred Date 1','Preferred Date 2','Preferred Date 3','Requirements','Host Organizations','Contact','Responsible Person',
@@ -675,7 +675,7 @@ define(['app', 'lodash',
                 return $q.all([loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                     var q = buildQuery ();
 
-                    return mongoStorage.loadDocs($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1,$scope.sort).then(function(response) {
+                    return mongoStorage.loadDocs($scope.schema,_.clone(q), (pageIndex * $scope.itemsPerPage),$scope.itemsPerPage,1,$scope.sort,false,true).then(function(response) {
                         loadListPostProcess (response);
                         refreshPager(pageIndex);
                         $scope.loading=false;
@@ -777,7 +777,7 @@ define(['app', 'lodash',
             //=======================================================================
             function loadOrgsFilter(q) {
                   var fields = {'hostOrgs':1};
-                  mongoStorage.loadDocs($scope.schema,_.clone(q), 0,1000000,false,$scope.sort,fields).then(
+                  mongoStorage.loadDocs($scope.schema,_.clone(q), 0,1000000,false,$scope.sort,fields,false,true).then(
                     function(r){
 
                       if(!$scope.options.filter.hostOrgs)$scope.options.filter.hostOrgs=[];

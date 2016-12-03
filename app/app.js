@@ -13,6 +13,7 @@ define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUploa
         // $httpProvider.useApplyAsync(true);
         $httpProvider.interceptors.push('authenticationHttpIntercepter');
         $httpProvider.interceptors.push('realmHttpIntercepter');
+        $httpProvider.interceptors.push('apiRebase');
     }]);
 
       app.config(['toastrConfig', function(toastrConfig) {
@@ -54,6 +55,21 @@ define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUploa
 			}
 		};
 	}]);
+  app.factory('apiRebase', ["$location", function($location) {
+
+  		return {
+  			request: function(config) {
+
+                  var rewrite = config  .url   .toLowerCase().indexOf('/api/')===0 &&
+                               $location.host().toLowerCase() == 'www.cbd.int';
+
+  				if(rewrite)
+                      config.url = 'https://api.cbd.int' + config.url;
+
+  				return config;
+  			}
+  		};
+  	}]);
 
     return app;
 });

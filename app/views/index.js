@@ -119,25 +119,27 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         function initWatches() {
             $scope.$watch('indexCtrl.hostOrgsSelected', function() {
 
-                if(typeof _ctrl.hostOrgsSelected !== "undefined")
+                if((typeof _ctrl.hostOrgsSelected !== "undefined") )
                   loadList(0);
             });
             $scope.$watch('indexCtrl.search', function() {
-                if(typeof _ctrl.search !== "undefined")
+                if((typeof _ctrl.search !== "undefined" ))
                   loadList(0);
             });
             $scope.$watch('indexCtrl.conference', function() {
-                if(typeof _ctrl.conference !== "undefined"){
+
+                if((typeof _ctrl.conference !== "undefined") ){
                   _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
                   delete(_ctrl.rooms);
                   delete(_ctrl.venueObj);
                   loadRooms();
                   loadVenue();
-                  loadList(0);
+
                 }
             });
-            $scope.$watch('indexCtrl.selectedTime', function() {
-                if(typeof _ctrl.selectedTime !== "undefined")
+            $scope.$watch('indexCtrl.selectedTime', function(prev) {
+
+                if((typeof _ctrl.selectedTime !== "undefined")  && !(_ctrl.selectedTime==='all' && prev==='all'))
                   loadList(0);
             });
         }
@@ -225,10 +227,13 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             _ctrl.currentPage=index;
         };
 
+        var inProgress = false;
         //=======================================================================
         //
         //=======================================================================
         function loadList  (pageIndex) {
+          if(inProgress)return $q.defer();
+            inProgress = true;
             _ctrl.loading = true;
             if(!pageIndex) pageIndex=0;
 
@@ -237,11 +242,12 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                 var q = buildQuery ();
 
-                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort).then(function(response) {
+                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,false,false).then(function(response) {
 
                     loadListPostProcess (response);
                     refreshPager(pageIndex);
                     _ctrl.loading=false;
+                    inProgress = false;
                 });
             });
         } // archiveOrg
