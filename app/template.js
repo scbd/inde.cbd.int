@@ -11,7 +11,7 @@ define(['app', 'jquery',
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
-
+        $scope.routeLoaded=false;
         $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
         $q.when(authentication.getUser()).then(function(u) {
             $rootScope.user = u;
@@ -20,6 +20,8 @@ define(['app', 'jquery',
         $scope.$on("$routeChangeSuccess", function(evt, current) {
           if(current.$$route)
             $("head > title").text(current.$$route.label || "Side Event Registration");
+
+          $scope.routeLoaded=true;
         });
 
         $rootScope.$on('event:auth-emailVerification', function(evt, data) {
