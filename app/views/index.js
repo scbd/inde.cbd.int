@@ -138,6 +138,13 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
                 }
             });
             $scope.$watch('indexCtrl.selectedTime', function(prev) {
+                var selectedT=null;
+
+                _.each(_ctrl.sideEventTimes,function(t){
+                      if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
+                        selectedT=t.value;
+                });
+                _ctrl.selectedTime=selectedT;
 
                 if((typeof _ctrl.selectedTime !== "undefined")  && !(_ctrl.selectedTime==='all' && prev==='all'))
                   loadList(0);
