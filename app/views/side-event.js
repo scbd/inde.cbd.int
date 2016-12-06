@@ -15,13 +15,16 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         var _ctrl = this;
         var allOrgs;
         var editable=false;
-
+        _ctrl.loadingAuth =true;
         _ctrl.hasError = hasError;
         _ctrl.trustSrc = trustSrc;
         _ctrl.isEditable= isEditable;
         _ctrl.notAuth = true;
         _ctrl.goTo = goTo;
         _ctrl.tab = 'description';
+          _ctrl.scheduled=false;
+          _ctrl.aichiLink=aichiLink;
+          _ctrl.aichiImgLink=aichiImgLink;
         init();
         return this;
 
@@ -80,7 +83,12 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         //==============================
         function loadConfrences() {
 
-            return $http.get('/api/v2016/conferences?s={"StartDate":1}', {
+            return $http.get('/api/v2016/conferences', {
+                params: {
+                    s:{StartDate:1},
+                    f:{Title:1,MajorEventIDs:1,timezone:1}
+                }
+            },{
                 cache: true
             }).then(function(conf) {
                 _ctrl.conferences = conf.data;
@@ -102,7 +110,8 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
                           _id: {
                               $in: oidArray
                           }
-                      }
+                      },
+                      f:{EVT_TIT_EN:1,EVT_CD:1}
                   }
               }, {
                   cache: true
@@ -121,8 +130,23 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         //==============================
         function loadDoc() {
             var _id = $route.current.params.id;
+            var params = {
+                f:{'meta.status':1,title:1,description:1,hostOrgs:1,id:1,conference:1,logo:1,subjects:1,targets:1,videos:1,publications:1,links:1,images:1,meetings:1}
+            };
+            return $http.get('/api/v2016/inde-side-events/'+_id, {params:params}).then(function(se) {
+                se=se.data;
+                var paramsR ={q:{'sideEvent.id':se.id},f:{start:1,end:1,'location.room':1,open:1}};
+                $http.get('/api/v2016/reservations/', {params:paramsR}).then(function(res) {
+                    return _ctrl.reservation=res.data[0];
+                }).then(function(r){
 
-            return mongoStorage.loadDoc('inde-side-events', _id).then(function(se) {
+                        return $http.get('/api/v2016/venue-rooms/'+r.location.room, {params:{f:{title:1,acronym:1,location:1,atTable:1,capacity:1}}}).then(function(room) {
+                            _ctrl.room=room.data;
+                            if(_ctrl.room)
+                              _ctrl.scheduled=true;
+          console.log('_ctrl.schedule',_ctrl.scheduled);
+                        });
+                });
 
                 return loadEditPermisions(se).then(function(){
 
@@ -148,6 +172,7 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         //==============================
         function loadSideEventFromRes(){
             var _id = $route.current.params.id;
+            _ctrl.loadingAuth =true;
           return $http.get("/api/v2016/reservations", {
               params: {
                   q: {
@@ -162,6 +187,7 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
                 _ctrl.doc = se.data[0].sideEvent;
                 _ctrl.doc.orgs = [];
                 _ctrl.notAuth=false;
+                _ctrl.loadingAuth =false;
               }
 
               //wasPrevPub(_ctrl.doc );
@@ -280,7 +306,23 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
             return $sce.trustAsResourceUrl(src);
         }
 
+        //============================================================
+        //
+        //============================================================
+        function aichiLink(target) {
+            if(!target)return '';
+            var number = Number(target.substring(target.length-2));
+            return 'https://www.cbd.int/aichi-targets/target/'+number;
+        }
 
+        //============================================================
+        //
+        //============================================================
+        function aichiImgLink(target) {
+            if(!target)return '';
+            var number = Number(target.substring(target.length-2));
+            return 'https://www.cbd.int/app/images/aichi-targets/abt-'+number+'-96.png';
+        }
 
         //============================================================
         //

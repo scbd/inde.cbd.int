@@ -395,7 +395,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
 
             promises[0]=$http.get('/api/v2016/' + schema, {'params':_.clone(params)});
             params.c=1;
-
+            params.f={_id:1};
             promises[1]=$http.get('/api/v2016/' + schema, {'params': params});
 
            if((!params.q['meta.status'] || _.isObject(params.q['meta.status'])) && all)
@@ -736,7 +736,8 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                                 c: 1,
                                 q: {
                                     'meta.status': status,
-                                }
+                                },
+                                f:{_id:1}
                             };
                             if (ownersOnly && !_.isBoolean(ownersOnly))
                                 params.q['meta.createdBy'] = ownersOnly;

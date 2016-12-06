@@ -31,8 +31,8 @@
     <div class="clearfix"></div>
   </div>
 </div>
-<div class="col-xs-12" ng-if="sideEventCtrl.notAuth">
-  <div class="bs-callout bs-callout-danger">
+<div class="col-xs-12" ng-if="sideEventCtrl.notAuth" ng-cloak>
+  <div class="bs-callout bs-callout-danger" ng-if="!sideEventCtrl.loadingAuth">
     <h4><i class="fa fa-lock" aria-hidden="true"></i> You are not authorised to view this side-event.</h4>
   </div>
 </div >
@@ -55,6 +55,27 @@
       <tr class="hidden-sm hidden-md hidden-lg hidden-xl">
         <th scope="row">ID</th>
         <td>{{sideEventCtrl.doc.id}}</td>
+      </tr>
+      <tr ng-if="sideEventCtrl.scheduled">
+        <th scope="row">Date</th>
+        <td
+          {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'dddd'}}<br>
+          {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'YYYY.MM.DD'}}
+           @ {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'HH:mm'}}
+        </td>
+      </tr>
+      <tr ng-if="!sideEventCtrl.scheduled">
+        <th scope="row">Date</th>
+        <td >
+          <span style="color:red;">Not scheduled</span>
+        </td>
+      </tr>
+      <tr ng-if="sideEventCtrl.scheduled">
+        <th scope="row">Room</th>
+        <td >{{sideEventCtrl.room.title}}<br>
+          {{sideEventCtrl.room.location}}<br>
+          Capacity: {{sideEventCtrl.room.capacity}} people
+        </td>
       </tr>
       <tr>
         <th scope="row">Conference</th>
@@ -84,6 +105,15 @@
         <th scope="row">Topics</th>
         <td>
           <div ng-repeat="subj in sideEventCtrl.doc.subjectObjs">{{subj.name}}</div>
+        </td>
+      </tr>
+      <tr >
+        <th scope="row">Aichi Biodiversity Targets</th>
+        <td ng-if="sideEventCtrl.doc.length">
+          <div ng-repeat="subj in sideEventCtrl.doc.targets"><a ng-href="{{sideEventCtrl.aichiLink(subj)}}"><img ng-src="{{sideEventCtrl.aichiImgLink(subj)}}" style="height:20px"></img> {{subj}}</></div>
+        </td>
+        <td ng-if="!sideEventCtrl.doc.length">
+          <span style="color:red;">Not Linked to Aichi Biodiversity Targets, this feature was recently added. Please update your side-event.</span>
         </td>
       </tr>
       <tr >
