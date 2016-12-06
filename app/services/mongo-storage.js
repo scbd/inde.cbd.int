@@ -197,14 +197,15 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
 
                     var params = {};
 
-                    if (!localStorage.getItem('allOrgs') || isModified || force) {
+                    if (!localStorage.getItem('allOrgs') || isModified || true) {
                         params = {
                             q: {
                                 'meta.status': 'published',
                                 'meta.v': {
                                     $ne: 0
                                 }
-                            }
+                            },
+                            f:{acronym:1,title:1,logo:1}
                         };
 
                         return  $http.get('/api/v2016/inde-orgs', {
@@ -503,7 +504,8 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                     'sideEvent': {
                         $exists: true
                     }
-                }
+                },
+                f:{start:1,end:-1,title:1,description:1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1}
             };
             if (text)
                 params.q.$text = {

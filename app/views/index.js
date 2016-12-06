@@ -247,8 +247,9 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
 
             return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                 var q = buildQuery ();
+                var f =  {start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
 
-                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,false,false).then(function(response) {
+                return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,f,false).then(function(response) {
 
                     loadListPostProcess (response);
                     refreshPager(pageIndex);
