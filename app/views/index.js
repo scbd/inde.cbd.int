@@ -139,15 +139,14 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             });
             $scope.$watch('indexCtrl.selectedTime', function(prev) {
                 var selectedT=null;
-
-                _.each(_ctrl.sideEventTimes,function(t){
-                      if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
-                        selectedT=t.value;
-                });
-                _ctrl.selectedTime=selectedT;
-
-                if((typeof _ctrl.selectedTime !== "undefined")  && !(_ctrl.selectedTime==='all' && prev==='all'))
-                  loadList(0);
+                if(typeof _ctrl.selectedTime ==="undefined" ){
+                    _.each(_ctrl.sideEventTimes,function(t){
+                          if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
+                            selectedT=t.value;
+                    });
+                    _ctrl.selectedTime=selectedT;
+                }
+                loadList(0);
             });
         }
 
@@ -367,8 +366,8 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             var numDays = moment.tz(_ctrl.confObj.EndDate,_ctrl.confObj.timezone).diff(_ctrl.confObj.StartDate,'days');
 
             _ctrl.sideEventTimes=[{title:'All Days',value:'all', selected:true}];
-            if(typeof _ctrl.selectedTime ==="undefined")
-              _ctrl.selectedTime='all';
+
+
 
             for(var i=1; i<=numDays; i++)
             {
