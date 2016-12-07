@@ -107,6 +107,7 @@ border-top-color: transparent !important;
       </div>
     </div>
     <div></div>
+
     <div class="row" ng-show="isEditable()">
 
       <div class="col-lg-6   col-xs-12 text-nowrap">
@@ -118,16 +119,17 @@ border-top-color: transparent !important;
       </div>
       <div class="col-lg-6  hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;padding-bottom:15px;">
 
-
-        <button ng-show="!showEdit() && (doc.meta.status!= 'published') " class="btn" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
-          <span ng-show="numStepsCompleted()<5">Save Draft</span>
+<!-- ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)} -->
+        <button ng-show="!showEdit() && (doc.meta.status!= 'published') " class="btn" type="button"  ng-click="saveDoc()" >
+          <span >Save Draft</span>
           <!-- <span ng-show="numStepsCompleted()>=5 ">Cancel Request</span> -->
         </button>
         <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
         Save & Validate Step</button>
-        <button ng-click="publishRequestDial()"  ng-disabled="!isTabsValid()" class="btn btn-success" type="button">
-          <span ng-show="numStepsCompleted()<5 && (doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-            <span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+
+        <button ng-show="doc.meta.status" ng-click="publishRequestDial()" class="btn btn-success" type="button">
+          <span ng-show="(doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
+            <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
           </button>
       </div>
 
@@ -136,13 +138,15 @@ border-top-color: transparent !important;
           <span >Save Draft</span>
           <!-- <span ng-show="numStepsCompleted()>=5">Cancel Request</span> -->
         </button>
-        <button ng-show="!showEdit() && isTabsValid() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
-        <button ng-click="publishRequestDial()"  ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button">
-          <span ng-show="numStepsCompleted()<5 && (doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-            <span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+
+        <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
+        <button ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
+          <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
+            <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
           </button>
       </div>
   </div>
+
     <div class="row">
       <div ng-show="false" class="alert alert-success alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="msg=''">&times;</button>
@@ -682,65 +686,7 @@ border-top-color: transparent !important;
                               </td>
                             </tr>
 
-                            <tr ng-repeat="org in doc.hostOrgs" ng-if="isOrgPublishable(org) || isOrgParty(org)" >
 
-                              <td class="text-nowrap">
-
-
-                                  <img  ng-if="org.length>2" ng-src="{{getOrgImgSource(org);}}" style="max-hight:38px;max-width:38px;" />
-
-
-                                <i ng-if="org.length===2" class="flag-icon flag-icon-{{org}}" ></i>
-
-                                {{getOrgName(org)}}
-                                <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
-                              </td>
-                              <td>
-                                <select id="res-org" ng-model="doc.responsibleOrgs[$index].sameAs" ng-change="sameAs(doc.responsibleOrgs[$index].sameAs,$index)" ng-disabled="allSameAsOptionsInUse() || document.getElementById('res-org').length===1">
-                                  <option value="" selected>Select a Person</option>
-                                  <option value="contact" ng-if="!isContactUsedInSameAs($index)">Contact</option>
-                                  <option value="principal" ng-if="(!isPrincipalUsedInSameAs($index) && (doc.responsible && doc.responsible.email)) || doc.responsibleOrgs[$index].sameAs==='principal'">Side Event Principal</option>
-                                  <option value="me" ng-if="!isMeUsedInSameAs($index)">Me</option>
-                                </select>
-
-                                <input type="hidden" ng-model="doc.responsibleOrgs[$index].orgId" value="org">
-                              </td>
-                              <td>
-
-                                <div ng-class="{'has-error': editForm['personalTitle_'+$index].$invalid && editForm.$submitted}">
-
-                                  <input id="personalTitle_{{$index}}" class="form-control" type="text" name="personalTitle_{{$index}}" ng-model="doc.responsibleOrgs[$index].personalTitle" />
-                                  <p ng-show="editForm['personalTitle_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">Salutation is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm['firstName_'+$index].$invalid && editForm.$submitted}">
-
-                                  <input id="firstName_{{$index}}" class="form-control" type="text" name="firstName_{{$index}}" ng-model="doc.responsibleOrgs[$index].firstName" />
-                                  <p ng-show="editForm['firstName_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">First name is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm['lastName_'+$index].$invalid && editForm.$submitted}">
-
-                                  <input id="lastName_{{$index}}" class="form-control" type="text" name="lastName_{{$index}}" ng-model="doc.responsibleOrgs[$index].lastName" required/>
-                                  <p ng-show="editForm['lastName_'+$index].$invalid && editForm.$submitted" class="help-block error red-status">Last name is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm['email_'+$index].$invalid && editForm.$submitted}">
-
-                                  <input type="email" id="email_{{$index}}" class="form-control" name="email_{{$index}}" ng-model="doc.responsibleOrgs[$index].email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder=" " required/>
-
-                                  <div ng-show="(editForm.$submitted || editForm['email_'+$index].$touched)">
-                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.duplicate">Error:  the contact person can only be associated or linked to one organization.</p>
-                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.required">This field is mandatory</p>
-                                      <p class="help-block error red-status" ng-show="editForm['email_'+$index].$error.pattern || editForm['email_'+$index].$error.email">This is not a valid email</p>
-                                  </div>
-                                </div>
-                              </td>
-
-                            </tr>
 
                         </table>
                       </div>
@@ -838,16 +784,17 @@ border-top-color: transparent !important;
                 </div>
                 <div class="col-lg-6  hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;padding-bottom:15px;">
 
-
-                  <button ng-show="!showEdit() && (doc.meta.status!= 'published') " class="btn" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)}">
-                    <span ng-show="numStepsCompleted()<5">Save Draft</span>
+            <!-- ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)} -->
+                  <button ng-show="!showEdit() && (doc.meta.status!= 'published') " class="btn" type="button"  ng-click="saveDoc()" >
+                    <span >Save Draft</span>
                     <!-- <span ng-show="numStepsCompleted()>=5 ">Cancel Request</span> -->
                   </button>
                   <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
                   Save & Validate Step</button>
-                  <button ng-click="publishRequestDial()"  ng-disabled="!isTabsValid()" class="btn btn-success" type="button">
-                    <span ng-show="numStepsCompleted()<5 && (doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-                      <span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+
+                  <button ng-show="doc.meta.status" ng-click="publishRequestDial()" class="btn btn-success" type="button">
+                    <span ng-show="(doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
+                      <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
                     </button>
                 </div>
 
@@ -856,10 +803,11 @@ border-top-color: transparent !important;
                     <span >Save Draft</span>
                     <!-- <span ng-show="numStepsCompleted()>=5">Cancel Request</span> -->
                   </button>
-                  <button ng-show="!showEdit() && isTabsValid() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
-                  <button ng-click="publishRequestDial()"  ng-disabled="!isTabsValid()" class="btn btn-success btn-block" type="button">
-                    <span ng-show="numStepsCompleted()<5 && (doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-                      <span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+
+                  <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
+                  <button ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
+                    <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
+                      <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
                     </button>
                 </div>
             </div>

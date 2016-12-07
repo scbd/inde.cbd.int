@@ -709,7 +709,7 @@ define(['app', 'lodash',
                                     $scope.doc.contact.email = response.data.Email;
                                     $scope.doc.contact.address = response.data.Address;
                                     $scope.doc.contact.city = response.data.City;
-                                    $scope.doc.contact.country = {identifier:response.data.Country};
+                                    $scope.doc.contact.country = response.data.Country;
 
                                     $scope.doc.contact.personalTitle = response.data.Title;
                                     $scope.doc.contact.state = response.data.State;
@@ -1003,26 +1003,26 @@ define(['app', 'lodash',
                                 $scope.doc.validTabs.orgs = true;
 
                             var validRows = true;
-                            _.each($scope.doc.hostOrgs, function(resOrg, key) {
-
-                                if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
-                                    if (validRows) validRows = false;
-                                }
-
-                                if (formData['lastName_' + key].required && $scope.submitted) {
-                                    if (validRows) validRows = false;
-                                }
-                                if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
-                                    validRows = false;
-
-                                _.each($scope.doc.hostOrgs, function(resOrg, key) {
-                                    if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
-                                      $scope.doc.responsibleOrgs[key].sameAs='';
-                                });
-
-                                if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
-                                  $scope.doc.responsible.sameAs='';
-                            });
+                            // _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                            //
+                            //     if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
+                            //         if (validRows) validRows = false;
+                            //     }
+                            //
+                            //     if (formData['lastName_' + key].required && $scope.submitted) {
+                            //         if (validRows) validRows = false;
+                            //     }
+                            //     if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
+                            //         validRows = false;
+                            //
+                            //     _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                            //         if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                            //           $scope.doc.responsibleOrgs[key].sameAs='';
+                            //     });
+                            //
+                            //     if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                            //       $scope.doc.responsible.sameAs='';
+                            // });
 
                             if(isAdmin())validRows = true;
                             if (formData && formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
@@ -1194,6 +1194,7 @@ define(['app', 'lodash',
                                 findScrollFocus('editForm.phone');
                             if (formData.city.$error.required && $scope.submitted)
                                 findScrollFocus('editForm.city');
+
                             if (formData.country.$error.required && $scope.submitted)
                                 findScrollFocus('editForm.country');
                             if ((formData.emaill.$error.required || formData.emaill.$error.pattern || formData.emaill.$error.email) && $scope.submitted)
@@ -1206,33 +1207,33 @@ define(['app', 'lodash',
                                 findScrollFocus('editForm.responsibleLastName');
 
                             var validRows = true;
-                            if(!isAdmin())
-                            _.each($scope.doc.hostOrgs, function(resOrg, key) {
-
-                                if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
-                                    findScrollFocus('email_' + key);
-                                    if (validRows) validRows = false;
-                                }
-
-                                if (formData['firstName_' + key].$error.required && $scope.submitted) {
-                                    findScrollFocus('firstName_' + key);
-                                    if (validRows) validRows = false;
-                                }
-                                if (formData['lastName_' + key].required && $scope.submitted) {
-                                    findScrollFocus('lastName_' + key);
-                                    if (validRows) validRows = false;
-                                }
-                                if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
-                                    validRows = false;
-
-                                _.each($scope.doc.hostOrgs, function(resOrg, key) {
-                                    if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
-                                      $scope.doc.responsibleOrgs[key].sameAs='';
-                                });
-
-                                if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
-                                  $scope.doc.responsible.sameAs='';
-                            });
+                            // if(!isAdmin())
+                            // _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                            //
+                            //     if ((formData['email_' + key].$error.required || formData['email_' + key].$error.pattern || formData['email_' + key].$error.email) && $scope.submitted) {
+                            //         findScrollFocus('email_' + key);
+                            //         if (validRows) validRows = false;
+                            //     }
+                            //
+                            //     if (formData['firstName_' + key].$error.required && $scope.submitted) {
+                            //         findScrollFocus('firstName_' + key);
+                            //         if (validRows) validRows = false;
+                            //     }
+                            //     if (formData['lastName_' + key].required && $scope.submitted) {
+                            //         findScrollFocus('lastName_' + key);
+                            //         if (validRows) validRows = false;
+                            //     }
+                            //     if($scope.doc.responsibleOrgs[key] && duplicateResponsibleOrgs(formData,$scope.doc.responsibleOrgs[key].email,key))
+                            //         validRows = false;
+                            //
+                            //     _.each($scope.doc.hostOrgs, function(resOrg, key) {
+                            //         if( $scope.doc.responsibleOrgs[key] && !$scope.doc.responsibleOrgs[key].lastName && !$scope.doc.responsibleOrgs[key].email)
+                            //           $scope.doc.responsibleOrgs[key].sameAs='';
+                            //     });
+                            //
+                            //     if($scope.doc.responsible && !$scope.doc.responsibleLastName && !$scope.doc.responsibleOrgsEmail)
+                            //       $scope.doc.responsible.sameAs='';
+                            // });
                             if(isAdmin())validRows = true;
 
                             if (formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
