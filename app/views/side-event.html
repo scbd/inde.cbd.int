@@ -109,10 +109,10 @@
       </tr>
       <tr >
         <th scope="row">Aichi Biodiversity Targets</th>
-        <td ng-if="sideEventCtrl.doc.length">
+        <td ng-if="sideEventCtrl.doc.targets.length">
           <div ng-repeat="subj in sideEventCtrl.doc.targets"><a ng-href="{{sideEventCtrl.aichiLink(subj)}}"><img ng-src="{{sideEventCtrl.aichiImgLink(subj)}}" style="height:20px"></img> {{subj}}</></div>
         </td>
-        <td ng-if="!sideEventCtrl.doc.length">
+        <td ng-if="!sideEventCtrl.doc.targets.length">
           <span style="color:red;">Not Linked to Aichi Biodiversity Targets, this feature was recently added. Please update your side-event.</span>
         </td>
       </tr>

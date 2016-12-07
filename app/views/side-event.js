@@ -11,7 +11,6 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
     });
 
     return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter','$timeout', function(mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter,$timeout) {
-
         var _ctrl = this;
         var allOrgs;
         var editable=false;
@@ -22,9 +21,9 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         _ctrl.notAuth = true;
         _ctrl.goTo = goTo;
         _ctrl.tab = 'description';
-          _ctrl.scheduled=false;
-          _ctrl.aichiLink=aichiLink;
-          _ctrl.aichiImgLink=aichiImgLink;
+        _ctrl.scheduled=false;
+        _ctrl.aichiLink=aichiLink;
+        _ctrl.aichiImgLink=aichiImgLink;
         init();
         return this;
 
@@ -144,7 +143,6 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
                             _ctrl.room=room.data;
                             if(_ctrl.room)
                               _ctrl.scheduled=true;
-          console.log('_ctrl.schedule',_ctrl.scheduled);
                         });
                 });
 
