@@ -1,21 +1,23 @@
-define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scroll-directive',
+define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-menu','ngSmoothScroll','scroll-directive',
     'filters/propsFilter',
     'filters/moment',
     'filters/truncate',
     'services/filters',
     'directives/pagination',
+    'directives/tool-tip',    
     'directives/room-table',
     'ui.select',
     'directives/mobi-menu',
-    'directives/share'
-], function(app, _, moment) {
+    'directives/share',
+    'ouical',
+    'directives/ouical',
+    'ngDialog'
+], function(app, _, moment,ouicalDialog) {
 
-    return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache) {
+    return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache','ngDialog',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache,ngDialog) {
 
         var _ctrl = this;
         _ctrl.hasError = hasError;
-        // _ctrl.customSearch = customSearch;
-        // _ctrl.loadReservations = loadReservations;
         _ctrl.allOrgs = [];
         _ctrl.confrences = [];
         _ctrl.preLoadImages = [];
@@ -34,6 +36,8 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         _ctrl.toggleAdvanced=toggleAdvanced;
         _ctrl.aichiLink=aichiLink;
         _ctrl.aichiImgLink=aichiImgLink;
+        _ctrl.calDialog=calDialog;
+
         load();
         return this;
 
@@ -64,6 +68,23 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
             return  _.find(_ctrl.rooms,{'_id':id})[property];
 
         }
+
+        //============================================================
+        //
+        //============================================================
+        function calDialog (res) {
+
+            $scope.dialogRes=res;
+            $scope.rooms=_ctrl.rooms;
+            ngDialog.open({
+                template: ouicalDialog,
+                className: 'ngdialog-theme-default',
+                closeByDocument: true,
+                plain: true,
+                scope: $scope
+            });
+
+        }; //$scope.roomDialog
 
         //==============================
         //

@@ -29,6 +29,7 @@ require.config({
         'ckeditor'                 : 'libs/ng-ckeditor/libs/ckeditor/ckeditor',
         '720kb.socialshare'        : 'libs/angular-socialshare/dist/angular-socialshare.min',
         'ui.select'                : 'libs/angular-ui-select/dist/select',
+        'ouical'                   : 'services/ouical',
     },
     shim: {
         'libs/angular/angular'      : { deps: ['jquery'] },
@@ -48,6 +49,7 @@ require.config({
         'toastr'                    : { deps: ['angular']},
         'ng-ckeditor'               : { deps: ['angular','ckeditor']},
         '720kb.socialshare'         : { deps: ['angular']}
+
     }
 
 });

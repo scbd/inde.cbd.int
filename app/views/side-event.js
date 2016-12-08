@@ -1,4 +1,4 @@
-define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-list','directives/share'], function(app, _,moment) {
+define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-menu',    'directives/link-list','directives/share',    'directives/ouical','ngDialog'], function(app, _,moment,ouicalDialog) {
     app.filter('fileSize', function() {
         return function(size) {
             if (size < 1024)
@@ -10,7 +10,7 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         };
     });
 
-    return ['mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter','$timeout', function(mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter,$timeout) {
+    return ['$scope','mongoStorage', '$route', '$http', '$sce', '$location', '$q','authentication','$window','devRouter','$timeout','ngDialog', function($scope,mongoStorage, $route, $http, $sce, $location, $q, auth,$window,devRouter,$timeout,ngDialog) {
         var _ctrl = this;
         var allOrgs;
         var editable=false;
@@ -24,6 +24,7 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
         _ctrl.scheduled=false;
         _ctrl.aichiLink=aichiLink;
         _ctrl.aichiImgLink=aichiImgLink;
+        _ctrl.calDialog=calDialog;
         init();
         return this;
 
@@ -36,7 +37,24 @@ define(['app', 'lodash','moment','directives/mobi-menu',    'directives/link-lis
                 allOrgs = orgs;
             });
         }
+        //============================================================
+        //
+        //============================================================
+        function calDialog (res) {
+          var test = Object.assign(_ctrl.reservation,_ctrl.doc);
 
+
+            $scope.dialogRes=Object.assign(_ctrl.reservation,_ctrl.doc);
+            $scope.room=_ctrl.room;
+            ngDialog.open({
+                template: ouicalDialog,
+                className: 'ngdialog-theme-default',
+                closeByDocument: true,
+                plain: true,
+                scope: $scope
+            });
+
+        }; //$scope.roomDialog
         //==============================
         //
         //==============================

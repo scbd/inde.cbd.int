@@ -1,4 +1,4 @@
-define(['text!./share.html', 'app','720kb.socialshare'], function(template, app) {
+define(['text!./share.html', 'app','720kb.socialshare',    'directives/tool-tip',  ], function(template, app) {
     'use strict';
     app.directive('share', ['$timeout',function($timeout) {
         return {
