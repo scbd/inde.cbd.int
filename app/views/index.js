@@ -32,6 +32,8 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         _ctrl.sort={'start': 1};
         _ctrl.advanced=false;
         _ctrl.toggleAdvanced=toggleAdvanced;
+        _ctrl.aichiLink=aichiLink;
+        _ctrl.aichiImgLink=aichiImgLink;
         load();
         return this;
 
@@ -234,6 +236,23 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
         };
 
         var inProgress = false;
+        //============================================================
+        //
+        //============================================================
+        function aichiLink(target) {
+            if(!target)return '';
+            var number = Number(target.substring(target.length-2));
+            return 'https://www.cbd.int/aichi-targets/target/'+number;
+        }
+
+        //============================================================
+        //
+        //============================================================
+        function aichiImgLink(target) {
+            if(!target)return '';
+            var number = Number(target.substring(target.length-2));
+            return 'https://www.cbd.int/app/images/aichi-targets/abt-'+number+'-96.png';
+        }
         //=======================================================================
         //
         //=======================================================================
@@ -247,7 +266,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
 
             return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                 var q = buildQuery ();
-                var f =  {start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
+                var f =  {'sideEvent.targets':1,start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
 
                 return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,f,false).then(function(response) {
 
@@ -372,8 +391,10 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
 
             for(var i=1; i<=numDays; i++)
             {
-              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
-              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
+              if(moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').isoWeekday()<6){
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
+              }
             }
 
         }
