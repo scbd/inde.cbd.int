@@ -149,12 +149,13 @@
                     <td style="cursor:pointer;" nowrap>#{{doc.sideEvent.id}}
 
                     </td>
-                    <td style="cursor:pointer;">{{doc.dayOfWeek}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'dddd'}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'YYYY.MM.DD'}} @ {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'HH:mm'}}
+                    <td style="cursor:pointer;">{{doc.dayOfWeek}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'dddd'}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'YYYY.MM.DD'}} @ {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'HH:mm'}}<br>
+                      <a href="#" ng-click="indexCtrl.calDialog(doc)" style="cursor:pointer;" tool-tip data-placement="top" data-original-title="Add to your calendar"><i  class="fa fa-calendar-plus-o fa-1x hidden-print" aria-hidden="true"  ></i> Add to Calendar</a>
+
                         <hr style="margin: 5px 0 5px 0;"> {{indexCtrl.roomDisplay(doc.location.room,'title')}}
                         <hr style="margin: 5px 0 5px 0;"> {{indexCtrl.roomDisplay(doc.location.room,'location')}}
                         <hr style="margin: 5px 0 5px 0;" class="hidden-print">
                         <share doc="doc.sideEvent" class="hidden-print"></share>
-                        <i ng-click="indexCtrl.calDialog(doc)" class="fa fa-calendar-plus-o fa-2x hidden-print" aria-hidden="true" style="color:#337ab7;" tool-tip data-placement="top" data-original-title="Add to your calendar"></i>
                     </td>
                     <!-- <td style="cursor:pointer;" nowrap>
               <strong>{{doc.room.title}}</strong>

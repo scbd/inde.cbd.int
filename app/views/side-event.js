@@ -156,7 +156,7 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
                 $http.get('/api/v2016/reservations/', {params:paramsR}).then(function(res) {
                     return _ctrl.reservation=res.data[0];
                 }).then(function(r){
-
+                        if(r.location.room)
                         return $http.get('/api/v2016/venue-rooms/'+r.location.room, {params:{f:{title:1,acronym:1,location:1,atTable:1,capacity:1}}}).then(function(room) {
                             _ctrl.room=room.data;
                             if(_ctrl.room)
