@@ -22,7 +22,7 @@
 </style>
 <form name="uploadForm" novalidate>
   <span ng-class="{'has-error-div':uploadForm.logo.$error.maxSize}">
-    <div ngf-pattern="{{pattern}}" ng-show="isImage" name="logo" ngf-max-size="1MB" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" style="position:relative;width:100%;">
+    <div ngf-pattern="{{pattern}}" ng-show="isImage" name="logo" ngf-max-size="2MB" ngf-drop ngf-select ng-model="files" class="drop-box" ngf-drag-over-class="'dragover'" ngf-multiple="false" ngf-allow-dir="true" style="position:relative;width:100%;">
 
       <i class="fa fa-camera" style="position:absolute;right:5px;color:#bbbbbb;font-size:30px;"></i>
       <div>
