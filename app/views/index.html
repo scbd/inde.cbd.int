@@ -161,7 +161,7 @@
               <strong>{{doc.room.title}}</strong>
               <br>{{doc.room.location}}</td>-->
                     <td>
-                        <span><a href="{{doc.sideEvent.id}}">{{doc.sideEvent.title}}</a></span>
+                        <span><a href="{{doc.sideEvent.id}}">{{doc.sideEvent.title || doc.title}}</a></span>
                         <br>
                         <hr style="margin: 5px 0 5px 0;" ng-if="doc.sideEvent.description">
                         <div class="row">
