@@ -133,7 +133,9 @@
     result.innerHTML += '<input name="add-to-calendar-checkbox" class="add-to-calendar-checkbox" id="checkbox-for-' + calendarId + '" type="checkbox">';
 
     Object.keys(calendars).forEach(function(services,index) {
-      if(!((window.navigator.userAgent.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(window.navigator.userAgent)) || navigator.userAgent.match('CriOS'))&& (index<2))
+      if(!(((/Chrome\/[.0-9]*/).test(window.navigator.userAgent) || navigator.userAgent.match('CriOS')) &&
+      (index<2) && navigator.vendor !== null && navigator.vendor.match(/Apple Computer, Inc./) &&
+      (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPod/i))    ))
       result.innerHTML += calendars[services];
     });
 
