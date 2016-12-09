@@ -132,7 +132,8 @@
       calendarId + '" class="add-to-calendar-checkbox"></label>';
     result.innerHTML += '<input name="add-to-calendar-checkbox" class="add-to-calendar-checkbox" id="checkbox-for-' + calendarId + '" type="checkbox">';
 
-    Object.keys(calendars).forEach(function(services) {
+    Object.keys(calendars).forEach(function(services,index) {
+      if(!((window.navigator.userAgent.indexOf('Android') > -1 && (/Chrome\/[.0-9]*/).test(window.navigator.userAgent)) || navigator.userAgent.match('CriOS'))&& (index<2))
       result.innerHTML += calendars[services];
     });
 
