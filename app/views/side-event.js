@@ -25,6 +25,7 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
         _ctrl.aichiLink=aichiLink;
         _ctrl.aichiImgLink=aichiImgLink;
         _ctrl.calDialog=calDialog;
+        _ctrl.isChromeIOS = isChromeIOS;
         init();
         return this;
 
@@ -41,11 +42,11 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
         //
         //============================================================
         function calDialog (res) {
-          var test = Object.assign(_ctrl.reservation,_ctrl.doc);
-
 
             $scope.dialogRes=Object.assign(_ctrl.reservation,_ctrl.doc);
             $scope.room=_ctrl.room;
+            $scope.isChromeIOS = isChromeIOS;
+
             ngDialog.open({
                 template: ouicalDialog,
                 className: 'ngdialog-theme-default',
@@ -72,6 +73,18 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
             );
         }
 
+        //==============================
+        //
+        //==============================
+        function isChromeIOS(){
+
+          if(/CriOS/i.test(navigator.userAgent) &&
+              /iphone|ipod|ipad/i.test(navigator.userAgent)){
+                  return true;
+              }else{
+                  return false;
+              }
+        }
 
         //==============================
         //

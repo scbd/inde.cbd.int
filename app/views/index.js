@@ -4,7 +4,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
     'filters/truncate',
     'services/filters',
     'directives/pagination',
-    'directives/tool-tip',    
+    'directives/tool-tip',
     'directives/room-table',
     'ui.select',
     'directives/mobi-menu',
@@ -37,6 +37,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         _ctrl.aichiLink=aichiLink;
         _ctrl.aichiImgLink=aichiImgLink;
         _ctrl.calDialog=calDialog;
+        _ctrl.isChromeIOS = isChromeIOS;
 
         load();
         return this;
@@ -69,6 +70,19 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
         }
 
+        //==============================
+        //
+        //==============================
+        function isChromeIOS(){
+
+          if(/CriOS/i.test(navigator.userAgent) &&
+              /iphone|ipod|ipad/i.test(navigator.userAgent)){
+                  return true;
+              }else{
+                  return false;
+              }
+        }
+
         //============================================================
         //
         //============================================================
@@ -76,6 +90,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             $scope.dialogRes=res;
             $scope.rooms=_ctrl.rooms;
+            $scope.isChromeIOS = isChromeIOS;
+
             ngDialog.open({
                 template: ouicalDialog,
                 className: 'ngdialog-theme-default',
