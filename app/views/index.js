@@ -196,15 +196,15 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             if(!_ctrl.allOrgs || _.isEmpty(_ctrl.allOrgs))
               return  mongoStorage.loadOrgs().then(function(orgs) {
                           _ctrl.allOrgs = orgs;
-                          $timeout(function(){
-                            _.each(_ctrl.allOrgs, function(org) {
-                                var image = new Image();
-                                if(org.logo && org.logo.indexOf('mongo.document.attachments.temporary')==-1){
-                                    image.src = org.logo;
-                                    _ctrl.preLoadImages.push(image);
-                                }
-                            });
-                          });
+                        //   $timeout(function(){
+                        //     _.each(_ctrl.allOrgs, function(org) {
+                        //         var image = new Image();
+                        //         if(org.logo && org.logo.indexOf('mongo.document.attachments.temporary')==-1){
+                        //             image.src = org.logo;
+                        //             _ctrl.preLoadImages.push(image);
+                        //         }
+                        //     });
+                        //   });
 
                       });
             else return $q.resolve(_ctrl.allOrgs);
@@ -415,6 +415,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //
         //============================================================
         function loadDates() {
+
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
               loadRooms();

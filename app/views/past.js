@@ -247,16 +247,13 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
           if(!_ctrl.conferences || _.isEmpty(_ctrl.conferences))
             return mongoStorage.loadConferences().then(function(o) {
               _ctrl.conferences=[];
-                var conferences=_.cloneDeep(o).sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
-                  conferences=conferences.splice(0,2);
 
-                _.each(conferences,function(conf,index){
-
-                      if(conf && !isPastConfrence(conf._id,conferences))
-
-                        conferences.splice(index,1);
+               var conferences=[];
 
 
+                _.each(o,function(conf){
+                      if(conf && conf.seTiers && isPastConfrence(conf._id,o)) 
+                        conferences.push(conf);
                 });
 
                 _ctrl.conferences=conferences;
