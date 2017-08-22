@@ -205,7 +205,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                                     $ne: 0
                                 }
                             },
-                            f:{acronym:1,title:1,logo:1}
+                            f:{acronym:1,title:1}
                         };
 
                         return  $http.get('/api/v2016/inde-orgs', {

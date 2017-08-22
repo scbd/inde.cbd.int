@@ -1,7 +1,7 @@
 <div>
     <div class="visible-print-block">
-      <span class="badge pull-left">{{indexCtrl.itemsPerPage}}</span> of <span class="badge">{{indexCtrl.count}}</span>
-      <h2 style="position:absolute;top:-20px;right:10px;">Side-Events</h2>
+        <span class="badge pull-left">{{indexCtrl.itemsPerPage}}</span> of <span class="badge">{{indexCtrl.count}}</span>
+        <h2 style="position:absolute;top:-20px;right:10px;">Side-Events</h2>
     </div>
     <div scroll-to="top" class="hidden-md hidden-sm hidden-xs hidden-print">
         <div ani-scroll="550" class="float-button" style="padding-top:5px;">
@@ -19,7 +19,7 @@
         <div>{{error}}</div>
     </div>
 
-    <div class="row hidden-print" >
+    <div class="row hidden-print">
         <div class="container-header " mobi-menu>
             <span class="container-header-name hidden-xs">
         <h1 style="display:inline;">Side-Events</h1>
@@ -32,12 +32,23 @@
 
     </div>
 
+    <div class="row">
+        <br>
+        <div class="alert alert-info">
+            <div class="text-center">
+                <h4 style="color:black;">{{indexCtrl.confObj.Title.en}}</h4></div>
+            <div>Side-event registration for the Twenty-first meeting of the Subsidiary Body on Scientific, Technical and Technological Advice and Tenth meeting of the Ad Hoc Open-ended Working Group on Article 8(j) and Related Provisions of the Convention
+                on Biological Diversity will be available this week.</div>
+        </div>
+    </div>
+
+
 
 
     <!-- venue-->
 
 
-    <div class="row">
+    <div class="row" ng-if="indexCtrl.reservations.length">
         <!-- side event schedule -->
 
         <style>
@@ -119,7 +130,8 @@
           <span class="text-right" style="padding-right:17px;">
             <span class="badge">{{filtered.length}}</span> Side Events in Total</span>
         </div> -->
-            <pagination class="hidden-print" pages="indexCtrl.pages" page-count="5" current-page="indexCtrl.currentPage" items-per-page="indexCtrl.itemsPerPage" filtered="filtered" search="indexCtrl.search" pages="indexCtrl.pages" on-page="indexCtrl.onPage(pageIndex)" count="indexCtrl.count">
+            <pagination class="hidden-print" pages="indexCtrl.pages" page-count="5" current-page="indexCtrl.currentPage" items-per-page="indexCtrl.itemsPerPage" filtered="filtered" search="indexCtrl.search" pages="indexCtrl.pages" on-page="indexCtrl.onPage(pageIndex)"
+                count="indexCtrl.count">
             </pagination>
 
         </div>
@@ -141,7 +153,7 @@
 
                     </td>
                     <td style="cursor:pointer;">{{doc.dayOfWeek}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'dddd'}} {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'YYYY.MM.DD'}} @ {{doc.start | momentTZ:indexCtrl.confObj.timezone:'format':'HH:mm'}}<br>
-                      <a href="#" ng-click="indexCtrl.calDialog(doc)" style="cursor:pointer;" tool-tip data-placement="top" data-original-title="Add to your calendar"><i  class="fa fa-calendar-plus-o fa-1x hidden-print" aria-hidden="true"  ></i> Add to Calendar</a>
+                        <a href="#" ng-click="indexCtrl.calDialog(doc)" style="cursor:pointer;" tool-tip data-placement="top" data-original-title="Add to your calendar"><i  class="fa fa-calendar-plus-o fa-1x hidden-print" aria-hidden="true"  ></i> Add to Calendar</a>
 
                         <hr style="margin: 5px 0 5px 0;"> {{indexCtrl.roomDisplay(doc.location.room,'title')}}
                         <hr style="margin: 5px 0 5px 0;"> {{indexCtrl.roomDisplay(doc.location.room,'location')}}
@@ -185,7 +197,7 @@
                                 <span ng-repeat="subj in doc.sideEvent.targets" >
                                   <a ng-href="{{indexCtrl.aichiLink(subj)}}"><img ng-src="{{indexCtrl.aichiImgLink(subj)}}" style="height:20px"></img></a>
                                 </span>
-                <!-- <span class="pull-right" ng-if="!doc.sideEvent.targets.length" style="color:red;">No Aichi Biodiversity Targets Linked</span> -->
+                                <!-- <span class="pull-right" ng-if="!doc.sideEvent.targets.length" style="color:red;">No Aichi Biodiversity Targets Linked</span> -->
 
 
 
@@ -203,147 +215,13 @@
             </pagination>
         </div>
     </div>
-    <div class="row hidden-print" id="rooms">
+    <div class="row hidden-print" id="rooms" ng-show="rooms.length">
         <div class="col-xs-12 text-center">
             <h3 style="background-color:#fff;">Rooms</h3>
             <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
             <hr>
         </div>
     </div>
-    <room-table class="hidden-print" conf-obj="indexCtrl.confObj"> </room-table>
+    <room-table class="hidden-print" conf-obj="indexCtrl.confObj" ng-show="rooms.length"> </room-table>
 
-    <div class="row hidden-print" id="faq">
-        <div class="col-xs-12 text-center">
-            <h3 style="background-color:#fff;">FAQ</h3>
-            <h5 style="background-color:#fff;">({{indexCtrl.confObj.Title.en}})</h5>
-            <hr>
-        </div>
-    </div>
-    <div>
-        <table class="table table-hover table-striped hidden-print" style="margin-top:10px;">
-            <thead>
-                <tr class="info">
-                    <th width="100%">Question / Answer</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-click="q1=!q1" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">When will the schedule be posted?</a></span>
-                        <div ng-if="q1" style="padding-left:50px;">
-                            <hr>
-                            <p>We have received and overwhelming amount of requests for side-events for COP-13. A total of 475 requests were received and two hundred requests were for spaces on the first 2 days of COP. We would like to thank everyone for
-                                their patience and those for their assistance with reducing the amount of side-events taking place at COP-13. </p>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr id="q2" ng-click="q2=!q2" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">Who do I contact about catering?</a></span>
-                        <div ng-if="q2" style="padding-left:50px;">
-                            <hr>
-                            <p>The <a href="https://s3.amazonaws.com/mongo.document.attachments/inde-side-events/catering.pdf">catering form</a> is in Annex D of the information note for participants, please <a href="https://s3.amazonaws.com/mongo.document.attachments/inde-side-events/catering.pdf">download it</a>,
-                                complete and return to:
-                                <br>
-                                <p style="padding-left:50px;">Ms. Margarita Luna
-                                    <br> Moon Palace Resort Cancun
-                                    <br> Carretera Cancun-Chetumal Km. 36.5
-                                    <br> Cancún, Quintana Roo
-                                    <br> CP. 77500 – México
-                                    <br> E-mail: <a href="mailto:marluna@palaceresorts.com">marluna@palaceresorts.com</a></p>
-                            </p>
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-click="q3=!q3" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">How do I cancel my side-event?</a></span>
-                        <div ng-if="q3" style="padding-left:50px;">
-                            <hr>
-                            <p>Please email us at <a href="mailto:secretariat@cbd.int">secretariat@cbd.int</a> indicateing your cancelation request. Ensure the sending email matches the email of the requester/creater of the side-event request or the person
-                                indicated as the principal for the side-event within the form. </p>
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-click="q4=!q4" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">How do I ship my promotional materials?</a></span>
-                        <div ng-if="q4" style="padding-left:50px;">
-                            <hr>
-                            <p>
-                                Kindly make arrangements to ensure that your service provider delivers the shipment to the Moon Palace to the address below between 20-27 November 2016 only. No shipments will be allowed in the venue thereafter.
-                                <p style="padding-left:50px;">Attention: Grupos y Convenciones / Mr. Rene Palavicini
-                                    <br> Hotel Moon Palace Golf & Spa Resort
-                                    <br> Carretera Federal 307 / Km. 340 Chetumal
-                                    <br> Cancún, Quintana Roo. C.P. 77500 México
-                                    <br> Mobile: +52 1 (55) 9185 1677
-                                    <br> Tel.: +52 (998) 8816000
-                                    <br>
-                                </p>
-                                Please take note of the following:
-                                <br>
-
-                                <ul>
-                                    <li>Boxes must be numbered in a “1 of X format”. Whenever possible, a copy of the publication should be affixed to each box. </li>
-                                    <li>Shipments will be available for collection as of 29 November 2016 at 3:30 p.m. at the shipping counter located in the Arena building.</li>
-                                    <li>Storage and handling fees will apply and will be payable upon collection of the shipment:</li>
-                                    <ul>
-                                        <li>Shipments smaller than a pallet are subject to 75.00 USD each.</li>
-                                        <li>Pallets are subject to 125.00 USD each.</li>
-                                    </ul>
-                                </ul>
-
-                            </p>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr ng-click="q5=!q5" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">How to I change the title, description or image of my side-event?</a></span>
-                        <div ng-if="q5" style="padding-left:50px;">
-                            <hr>
-                            <p>
-                                <ol>
-                                    <li>Go to your dashbord from the very top menu.</li>
-                                    <li>Press the blue button "Go to Your Side-Events".</li>
-                                    <li>Locate the side-event you want to edit and press the edit button on the far right of the row.</li>
-                                    <li>Make the changes you want, then ensure to press the button "Edit Request" once finnished. This will send the change request to the Secretariat for approval. Once Approved the changes will be visible to the public.</li>
-                                </ol>
-                            </p>
-                        </div>
-                    </td>
-                </tr>
-                <tr ng-click="q6=!q6" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">If I am having a technical issue with the form or the web-site what do I do?</a></span>
-                        <div ng-if="q6" style="padding-left:50px;">
-                            <hr>
-                            <p> Use our live chat to get support from our IT help desk.</p>
-                        </div>
-                    </td>
-                </tr>
-
-
-                <tr ng-click="q7=!q7" style="cursor:pointer;">
-                    <td>
-                        <span><a href="#">Who do I contact with all non-technical related questions about side-events ?</a></span>
-                        <div ng-if="q7" style="padding-left:50px;">
-                            <hr>
-                            <p> <strong>Lisa Pedicelli</strong>
-                                <br> Conference Services
-                                <br> Secretariat of the Convention on Biological Diversity
-                                <br> 413 St-Jacques Street West, Suite 800
-                                <br> Montreal, Quebec
-                                <br> H2Y 1N9
-                                <br> Direct tel: +1-514-287-7058
-                                <br> E-mail: <a href="mailto:lisa.pedicelli@cbd.int">lisa.pedicelli@cbd.int</a>
-                                <br> Web site: <a href="https://www.cbd.int">www.cbd.int</a> </p>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
