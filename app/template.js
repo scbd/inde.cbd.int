@@ -1,5 +1,4 @@
-define(['app', 'jquery',
-    'lodash',
+define(['app','angular', 'jquery',
     'text!./toast.html',
     'toastr',
     'services/authentication',
@@ -7,7 +6,7 @@ define(['app', 'jquery',
     'services/history',
     'services/dev-router',
     'services/mongo-storage'
-], function(app, $, _, toastTemplate) {
+], function(app, ng,$, _, toastTemplate) {
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
@@ -17,11 +16,14 @@ define(['app', 'jquery',
             $rootScope.user = u;
         });
 
+        var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
         $scope.$on("$routeChangeSuccess", function(evt, current) {
           if(current.$$route)
             $("head > title").text(current.$$route.label || "Side Event Registration");
 
           $scope.routeLoaded=true;
+          $window.ga('set',  'page', basePath+$location.path());
+          $window.ga('send', 'pageview');
         });
 
         $rootScope.$on('event:auth-emailVerification', function(evt, data) {
@@ -33,7 +35,7 @@ define(['app', 'jquery',
         //
         //
         //============================================================
-        $rootScope.$watch('user', _.debounce(function(user) {
+        var killWatch = $rootScope.$watch('user', function(user) {
 
             if (!user)
                 return;
@@ -55,9 +57,10 @@ define(['app', 'jquery',
                 if (!_slaask.initialized) {
                     _slaask.init('ae83e21f01860758210a799872e12ac4');
                     _slaask.initialized = true;
+                    killWatch();
                 }
             });
-        }, 1000));
+        });
 
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 
