@@ -122,7 +122,7 @@
         <td colspan="3" >
           &nbsp;
 
-            <share doc="sideEventCtrl.doc"></share>
+            <share doc="sideEventCtrl.doc" conf="sideEventCtrl.doc.conferenceObj"></share>
 
         </td>
       </tr>
@@ -144,9 +144,10 @@
 
           <div fade-in-tab id="description"  class="tab-pane   active text-left" ng-show="sideEventCtrl.tab==='description'">
             <p>&nbsp;</p>
-            <span ng-bind-html="sideEventCtrl.doc.description | rawHtml">
+            <p style="overflow-wrap: break-word; word-wrap: break-word; -ms-word-break: break-all; word-break: break-all;word-break: break-word; ">
+            <span ng-bind-html="sideEventCtrl.doc.description | rawHtml" >
 
-            </span>
+            </span></p>
           </div>
           <div fade-in-tab id="documents"  class="tab-pane   active text-left" ng-show="sideEventCtrl.tab==='documents'">
             <div>
