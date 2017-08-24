@@ -6,9 +6,17 @@ define(['text!./share.html', 'app','720kb.socialshare',    'directives/tool-tip'
             template: template,
             scope: {
                 doc:'=',
+                conf:'='
             },
 
             controller: ['$scope', function($scope) {
+                console.log($scope.conf);
+                var killWatch = $scope.$watch('conf',function(){
+                    if($scope.conf){
+                        console.log($scope.conf);
+                        killWatch();
+                    }
+                });
                 function getPageCount(){
                   return Math.ceil($scope.count/5);
                 }
