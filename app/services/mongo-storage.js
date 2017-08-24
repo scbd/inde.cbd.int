@@ -150,7 +150,8 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                                                   _id: {
                                                       $in: oidArray
                                                   }
-                                              }
+                                              },
+                                              f:{titleShort:1,EVT_THM_CD:1}
                                           }
                                       }).then(function(m) {
                                           conf.meetings = m.data;
