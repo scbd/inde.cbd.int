@@ -30,6 +30,7 @@ define(['app', 'lodash',
                         var numHostOrgs =0;
                         $scope.status = "";
                         $scope._id = $route.current.params.id;
+                        $scope.meetingId = $location.search().meetingId;
 
                         $scope.loading = true;
                         $scope.schema = "inde-side-events";
@@ -90,9 +91,11 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
-                        $scope.$watch('doc.conference', function() {
-                            if ($scope.doc.conference)
+                        var killWatch = $scope.$watch('doc.conference', function() {
+                            if ($scope.doc.conference){
                                     generateDates();
+                                    killWatch();
+                            }
 
                         });
 
@@ -530,7 +533,7 @@ define(['app', 'lodash',
                             $scope.editIndex = false;
 
                             $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets()]).then(function() {
-                              showProgress();
+                                showProgress();
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
                                     if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
@@ -589,37 +592,38 @@ define(['app', 'lodash',
                                               );
                                         }).catch(onError);
                                 } else {
-                                            $scope.loading = true;
-                                            $scope.doc = {};
-                                            $scope.doc.meta={};
-                                            $scope.doc.tempFile={};
-                                            delete($scope._id);
-                                            $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
-                                            //initProfile(true);
+                                    $scope.loading = true;
+                                    $scope.doc = {};
+                                    $scope.doc.meta={};
+                                    $scope.doc.tempFile={};
+                                    delete($scope._id);
+                                    $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
+                                    //initProfile(true);
 
-                                            $scope.doc.validTabs = {
-                                                'general': false,
-                                                'logistics': false,
-                                                'orgs': false,
-                                                'contact': false
-                                            };
-                                            $scope.isNew = true;
+                                    $scope.doc.validTabs = {
+                                        'general': false,
+                                        'logistics': false,
+                                        'orgs': false,
+                                        'contact': false
+                                    };
+                                    $scope.isNew = true;
 
-                                            if (!$scope.doc.hostOrgs) $scope.doc.hostOrgs = [];
-                                            if (!$scope.doc.contact) $scope.doc.contact = {};
-                                            if (!$scope.doc.publications) $scope.doc.publications = [];
-                                            if (!$scope.doc.images) $scope.doc.images = [];
-                                            if (!$scope.doc.links) $scope.doc.links = [];
-                                            if (!$scope.doc.videos) $scope.doc.videos = [];
-                                            if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
-                                            if (!$scope.doc.prefDate)$scope.doc.prefDate={};
+                                    if (!$scope.doc.hostOrgs) $scope.doc.hostOrgs = [];
+                                    if (!$scope.doc.contact) $scope.doc.contact = {};
+                                    if (!$scope.doc.publications) $scope.doc.publications = [];
+                                    if (!$scope.doc.images) $scope.doc.images = [];
+                                    if (!$scope.doc.links) $scope.doc.links = [];
+                                    if (!$scope.doc.videos) $scope.doc.videos = [];
+                                    if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
+                                    if (!$scope.doc.prefDate)$scope.doc.prefDate={};
 
 
-                                        $scope.doc.conference=$scope.options.conferences[0]._id;
-                                        $scope.options.conferences[0].selected=true;
+                                    $scope.doc.conference=$scope.options.conferences[0]._id;
+                                    $scope.options.conferences[0].selected=true;
 
-                                      $scope.preFill=false;
-                                      $scope.loading=false;
+                                    $scope.preFill=false;
+                                    $scope.loading=false;
+
                                 }
                             }).catch(onError); // load orgs
                         } // init
@@ -632,11 +636,19 @@ define(['app', 'lodash',
                             return $scope.prevPublished;
                         }
                         //============================================================
-                        // preselect meeting in data
+                        //
                         //============================================================
                         function checkMeeting(index) {
+                            var meeting;
+                            var meetings =$scope.options.conferenceObj.meetings;
 
-                            var meeting = $scope.options.conferenceObj.meetings[index];
+                            if(index)
+                                meeting = meetings[index];
+                            else
+                                for (var i=0; i<meetings.length; i++)
+                                    if(meetings[i]._id === $scope.meetingId)
+                                        meeting = meetings[i];
+
                             meeting.selected = !meeting.selected;
                             if (!$scope.doc.meetings) $scope.doc.meetings = [];
                             if (meeting.selected)
@@ -687,6 +699,7 @@ define(['app', 'lodash',
                                         meet.selected = true;
                                 });
                             });
+                            checkMeeting();
                         } // init
 
 

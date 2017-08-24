@@ -38,6 +38,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         _ctrl.aichiImgLink=aichiImgLink;
         _ctrl.calDialog=calDialog;
         _ctrl.isChromeIOS = isChromeIOS;
+        _ctrl.goTo=goTo;
 
         load();
         return this;
@@ -173,7 +174,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                   delete(_ctrl.venueObj);
                   loadRooms();
                   loadVenue();
-
                 }
             });
             $scope.$watch('indexCtrl.selectedTime', function(prev) {
@@ -406,6 +406,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                     _ctrl.conference=_ctrl.conferences[0]._id;
                     _ctrl.conferences[0].selected=true;
                   }
+
               }).then(loadDates).catch(onError);
 
             else return $q.resolve(_ctrl.conferences);
@@ -531,6 +532,13 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //============================================================
         function hasError() {
             return !!_ctrl.error;
+        }
+
+        //============================================================
+        //
+        //============================================================
+        function goTo(url) {
+            return $location.url(url);
         }
 
         //============================================================

@@ -37,12 +37,36 @@
         <div class="alert alert-info">
             <div class="text-center">
                 <h4 style="color:black;">{{indexCtrl.confObj.Title.en}}</h4></div>
-            <div>Side-event registration for the Twenty-first meeting of the Subsidiary Body on Scientific, Technical and Technological Advice and Tenth meeting of the Ad Hoc Open-ended Working Group on Article 8(j) and Related Provisions of the Convention
-                on Biological Diversity will be available this week.</div>
+            <div><p>Side-event registration for the Twenty-first meeting of the Subsidiary Body on Scientific, Technical and Technological Advice and Tenth meeting of the Ad Hoc Open-ended Working Group on Article 8(j) and Related Provisions of the Convention
+                on Biological Diversity is now open.</p>
+                <p>Other information will be posted shortly when available.</p>
+            </div>
         </div>
     </div>
 
+    <div class="row">
+      <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="meeting in indexCtrl.confObj.meetings">
 
+        <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
+          <div class="panel-heading  text-center text-nowrap">
+            <h4 class="hidden-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_THM_CD}}</h4>
+            <h5 class="visible-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_THM_CD}}</h5>
+          </div>
+          <div class="panel-body text-center" >
+            <div class="btn-group-vertical">
+              <!-- <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button> -->
+              <!-- <button class="btn btn-sm btn-info disabled">Register a Side Event (under maintenance 2 hours)</button> -->
+              <button class="btn btn-sm btn-info" ng-click="indexCtrl.goTo('/manage/events/new?meetingId='+meeting._id)">Register a Side Event</button>
+              <!-- ng-click="goTo(con._id);" -->
+            </div>
+          </div>
+          <div class="panel-footer text-right">
+            <div class="text-center">{{meeting.EVT_FROM_DT | date:'dd/MM/yyyy': 'UTC' }}
+              <span style=""> to </span> {{meeting.EVT_TO_DT | date:'dd/MM/yyyy':'UTC' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
     <!-- venue-->
