@@ -16,7 +16,6 @@ define(['app', 'lodash',
     'ng-ckeditor',
     'ui.select',
     'filters/propsFilter',
-    'directives/google-address',
     'services/reloader'
 ], function(app, _, template, moment, dialogTemplate) {
     app.directive("editSideEvent", [ '$q', '$http', '$filter', '$route', 'mongoStorage', '$location', 'authentication', '$window', 'ngDialog', '$compile', '$timeout', 'smoothScroll', 'history', '$rootScope', 'Thesaurus','$routeParams','reloader', //"$http", "$filter", "Thesaurus",
@@ -670,15 +669,11 @@ define(['app', 'lodash',
                             if (!$scope.options.dates) $scope.options.dates = [];
 
                             for (var i = 0; i < numDays; i++) {
-                                if(i && (moment(startDate).subtract(1, 'day').day()===0 || moment(startDate).subtract(1, 'day').day()===6)){
-                                    i--;
-                                }
-                                if(startDate.day()===0 || startDate.day()===6){
-                                    numDays--;
-                                    startDate = startDate.add(1, 'day');
-                                    continue;
-                                }
-                                $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
+                                var visibleDays = $scope.options.conferenceObj.schedule.sideEventVisibleDays;
+
+                                if(~visibleDays.indexOf(startDate.day()))
+                                    $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
+
                                 startDate = startDate.add(1, 'day');
                             }
 
