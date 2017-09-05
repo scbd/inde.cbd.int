@@ -1181,7 +1181,7 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isNeww(){
-                           return (((!$scope._id ||  $scope._id==='new' ) || Number($scope.doc.id) > 2292) && moment($scope.doc.meta.status.createdOn).add(1,'day').isAfter());
+                           return (((!$scope._id ||  $scope._id==='new' ) || Number($scope.doc.id) > 2300) );
                         }
                         $scope.isNeww=isNeww;
 
