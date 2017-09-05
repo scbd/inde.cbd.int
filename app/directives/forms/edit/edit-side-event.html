@@ -339,12 +339,12 @@ border-top-color: transparent !important;
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div id="ssdf" ng-class="{'has-error': (editForm.prefDateOne.$invalid && editForm.$submitted)|| (editForm.prefTimeOne.$invalid && editForm.$submitted) }">
                   <label>First Choice</label>
-                  <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates )" required>
+                  <select id="editForm.prefDateOne" class="form-control" name="prefDateOne" ng-model="doc.prefDate.one" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
                   <p ng-show="editForm.prefDateOne.$invalid && (editForm.prefDateOne.$touched || editForm.$submitted) " class="help-block error red-status">First Choice Date required. </p>
-                  <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates " required>
+                  <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>
@@ -356,12 +356,12 @@ border-top-color: transparent !important;
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div ng-class="{'has-error': (editForm.prefDateTwo.$invalid && editForm.$submitted) || (editForm.prefTimeTwo.$invalid && editForm.$submitted )}">
                   <label>Second Choice</label>
-                  <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates " required>
+                  <select  id="editForm.prefDateTwo" class="form-control" name="prefDateTwo" ng-model="doc.prefDate.two" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
                   <p ng-show="editForm.prefDateTwo.$invalid && (editForm.prefDateTwo.$touched || editForm.$submitted) " class="help-block error red-status">Second choice date required.</p>
-                  <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates )" required>
+                  <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>
@@ -372,12 +372,12 @@ border-top-color: transparent !important;
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div ng-class="{'has-error': (editForm.prefDateThree.$invalid && editForm.$submitted) || (editForm.prefTimeThree.$invalid && editForm.$submitted)}" >
                   <label>Third Choice</label>
-                  <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates " required>
+                  <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Date</option>
                     <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
                   </select>
                   <p ng-show="editForm.prefDateThree.$invalid && (editForm.prefDateThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice date required.</p>
-                  <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates " required>
+                  <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
                     <option value="lunch">Lunch: 13:15 - 14:45</option>
                     <option value="evening">Evening: 18:15 - 19:45</option>

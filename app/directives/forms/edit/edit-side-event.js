@@ -452,6 +452,7 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isEditable() {
+                            console.log('$scope.doc.meta',$scope.doc.meta);
                             if($scope.doc.meta)
                             if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request')
                                 return true;
@@ -594,7 +595,7 @@ define(['app', 'lodash',
                                 } else {
                                     $scope.loading = true;
                                     $scope.doc = {};
-                                    $scope.doc.meta={};
+                                    $scope.doc.meta={status:'draft'};
                                     $scope.doc.tempFile={};
                                     delete($scope._id);
                                     $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
@@ -648,13 +649,14 @@ define(['app', 'lodash',
                                 for (var i=0; i<meetings.length; i++)
                                     if(meetings[i]._id === $scope.meetingId)
                                         meeting = meetings[i];
-
-                            meeting.selected = !meeting.selected;
-                            if (!$scope.doc.meetings) $scope.doc.meetings = [];
-                            if (meeting.selected)
-                                $scope.doc.meetings.push(meeting._id);
-                            else
-                                $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
+                            if(meeting){
+                                meeting.selected = !meeting.selected;
+                                if (!$scope.doc.meetings) $scope.doc.meetings = [];
+                                if (meeting.selected)
+                                    $scope.doc.meetings.push(meeting._id);
+                                else
+                                    $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
+                            }
 
                         } //
                         $scope.checkMeeting = checkMeeting;
