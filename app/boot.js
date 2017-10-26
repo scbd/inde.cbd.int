@@ -52,7 +52,7 @@ require.config({
         '720kb.socialshare'         : { deps: ['angular']}
 
     },
-    urlArgs: 'v=' + gitVersion
+    // urlArgs: 'v=' + gitVersion
 
 });
 define("_slaask", window._slaask);

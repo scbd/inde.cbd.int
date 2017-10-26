@@ -452,7 +452,7 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isEditable() {
-                            console.log('$scope.doc.meta',$scope.doc.meta);
+  
                             if($scope.doc.meta)
                             if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request')
                                 return true;
