@@ -1,3 +1,4 @@
+var gitVersion = document.documentElement.attributes['git-version'].value;
 require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
@@ -50,7 +51,8 @@ require.config({
         'ng-ckeditor'               : { deps: ['angular','ckeditor']},
         '720kb.socialshare'         : { deps: ['angular']}
 
-    }
+    },
+    // urlArgs: 'v=' + gitVersion
 
 });
 define("_slaask", window._slaask);

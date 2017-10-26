@@ -4,17 +4,14 @@
   "description": "Inde  - side event portal",
   "main": "server.js",
   "dependencies": {
-    "bower": "1.7.0",
-    "ejs": "2.3.4",
-    "express": "4.13.3",
+    "bower": "1.7.9",
+    "ejs": "2.5.5",
+    "express": "4.13.4",
     "morgan": "1.6.1",
-    "serve-static": "1.10.0",
     "http-proxy": "1.12.0"
   },
-  "engine": "node >= 0.10.36",
   "devDependencies": {},
   "scripts": {
-    "start": "node server.js",
     "postinstall": "./node_modules/.bin/bower install --allow-root"
   },
   "repository": {

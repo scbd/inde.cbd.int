@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController">
+<html lang="en" ng-controller="TemplateController" git-version="<%=gitVersion%>">
 
 <head>
   <base href="<%=baseUrl%>">
@@ -13,15 +13,15 @@
 
   <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous"> -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="app/libs/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="app/libs/angular-toastr/dist/angular-toastr.min.css" rel="stylesheet">
-  <link href="app/libs/flag-icon-css/css/flag-icon.css" rel="stylesheet">
-  <link href="app/libs/ng-dialog/css/ngDialog.css" rel="stylesheet">
+  <link href="app/libs/font-awesome/css/font-awesome.min.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/libs/angular-toastr/dist/angular-toastr.min.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/libs/flag-icon-css/css/flag-icon.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/libs/ng-dialog/css/ngDialog.css?v=<%=gitVersion%>" rel="stylesheet">
   <!-- <link href="app/libs/angular-ui-select/dist/select.min.css"> -->
-  <link href="app/libs/ng-dialog/css/ngDialog-theme-default.min.css" rel="stylesheet">
-  <link href="app/libs/angular-ui-select/dist/select.css" rel="stylesheet">
-  <link href="app/css/main.css" rel="stylesheet">
-  <link href="app/css/ouical.css" rel="stylesheet">
+  <link href="app/libs/ng-dialog/css/ngDialog-theme-default.min.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/libs/angular-ui-select/dist/select.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/css/main.css?v=<%=gitVersion%>" rel="stylesheet">
+  <link href="app/css/ouical.css?v=<%=gitVersion%>" rel="stylesheet">
   <style>
     [ng\:cloak],
     [ng-cloak],
@@ -278,8 +278,8 @@
         </a> -->
         <div id="t-headerLogo">
                     <a href="/">
-                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-leaf-line.gif" id="CCbdLogoLeaf" height="65" width="52" alt="Convention on Biological Diversity">
-                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-text-en.gif" id="CCbdLogoText" height="65" alt="Convention on Biological Diversity">
+                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-leaf-line.gif?v=<%=gitVersion%>" id="CCbdLogoLeaf" height="65" width="52" alt="Convention on Biological Diversity">
+                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-text-en.gif?v=<%=gitVersion%>" id="CCbdLogoText" height="65" alt="Convention on Biological Diversity">
                     </a>
                 </div>
       </div>
@@ -323,8 +323,8 @@
         <!--  end sign in-->
         <div id="t-headerLogo">
                     <a href="/">
-                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-leaf-line.gif" id="CCbdLogoLeaf" height="65" width="52" alt="Convention on Biological Diversity">
-                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-text-en.gif" id="CCbdLogoText" height="65" alt="Convention on Biological Diversity">
+                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-leaf-line.gif?v=<%=gitVersion%>" id="CCbdLogoLeaf" height="65" width="52" alt="Convention on Biological Diversity">
+                        <img src="https://www.cbd.int/styles/ui/templates/cbd2011/images/logo-cbd-text-en.gif?v=<%=gitVersion%>" id="CCbdLogoText" height="65" alt="Convention on Biological Diversity">
                     </a>
                 </div>
         <!-- <div style="padding:5px 0px">
@@ -447,7 +447,7 @@
   </script>
 
 
-  <script src="app/libs/requirejs/require.js" data-main="app/boot.js"></script>
+  <script src="app/libs/requirejs/require.js?v=<%=gitVersion%>" data-main="app/boot.js?v=<%=gitVersion%>"></script>
 
 </body>
 

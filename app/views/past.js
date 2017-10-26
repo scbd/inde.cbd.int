@@ -252,7 +252,7 @@ define(['app', 'lodash', 'moment', 'directives/mobi-menu','ngSmoothScroll','scro
 
 
                 _.each(o,function(conf){
-                      if(conf && conf.seTiers && isPastConfrence(conf._id,o)) 
+                      if(conf && conf.seTiers && isPastConfrence(conf._id,o))
                         conferences.push(conf);
                 });
 
