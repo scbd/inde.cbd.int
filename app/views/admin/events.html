@@ -90,7 +90,7 @@
 
           </div>
           <div class="col-lg-3 col-md-3 col-xs-12">
-            <select  class="form-control" ng-model="filter.meeting" name="meeting" ng-change="onPage(0)" ng-options="docObj as docObj.titleShort for docObj in options.meetings track by docObj._id ">
+            <select  class="form-control" ng-model="filter.meeting" name="meeting" ng-change="onPage(0)" ng-options="docObj as docObj.titleShort || docObj.EVT_THM_CD for docObj in options.meetings track by docObj._id ">
               <option value="">All Meetings</option>
               <!-- <option ng-repeat="docObj in options.meetings" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="filter.meeting">{{docObj.titleShort}} </option> -->
             </select>
