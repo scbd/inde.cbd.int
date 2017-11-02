@@ -380,9 +380,20 @@ define(['app', 'lodash',
                       $scope.filter.conference=$scope.options.conferences[0]._id;
                       $scope.options.conferences[0].selected=true;
                     }
-                }).catch(onError);
+                    console.log($scope.options.conferences)
+                }).then(loadMeetings).catch(onError);
             }
 
+            //============================================================
+            //
+            //============================================================
+            function loadMeetings() {
+              var confObj = _.find($scope.options.conferences,{'_id':$scope.filter.conference});
+              if(!confObj) throw 'Error: no confrence for side-event';
+
+              $scope.options.meetings = confObj.meetings
+            }
+            $scope.loadMeetings=loadMeetings
 
             //=======================================================================
             //
@@ -391,6 +402,7 @@ define(['app', 'lodash',
                 var q = {};
 
                 if($scope.filter.conference) q.conference=$scope.filter.conference;
+                if($scope.filter.meeting) q.meetings={'$in':[$scope.filter.meeting]};
                 if($scope.filter.status) q['meta.status']=$scope.filter.status;// jshint ignore:line
 
                 if($scope.search){
@@ -453,7 +465,7 @@ define(['app', 'lodash',
 
               row.meetings.forEach(function(meetingId,index){
                 var meetingObj = _.find(confObj.meetings,{'_id':meetingId});
-                  returnString+=meetingObj.EVT_CD;
+                  returnString+=meetingObj.titleShort;
                   if(index<row.meetings.length-1)
                      returnString+=', ';
               });

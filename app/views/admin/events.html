@@ -84,13 +84,17 @@
           </div>
           <div class="col-lg-4 col-md-4 col-xs-12">
 
-              <select  class="form-control" ng-model="filter.conference" name="conference" ng-change="onPage(0)">
+              <select  class="form-control" ng-model="filter.conference" name="conference" ng-change="onPage(0)" >
                 <option ng-repeat="docObj in options.conferences" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
               </select>
 
           </div>
           <div class="col-lg-3 col-md-3 col-xs-12">
-              <select  class="form-control" ng-model="filter.status" name="status" ng-change="selectChip(filter.status);">
+            <select  class="form-control" ng-model="filter.meeting" name="meeting" ng-change="onPage(0)" ng-options="docObj as docObj.titleShort for docObj in options.meetings track by docObj._id ">
+              <option value="">All Meetings</option>
+              <!-- <option ng-repeat="docObj in options.meetings" value="{{docObj._id}}" ng-if="docObj._id" ng-selected="filter.meeting">{{docObj.titleShort}} </option> -->
+            </select>
+              <!-- <select  class="form-control" ng-model="filter.status" name="status" ng-change="selectChip(filter.status);">
                 <option  value="all"  ng-selected="filter.status==='all'">All Statuses</option>
                 <option  value="draft"  ng-selected="filter.status==='draft'">Draft</option>
                 <option  value="request"  ng-selected="filter.status==='request'">Request</option>
@@ -98,12 +102,12 @@
                 <option  value="canceled"  ng-selected="filter.status==='canceled'">Canceled</option>
                 <option  value="rejected"  ng-selected="filter.status==='rejected'">Rejected</option>
                 <option  value="archived"  ng-selected="filter.status==='archived'">Archived</option>
-              </select>
+              </select> -->
           </div>
           <div class="col-lg-2 col-md-2 col-xs-12">
               <div class=" pull-right">
                   <!-- <button title="Options" class="btn btn-default btn-sm" ng-click="toggle('adminOptions')"><i class="fa fa-ellipsis-h"></i></button> -->
-                  <button class="btn btn-default btn-xs" ng-click="detailView=!detailView" ng-if="isAdmin()"><span ng-show="!detailView" ><i class="fa fa-list-alt" aria-hidden="true"></i> Details</span><span ng-show="detailView"><i class="fa fa-list" aria-hidden="true"></i> List View</span></button>
+                  <!-- <button class="btn btn-default btn-xs" ng-click="detailView=!detailView" ng-if="isAdmin()"><span ng-show="!detailView" ><i class="fa fa-list-alt" aria-hidden="true"></i> Details</span><span ng-show="detailView"><i class="fa fa-list" aria-hidden="true"></i> List View</span></button> -->
                   <button  class="btn btn-default btn-xs" ng-click="expandDesc();" ng-if="detailView" ><span ng-show="!expandAll" >Expand All</span><span ng-show="expandAll"><i class="fa fa-compress" aria-hidden="true"></i> Compress </span></button>
                   <button cvs-exporter build-file="cvsExport()" class="btn btn-default btn-xs" ng-if="isAdmin()"> <i class="fa fa-download" aria-hidden="true"></i><i class="fa fa-file-excel-o" aria-hidden="true"></i> Export</button>
 
@@ -221,6 +225,7 @@
 
                 <div class="event-title-collection">
                   <!-- big title -->
+
                   <div class="hidden-md hidden-sm hidden-xs" style="width:77%;white-space: normal;layout:inline;">
 
                       <table style="width:100%;margin-bottom:3px;">
@@ -440,10 +445,15 @@
                 <hr>
 
                 <span ng-if="doc.expNumPart">{{doc.expNumPart}}<br><hr></span>
-
+                <span>(
+                    <span ng-repeat="meet in doc.meetingObjs track by $index">{{meet.titleShort}}
+                      <span ng-if="!$last">,</span>
+                    </span> )</span><br>
                 <img ng-src="{{doc.logo}}" style="vertical-align:middle;max-width:100%;" />
             </div>
             <div class="col-lg-3 col-md-3" >
+
+
                 <strong ng-if="doc.title"><a ng-href="{{doc._id}}">{{doc.title}}</a>   <hr></strong>
 
                 <div ng-bind-html="doc.description | truncate:(doc.truncate || 300):' ...' | rawHtml ">
