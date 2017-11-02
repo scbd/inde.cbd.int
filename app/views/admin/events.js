@@ -402,7 +402,7 @@ define(['app', 'lodash',
                 var q = {};
 
                 if($scope.filter.conference) q.conference=$scope.filter.conference;
-                if($scope.filter.meeting) q.meetings={'$in':[$scope.filter.meeting]};
+                if($scope.filter.meeting) q.meetings={'$in':[$scope.filter.meeting._id]};
                 if($scope.filter.status) q['meta.status']=$scope.filter.status;// jshint ignore:line
 
                 if($scope.search){
