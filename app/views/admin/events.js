@@ -426,7 +426,7 @@ define(['app', 'lodash',
                   q['meta.createdBy']=$scope.user.userID;
 
                 if($scope.filter.status==='all')
-                  q['meta.status']={'$in':['draft', 'published', 'request', 'canceled', 'rejected']};
+                  q['meta.status']={'$in':['draft', 'scheduled','published', 'request', 'canceled', 'rejected']};
 
                 return q;
             }

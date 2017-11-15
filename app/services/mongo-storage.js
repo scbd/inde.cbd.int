@@ -32,7 +32,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                 delete(document.history);
                 return $http.patch(url, cleanDoc(document), params).then(function(res) {
                     authentication.getUser().then(function(user) {
-                        var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                        var statuses = ['draft', 'scheduled','published', 'request', 'canceled', 'rejected', 'archived'];
                         getStatusFacits(schema, statuses, user.userID, true);
                         getStatusFacits(schema, statuses, true);
 
@@ -46,7 +46,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                 if (!document.meta.clientOrg) document.meta.clientOrg = clientOrg;
                 return $http.post(url, cleanDoc(document)).then(function(res) {
                     authentication.getUser().then(function(user) {
-                        var statuses = ['draft', 'published', 'request', 'canceled', 'rejected', 'archived'];
+                        var statuses = ['draft', 'scheduled','published', 'request', 'canceled', 'rejected', 'archived'];
                         getStatusFacits(schema, statuses, user.userID, true);
                         getStatusFacits(schema, statuses, true);
 
@@ -400,7 +400,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
             promises[1]=$http.get('/api/v2016/' + schema, {'params': params});
 
            if((!params.q['meta.status'] || _.isObject(params.q['meta.status'])) && all)
-              _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
+              _.each(['draft','scheduled','request','published','canceled','rejected','archived'], function(status) {
                   var tempP = _.cloneDeep(params);
                   tempP.q['meta.status']=status;
                   promises.push($http.get('/api/v2016/' + schema, {'params': tempP}));
@@ -411,7 +411,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                  res[0].facits={all:res[1].data.count};
                   var count=2;
                   if((!params.q['meta.status'] || _.isObject(params.q['meta.status'])) && all)
-                    _.each(['draft','request','published','canceled','rejected','archived'], function(status) {
+                    _.each(['draft','scheduled','request','published','canceled','rejected','archived'], function(status) {
                         res[0].facits[status]=res[count].data.count;
                         count++;
                     });

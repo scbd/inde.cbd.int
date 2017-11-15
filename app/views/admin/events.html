@@ -147,7 +147,12 @@
           </div>All
           <span class="sqr">{{statusFacits.all}}</span>
         </div>
-
+        <div id="chip-scheduled" class="chip"  ng-show=" (!loading && statusFacits.scheduled )" ng-click="selectChip('scheduled')">
+          <div>
+            <i class="material-icons">&#xE24D;</i>
+          </div>Scheduled
+          <span class="sqr">{{statusFacits.scheduled}}</span>
+        </div>
         <div id="chip-draft" class="chip"  ng-show=" (!loading && statusFacits.draft )" ng-click="selectChip('draft')">
           <div>
             <i class="material-icons">&#xE24D;</i>
