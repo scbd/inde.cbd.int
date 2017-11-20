@@ -117,6 +117,7 @@ border-top-color: transparent !important;
 
         </div>
       </div>
+
       <div class="col-lg-6  hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;padding-bottom:15px;">
 
 <!-- ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)} -->
@@ -129,11 +130,12 @@ border-top-color: transparent !important;
 
         <button ng-show="doc.meta.status" ng-click="publishRequestDial()" class="btn btn-success" type="button">
           <span ng-show="(doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-            <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+            <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
           </button>
       </div>
 
       <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg  hidden-md     text-right text-nowrap" style="padding-bottom:15px;">
+
         <button ng-show="!showEdit()" class="btn btn-block" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5 && !prevPublished),'btn-default':!(numStepsCompleted()>=5)}">
           <span >Save Draft</span>
           <!-- <span ng-show="numStepsCompleted()>=5">Cancel Request</span> -->
@@ -142,7 +144,7 @@ border-top-color: transparent !important;
         <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
         <button ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
           <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
-            <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+            <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
           </button>
       </div>
   </div>
@@ -795,7 +797,7 @@ border-top-color: transparent !important;
 
                   <button ng-show="doc.meta.status" ng-click="publishRequestDial()" class="btn btn-success" type="button">
                     <span ng-show="(doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
-                      <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+                      <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
                     </button>
                 </div>
 
@@ -808,7 +810,7 @@ border-top-color: transparent !important;
                   <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
                   <button ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
                     <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
-                      <span ng-show="(doc.meta.status=== 'published')">Edit Your Live Side-event</span>
+                      <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
                     </button>
                 </div>
             </div>

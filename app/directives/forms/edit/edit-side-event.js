@@ -452,9 +452,9 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isEditable() {
-  
+
                             if($scope.doc.meta)
-                            if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request')
+                            if (isAdmin() || $scope.doc.meta.status ==='draft' || $scope.doc.meta.status ==='published' || $scope.doc.meta.status ==='request' || $scope.doc.meta.status ==='scheduled')
                                 return true;
                             else
                                 return false;
@@ -777,7 +777,7 @@ define(['app', 'lodash',
 
                             $scope.doc.meta.status = 'draft';
                             if($scope.prevPublished)
-                              $scope.doc.meta.status = 'published';
+                              $scope.doc.meta.status =  $scope.doc.meta.status || 'published';
 
                             numHostOrgs = $scope.doc.hostOrgs.length;
                             if(!$scope.prevPublished)
