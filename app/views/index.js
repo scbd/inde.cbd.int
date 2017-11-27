@@ -431,8 +431,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             for(var i=0; i<=numDays; i++)
             {
 
-                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
-                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
 
             }
 
