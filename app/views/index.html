@@ -123,7 +123,7 @@
         </div>
         <div class="row hidden-print" ng-hide="!indexCtrl.advanced" style="padding: 0 10px 0 10px;">
             <br>
-            <div class="col-lg-3 col-md-3 col-xs-12">
+            <!-- <div class="col-lg-3 col-md-3 col-xs-12">
                 <select class="form-control" ng-model="indexCtrl.conference" name="conference" ng-change="onPage(0)">
                     <option ng-repeat="docObj in indexCtrl.conferences" value="{{docObj._id}}" ng-if="indexCtrl.isPastConfrence(docObj._id)" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
                 </select>
@@ -132,8 +132,8 @@
 
                 &nbsp;
 
-            </div>
-            <div class="col-lg-5 col-md-5 col-xs-12 hidden-print">
+            </div> -->
+            <div class="col-xs-12 hidden-print">
                 <ui-select multiple ng-model="indexCtrl.hostOrgsSelected" close-on-select="true" append-to-body="true" title=" " spinner-enabled="true">
                     <ui-select-match placeholder="Host Party or Org. Search">{{$item.acronym || $item.title}}</ui-select-match>
                     <ui-select-choices minimum-input-length="3" style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">

@@ -178,11 +178,20 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             });
             $scope.$watch('indexCtrl.selectedTime', function(prev) {
                 var selectedT=null;
+
                 if(typeof _ctrl.selectedTime ==="undefined" ){
-                    _.each(_ctrl.sideEventTimes,function(t){
-                          if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
-                            selectedT=t.value;
-                    });
+
+                    if(moment(Date.now()).isBefore(moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone))){
+                        _ctrl.selectedTime='all'
+                        selectedT='all';
+                        _ctrl.itemsPerPage=50;
+                    }
+                    else
+                        _.each(_ctrl.sideEventTimes,function(t){
+
+                            if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
+                                selectedT=t.value;
+                        });
                     _ctrl.selectedTime=selectedT;
                 }
                 loadList(0);
