@@ -170,6 +170,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                 if((typeof _ctrl.conference !== "undefined") ){
                   _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
+
                   delete(_ctrl.rooms);
                   delete(_ctrl.venueObj);
                   loadRooms();
@@ -412,7 +413,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
 
                   if(!_ctrl.conference){
-                    _ctrl.conference=_ctrl.conferences[0]._id;
+                    _ctrl.conference=_ctrl.conferences[1]._id;
                     _ctrl.conferences[0].selected=true;
                   }
 
@@ -428,6 +429,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
+
               loadRooms();
             }
 
