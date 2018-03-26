@@ -414,7 +414,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                   if(!_ctrl.conference){
                     _ctrl.conference=_ctrl.conferences[1]._id;
-                    _ctrl.conferences[0].selected=true;
+                    _ctrl.conferences[1].selected=true;
                   }
 
               }).then(loadDates).catch(onError);
