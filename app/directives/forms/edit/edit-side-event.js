@@ -619,8 +619,8 @@ define(['app', 'lodash',
                                     if (!$scope.doc.prefDate)$scope.doc.prefDate={};
 
 
-                                    $scope.doc.conference=$scope.options.conferences[0]._id;
-                                    $scope.options.conferences[0].selected=true;
+                                    $scope.doc.conference=$scope.options.conferences[1]._id;
+                                    $scope.options.conferences[1].selected=true;
 
                                     $scope.preFill=false;
                                     $scope.loading=false;
@@ -668,6 +668,7 @@ define(['app', 'lodash',
                         function generateDates() {
 
                             if(!$scope.options.conferences) return;
+
                             var confr = $scope.options.conferenceObj = _.find($scope.options.conferences, {
                                 _id: $scope.doc.conference
                             });
