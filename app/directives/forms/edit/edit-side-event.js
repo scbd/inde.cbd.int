@@ -682,11 +682,12 @@ define(['app', 'lodash',
                             var startDate = moment(confr.StartDate);
                             if (!$scope.options) $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
+                            var visibleDays = $scope.options.conferenceObj.schedule.sideEventVisibleDays;
 
                             for (var i = 0; i < numDays; i++) {
-                                var visibleDays = $scope.options.conferenceObj.schedule.sideEventVisibleDays;
 
-                                if(~visibleDays.indexOf(startDate.day()))
+
+                                if(~visibleDays.indexOf(startDate.day()) && isMeetingDay(startDate))
                                     $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
                                 startDate = startDate.add(1, 'day');
@@ -705,6 +706,22 @@ define(['app', 'lodash',
                             checkMeeting();
                         } // init
 
+                        //============================================================
+                        //
+                        //============================================================
+                        function isMeetingDay(day) {
+                            if(!$scope.options.conferenceObj)
+                              $scope.options.conferenceObj = _.find($scope.options.conferences, {
+                                  _id: $scope.doc.conference
+                              });
+
+                            if(!$scope.meetingObj)
+                              $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
+                                 _id: $scope.meetingId
+                             });
+
+                           return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                        } // init
 
                         //============================================================
                         //
