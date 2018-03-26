@@ -23,7 +23,7 @@ if(!process.env.API_URL) {
 }
 
 var apiUrl = process.env.API_URL || 'https://api.cbd.int:443';
-var gitVersion = (process.env.VERSION || 'UNKNOWN').substr(0, 7);
+var gitVersion = (process.env.COMMIT || 'UNKNOWN').substr(0, 7);
 
 console.info(`info: www.cbd.int/side-events`);
 console.info(`info: Git version: ${gitVersion}`);
