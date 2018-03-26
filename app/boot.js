@@ -1,3 +1,4 @@
+if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 var gitVersion = document.documentElement.attributes['git-version'].value;
 require.config({
     waitSeconds: 120,
@@ -67,5 +68,3 @@ require(['angular', 'app', 'text', 'routes', 'template','bootstrap'], function(n
 
 // Fix IE Console
 (function(a){a.console||(a.console={});for(var c="log info warn error debug trace dir group groupCollapsed groupEnd time timeEnd profile profileEnd dirxml assert count markTimeline timeStamp clear".split(" "),d=function(){},b=0;b<c.length;b++)a.console[c[b]]||(a.console[c[b]]=d)})(window); //jshint ignore:line
-if(/Safari/.test(navigator.userAgent))
-  console.log = function(){}

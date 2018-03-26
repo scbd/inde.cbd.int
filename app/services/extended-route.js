@@ -1,7 +1,7 @@
 define(['require', 'app', 'angular', 'ngRoute', 'lodash'], function(require, app, angular) { 'use strict';
 
-    var baseUrl = require.toUrl('');
-
+    var baseUrl = require.toUrl('').replace(/\?.*/,'');
+    var gitVersion = document.documentElement.attributes['git-version'].value;
     app.provider('extendedRoute', ["$routeProvider", function($routeProvider) {
 
         var __when = $routeProvider.when.bind($routeProvider);
@@ -18,12 +18,13 @@ define(['require', 'app', 'angular', 'ngRoute', 'lodash'], function(require, app
             if(templateUrl) {
 
                 if(templateUrl.indexOf('/')!==0) {
-                    route.templateUrl = baseUrl + templateUrl;
+                    route.templateUrl = baseUrl + templateUrl  + '?v=' + gitVersion;
                     templateModule  = changeExtension(templateUrl, '');
                 }
                 else {
                     templateModule = changeExtension(templateUrl, '.js');
                 }
+
             }
 
             var ext = { resolve: route.resolve || {} };
