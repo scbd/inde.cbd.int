@@ -311,7 +311,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             _ctrl.itemsPerPage=Number(_ctrl.itemsPerPage);
 
-            return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(),loadSubjects(),mongoStorage.getCountries()]).then(function() {
+            return $q.all([loadSideEventTypes(),loadOrgs(), loadConferences(1),loadSubjects(),mongoStorage.getCountries()]).then(function() {
                 var q = buildQuery ();
                 var f =  {'sideEvent.targets':1,start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
 
@@ -408,7 +408,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         function loadConferences() {
 
             if(!_ctrl.conferences || _.isEmpty(_ctrl.conferences))
-              return mongoStorage.loadConferences().then(function(o) {
+              return mongoStorage.loadConferences(1).then(function(o) {
                   _ctrl.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
 
 
