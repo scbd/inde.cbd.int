@@ -127,7 +127,7 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                     var params = {};
                     if (modified) {
                         params = {
-                            q: {}
+                            q: {institution:'CBD'}
                           };
                         numPromises++;
                         allPromises[1]= $http.get('/api/v2016/conferences', {
