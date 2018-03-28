@@ -710,15 +710,26 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         function isMeetingDay(day) {
+
                             if(!$scope.options.conferenceObj)
                               $scope.options.conferenceObj = _.find($scope.options.conferences, {
                                   _id: $scope.doc.conference
                               });
 
                             if(!$scope.meetingObj)
-                              $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
-                                 _id: $scope.meetingId
-                             });
+                              if($scope.meetingId)
+                                $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
+                                   _id: $scope.meetingId
+                                });
+                              else
+                              if($scope.doc.meetings)
+                                for (var i = 0; i < $scope.doc.meetings.length; i++) {
+                                  $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
+                                     _id: $scope.doc.meetings[i]
+                                  });
+                                  if($scope.meetingObj) break;
+                                }
+
 
                            return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
                         } // init
