@@ -98,7 +98,12 @@ define(['app', 'lodash',
                             }
 
                         });
+                        $scope.$watch('doc.meetings', function() {
+                console.log($scope.doc.meetings)
+                            if ($scope.doc.meetings)
+                                    generateDates();
 
+                        });
 
                         //============================================================
                         //
@@ -477,14 +482,14 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.selectMeeting = function(docObj) {
                             $timeout(function() {
-                                _.each($scope.options.conferences, function(meeting) {
+                                _.each($scope.options.conferenceObj.meetings, function(meeting) {
                                     meeting.selected = false;
                                 });
 
                                 docObj.selected = !docObj.selected;
                                 if (true) {
                                     if (docObj.selected) {
-                                        $scope.doc.confrence = docObj._id;
+                                        $scope.doc.meetings= [docObj._id] ;
                                     } else {
                                         $scope.doc.confrence = '';
                                         $scope.search = '';
@@ -722,7 +727,7 @@ define(['app', 'lodash',
                                    _id: $scope.meetingId
                                 });
                               else
-                              if($scope.doc.meetings)
+                              if($scope.doc.meetings && $scope.doc.meetings.length)
                                 for (var i = 0; i < $scope.doc.meetings.length; i++) {
                                   $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
                                      _id: $scope.doc.meetings[i]
@@ -730,8 +735,11 @@ define(['app', 'lodash',
                                   if($scope.meetingObj) break;
                                 }
 
-
-                           return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                            if($scope.meetingObj)
+                                return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                            else if($scope.options.conferenceObj)
+                                return day.isBetween(moment($scope.options.conferenceObj.StartDate).subtract(1, 'days'), moment($scope.options.conferenceObj.EndDate).add(1, 'days'));
+                            else false
                         } // init
 
                         //============================================================

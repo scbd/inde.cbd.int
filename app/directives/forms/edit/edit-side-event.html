@@ -315,11 +315,14 @@ border-top-color: transparent !important;
               <div class="col-xs-12 col-lg-4">
                 <div>
                   <label>Associated Meeting(s)</label>
+                  <!-- <select id="editForm.meetings" class="form-control" ng-model="doc.meetings" name="meetings" required>
+                    <option ng-repeat="meeting in options.conferenceObj.meetings" value="[{{meeting._id}}]" ng-selected="meeting.selected">{{meeting.EVT_CD}} </option>
+                  </select> -->
                   <div class="panel panel-default">
                     <div class="panel-body">
-                      <div ng-repeat="meeting in options.conferenceObj.meetings"  class="pointer" ng-show="options.conferenceObj.meetings[$index].selected">
-                        <i class="fa fa-check-square-o" ng-show="options.conferenceObj.meetings[$index].selected"></i>
-                        <i class="fa fa-square-o" ng-show="!options.conferenceObj.meetings[$index].selected"></i> {{meeting.EVT_CD}}
+                      <div ng-repeat="meeting in options.conferenceObj.meetings"  class="pointer" ng-click="selectMeeting(meeting)">
+                        <i class="fa fa-check-square-o" ng-show="options.conferenceObj.meetings[$index].selected" ></i>
+                        <i class="fa fa-square-o" ng-show="!options.conferenceObj.meetings[$index].selected" ></i> {{meeting.EVT_CD}}
                       </div>
                     </div>
 
