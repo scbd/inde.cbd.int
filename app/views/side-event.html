@@ -26,7 +26,7 @@
       <h4>Side Event #{{sideEventCtrl.doc.id}}</h4>
     </span>
     <span style="white-space: normal;">
-      <span class="pull-right text-nowrap"><h4>Status:</hr> <span ng-class="{'red-status':(sideEventCtrl.doc.meta.status!=='request' && sideEventCtrl.doc.meta.status!=='published')}"><span ng-if="sideEventCtrl.doc.meta.status!=='request'">{{sideEventCtrl.doc.meta.status.toUpperCase()}}</span> <span ng-if="sideEventCtrl.doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!sideEventCtrl.doc.meta.status">NOT SAVED</span></span></span>
+      <span class="pull-right text-nowrap"><h4>Status:</hr> <span ng-class="{'red-status':(sideEventCtrl.doc.meta.status!=='request' && sideEventCtrl.doc.meta.status!=='published')}"><span ng-if="sideEventCtrl.doc.meta.status!=='request'"><span ng-if="(sideEventCtrl.doc.meta.status==='scheduled') && !sideEventCtrl.scheduled()">NOT</span> {{sideEventCtrl.doc.meta.status.toUpperCase()}}</span> <span ng-if="sideEventCtrl.doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!sideEventCtrl.doc.meta.status">NOT SAVED</span></span></span>
     </span>
     <div class="clearfix"></div>
   </div>
@@ -58,7 +58,7 @@
         <th scope="row">ID</th>
         <td>{{sideEventCtrl.doc.id}}</td>
       </tr>
-      <tr ng-if="sideEventCtrl.scheduled">
+      <tr ng-if="sideEventCtrl.scheduled()">
         <th scope="row">Date</th>
         <td>
           {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'dddd'}}<br>
@@ -68,13 +68,13 @@
 
         </td>
       </tr>
-      <tr ng-if="!sideEventCtrl.scheduled">
+      <tr ng-if="!sideEventCtrl.scheduled()">
         <th scope="row">Date</th>
         <td >
           <span style="color:red;">Not scheduled</span>
         </td>
       </tr>
-      <tr ng-if="sideEventCtrl.scheduled">
+      <tr ng-if="sideEventCtrl.scheduled()">
         <th scope="row">Room</th>
         <td >{{sideEventCtrl.room.title}}<br>
           {{sideEventCtrl.room.location}}<br>

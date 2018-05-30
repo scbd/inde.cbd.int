@@ -21,7 +21,7 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
         _ctrl.notAuth = true;
         _ctrl.goTo = goTo;
         _ctrl.tab = 'description';
-        _ctrl.scheduled=false;
+        _ctrl.scheduled=isScheduled;
         _ctrl.aichiLink=aichiLink;
         _ctrl.aichiImgLink=aichiImgLink;
         _ctrl.calDialog=calDialog;
@@ -116,7 +116,7 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
             return $http.get('/api/v2016/conferences', {
                 params: {
                     s:{StartDate:1},
-                    f:{Title:1,MajorEventIDs:1,timezone:1}
+                    f:{Title:1,MajorEventIDs:1,timezone:1,conference:1}
                 }
             },{
                 cache: true
@@ -172,8 +172,6 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
                         if(r && r.location && r.location.room)
                         return $http.get('/api/v2016/venue-rooms/'+r.location.room, {params:{f:{title:1,acronym:1,location:1,atTable:1,capacity:1}}}).then(function(room) {
                             _ctrl.room=room.data;
-                            if(_ctrl.room)
-                              _ctrl.scheduled=true;
                         });
                 });
 
@@ -195,7 +193,15 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
 
             });
         }
+function isScheduled(){
+  var published = false
 
+  if(_ctrl.doc.conferenceObj && _ctrl.doc.conferenceObj.conference)
+    published = _ctrl.doc.conferenceObj.conference.sideEventsPublished
+  else published = true
+
+  return !!(_ctrl.room && published)
+}
         //==============================
         //
         //==============================
