@@ -32,9 +32,9 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" >
         <br>
-        <div class="alert alert-info" >
+        <div class="alert alert-info" ng-if="flase">
             <div class="text-center" ng-if="false">
                 <!-- <h4 style="color:black;">{{indexCtrl.confObj.Title.en}}</h4></div> -->
                 <h4 style="color:black;"> SBSTTA-22 / SBI-02 </h4>
@@ -88,7 +88,7 @@
     <!-- venue-->
 
 
-    <div class="row" ng-if="false">
+    <div ng-if="true">
         <!-- side event schedule -->
 
         <style>
@@ -100,8 +100,9 @@
         </style>
         <div class="row hidden-print" style="padding: 0 10px 0 10px;">
             <div class="col-xs-12 text-center">
-                <h3 style="background-color:#fff;">{{indexCtrl.confObj.Title.en}}</h3>
+                <h3 style="background-color:#fff;">SBSTTA-22</h3>
                 <h5 style="background-color:#fff;">(Timezone: {{indexCtrl.confObj.timezone}})</h5>
+                <h5 style="background-color:#fff;">SBI-02 Will Follow Shortly</h5>
                 <hr>
 
             </div>

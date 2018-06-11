@@ -459,6 +459,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             q.start={'$exists':1};
             q.start={'$ne':null};
             if(_ctrl.conference) q['location.conference']=_ctrl.conference;
+q['sideEvent.meetings']='52000000cbd0495c0000163a'
 
             if($location.search().search){
                 _ctrl.search = $location.search().search;
