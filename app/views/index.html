@@ -99,24 +99,28 @@
                 }
             }
         </style>
+        <br>
+        <div class="col-xs-10 col-xs-offset-1 alert alert-info">
+            <p>Thank you all for your requests for side-events at SBSTTA-22 and SBI-2.  We received more requests than available space and asked many organizers to merge their side-events to help us showcase the many topics related to the meetings.  We appreciate your assistance in contributing to the side-events at SBSTTA-22 and SBI-2.
+
+Please note that there may be a few side-events that have not yet been published while awaiting confirmation.</p>
+
+        </div>
+
         <div class="row hidden-print" style="padding: 0 10px 0 10px;">
             <div class="col-xs-12 text-center">
+                <hr>
                 <h3 style="background-color:#fff;"> SBSTTA-22 / SBI-02 </h3>
                 <h5 style="background-color:#fff;">(Timezone: {{indexCtrl.confObj.timezone}})</h5>
                 <hr>
 
             </div>
-            <br>
-            <div class="col-xs-12 alert alert-info">
-                <p>Thank you all for your requests for side-events at SBSTTA-22 and SBI-2.  We received more requests than available space and asked many organizers to merge their side-events to help us showcase the many topics related to the meetings.  We appreciate your assistance in contributing to the side-events at SBSTTA-22 and SBI-2.
 
-Please note that there may be a few side-events that have not yet been published while awaiting confirmation.</p>
-            </div>
             <div class="col-lg-4 col-md-4 col-xs-12">
-
-                <select class="form-control" ng-model="indexCtrl.selectedTime" name="conference" ng-change="onPage(0)">
+&nbsp;
+                <!-- <select class="form-control" ng-model="indexCtrl.selectedTime" name="conference" ng-change="onPage(0)">
                     <option ng-repeat="docObj in indexCtrl.sideEventTimes" value="{{docObj.value}}" ng-if="docObj.value" ng-selected="docObj.value===indexCtrl.selectedTime">{{docObj.title}} </option>
-                </select>
+                </select> -->
             </div>
             <div class="col-lg-4 col-md-4 col-xs-12">
                 &nbsp;
