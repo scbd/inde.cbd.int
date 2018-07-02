@@ -187,8 +187,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                         selectedT='all';
                         _ctrl.itemsPerPage=50;
                     }
-                    else
-                      _ctrl.selectedTime=moment.tz(Date.now(),_ctrl.confObj.timezone)
+
                 }
                 loadList(0);
             });
