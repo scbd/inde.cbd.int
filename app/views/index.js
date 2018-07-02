@@ -188,12 +188,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                         _ctrl.itemsPerPage=50;
                     }
                     else
-                        _.each(_ctrl.sideEventTimes,function(t){
-
-                            if(t.value!=='all' &&  moment(Date.now()).isBefore(moment.tz(t.value,_ctrl.conference.timezone)) && !selectedT)
-                                selectedT=t.value;
-                        });
-                    _ctrl.selectedTime=selectedT;
+                      _ctrl.selectedTime=moment.tz(Date.now(),_ctrl.confObj.timezone)
                 }
                 loadList(0);
             });
@@ -471,20 +466,19 @@ console.log(response)
                   q['sideEvent.id'] = Number(_ctrl.search);  // jshint ignore:line
             }
 
-            // if(_ctrl.selectedTime && _ctrl.selectedTime!=='all')
-            //     q['$and']= [{
-            //         'start': {
-            //             '$gte': {
-            //                 '$date': _ctrl.selectedTime
-            //             }
-            //         }
-            //     }, {
-            //         'end': {
-            //             '$lt': {
-            //                 '$date': moment.tz(_ctrl.selectedTime,_ctrl.confObj.timezone).add(4,'hours')
-            //             }
-            //         }
-            //     }];
+            if(_ctrl.selectedTime && _ctrl.selectedTime!=='all'){
+              q.start=  {
+                      '$gte': {
+                          '$date': moment.tz(_ctrl.selectedTime,_ctrl.confObj.timezone)
+                      }
+                  }
+
+                // q.end= {
+                //         '$lt': {
+                //             '$date': moment.tz(_ctrl.selectedTime,_ctrl.confObj.timezone).add(4,'hours')
+                //         }
+                //     }
+            }
             if(!_.isEmpty(_ctrl.hostOrgsSelected))  {
               q['$and']=[];// jshint ignore:line
               _ctrl.hostOrgsSelected.forEach(
