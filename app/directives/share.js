@@ -10,7 +10,6 @@ define(['text!./share.html', 'app','720kb.socialshare',    'directives/tool-tip'
             },
 
             controller: ['$scope', function($scope) {
-                console.log($scope.conf);
                 var killWatch = $scope.$watch('conf',function(){
                     if($scope.conf){
                         console.log($scope.conf);
