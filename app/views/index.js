@@ -316,7 +316,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                 var f =  {'sideEvent.targets':1,start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
 
                 return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,f,false).then(function(response) {
-
+console.log(response)
                     loadListPostProcess (response);
                     refreshPager(pageIndex);
                     _ctrl.loading=false;
@@ -471,20 +471,20 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                   q['sideEvent.id'] = Number(_ctrl.search);  // jshint ignore:line
             }
 
-            if(_ctrl.selectedTime && _ctrl.selectedTime!=='all')
-                q['$and']= [{
-                    'start': {
-                        '$gte': {
-                            '$date': _ctrl.selectedTime
-                        }
-                    }
-                }, {
-                    'end': {
-                        '$lt': {
-                            '$date': moment.tz(_ctrl.selectedTime,_ctrl.confObj.timezone).add(4,'hours')
-                        }
-                    }
-                }];
+            // if(_ctrl.selectedTime && _ctrl.selectedTime!=='all')
+            //     q['$and']= [{
+            //         'start': {
+            //             '$gte': {
+            //                 '$date': _ctrl.selectedTime
+            //             }
+            //         }
+            //     }, {
+            //         'end': {
+            //             '$lt': {
+            //                 '$date': moment.tz(_ctrl.selectedTime,_ctrl.confObj.timezone).add(4,'hours')
+            //             }
+            //         }
+            //     }];
             if(!_.isEmpty(_ctrl.hostOrgsSelected))  {
               q['$and']=[];// jshint ignore:line
               _ctrl.hostOrgsSelected.forEach(
