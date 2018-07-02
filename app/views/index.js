@@ -187,7 +187,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                         selectedT='all';
                         _ctrl.itemsPerPage=50;
                     }
-
+                    else
+                      _ctrl.selectedTime=moment.tz(Date.now(),_ctrl.confObj.timezone)
                 }
                 loadList(0);
             });
@@ -310,7 +311,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                 var f =  {'sideEvent.targets':1,start:1,end:1,title:1,description:1,'sideEvent.title':1,'sideEvent.description':1,'sideEvent.id':1,'sideEvent.hostOrgs':1,'location.room':1};
 
                 return mongoStorage.loadDocs('reservations',_.clone(q), (pageIndex * Number(_ctrl.itemsPerPage)),Number(_ctrl.itemsPerPage),1,_ctrl.sort,f,false).then(function(response) {
-console.log(response)
+
                     loadListPostProcess (response);
                     refreshPager(pageIndex);
                     _ctrl.loading=false;
@@ -432,13 +433,11 @@ console.log(response)
 
             _ctrl.sideEventTimes=[{title:'All Days',value:'all', selected:true}];
 
-
-
             for(var i=0; i<=numDays; i++)
             {
 
-                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0],'seconds').format()});
-                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format('dddd MMM Do @ HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1],'seconds').format()});
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format()});
+                _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(1,'hours').add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format()});
 
             }
 
