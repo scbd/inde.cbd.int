@@ -4,7 +4,7 @@
   "description": "Inde  - side event portal",
   "main": "server.js",
   "dependencies": {
-    "bower": "1.7.9",
+    "bower": "1.8.4",
     "ejs": "2.5.5",
     "express": "4.13.4",
     "morgan": "1.6.1",
@@ -20,4 +20,4 @@
   },
   "author": "Secretariat of the Convention on Biological Diversity (SCBD)",
   "license": "MIT"
-}
+}     
