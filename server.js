@@ -1,17 +1,9 @@
-/* jshint node: true, browser: false, esnext: true */
-'use strict';
-
-process.on('SIGTERM', ()=>process.exit());
-
-// CREATE HTTP SERVER AND PROXY
-var express     = require('express');
-var app = express();
-var proxy   = require('http-proxy').createProxyServer({});
+var express   = require('express');
+var app       = express();
+var proxy     = require('http-proxy').createProxyServer({});
 
 app.set('views', __dirname + '/app');
 app.set('view engine', 'ejs');
-
-app.use(require('morgan')('dev'));
 
 // LOAD CONFIGURATION
 
