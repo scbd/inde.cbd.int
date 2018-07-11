@@ -9,10 +9,12 @@ define(['app'], function(app) {
 
         var domain = document.location.hostname.replace(/[^\.]+\./, '');
         var production = false; // change to true to work on production accounts from dev
-        if ((domain == 'localhost' ||  (domain.indexOf('cbddev.xyz') >= 0)) && !production)
-            domain = 'cbddev.xyz';
+        if ((domain.indexOf('localhost') || ~domain.indexOf('cbddev.xyz') ))
+          domain='cbddev.xyz';
+        else if (~domain.indexOf('staging.cbd.int'))
+          domain='staging.cbd.int';
         else
-            domain = 'cbd.int';
+          domain = 'cbd.int';
 
         var ACCOUNTS_URI = 'https://accounts.' + domain;
 

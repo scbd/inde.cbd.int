@@ -9,7 +9,7 @@ lib-cov
 *.swp
 *.vimrc
 *.DS_STORE
-
+yarn.lock
 pids
 logs
 results
