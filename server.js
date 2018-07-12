@@ -24,7 +24,7 @@ console.info(`info: API address: ${apiUrl}`);
 
 app.use('/app',           express.static(__dirname + '/app', { setHeaders: setCustomCacheControl }));
 app.all('/api/*', (req, res) => proxy.web(req, res, { target: apiUrl, changeOrigin: true, secure:false }));
-
+app.use('/app/libs',      express.static(__dirname + '/node_modules/@bower_components', { setHeaders: setCustomCacheControl }));
 app.all('/app/*', function(req, res) { res.status(404).send(); } );
 
 // CONFIGURE TEMPLATE
