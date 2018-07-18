@@ -14,6 +14,7 @@
             <i class="fa fa-arrow-circle-up" style="font-size:25px;color:white;position:absolute;top:3px;left:4px;"></i>
         </div>
     </div>
+
     <div class="alert alert-danger" ng-show="hasError()">
         <strong>Error as occured...</strong>
         <div>{{error}}</div>
@@ -29,26 +30,27 @@
       </span>
             <div class="clearfix"></div>
         </div>
-
     </div>
 
-    <div class="row" >
-        <br>
-        <div class="alert alert-info" ng-if="flase">
-            <div class="text-center" ng-if="false">
-                <!-- <h4 style="color:black;">{{indexCtrl.confObj.Title.en}}</h4></div> -->
-                <h4 style="color:black;"> SBSTTA-22 / SBI-02 </h4>
-                <div><p>Side-event registration for the twenty-second meeting of the Subsidiary Body on Scientific, Technical and Technological Advice (SBSTTA-22)  and the second meeting of the Subsidiary Body on Implementation (SBI-2) is now open.</p>
-                    <!-- <center><p><strong> Side-event request system not yet available.</strong></p></center> -->
-                      <center><p><strong>Side-event Request Deadline</strong>: 4 May 2018 23:59 EST</p></center>
-                </div>
+
+<br>
+
+
+
+      <div class="alert alert-info" ng-if="true">
+        <div class="text-center" ng-if="true">
+            <h4 style="color:black;">{{indexCtrl.confObj.schedule.title}}</h4>
+            <div>
+                  <p>Side-event registration for the UN Biodiversity Conference 2018 is now open.</p>
+                  <center><p><strong>Side-event Request Deadline</strong>: 15 Sept 2018 23:59 EST</p></center>
             </div>
-            <div class="text-center" >
-                <h4 style="color:black;"> SBSTTA-22 / SBI-02 </h4>
-                <div><p>Side-event registration for the twenty-second meeting of the Subsidiary Body on Scientific, Technical and Technological Advice (SBSTTA-22)  and the second meeting of the Subsidiary Body on Implementation (SBI-2) is now closed.</p>
-                      <center><p><strong>The side-event schedule will be posted shortly.  Organizers will receive an email once posted.</strong></p></center>
-                </div>
+        </div>
+        <!-- <div class="text-center" >
+            <h4 style="color:black;"> SBSTTA-22 / SBI-02 </h4>
+            <div><p>Side-event registration for the twenty-second meeting of the Subsidiary Body on Scientific, Technical and Technological Advice (SBSTTA-22)  and the second meeting of the Subsidiary Body on Implementation (SBI-2) is now closed.</p>
+                  <center><p><strong>The side-event schedule will be posted shortly.  Organizers will receive an email once posted.</strong></p></center>
             </div>
+        </div> -->
 
         <!-- <div class="alert alert-info">
             <div class="text-center">
@@ -61,7 +63,7 @@
         </div> -->
     </div>
 
-    <div class="row" ng-if="false">
+    <div class="row" ng-if="indexCtrl.isRegistrationOpen()">
       <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="meeting in indexCtrl.confObj.meetings">
 
         <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
@@ -71,10 +73,7 @@
           </div>
           <div class="panel-body text-center" >
             <div class="btn-group-vertical">
-              <!-- <button class="btn btn-sm btn-default" scroll-to="schedule{{$index}}" duration="1000"> Schedule</button> -->
-              <!-- <button class="btn btn-sm btn-info disabled">Register a Side Event (under maintenance 2 hours)</button> -->
-              <button class="btn btn-sm btn-info" ng-click="indexCtrl.goTo('/manage/events/new?meetingId='+meeting._id)">Register a Side Event</button>
-              <!-- ng-click="goTo(con._id);" -->
+              <button class="btn btn-sm btn-info" ng-click="indexCtrl.goTo('/manage/events/new?meetingId='+meeting._id)">Request a Side-event</button>
             </div>
           </div>
           <div class="panel-footer text-right">
@@ -86,14 +85,12 @@
     </div>
 
 
-    <!-- venue-->
-    <div class="col-xs-10 col-xs-offset-1 alert alert-info text-center">
-        <p>Side-event registration for the UN Biodiversity Conference 2018 will be available shortly.</p>
 
-    </div>
 
-    <div ng-if="false">
-        <!-- side event schedule -->
+<!-- side event schedule -->
+<div class="row" ng-if="indexCtrl.confObj.schedule.sideEvents.sideEventsPublished">
+    <div ng-if="true">
+
 
         <style>
             @-moz-document url-prefix() {
@@ -103,17 +100,12 @@
             }
         </style>
         <br>
-        <div class="col-xs-10 col-xs-offset-1 alert alert-info">
-            <p>Thank you all for your requests for side-events at SBSTTA-22 and SBI-2.  We received more requests than available space and asked many organizers to merge their side-events to help us showcase the many topics related to the meetings.  We appreciate your assistance in contributing to the side-events at SBSTTA-22 and SBI-2.
 
-Please note that there may be a few side-events that have not yet been published while awaiting confirmation.</p>
-
-        </div>
 
         <div class="row hidden-print" style="padding: 0 10px 0 10px;">
             <div class="col-xs-12 text-center">
                 <hr>
-                <h3 style="background-color:#fff;"> SBSTTA-22 / SBI-02 </h3>
+                <h3 style="background-color:#fff;"> {{indexCtrl.confObj.title.en}} </h3>
                 <h5 style="background-color:#fff;">(Timezone: {{indexCtrl.confObj.timezone}})</h5>
                 <hr>
 
@@ -258,8 +250,6 @@ Please note that there may be a few side-events that have not yet been published
                         </div>
                     </td>
                 </tr>
-
-
             </tbody>
         </table>
         <div style="margin-top:6px;">
@@ -267,13 +257,13 @@ Please note that there may be a few side-events that have not yet been published
             </pagination>
         </div>
     </div>
-    <div class="row hidden-print" id="rooms" ng-show="rooms.length">
-        <div class="col-xs-12 text-center">
-            <h3 style="background-color:#fff;">Rooms</h3>
-            <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
-            <hr>
-        </div>
+</div>
+<!-- side event rooms -->
+<div class="row hidden-print" id="rooms" ng-if="indexCtrl.confObj.schedule.sideEvents.showRooms">
+    <div class="col-xs-12 text-center">
+        <h3 style="background-color:#fff;">Rooms</h3>
+        <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
+        <hr>
     </div>
-    <room-table class="hidden-print" conf-obj="indexCtrl.confObj" ng-show="rooms.length"> </room-table>
-
+    <room-table class="hidden-print" conf-obj="indexCtrl.confObj" ng-if="false"> </room-table>
 </div>
