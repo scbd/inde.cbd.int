@@ -307,7 +307,7 @@ border-top-color: transparent !important;
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
                   <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" required>
-                    <option ng-repeat="docObj in options.conferences | futureConferences:doc.conference" value="{{docObj._id}}" ng-if="docObj._id==='5a94529e465c5db9eab0fdea'" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
+                    <option ng-repeat="docObj in options.conferences | futureConferences:doc.conference" value="{{docObj._id}}"  ng-selected="docObj.selected">{{docObj.Title.en}} </option>
                   </select>
                   <p ng-show="editForm.conference.$invalid " class="help-block error red-status">A conference is required.</p>
                 </div>

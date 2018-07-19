@@ -89,17 +89,16 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //==============================
         function isRegistrationOpen(){
           var sideEvents
-console.log('sideEvents',_ctrl.confObj)
+
           if(_ctrl.confObj && _ctrl.confObj.schedule && _ctrl.confObj.schedule.sideEvents)
             sideEvents = _ctrl.confObj.schedule.sideEvents
           else
             return false
-console.log('sideEvents',sideEvents)
+
 
           var isAfter  = moment(Date.now()).isAfter(moment.tz(sideEvents.start,_ctrl.confObj.timezone))
           var isBefore = moment(Date.now()).isBefore(moment.tz(sideEvents.end,_ctrl.confObj.timezone))
-console.log('isAfter',isAfter)
-console.log('isBefore',isBefore)
+
           if( isAfter && isBefore )
             return true
           else

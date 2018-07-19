@@ -85,7 +85,7 @@ define(['app', 'lodash',
 
                         $scope.tab = 'general';
                         $('#general-tab').tab('show');
-
+                        var meetingInit = false
                         init();
 
                         //============================================================
@@ -99,9 +99,9 @@ define(['app', 'lodash',
 
                         });
                         $scope.$watch('doc.meetings', function() {
-                console.log($scope.doc.meetings)
+
                             if ($scope.doc.meetings)
-                                    generateDates();
+                              generateDates();
 
                         });
 
@@ -487,14 +487,10 @@ define(['app', 'lodash',
                                 });
 
                                 docObj.selected = !docObj.selected;
-                                if (true) {
-                                    if (docObj.selected) {
-                                        $scope.doc.meetings= [docObj._id] ;
-                                    } else {
-                                        $scope.doc.confrence = '';
-                                        $scope.search = '';
-                                    }
-                                }
+
+                                if (docObj.selected)
+                                    $scope.doc.meetings= [docObj._id]
+
                             });
                         }; // archiveOrg
 
@@ -624,8 +620,8 @@ define(['app', 'lodash',
                                     if (!$scope.doc.prefDate)$scope.doc.prefDate={};
 
 
-                                    $scope.doc.conference=$scope.options.conferences[1]._id;
-                                    $scope.options.conferences[1].selected=true;
+                                    $scope.doc.conference=$scope.options.conferences[0]._id;
+                                    $scope.options.conferences[0].selected=true;
 
                                     $scope.preFill=false;
                                     $scope.loading=false;
@@ -652,8 +648,13 @@ define(['app', 'lodash',
                                 meeting = meetings[index];
                             else
                                 for (var i=0; i<meetings.length; i++)
-                                    if(meetings[i]._id === $scope.meetingId)
-                                        meeting = meetings[i];
+                                    if(meetings[i]._id === $scope.meetingId && !meetingInit){
+                                      meetingInit = true
+                                      meeting = meetings[i];
+                                      meeting.selected=false
+                                    }
+
+
                             if(meeting){
                                 meeting.selected = !meeting.selected;
                                 if (!$scope.doc.meetings) $scope.doc.meetings = [];
@@ -1108,8 +1109,6 @@ define(['app', 'lodash',
                                     $scope.tab = 'logistics';
                                     $('#logistics-tab').tab('show');
                                 });
-                                if(!$scope.doc.conference)
-                                    $scope.doc.conference='56f14b1e49a977d560a27ede';
                                 $scope.saveDoc();
                             }
                         } //submitGeneral
