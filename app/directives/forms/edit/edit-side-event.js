@@ -692,8 +692,7 @@ define(['app', 'lodash',
 
                             for (var i = 0; i < numDays; i++) {
 
-
-                                if(~visibleDays.indexOf(startDate.day()) && isMeetingDay(startDate))
+                                if(~visibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
                                     $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
                                 startDate = startDate.add(1, 'day');
