@@ -10,6 +10,9 @@ define(['app','angular', 'jquery',
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
+
+      $scope.viewOnly = (new URL(location)).searchParams.get('viewOnly') || false
+
         $scope.routeLoaded=false;
         $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
         $q.when(authentication.getUser()).then(function(u) {

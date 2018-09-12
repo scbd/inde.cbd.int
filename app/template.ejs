@@ -241,7 +241,7 @@
 
 <body class="ltr" id="top">
   <!-- HEADER (MOBILE) -->
-  <header class="mobile navbar visible-xs hidden-print" role="banner">
+  <header ng-if="!viewOnly" class="mobile navbar visible-xs hidden-print" role="banner">
     <div class="container">
 
       <div class="navbar-header">
@@ -298,7 +298,7 @@
   </header>
 
   <!-- HEADER (LARGE) -->
-  <header class="large hidden-xs  ">
+  <header ng-if="!viewOnly" class="large hidden-xs  ">
     <div class="container whitebg">
       <div>
 
@@ -352,12 +352,12 @@
   <!-- CONTENT -->
   <div class="container whitebg view">
 
-    <portal-nav></portal-nav>
+    <portal-nav ng-if="!viewOnly"></portal-nav>
     <ng-view autoscroll="true"></ng-view>
   </div>
 
   <!--  FOOTER   -->
-  <footer ng-cloak class="container whitebg hidden-print" ng-show="routeLoaded">
+  <footer ng-if="!viewOnly" ng-cloak class="container whitebg hidden-print" ng-show="routeLoaded">
     <div class="greybg">
       <div class="col-sm-4 fleft">
         <h4>Quick Links</h4>
@@ -398,7 +398,7 @@
     </div>
   </footer>
 
-  <footer ng-cloak class="container standard whitebg hidden-print" ng-show="routeLoaded">
+  <footer ng-if="!viewOnly" ng-cloak class="container standard whitebg hidden-print" ng-show="routeLoaded">
     <div class="col-md-9">
       <ul class="list-inline">
         <li><a href="/feedback">Feedback</a></li>
@@ -424,8 +424,8 @@
 
 
   <!-- Slaask. need to be placed just before require.JS script tag -->
-  <script src="https://cdn.slaask.com/chat.js"></script>
-  <script>
+  <script ng-if="!viewOnly" src="https://cdn.slaask.com/chat.js"></script>
+  <script ng-if="!viewOnly">
     //patch slaask to works with requireJS
     window._slaask.createScriptTag = function(url) {
       var t = {};
