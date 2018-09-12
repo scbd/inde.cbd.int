@@ -10,8 +10,8 @@ define(['app','angular', 'jquery',
     'use strict';
 
     app.controller('TemplateController', ['$scope', '$rootScope', '$window', '$location', 'authentication', '$q', 'toastr', '$templateCache','devRouter', function($scope, $rootScope, $window, $location, authentication, $q, toastr, $templateCache,devRouter) {
-
-      $scope.viewOnly = (new URL(location)).searchParams.get('viewOnly') || false
+        var searchParams = new URL(location).searchParams
+        $scope.viewOnly = searchParams.get('viewOnly') || searchParams.get('view-only') || false
 
         $scope.routeLoaded=false;
         $scope.ACCOUNTS_URI=devRouter.ACCOUNTS_URI;
@@ -42,8 +42,10 @@ define(['app','angular', 'jquery',
 
             if (!user)
                 return;
+            if($scope.viewOnly)
+              return killWatch();
 
-            require(["_slaask"], function(_slaask) {
+            require(["https://www.cbd.int/app/js/slaask.js"], function(_slaask) {
 
                 if (user.isAuthenticated) {
                     _slaask.identify(user.name, {
