@@ -464,8 +464,8 @@ define(['app', 'lodash',
               if(!confObj) throw 'Error: no confrence for side-event';
 
               row.meetings.forEach(function(meetingId,index){
-                var meetingObj = _.find(confObj.meetings,{'_id':meetingId});
-                  returnString+=meetingObj.titleShort;
+                  var meetingObj = _.find(confObj.meetings,{'_id':meetingId});
+                  returnString+=meetingObj.titleShort || meetingObj.EVT_CD;
                   if(index<row.meetings.length-1)
                      returnString+=', ';
               });
