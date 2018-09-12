@@ -16,6 +16,8 @@ define(['app','angular', 'jquery',
             $rootScope.user = u;
         });
 
+        this.viewOnly = $rootScope.viewOnly = $location.search().viewOnly;
+
         var basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
         $scope.$on("$routeChangeSuccess", function(evt, current) {
           if(current.$$route)
@@ -31,37 +33,32 @@ define(['app','angular', 'jquery',
         });
 
         $scope.auth = authentication;
-        //============================================================
-        //
-        //
-        //============================================================
-        var killWatch = $rootScope.$watch('user', function(user) {
 
-            if (!user)
-                return;
+        if(!this.viewOnly)
+          $q.when(authentication.getUser()).then(function(user){
 
-            require(["https://www.cbd.int/app/js/slaask.js"], function(_slaask) {
+              $scope.user = user;
 
-                if (user.isAuthenticated) {
-                    _slaask.identify(user.name, {
-                        'user-id': user.userID,
-                        'name': user.name,
-                        'email': user.email,
-                    });
+              require(["https://www.cbd.int/app/js/slaask.js"], function(_slaask) {
 
-                    if (_slaask.initialized) {
-                        _slaask.slaaskSendUserInfos();
-                    }
-                }
+                  if (user.isAuthenticated) {
+                      _slaask.identify(user.name, {
+                          'user-id' : user.userID,
+                          'name' : user.name,
+                          'email' : user.email,
+                      });
 
-                if (!_slaask.initialized) {
-                    _slaask.init('ae83e21f01860758210a799872e12ac4');
-                    _slaask.initialized = true;
-                    killWatch();
-                }
-            });
-        });
+                      if(_slaask.initialized) {
+                          _slaask.slaaskSendUserInfos();
+                      }
+                  }
 
+                  if(!_slaask.initialized) {
+                      _slaask.init('ae83e21f01860758210a799872e12ac4');
+                      _slaask.initialized = true;
+                  }
+              });
+          });
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 
 
