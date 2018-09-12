@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-controller="TemplateController" git-version="<%=gitVersion%>">
+<html lang="en" ng-controller="TemplateController  as templateCtrl" git-version="<%=gitVersion%>">
 
 <head>
   <base href="<%=baseUrl%>">
@@ -241,7 +241,7 @@
 
 <body class="ltr" id="top">
   <!-- HEADER (MOBILE) -->
-  <header class="mobile navbar visible-xs hidden-print" role="banner">
+  <header ng-if="!templateCtrl.viewOnly" class="mobile navbar visible-xs hidden-print" role="banner">
     <div class="container">
 
       <div class="navbar-header">
@@ -298,7 +298,7 @@
   </header>
 
   <!-- HEADER (LARGE) -->
-  <header class="large hidden-xs  ">
+  <header ng-if="!templateCtrl.viewOnly" class="large hidden-xs  ">
     <div class="container whitebg">
       <div>
 
@@ -352,12 +352,12 @@
   <!-- CONTENT -->
   <div class="container whitebg view">
 
-    <portal-nav></portal-nav>
+    <portal-nav ng-if="!templateCtrl.viewOnly"></portal-nav>
     <ng-view autoscroll="true"></ng-view>
   </div>
 
   <!--  FOOTER   -->
-  <footer ng-cloak class="container whitebg hidden-print" ng-show="routeLoaded">
+  <footer ng-if="!templateCtrl.viewOnly" ng-cloak class="container whitebg hidden-print" ng-show="routeLoaded">
     <div class="greybg">
       <div class="col-sm-4 fleft">
         <h4>Quick Links</h4>
@@ -398,7 +398,7 @@
     </div>
   </footer>
 
-  <footer ng-cloak class="container standard whitebg hidden-print" ng-show="routeLoaded">
+  <footer ng-if="!templateCtrl.viewOnly" ng-cloak class="container standard whitebg hidden-print" ng-show="routeLoaded">
     <div class="col-md-9">
       <ul class="list-inline">
         <li><a href="/feedback">Feedback</a></li>
