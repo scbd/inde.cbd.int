@@ -465,7 +465,7 @@ define(['app', 'lodash',
 
               row.meetings.forEach(function(meetingId,index){
                 var meetingObj = _.find(confObj.meetings,{'_id':meetingId});
-                  returnString+=meetingObj.titleShort;
+                  returnString+=meetingObj.titleShort || meetingObj.EVT_CD;
                   if(index<row.meetings.length-1)
                      returnString+=', ';
               });
