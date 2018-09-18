@@ -653,10 +653,26 @@ define(['app', 'lodash',
             //
             //=======================================================================
             function cvsExport() {
-
+              var fields = {
+                title: 1,
+                description: 1,
+                conference: 1,
+                id: 1,
+                meta: 1,
+                meetings: 1,
+                contact: 1,
+                expNumPart: 1,
+                hostOrgs: 1,
+                prefDate: 1,
+                prefDateTime: 1,
+                requirements: 1,
+                responsible: 1,
+                subjects: 1,
+                targets: 1
+              }
               var q = buildQuery ();
               $scope.exporting=true;
-              return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort,false,true).then(
+              return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort,fields,true).then(
                 function(responce){
                     var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Meetings','# Participants',
                                         'Preferred Date 1','Preferred Date 2','Preferred Date 3','Requirements','Host Organizations','Contact','Responsible Person',
