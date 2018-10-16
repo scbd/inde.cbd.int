@@ -196,8 +196,8 @@ define(['app', 'lodash','moment','text!./ouical-dialog.html','directives/mobi-me
 function isScheduled(){
   var published = false
 
-  if(_ctrl.doc.conferenceObj && _ctrl.doc.conferenceObj.conference)
-    published = _ctrl.doc.conferenceObj.conference.sideEventsPublished
+  if(_ctrl.doc.conferenceObj && _ctrl.doc.conferenceObj.schedule && _ctrl.doc.conferenceObj.schedule.sideEvents)
+    published = _ctrl.doc.conferenceObj.schedule.sideEvents.sideEventsPublished
   else published = true
 
   return !!(_ctrl.room && published)

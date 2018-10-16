@@ -26,7 +26,7 @@
       <h4>Side Event #{{sideEventCtrl.doc.id}}</h4>
     </span>
     <span style="white-space: normal;">
-      <span class="pull-right text-nowrap"><h4>Status:</hr> <span ng-class="{'red-status':(sideEventCtrl.doc.meta.status!=='request' && sideEventCtrl.doc.meta.status!=='published')}"><span ng-if="sideEventCtrl.doc.meta.status!=='request'"><span ng-if="(sideEventCtrl.doc.meta.status==='scheduled') && !sideEventCtrl.scheduled()">NOT</span> {{sideEventCtrl.doc.meta.status.toUpperCase()}}</span> <span ng-if="sideEventCtrl.doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!sideEventCtrl.doc.meta.status">NOT SAVED</span></span></span>
+      <span class="pull-right text-nowrap"><h4>Status:</hr> <span ng-class="{'red-status':(sideEventCtrl.doc.meta.status!=='request' && sideEventCtrl.doc.meta.status!=='published' && sideEventCtrl.doc.meta.status!=='scheduled')}"><span ng-if="sideEventCtrl.doc.meta.status!=='request'"><span ng-if="(sideEventCtrl.doc.meta.status==='scheduled') && !sideEventCtrl.scheduled()">NOT</span> {{sideEventCtrl.doc.meta.status.toUpperCase()}}</span> <span ng-if="sideEventCtrl.doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!sideEventCtrl.doc.meta.status">NOT SAVED</span></span></span>
     </span>
     <div class="clearfix"></div>
   </div>
