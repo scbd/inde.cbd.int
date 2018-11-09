@@ -204,10 +204,10 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                 if(typeof _ctrl.selectedTime ==="undefined" ){
 
-                    if(moment(Date.now()).isBefore(moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone))){
-                        _ctrl.selectedTime='all'
-                        selectedT='all';
-                        _ctrl.itemsPerPage=50;
+                    if(moment(Date.now()).isBefore(moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone))){
+                      _ctrl.selectedTime='all'
+                      selectedT='all';
+                      _ctrl.itemsPerPage=50;
                     }
                     else
                       _ctrl.selectedTime=moment.tz(Date.now(),_ctrl.confObj.timezone)
@@ -449,16 +449,14 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
               loadRooms();
             }
 
-            var numDays = moment.tz(_ctrl.confObj.EndDate,_ctrl.confObj.timezone).diff(_ctrl.confObj.StartDate,'days');
+            var numDays = moment.tz(_ctrl.confObj.EndDate,_ctrl.confObj.timezone).diff(_ctrl.confObj.schedule.sideEvents.search.start,'days');
 
             _ctrl.sideEventTimes=[{title:'All Days',value:'all', selected:true}];
 
             for(var i=0; i<=numDays; i++)
             {
-
-                _ctrl.sideEventTimes.push({title:moment(_ctrl.confObj.StartDate).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(7,'hours').add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format()});
-                _ctrl.sideEventTimes.push({title:moment(_ctrl.confObj.StartDate).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.StartDate,_ctrl.confObj.timezone).startOf().subtract(7,'hours').add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format()});
-
+              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format()});
+              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format()});
             }
 
         }
