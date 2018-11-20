@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-menu','ngSmoothScroll','scroll-directive',
+define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-menu','ngSmoothScroll','scroll-directive','directives/cbd-article',
     'filters/propsFilter',
     'filters/moment',
     'filters/truncate',
@@ -43,6 +43,47 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         load();
         return this;
 
+
+        //==============================
+        //
+        //==============================
+        function getArticle() {
+          $scope.articleQuery = getArticleQuery();
+
+          $scope.onArticleLoad = function(article){               
+              
+              $scope.article = article;
+              $scope.isLoading = false;
+          } 
+  //         $http.get("/api/v2017/articles", { params: getArticleQuery()}).then(function(res){
+  // console.log('res.data',res.data)          
+  //           _ctrl.article = res.data; 
+  // 
+  //         });
+
+        }
+        
+        //==============================
+        //
+        //==============================
+        function getArticleQuery(indeNotice){
+          let ag   = []
+          let tags = []
+         
+          tags[0] = encodeURIComponent('inde-side-events')
+          
+          if(indeNotice)
+            tags[1] = encodeURIComponent('inde-side-events-notice') 
+          let match = { 'adminTags.title.en' : { $all: tags }}
+
+          ag.push({'$match'   : match })
+          ag.push({'$project' : { title:1, summary:1, content:1, coverImage:1}})
+          ag.push({'$sort'    : { 'meta.updatedOn':-1}})
+          ag.push({'$limit'   : 1 })
+
+          return ag
+        }
+        
         //==============================
         //
         //==============================
@@ -60,6 +101,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             $templateCache.put("bootstrap/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control\" ng-class=\"{open: $select.open}\"><div><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" class=\"ui-select-search input-xs\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" ng-model=\"$select.search\" ng-model=\"$select.search\" ng-model-options=\"{debounce: 1000}\" role=\"combobox\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
 
             loadList(0).then(initWatches);
+            getArticle()
         }
 
         //==============================

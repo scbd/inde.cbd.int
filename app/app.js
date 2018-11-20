@@ -1,6 +1,6 @@
 define(['angular','dragula','angular-animate','angular-loading-bar','ngFileUpload','ui.select','720kb.socialshare'], function(angular,angularDragula) { 'use strict';
 
-    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','ngFileUpload','ui.select','ngDialog','smoothScroll','scroll-animate-directive', angularDragula(angular),'toastr','ngCkeditor','720kb.socialshare'];
+    var deps = ['ngRoute','ngAnimate','chieffancypants.loadingBar','ngFileUpload','ui.select','ngDialog','smoothScroll','scroll-animate-directive', angularDragula(angular),'toastr','ngCkeditor','720kb.socialshare', 'angular-cache'];
 
     angular.defineModules(deps);
 

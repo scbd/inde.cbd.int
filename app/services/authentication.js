@@ -324,8 +324,18 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
             $window.location.href = 'https://accounts.' + devRouter.DOMAIN + '/profile?returnUrl='+  encodedReturnUrl();
         }
 
+        function isInRole(user, roles) {
 
+    			if(!user)  return false;
+    			if(!roles) return false;
+
+    			if( _.isString(roles)) roles = [roles];
+    			if(!_.isArray (roles)) throw new Error("`roles` must be string or array od string");
+
+    			return !!_.intersection(user.roles||[], roles).length;
+    		}
         return {
+          isInRole:isInRole,
             signIn: signIn,
             signOut: signOut,
             goToSignIn: goToSignIn,

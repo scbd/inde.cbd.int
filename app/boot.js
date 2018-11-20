@@ -1,5 +1,6 @@
 if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 var gitVersion = document.documentElement.attributes['git-version'].value;
+var cdnHost    = 'https://cdn.cbd.int/';
 require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
@@ -32,6 +33,7 @@ require.config({
         '720kb.socialshare'        : 'libs/angular-socialshare/dist/angular-socialshare.min',
         'ui.select'                : 'libs/angular-ui-select/dist/select',
         'ouical'                   : 'services/ouical',
+        'angular-cache'            : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min'
     },
     shim: {
         'libs/angular/angular'      : { deps: ['jquery'] },

@@ -1,4 +1,5 @@
 <div>
+
     <div class="visible-print-block">
         <span class="badge pull-left">{{indexCtrl.itemsPerPage}}</span> of <span class="badge">{{indexCtrl.count}}</span>
         <h2 style="position:absolute;top:-20px;right:10px;">Side-Events</h2>
@@ -31,8 +32,8 @@
             <div class="clearfix"></div>
         </div>
     </div>
-
-
+    <!-- <cbd-article query="articleNoticeQuery" ng-if="articleNoticeQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
+    <cbd-article query="articleQuery" ng-if="articleQuery"  hide-cover-image=""></cbd-article>
     <div class="row" ng-if="indexCtrl.isRegistrationOpen()">
       <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="meeting in indexCtrl.confObj.meetings">
 
