@@ -35,7 +35,8 @@ define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-
 
 						if(($scope.article.coverImage||{}).url)
 							$scope.article.coverImage.url_1200  = $scope.article.coverImage.url.replace(/attachments\.cbd\.int\//, '$&1200x600/')
-						
+            else 
+              $scope.hideCoverImage =true
 						$scope.onLoad({article: article[0]});
 						
 						$q.when(authentication.getUser())
