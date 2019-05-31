@@ -34,30 +34,11 @@
     </div>
     <!-- <cbd-article query="articleNoticeQuery" ng-if="articleNoticeQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
     <cbd-article query="articleQuery" ng-if="articleQuery"  hide-cover-image=""></cbd-article>
-    <div class="row" ng-if="indexCtrl.isRegistrationOpen()">
-      <div class="col-lg-6 col-lg-offset-3  col-sm-6 col-xs-12" ng-repeat="meeting in indexCtrl.confObj.meetings">
-
-        <div class="panel" ng-class="{ 'panel-primary' : m.primary, 'panel-info' : !m.primary }">
-          <div class="panel-heading  text-center text-nowrap">
-            <h4 class="hidden-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h4>
-            <h5 class="visible-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h5>
-          </div>
-          <div class="panel-body text-center" >
-            <div class="btn-group-vertical">
-              <button class="btn btn-sm btn-info" ng-click="indexCtrl.goTo('/manage/events/new?meetingId='+meeting._id)">Request a Side-event</button>
-            </div>
-          </div>
-          <div class="panel-footer text-right">
-            <div class="text-center">{{meeting.EVT_FROM_DT | date:'dd/MM/yyyy': 'UTC' }}
-              <span style=""> to </span> {{meeting.EVT_TO_DT | date:'dd/MM/yyyy':'UTC' }}</div>
-          </div>
-        </div>
-      </div>
-    </div>
 
 
 
 
+<reg-open></reg-open>
 <!-- side event schedule -->
 <div class="row" ng-if="indexCtrl.confObj.schedule.sideEvents.sideEventsPublished">
     <div ng-if="true">

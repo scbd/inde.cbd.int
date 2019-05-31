@@ -11,7 +11,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
     'directives/share',
     'ouical',
     'directives/ouical',
-    'ngDialog'
+    'ngDialog',
+    'directives/reg-open',
 ], function(app, _, moment,ouicalDialog) {
 
     return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache','ngDialog',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache,ngDialog) {
