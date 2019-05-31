@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 
 COPY package.json .npmrc ./
 
-RUN yarn install --flat --production
+RUN yarn install  --production
 
 ENV PORT 8000
 
