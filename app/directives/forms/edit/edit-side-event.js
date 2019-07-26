@@ -217,11 +217,61 @@ define(['app', 'lodash',
                         //
                         //============================================================
                         function loadConferences() {
-                            return mongoStorage.loadConferences().then(function(o) {
+                            return $http.get('/api/v2016/conferences', { 'params': findOpenRegsQuery() }).then(function(res) {
 
-                                $scope.options.conferences=o.sort(compareDates); //= $filter("orderBy")(o.data, "StartDate");
+                                $scope.options.conferences=res.data.sort(compareDates);
+                                return $scope.options.conferences
+                            })
+                            .then(loadMeetingsData)
+                            .catch(onError);
+                        }
 
-                            }).catch(onError);
+                        function setMeetingsInConf(res){
+                            var meetings = res.data
+                            var conferences = $scope.options.conferences
+                            for (var j =0; j< meetings.length; j++)
+                                for (var i = 0; i<conferences.length; i++) {
+                                    if(!conferences[i].meetings) conferences[i].meetings = []
+                                    if(_.includes(conferences[i].MajorEventIDs,meetings[j]._id ))
+                                        conferences[i].meetings.push(meetings[j])
+                                }
+                        }
+
+                        function loadMeetingsData(conferences){
+                            var ids = getMeetingIds(conferences)
+                            $http.get('/api/v2016/meetings', { 'params': meetingsQuery(ids) }).then(setMeetingsInConf)
+                        }
+
+                        function meetingsQuery(meetingIds){
+                            return  {
+                                        q:  { '_id': { '$in': meetingIds } },
+                                        f: {titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1},
+                                        s: { EVT_FROM_DT: 1 }
+                                    }
+                        }
+
+                        function getMeetingIds(conferences){
+                            var meetingIds = []
+
+                            if(!conferences || !Array.isArray(conferences) || !conferences.length) return false
+
+                            for (var i = 0; i < conferences.length; i++) 
+                                for (var j = 0; j < conferences[i].MajorEventIDs.length; j++) 
+                                meetingIds.push({'$oid': conferences[i].MajorEventIDs[j]})
+
+                            return meetingIds
+                        }
+
+                        function findOpenRegsQuery(){
+                            return {
+                                    q:  {
+                                            '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
+                                            schedule                   : { $exists: true },
+                                            StartDate                  : { $gt: { $date: new Date().toISOString() } },
+                                            'schedule.sideEvents.start': { $lt: { $date: new Date().toISOString() } },
+                                        },
+                                    s: { 'schedule.sideEvents.start': 1 }
+                                    }
                         }
 
                         //============================================================
