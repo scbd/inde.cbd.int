@@ -17,7 +17,7 @@ define(['app', 'lodash',
             $scope.selectedChip = 'all';
             $scope.docs = [];
             $scope.options={};
-            $scope.itemsPerPage=20;
+            $scope.itemsPerPage=99999;
             $scope.currentPage=0;
             $scope.onPage      = loadList;
             $scope.filter={};
@@ -260,15 +260,15 @@ define(['app', 'lodash',
                     $scope.count = response.count;
                     $scope.statusFacits =  response.facits;
 
-                    if ($scope.isAdmin)
-                        _.each($scope.docs, function(doc) {
+                    // if ($scope.isAdmin)
+                    //     _.each($scope.docs, function(doc) {
 
-                            $http.get('/api/v2013/users/' + doc.meta.createdBy, {
-                                cache: true
-                            }).then(function onsuccess(response) {
-                                doc.contact = response.data;
-                            }).catch(onError);
-                        });
+                    //         $http.get('/api/v2013/users/' + doc.meta.createdBy, {
+                    //             cache: true
+                    //         }).then(function onsuccess(response) {
+                    //             doc.contact = response.data;
+                    //         }).catch(onError);
+                    //     });
                         refreshPager(pageIndex);
                         $scope.loading=false;
                 }).catch(onError);

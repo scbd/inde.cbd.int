@@ -166,12 +166,12 @@
                             <div class="form-group form-inline" style="color:#333;font-size:14px;margin-top:20px;">
                                 <span style="color:#333;font-size:14px;">Records per page:</span>
                                 <select style="display:inline;" class="form-control" ng-model="itemsPerPage" ng-change="onPage(0)" convert-to-number>
-                                    <option ng-value="5" ng-selected="itemsPerPage===5" >5</option>
-                                    <option ng-value="10" ng-selected="itemsPerPage===10">10</option>
-                                    <option ng-value="15" ng-selected="itemsPerPage===15" >15</option>
                                     <option ng-value="20" ng-selected="itemsPerPage===20">20</option>
                                     <option ng-value="50" ng-selected="itemsPerPage===50">50</option>
                                     <option ng-value="100" ng-selected="itemsPerPage===100">100</option>
+                                    <option ng-value="300" ng-selected="itemsPerPage===300">300</option>
+                                    <option ng-value="500" ng-selected="itemsPerPage===500">500</option>
+                                    <option ng-value="99999" ng-selected="itemsPerPage===99999">All</option>
                                 </select>
                             </div>
                         </div>
@@ -207,8 +207,8 @@
                     </span>
                     <span style="padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym}} |</span>
                   </span>
-                  <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-                  <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
+                  <!-- <span class="hidden-md hidden-sm hidden-xs" class="circle"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
+                  <span class="hidden-md hidden-sm hidden-xs"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span> -->
                 </div>
 
             </div>
@@ -221,8 +221,8 @@
                 </span>
                 <span style="font-size:.8rem;padding:0px 0px 0px 1px; vertical-align:middle;"> {{org.acronym  }} |</span>
               </span>
-              <span ng-if="isAdmin()" class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span>
-              <span ng-if="isAdmin()" style="font-size:.8rem;"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span>
+              <!-- <span ng-if="isAdmin()" class="circle" style="font-size:.8rem;"><i class="material-icons" style="vertical-align:middle;">&#xE7FD;</i></span> -->
+              <!-- <span ng-if="isAdmin()" style="font-size:.8rem;"> {{doc.contact.FirstName}} {{doc.contact.LastName}}</span> -->
             </div>
             <!-- mobi title status-->
             <div class="hidden-lg hidden-xl" style="color:white;text-align:left;background-color:rgba(0, 0, 0, 0.6);position:absolute;left:0px;top:0px;width:100%;padding: 2px 5px 0px 5px;font-size:.8rem;line-height:.8rem">
