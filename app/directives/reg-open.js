@@ -76,6 +76,7 @@ function findOpenRegsQuery(){
                   schedule                   : { $exists: true },
                   StartDate                  : { $gt: { $date: new Date().toISOString() } },
                   'schedule.sideEvents.start': { $lt: { $date: new Date().toISOString() } },
+                  'schedule.sideEvents.end'  : { $gt: { $date: new Date().toISOString() } },
                 },
             f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 },
             s: { 'schedule.sideEvents.start': 1 }
@@ -87,7 +88,7 @@ function meetingsQuery(meetingIds){
             q:  {
                   '_id': { '$in': meetingIds }
                 },
-            f: {titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1},
+            f: { titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1, EVT_THM_CD:1 },
             s: { EVT_FROM_DT: 1 }
           }
 }
