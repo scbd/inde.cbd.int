@@ -244,7 +244,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                     var sideEvents = _ctrl.confObj.schedule.sideEvents
 
-                    if(sideEvents && moment(Date.now()).isBefore(moment.tz(sideEvents.search.start,_ctrl.confObj.timezone))){
+                    if(sideEvents && moment(moment.utc()).isBefore(moment.tz(sideEvents.search.start,_ctrl.confObj.timezone))){
                       _ctrl.selectedTime='all'
                       selectedT='all';
                       _ctrl.itemsPerPage=50;
