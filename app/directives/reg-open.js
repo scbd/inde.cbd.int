@@ -1,9 +1,10 @@
-define(['app', 'text!./reg-open.html','lodash',], loadGlobalModules)
+define(['app', 'text!./reg-open.html','lodash', 'moment',], loadGlobalModules)
 
 // requirejs global modules
-function loadGlobalModules(app, template, _) {
+function loadGlobalModules(app, template, _, moment) {
   this.template = template
-  this._ = _
+  this._        = _
+  this.moment   = moment
 	app.directive('regOpen', ['$http', directive.bind(this) ]);
 }
 
@@ -74,9 +75,9 @@ function findOpenRegsQuery(){
             q:  {
                   '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
                   schedule                   : { $exists: true },
-                  StartDate                  : { $gt: { $date: new Date().toISOString() } },
-                  'schedule.sideEvents.start': { $lt: { $date: new Date().toISOString() } },
-                  'schedule.sideEvents.end'  : { $gt: { $date: new Date().toISOString() } },
+                  StartDate                  : { $gt: { $date: moment.utc() } },
+                  'schedule.sideEvents.start': { $lt: { $date: moment.utc() } },
+                  'schedule.sideEvents.end'  : { $gt: { $date: moment.utc() } },
                 },
             f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 },
             s: { 'schedule.sideEvents.start': 1 }
