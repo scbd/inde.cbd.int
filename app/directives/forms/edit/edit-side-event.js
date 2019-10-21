@@ -253,7 +253,7 @@ define(['app', 'lodash',
                         function getMeetingIds(conferences){
                             var meetingIds = []
 
-                            if(!conferences || !Array.isArray(conferences) || !conferences.length) return false
+                            if(!conferences || !Array.isArray(conferences) || !conferences.length) return meetingIds
 
                             for (var i = 0; i < conferences.length; i++) 
                                 for (var j = 0; j < conferences[i].MajorEventIDs.length; j++) 
