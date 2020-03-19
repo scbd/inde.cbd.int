@@ -1,6 +1,5 @@
 define(['app',
-        'text!./portal-branding.html',
-        'css!./portal-branding',
+        'text!./portal-branding.html'
     ], function(app, template) {
     app.directive('portalBranding', function() {
         return {

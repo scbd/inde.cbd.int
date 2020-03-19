@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Inde  - side event portal",
   "main": "server.js",
+  "scripts":{
+    "dev":"node server.js"
+  },
   "dependencies": {
     "@bower_components/angular": "angular/bower-angular#1.4.9",
     "@bower_components/angular-animate": "angular/bower-angular-animate#1.4.8",
@@ -26,7 +29,6 @@
     "@bower_components/ng-dialog": "likeastore/ngDialog#0.5.8",
     "@bower_components/ng-file-upload": "danialfarid/angular-file-upload-bower#12.0.1",
     "@bower_components/ngSmoothScroll": "d-oliveros/angular-smooth-scroll#2.0.0",
-    "@bower_components/require-css": "guybedford/require-css#0.1.8",
     "@bower_components/requirejs": "jrburke/requirejs-bower#*",
     "@bower_components/requirejs-plugins": "millermedeiros/requirejs-plugins#1.0.3",
     "@bower_components/requirejs-text": "requirejs/text#2.0.15",

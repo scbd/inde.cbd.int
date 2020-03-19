@@ -4,7 +4,6 @@ define(['app',
     'text!./add-org-dialog.html',
     'services/filters',
     'services/mongo-storage',
-    'css!libs/angular-dragula/dist/dragula.css',
     'ngDialog'
 ], function(app, _, template,dialogTemplate) {
     'use strict';

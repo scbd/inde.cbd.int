@@ -12,7 +12,7 @@ require.config({
         'angular-route'            : 'libs/angular-route/angular-route',
         'app-css'                  : 'css/main',
         'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',
-        'css'                      : 'libs/require-css/css.min',
+        // 'css'                      : 'libs/require-css/css.min',
         'dragula'                  : 'libs/angular-dragula/dist/angular-dragula',
         'flag-icon-css'            : 'libs/flag-icon-css/css/flag-icon.min',
         'font-awsome-css'          : 'libs/font-awesome/css/font-awesome.min',

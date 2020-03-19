@@ -1,7 +1,7 @@
 define(['app', 'text!./cbd-article.html','lodash', 'require', 'services/article-service'], function(app, template, _, require) {
 	 'use strict';
 	
-	require(['css!https://www.cbd.int/management/app/dist/ckeditor5/style.css']);
+	// require(['css!https://www.cbd.int/management/app/dist/ckeditor5/style.css']);
 
 	app.directive('cbdArticle', ['$sce', '$q', 'articleService', 'authentication', '$location',  function ($sce, $q, articleService, authentication, $location)
 	{

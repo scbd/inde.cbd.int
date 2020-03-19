@@ -1,4 +1,4 @@
-define(['app', 'lodash', 'text!./portal-nav.html', 'css!./portal-nav','ngSmoothScroll'], function(app, _, template) {
+define(['app', 'lodash', 'text!./portal-nav.html', 'ngSmoothScroll'], function(app, _, template) {
   app.directive('portalNav', function() {
     return {
       restrict: 'E',
