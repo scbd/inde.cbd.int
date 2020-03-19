@@ -79,7 +79,7 @@ function findOpenRegsQuery(){
                   'schedule.sideEvents.start': { $lt: { $date: moment.utc() } },
                   'schedule.sideEvents.end'  : { $gt: { $date: moment.utc() } },
                 },
-            f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 },
+            f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1},
             s: { 'schedule.sideEvents.start': 1 }
           }
 }
@@ -120,7 +120,7 @@ function setMeetings(res){
 
   for (var i = meetings.length-1; i >=0; i--) {
     var parentConference = getConference(meetings[i]._id)
-    meetings[i] = this._.assign(meetings[i],{start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end})
+    meetings[i] = this._.assign(meetings[i],{start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end, hideDates: parentConference.schedule.sideEvents.hideDates})
   }
   this.$scope.meetings = meetings
 }

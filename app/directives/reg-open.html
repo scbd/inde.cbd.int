@@ -5,7 +5,7 @@
       <div class="panel-heading  text-center text-nowrap">
         <h4 class="hidden-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h4>
         <h5 class="visible-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h5>
-        <div class="text-center">{{meeting.EVT_FROM_DT | date:'dd/MM/yyyy': 'UTC' }}
+        <div ng-if="!meeting.hideDates" class="text-center">{{meeting.EVT_FROM_DT | date:'dd/MM/yyyy': 'UTC' }}
           <span> to </span> {{meeting.EVT_TO_DT | date:'dd/MM/yyyy':'UTC' }}
         </div>
       </div>
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="panel-footer text-right">
-        <div class="text-center">
+        <div ng-if="!meeting.hideDates" class="text-center">
           <span > Deadline for this side-event registration is:</span><br> <strong>{{ meeting.end | date:'dd/MM/yyyy':'UTC' }} </strong></div>
         </div>
       </div>
