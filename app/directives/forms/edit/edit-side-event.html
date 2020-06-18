@@ -317,7 +317,7 @@ border-top-color: transparent !important;
                   <label>Associated Meeting(s)</label>
                   <div class="panel panel-default">
                     <div class="panel-body">
-                      <div ng-repeat="meeting in options.conferenceObj.meetings"  class="pointer" ng-click="selectMeeting(meeting)">
+                      <div ng-repeat="meeting in options.conferenceObj.meetings"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.conferenceObj.meetings[$index].selected">
                         <i class="fa fa-check-square-o" ng-show="options.conferenceObj.meetings[$index].selected" ></i>
                         <i class="fa fa-square-o" ng-show="!options.conferenceObj.meetings[$index].selected" ></i> {{meeting.EVT_CD}}
                       </div>

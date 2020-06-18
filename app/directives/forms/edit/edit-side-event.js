@@ -735,7 +735,7 @@ define(['app', 'lodash',
 
                             var numDays = Math.ceil(diff / 86400) + 1;
 
-                            var startDate = moment(confr.StartDate);
+                            var startDate = moment(confr.StartDate).utc();
                             if (!$scope.options) $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
                             var visibleDays = $scope.options.conferenceObj.schedule.sideEventVisibleDays;
@@ -786,9 +786,9 @@ define(['app', 'lodash',
                                 }
 
                             if($scope.meetingObj)
-                                return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                                return day.isBetween(moment.utc($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment.utc($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
                             else if($scope.options.conferenceObj)
-                                return day.isBetween(moment($scope.options.conferenceObj.StartDate).subtract(1, 'days'), moment($scope.options.conferenceObj.EndDate).add(1, 'days'));
+                                return day.isBetween(moment.utc($scope.options.conferenceObj.StartDate).subtract(1, 'days'), moment.utc($scope.options.conferenceObj.EndDate).add(1, 'days'));
                             else false
                         } // init
 
