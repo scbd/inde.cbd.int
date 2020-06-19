@@ -31,7 +31,7 @@ define(['app', 'lodash',
                         $scope.status = "";
                         $scope._id = $route.current.params.id;
                         $scope.meetingId = $location.search().meetingId;
-
+                        $scope.hasMeetingIdQueryParam = !!$scope.meetingId
                         $scope.loading = true;
                         $scope.schema = "inde-side-events";
                         $scope.showOrgForm = 0;
@@ -232,8 +232,10 @@ define(['app', 'lodash',
                             for (var j =0; j< meetings.length; j++)
                                 for (var i = 0; i<conferences.length; i++) {
                                     if(!conferences[i].meetings) conferences[i].meetings = []
-                                    if(_.includes(conferences[i].MajorEventIDs,meetings[j]._id ))
+                                    if(_.includes(conferences[i].MajorEventIDs,meetings[j]._id )){
+                                      meetings[j].selected = false
                                         conferences[i].meetings.push(meetings[j])
+                                    }
                                 }
                         }
 
@@ -534,13 +536,11 @@ define(['app', 'lodash',
                             $timeout(function() {
                                 _.each($scope.options.conferenceObj.meetings, function(meeting) {
                                     meeting.selected = false;
+                                    if(docObj._id === meeting._id){
+                                      meeting.selected = true;
+                                      $scope.doc.meetings = [docObj._id]
+                                    }
                                 });
-
-                                docObj.selected = !docObj.selected;
-
-                                if (docObj.selected)
-                                    $scope.doc.meetings= [docObj._id]
-
                             });
                         }; // archiveOrg
 
@@ -752,11 +752,11 @@ define(['app', 'lodash',
                                 if (conf._id === $scope.doc.conference || $scope.options.conferences.length===1)
                                     conf.selected = true;
                                 //load selected meetings
-
-                                _.each(conf.meetings, function(meet) {
-                                    if ($scope.doc.meetings && $scope.doc.meetings.indexOf(meet._id) >= 0)
-                                        meet.selected = true;
-                                });
+                                if($location.search().hasMeetingIdQueryParam)
+                                    _.each(conf.meetings, function(meet) {
+                                        if ($scope.doc.meetings && $scope.doc.meetings.indexOf(meet._id) >= 0)
+                                            meet.selected = true;
+                                    });
                             });
                             checkMeeting();
                         } // init
@@ -777,7 +777,7 @@ define(['app', 'lodash',
                                    _id: $scope.meetingId
                                 });
                               else
-                              if($scope.doc.meetings && $scope.doc.meetings.length)
+                              if($scope.doc.meetings && $scope.doc.meetings.length && $location.search().meetingId)
                                 for (var i = 0; i < $scope.doc.meetings.length; i++) {
                                   $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
                                      _id: $scope.doc.meetings[i]
