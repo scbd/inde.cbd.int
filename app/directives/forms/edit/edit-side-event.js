@@ -269,8 +269,7 @@ define(['app', 'lodash',
                                     q:  {
                                             '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
                                             schedule                   : { $exists: true },
-                                            StartDate                  : { $gt: { $date: new Date().toISOString() } },
-                                            'schedule.sideEvents.start': { $lt: { $date: new Date().toISOString() } },
+                                            StartDate                  : { $gt: { $date: new Date().toISOString() } }
                                         },
                                     s: { 'schedule.sideEvents.start': 1 }
                                     }
