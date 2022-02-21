@@ -1,15 +1,18 @@
-if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
+//if(/Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)) { console.log = function(){}; }
 var gitVersion = document.documentElement.attributes['git-version'].value;
-var cdnHost    = 'https://cdn.cbd.int/';
+const cdnHost     = 'https://cdn.jsdelivr.net'
+
 require.config({
     waitSeconds: 120,
     baseUrl : 'app/',
     IESelectorLimit: true,
     paths: {
-        'angular'                  : 'libs/angular-flex/angular-flex',
-        'angular-animate'          : 'libs/angular-animate/angular-animate.min',
-        'angular-loading-bar'      : 'libs/angular-loading-bar/src/loading-bar',
-        'angular-route'            : 'libs/angular-route/angular-route',
+      'ng': cdnHost + '/npm/angular@1.4.9/angular.min',
+      'angular'                  : cdnHost + '/gh/scbd/angular-flex@1.0.1/angular-flex.min',
+      'angular-animate'          : cdnHost + '/npm/angular-animate@1.4.8/angular-animate.min',
+      'ngRoute'                  : cdnHost + '/npm/angular-route@1.4.8/angular-route.min',// maybe 1.4.8
+      'angular-sanitize'         : cdnHost + '/npm/angular-sanitize@1.4.8/angular-sanitize.min',
+      'angular-cache'            : cdnHost + '/npm/angular-cache@4.6.0/dist/angular-cache.min',
         'app-css'                  : 'css/main',
         'bootstrap'                : 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min',
         // 'css'                      : 'libs/require-css/css.min',
@@ -19,8 +22,8 @@ require.config({
         'jquery'                   : 'libs/jquery/dist/jquery',
         'linqjs'                   : 'libs/linqjs/linq.min',
         'lodash'                   : 'libs/lodash/lodash',
-        'moment'                   : 'libs/moment/moment',
-        'moment-timezone'          : 'libs/moment-timezone/builds/moment-timezone-with-data.min',
+        'moment'                   : cdnHost + '/npm/moment@2.29.1/moment',
+        'moment-timezone'          : cdnHost + '/npm/moment-timezone@0.5.34/builds/moment-timezone-with-data.min',
         'ngFileUpload'             : 'libs/ng-file-upload/ng-file-upload',
         'ngDialog'                 : 'libs/ng-dialog/js/ngDialog.min',
         'ngRoute'                  : 'libs/angular-route/angular-route.min',
@@ -33,11 +36,11 @@ require.config({
         '720kb.socialshare'        : 'libs/angular-socialshare/dist/angular-socialshare.min',
         'ui.select'                : 'libs/angular-ui-select/dist/select',
         'ouical'                   : 'services/ouical',
-        'angular-cache'            : cdnHost + 'angular-cache@4.6.0/dist/angular-cache.min'
+        'angular-loading-bar'       : 'libs/angular-loading-bar/build/loading-bar.min'
     },
     shim: {
-        'libs/angular/angular'      : { deps: ['jquery'] },
-        'angular'                   : { deps: ['libs/angular/angular'] },
+        'ng'      : { deps: ['jquery'] },
+        'angular'                   : { deps: ['ng'] },
         'angular-route'             : { deps: ['angular'] },
         'ngRoute'                   : { deps: ['angular'] },
         'ui.select'                 : { deps: ['angular'] },
@@ -52,7 +55,8 @@ require.config({
         'linqjs'                    : { deps: [], exports : 'Enumerable' },
         'toastr'                    : { deps: ['angular']},
         'ng-ckeditor'               : { deps: ['angular','ckeditor']},
-        '720kb.socialshare'         : { deps: ['angular']}
+        '720kb.socialshare'         : { deps: ['angular']},
+        'services/article-service': { deps: ['angular-cache']}
 
     },
     urlArgs: 'v=' + gitVersion

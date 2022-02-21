@@ -738,11 +738,11 @@ define(['app', 'lodash',
                             var startDate = moment(confr.StartDate).utc();
                             if (!$scope.options) $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
-                            var visibleDays = $scope.options.conferenceObj.schedule.sideEventVisibleDays;
+                            const { sideEventVisibleDays } = $scope.options.conferenceObj.schedule.sideEvents;
 
                             for (var i = 0; i < numDays; i++) {
 
-                                if(~visibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
+                                if(~sideEventVisibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
                                     $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
                                 startDate = startDate.add(1, 'day');
@@ -777,7 +777,7 @@ define(['app', 'lodash',
                                    _id: $scope.meetingId
                                 });
                               else
-                              if($scope.doc.meetings && $scope.doc.meetings.length && $location.search().meetingId)
+                              if($scope.doc.meetings && $scope.doc.meetings.length && !isAdmin())
                                 for (var i = 0; i < $scope.doc.meetings.length; i++) {
                                   $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
                                      _id: $scope.doc.meetings[i]

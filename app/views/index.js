@@ -494,12 +494,27 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             _ctrl.sideEventTimes=[{title:'All Days',value:'all', selected:true}];
 
+            const { search, seTiers }           = _ctrl.confObj.schedule.sideEvents
+            const { timezone, timezoneLink   } = _ctrl.confObj
+
+            if(timezoneLink) moment.tz.link(`${timezoneLink}|${timezone}`)
+
+            const tz = timezoneLink || timezone
+
+
             for(var i=0; i<numDays; i++)
             {
-              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[0].seconds,'seconds').format()});
-              _ctrl.sideEventTimes.push({title:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format('dddd MMM Do  HH:mm'),value:moment.tz(_ctrl.confObj.schedule.sideEvents.search.start,_ctrl.confObj.timezone).startOf().add(i,'days').add(_ctrl.confObj.seTiers[1].seconds,'seconds').format()});
-            }
+              for (const tier of seTiers) {
+                const aDateTime = moment.tz(search.start,tz).add(i,'days').startOf().add(tier.seconds,'seconds').subtract(1,'hours')
 
+                const isM27 = aDateTime.format().includes('-03-27')
+
+                if(isM27) aDateTime.subtract(1,'hours')
+
+                _ctrl.sideEventTimes.push({title: aDateTime.format('dddd MMM Do  HH:mm'),value:aDateTime.format()});
+
+              }
+            }
         }
 
         //=======================================================================
