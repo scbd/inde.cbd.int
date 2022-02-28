@@ -126,13 +126,19 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                     modified = (!localStorage.getItem('allConferences') || isModified || force);
                     var params = {};
                     if (modified) {
-                        params = {
-                            q: {institution:'CBD'}
-                          };
+                        params = { q: { 
+                          $and: [
+                            {$or: [ {institution:'CBD'}, {institution:'cbd'} ]},
+                            {$or: [
+                              { seTiers: { $exists: true } },
+                              { ['schedule.sideEvents.seTiers']: { $exists: true } }
+                            ]}
+                          ]
+                        } };
+
                         numPromises++;
-                        allPromises[1]= $http.get('/api/v2016/conferences', {
-                            'params': params
-                        }).then(function(res) {
+                        allPromises[1]= $http.get('/api/v2016/conferences', { params: params })
+                        .then(function(res) {
                               var oidArray = [];
                               conferences=res.data;
                               numPromises+=conferences.length;
@@ -797,13 +803,10 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
         //=======================================================================
         function moveTempFileToPermanent(target,id) {
             var params={};
-            if(devRouter.isDev())
-              params.dev=true;
 
-            if(id)
-              params.docid=id;
+            if(id) params.docid = id;
 
-          return $http.get("/api/v2016/mongo-document-attachment/" + target.uid, {
+          return $http.get("https://api.cbd.int/api/v2016/mongo-document-attachment/" + encodeURIComponent(target.uid), {
               params:params
           });
         } // touch
@@ -814,8 +817,8 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
             if (!schema) throw "Error: no schema set to upload attachment";
             if (!_id) throw "Error: no docId set to upload attachment";
 
-            return uploadTempFile(schema, file, {'_id':_id,'public':true}).then(function(target) {
-                  return moveTempFileToPermanent(target.data);
+            return uploadTempFile(schema, file, { '_id': _id }).then(function(response) {
+                return moveTempFileToPermanent(response.data);
             });
         } // touch
         //=======================================================================
@@ -823,13 +826,11 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
         //=======================================================================
         function uploadTempFile(schema, file, options) {
             if (!schema) throw "Error: no schema set to upload attachment";
-            if(!options)options={};
+            if(!options) options = {};
             var postData = {
                 filename: replaceAllSpaces(file.name),
-                mongo:true,
                 //amazon messes with camel case and returns objects with hyphen in property name in accessible in JS
                 // hence no camalized and no hyphanized meta names
-                public:options.public,
                 metadata: {
                     createdby: user.userID,
                     createdon: Date.now(),
@@ -838,12 +839,13 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                     filename: replaceAllSpaces(file.name),
                 }
             };
-            return $http.post('/api/v2015/temporary-files', postData).then(function(res) {
-                return $http.put(res.data.url, file, {
-                    headers: {
-                        'Content-Type': res.data.contentType
-                    }
-                }).then(function(){return res;});
+            return $http.post('https://api.cbd.int/api/v2015/temporary-files', postData)
+            .then(function(response) {
+              
+              return $http.put(response.data.url, file, { headers: { 'Content-Type': response.data.contentType } })
+                .then(function(){
+                  return $http.get('https://api.cbd.int/api/v2015/temporary-files/'+encodeURIComponent(response.data.uid))
+                });
             });
         } // touch
 

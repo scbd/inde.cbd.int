@@ -62,25 +62,21 @@ define(['app', 'lodash', 'text!./scbd-file-upload.html','filters/l-string','serv
                         _.each(files, function(file) {
                             var pubDoc = {};
 
-                            if (!file.$error && $attrs.schema &&  $attrs.docId)
-                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function() {
+                            if (!file.$error && $attrs.schema &&  $attrs.docId){
+                                mongoStorage.uploadDocAtt($attrs.schema, $attrs.docId, file).then(function(res) {
 
-                                  if(!devRouter.isDev())
-                                    pubDoc.src = 'https://s3.amazonaws.com/mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + mongoStorage.awsFileNameFix(file.name);
+                                  pubDoc.src  = res.data.url;
+                                  pubDoc.size = res.data.size;
+                                  pubDoc.name = res.data.fileName;
+
+                                  if ($scope.isImage)
+                                      $scope.binding = pubDoc.src;
                                   else
-                                    pubDoc.src = 'https://s3.amazonaws.com/dev.mongo.document.attachments' + '/' + $attrs.schema + '/' + $attrs.docId + '/' + mongoStorage.awsFileNameFix(file.name);
-
-                                  pubDoc.size = file.size;
-                                  pubDoc.name =   mongoStorage.awsFileNameFix(file.name);
-                                    if ($scope.isImage)
-                                        $scope.binding = pubDoc.src;
-                                    else
-                                        $scope.binding.push(pubDoc);
+                                      $scope.binding.push(pubDoc);
                                 }).catch(function(err){$scope.error=err;});
-                            else if(!file.$error && $attrs.schema &&  !$attrs.docId ) {
-                                mongoStorage.uploadTempFile($attrs.schema, file,{'public':true}).then(function(tempFile) {
-                                    $scope.tempFile=tempFile.data;
-                                    $scope.binding = 'https://s3.amazonaws.com/mongo.document.attachments.temporary/'+tempFile.data.uid;
+                              }else if(!file.$error && $attrs.schema &&  !$attrs.docId ) {
+                                mongoStorage.uploadTempFile($attrs.schema, file).then(function(response) {
+                                  $scope.binding = response.data.url
                                 }).catch(function(err){$scope.error=err;});
                             } else {
                                 if(file.$error)
