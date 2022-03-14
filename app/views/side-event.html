@@ -58,7 +58,7 @@
         <th scope="row">ID</th>
         <td>{{sideEventCtrl.doc.id}}</td>
       </tr>
-      <tr ng-if="sideEventCtrl.scheduled()">
+      <tr ng-if="true">
         <th scope="row">Date</th>
         <td>
           {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'dddd'}}<br>
@@ -66,12 +66,6 @@
            @ {{sideEventCtrl.reservation.start | momentTZ:sideEventCtrl.doc.conferenceObj.timezone:'format':'HH:mm'}}<br>
            <a ng-click="sideEventCtrl.calDialog(sideEventCtrl.doc)"  href="#" style="cursor:pointer;" tool-tip data-placement="top" data-original-title="Add to your calendar"><i class="fa fa-calendar-plus-o fa-1x hidden-print" aria-hidden="true"  ></i> Add to Calendar</a>
 
-        </td>
-      </tr>
-      <tr ng-if="!sideEventCtrl.scheduled()">
-        <th scope="row">Date</th>
-        <td >
-          <span style="color:red;">Not scheduled</span>
         </td>
       </tr>
       <tr ng-if="sideEventCtrl.scheduled()">
