@@ -10,7 +10,6 @@
     "@bower_components/angular": "angular/bower-angular#1.4.9",
     "@bower_components/angular-animate": "angular/bower-angular-animate#1.4.8",
     "@bower_components/angular-dragula": "scbd/angular-dragula#1dce13cd4fb9c53ded111e5ebfb5f18e5fa95117",
-    "@bower_components/angular-flex": "git://github.com/scbd/angular-flex.git#1.0.1",
     "@bower_components/angular-loading-bar": "chieffancypants/angular-loading-bar#0.9.0",
     "@bower_components/angular-route": "angular/bower-angular-route#1.4.8",
     "@bower_components/angular-socialshare": "720kb/angular-socialshare#^2.3.3",
