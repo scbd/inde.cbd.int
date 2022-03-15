@@ -505,7 +505,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             for(var i=0; i<numDays; i++)
             {
               for (const tier of seTiers) {
-                const aDateTime = moment.tz(search.start,tz).add(i,'days').startOf().add(tier.seconds,'seconds').subtract(1,'hours')
+                const aDateTime = moment.tz(search.start,tz).add(i,'days').startOf().add(tier.seconds,'seconds').subtract(2,'hours')
 
                 const isM27 = aDateTime.format().includes('-03-27')
 
