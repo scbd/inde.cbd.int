@@ -317,9 +317,9 @@ border-top-color: transparent !important;
                   <label>Associated Meeting(s)</label>
                   <div class="panel panel-default">
                     <div class="panel-body">
-                      <div ng-repeat="meeting in options.conferenceObj.meetings"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.conferenceObj.meetings[$index].selected || !hasMeetingIdQueryParam">
-                        <i class="fa fa-check-square-o" ng-show="options.conferenceObj.meetings[$index].selected" ></i>
-                        <i class="fa fa-square-o" ng-show="!options.conferenceObj.meetings[$index].selected" ></i> {{meeting.EVT_CD}}
+                      <div ng-repeat="meeting in options.meetingsFiltered"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
+                        <i class="fa fa-check-square-o" ng-show="options.meetingsFiltered[$index].selected" ></i>
+                        <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.EVT_CD}}
                       </div>
                     </div>
 
@@ -351,8 +351,8 @@ border-top-color: transparent !important;
                   <p ng-show="editForm.prefDateOne.$invalid && (editForm.prefDateOne.$touched || editForm.$submitted) " class="help-block error red-status">First Choice Date required. </p>
                   <select ng-show="doc.prefDate.one" id="editForm.prefTimeOne" class="form-control" name="prefTimeOne" ng-model="doc.prefDateTime.one" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
+                    <option ng-show="!isExcludedTier('one', 'lunch')" value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option ng-show="!isExcludedTier('one', 'evening')" value="evening">Evening: 18:15 - 19:45</option>
                   </select>
                   <p ng-show="editForm.prefTimeOne.$error.required && doc.prefDate.one && (editForm.prefTimeOne.$touched || editForm.$submitted)" class="help-block error red-status">First choice time required.</p>
                 </div>
@@ -368,8 +368,8 @@ border-top-color: transparent !important;
                   <p ng-show="editForm.prefDateTwo.$invalid && (editForm.prefDateTwo.$touched || editForm.$submitted) " class="help-block error red-status">Second choice date required.</p>
                   <select ng-show="doc.prefDate.two" id="editForm.prefTimeTwo" class="form-control" name="prefTimeTwo" ng-model="doc.prefDateTime.two" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
+                    <option ng-show="!isExcludedTier('two', 'lunch')"  value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option ng-show="!isExcludedTier('two', 'evening')" value="evening">Evening: 18:15 - 19:45</option>
                   </select>
                   <p ng-show="editForm.prefTimeTwo.$error.required && doc.prefDate.two && (editForm.prefTimeTwo.$touched || editForm.$submitted)" class="help-block error red-status">Second choice time required.</p>
                 </div>
@@ -379,13 +379,13 @@ border-top-color: transparent !important;
                   <label>Third Choice</label>
                   <select id="editForm.prefDateThree" class="form-control" name="prefDateThree" ng-model="doc.prefDate.three" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Date</option>
-                    <option value="{{date}}" ng-repeat="date in options.dates">{{date}}</option>
+                    <option ng-repeat="date in options.dates">{{date}}</option>
                   </select>
                   <p ng-show="editForm.prefDateThree.$invalid && (editForm.prefDateThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice date required.</p>
                   <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
-                    <option value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option value="evening">Evening: 18:15 - 19:45</option>
+                    <option ng-show="!isExcludedTier('three', 'lunch')"  value="lunch">Lunch: 13:15 - 14:45</option>
+                    <option ng-show="!isExcludedTier('three', 'evening')" value="{{date}}" value="evening">Evening: 18:15 - 19:45</option>
                   </select>
                   <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && (editForm.prefTimeThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice time required.</p>
                 </div>
@@ -395,32 +395,81 @@ border-top-color: transparent !important;
             <legend class="container-subheader">
               <h2 >Requirements (optional)</h2>
             </legend>
-            <div class="row">
 
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.lcd=!doc.requirements.lcd;"><i class="fa fa-check-square-o" ng-show="doc.requirements.lcd"></i><i class="fa fa-square-o" ng-show="!doc.requirements.lcd"></i> Internet Connection </span>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.pc=!doc.requirements.pc;"><i class="fa fa-check-square-o" ng-show="doc.requirements.pc"></i><i class="fa fa-square-o" ng-show="!doc.requirements.pc"></i> PC</span>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.overhead=!doc.requirements.overhead;"><i class="fa fa-check-square-o" ng-show="doc.requirements.overhead"></i><i class="fa fa-square-o" ng-show="!doc.requirements.overhead"></i> LCD Projector</span>
-              </div>
-            </div>
             <div class="row">
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.sound=!doc.requirements.sound;"><i class="fa fa-check-square-o" ng-show="doc.requirements.sound"></i><i class="fa fa-square-o" ng-show="!doc.requirements.sound"></i> Sound System</span>
+              <div ng-if="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation  <span style="font-size:11px;">(at your own expense)</span></span>
+              <div ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                  <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span><span style="font-size:11px;">(at your own expense)</span>
+              <div ng-show="doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                Platform: <span class="muted small">(at your own expense)</span>
+
+                <select  class="form-control" ng-model="doc.requirements.hybrid.platform" name="platform" ng-disabled="options.requirements.hybridPlatforms.length===1">
+                  <option ng-repeat="platform in options.requirements.hybridPlatforms" ng-value="platform" ng-selected="platform===options.requirements.selectedHybridPlatform">{{platform}}</option>
+                </select>
               </div>
-              <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                  <span ng-click="doc.requirements.skype=!doc.requirements.skype;"><i class="fa fa-check-square-o" ng-show="doc.requirements.skype"></i><i class="fa fa-square-o" ng-show="!doc.requirements.skype"></i><span > Skype </span>
+
+              <div ng-if="options.requirements.translationHybrid && doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ng-click="doc.requirements.hybrid.interpretation.required=!doc.requirements.hybrid.interpretation.required;"><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.interpretation.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.interpretation.required"></i> Hybrid Interpretation  <span class="small muted">(at your own expense)</span></span>
+                <span ng-if="options.requirements.hybridTranslationLanguageLimit && doc.requirements.hybrid.interpretation.required" class="small muted"> <br>(The maximum languages permitted is {{options.requirements.hybridTranslationLanguageLimit}})</span>
               </div>
+
+              <div ng-if="options.requirements.translationHybrid && doc.requirements.hybrid.interpretation.required" class="col-xl-8 col-lg-8 col-md-12 col-xs-12">
+                Languages:
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div ng-repeat="lang in getSelectedOtherLangs() track by $index" ng-click="toggleLang(lang)" class="pointer col-xl-4 col-lg-4 col-md-12 col-xs-12" >
+                      <i class="fa fa-check-square-o" ng-show="isLangSelected(lang)" ></i> 
+                      <i class="fa fa-square-o" ng-show="!isLangSelected(lang)" ></i> {{languageNameEnglish(lang)}}
+                    </div>
+                    <form class="form-inline"> &nbsp; </form>
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <select  ng-model="options.requirements.selectedLang" class="form-control"  name="lang" >
+                        <option  value="" ng-selected="true" >Other Language</option>
+                        <option ng-repeat="lang in getUnselectedLang()" ng-value="lang.identifier" >{{lang.title.en}}</option>
+                      </select>
+                    </div>
+                    <button class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
+                  </form>
+                  </div>
+                </div>
+              </div>
+
+              <div ng-if="options.requirements.translationInPerson" class="col-xl-9 col-lg-9 col-md-12 col-xs-12">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.ar = !doc.requirements.interpretation.langs.ar">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.ar" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.ar" ></i> Arabic
+                    </div>
+                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.es =!doc.requirements.interpretation.langs.es">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.es" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.es" ></i> Spanish
+                    </div>
+                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.fr =!doc.requirements.interpretation.langs.fr">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.fr" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.fr" ></i> French
+                    </div>
+                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.ru =!doc.requirements.interpretation.langs.ru">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.ru" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.ru" ></i> Russian
+                    </div>
+                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.zh =!doc.requirements.interpretation.langs.zh">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.zh" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.zh" ></i> Chinese
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
+
+
+
+
 
             <div  class="row" style="margin-bottom:10px;">
               <div class="col-xs-12">
