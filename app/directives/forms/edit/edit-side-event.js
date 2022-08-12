@@ -170,7 +170,15 @@ define(['app', 'lodash',
 
                             }).catch(onError);
                         }
+//
+                        function loadLangs(){
+                            return $http.get("/api/v2013/thesaurus/domains/ISO639-2/terms", {
+                                cache: true
+                            }).then(function(o) {
+                              $scope.options.langs = o.data;
 
+                            }).catch(onError);
+                        }
                         //============================================================
                         //
                         //============================================================
@@ -234,7 +242,7 @@ define(['app', 'lodash',
                                     if(!conferences[i].meetings) conferences[i].meetings = []
                                     if(_.includes(conferences[i].MajorEventIDs,meetings[j]._id )){
                                       meetings[j].selected = false
-                                        conferences[i].meetings.push(meetings[j])
+                                      conferences[i].meetings.push(meetings[j])
                                     }
                                 }
                         }
@@ -533,7 +541,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.selectMeeting = function(docObj) {
                             $timeout(function() {
-                                _.each($scope.options.conferenceObj.meetings, function(meeting) {
+                                _.each($scope.options.meetingsFiltered, function(meeting) {
                                     meeting.selected = false;
                                     if(docObj._id === meeting._id){
                                       meeting.selected = true;
@@ -583,7 +591,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets(), loadLangs()]).then(function() {
                                 showProgress();
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
@@ -667,14 +675,15 @@ define(['app', 'lodash',
                                     if (!$scope.doc.videos) $scope.doc.videos = [];
                                     if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
                                     if (!$scope.doc.prefDate)$scope.doc.prefDate={};
-
+                                    if(!$scope.doc.requirements) $scope.doc.requirements={}
+                                    if(!$scope.doc.requirements.hybrid) $scope.doc.requirements.hybrid={}
 
                                     $scope.doc.conference=$scope.options.conferences[0]._id;
                                     $scope.options.conferences[0].selected=true;
 
                                     $scope.preFill=false;
                                     $scope.loading=false;
-
+                                    
                                 }
                             }).catch(onError); // load orgs
                         } // init
@@ -734,7 +743,7 @@ define(['app', 'lodash',
 
                             var numDays = Math.ceil(diff / 86400) + 1;
 
-                            var startDate = moment(confr.StartDate).utc();
+                            var startDate = moment(confr.schedule.startMain).utc();
                             if (!$scope.options) $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
                             const { sideEventVisibleDays } = $scope.options.conferenceObj.schedule.sideEvents;
@@ -742,7 +751,8 @@ define(['app', 'lodash',
                             for (var i = 0; i < numDays; i++) {
 
                                 if(~sideEventVisibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
-                                    $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
+                                    if(!isExcludedDay(startDate))
+                                        $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
                                 startDate = startDate.add(1, 'day');
                             }
@@ -758,8 +768,50 @@ define(['app', 'lodash',
                                     });
                             });
                             checkMeeting();
+                            $scope.options.requirements = $scope.options.conferenceObj.schedule.sideEvents.requirements || {}
+
+                            const { excludedMeetings } = $scope.options.conferenceObj.schedule.sideEvents
+
+                            $scope.options.meetingsFiltered = $scope.options.conferenceObj.meetings.filter(({_id}) => !(excludedMeetings || [] ) .includes(_id));
+
+                            for (const meeting of $scope.options.meetingsFiltered ) {
+                                if(!$scope.doc.meetings.includes(meeting._id)) continue
+                                meeting.selected = true
+                            }
+
+                            if(!$scope.doc?.requirements?.hybrid?.platform)
+                                $scope.doc.requirements.hybrid.platform = $scope.options.requirements.selectedHybridPlatform
                         } // init
 
+                        function isExcludedDay(day){
+                            if(!$scope.options?.conferenceObj?.schedule?.sideEvents?.excludedDayTier) return false
+
+                            const { excludedDayTier } = $scope.options.conferenceObj.schedule.sideEvents
+
+                            const days = excludedDayTier.filter(({tier}) => !tier).map(({day}) => moment(day).utc().startOf('day'))
+
+                            for (const excludedDay of days)
+                                if(excludedDay.utc().isSame(day.startOf('day'))) return true
+                            
+                            return false
+                        }
+
+                        $scope.isExcludedTier = isExcludedTier
+                        function isExcludedTier(testDayName, tier){
+                            if(!$scope?.doc?.prefDate) return false
+                            const testDay = $scope.doc.prefDate[testDayName]
+                            if(!$scope.options?.conferenceObj?.schedule?.sideEvents?.excludedDayTier) return false
+
+                            const { excludedDayTier } = $scope.options.conferenceObj.schedule.sideEvents
+                            const   days              = excludedDayTier.filter(({tier}) => tier).map(({day}) => (moment(day).utc().startOf('day')).format("(dddd) YYYY/MM/DD"))
+                            const   tiers             = excludedDayTier.filter(({tier}) => tier).map(({tier}) => tier)
+
+                            if(!days.includes(testDay)) return false
+
+                            const dayIndex = days.indexOf(testDay)
+
+                            return tiers[dayIndex].toLowerCase() === tier
+                        }
                         //============================================================
                         //
                         //============================================================
@@ -1121,8 +1173,8 @@ define(['app', 'lodash',
                             // });
 
                             if(isAdmin())validRows = true;
-                            if (formData && formData.firstName.$valid && formData.lastName.$valid && formData.phone.$valid &&
-                                formData.city.$valid && formData.country.$valid && formData.emaill.$valid && formData.responsibleLastName.$valid && formData.responsibleEmail.$valid && validRows
+                            if (formData && formData?.firstName?.$valid && formData?.lastName?.$valid && formData?.phone?.$valid &&
+                                formData?.city?.$valid && formData?.country?.$valid && formData?.emaill?.$valid && formData?.responsibleLastName?.$valid && formData?.responsibleEmail?.$valid && validRows
                             )
                               $scope.doc.validTabs.contact = true;
 
@@ -1456,6 +1508,89 @@ define(['app', 'lodash',
                             if(!$scope.doc || !$scope.doc.meta || $scope.prevPublished) return false;
                             return (($scope.doc.meta.status==='request' || $scope.doc.meta.status==='published') && !isTabsValid());
                         };
+
+                        const defaultLangs = ['lang-ar','lang-en','lang-es','lang-fr','lang-ru','lang-zh']
+
+                        $scope.getNumberSelectedLanguages= function() {
+                            let count = 0
+
+                            if($scope.doc?.requirements?.hybrid?.interpretation?.langs)
+                                for (const lang in $scope.doc.requirements.hybrid.interpretation.langs)
+                                    if($scope.doc.requirements.hybrid.interpretation.langs[lang]) count++
+
+                            return count
+                        }
+
+                        $scope.toggleLang= function(lang) {
+
+                            if(!$scope.doc?.requirements?.hybrid?.interpretation?.langs || !lang) return
+
+                            // if(!defaultLangs.includes(lang)) return delete($scope.doc.requirements.hybrid.interpretation.langs[lang])
+
+                            if(isMaxLangsSelected() && !$scope.doc.requirements.hybrid.interpretation.langs[lang]) 
+                                return alert(`maximum languages permited is ${$scope.options.requirements.hybridTranslationLanguageLimit}`)
+
+                            if($scope.doc.requirements.hybrid.interpretation.langs[lang]) delete($scope.doc.requirements.hybrid.interpretation.langs[lang])
+                            else $scope.doc.requirements.hybrid.interpretation.langs[lang] = true
+                        }
+
+                        $scope.addSelectedLang= function(lang, event) {
+                            event.preventDefault();
+
+                            if(!lang) return
+
+                            if(isMaxLangsSelected()) return alert(`maximum languages permited is ${$scope.options.requirements.hybridTranslationLanguageLimit}`)
+                            
+
+                            if(!$scope.doc?.requirements?.hybrid?.interpretation?.langs ) $scope.doc.requirements.hybrid.interpretation.langs ={}
+
+                            const [ locale ] = $scope.options.langs.filter((l) => l.identifier === lang)
+
+                            $scope.doc.requirements.hybrid.interpretation.langs[lang]= true
+                        }
+                        $scope.getSelectedOtherLangs= function(g) {
+                            
+                            if(!$scope.doc?.requirements?.hybrid?.interpretation?.langs) $scope.doc.requirements.hybrid.interpretation.langs = {}
+
+                            const langs = Object.keys($scope.doc.requirements.hybrid.interpretation.langs)
+
+                            return Array.from(new Set([...langs, ...defaultLangs].sort(sortByName)))
+                        }
+
+                        function sortByName(a,b){
+                            const nameA = $scope.languageNameEnglish(a).toUpperCase(); // ignore upper and lowercase
+                            const nameB = $scope.languageNameEnglish(b).toUpperCase(); // ignore upper and lowercase
+
+                            if (nameA < nameB)  return -1;
+
+                            if (nameA > nameB) return 1;
+
+                            return 0;
+                        }
+
+                        function isMaxLangsSelected() {
+                            if(!$scope.options?.requirements?.hybridTranslationLanguageLimit) return false
+
+                            return $scope.getNumberSelectedLanguages() == $scope.options.requirements.hybridTranslationLanguageLimit
+                        }
+
+                        $scope.languageNameEnglish= function(identifier) {
+                            const [ locale ] = $scope.options.langs.filter((l) => l.identifier === identifier)
+
+                            return locale.title.en
+                        }
+
+                        $scope.isLangSelected= function(identifier) {
+                            if(!$scope.doc?.requirements?.hybrid.interpretation?.langs) return false
+
+                            return $scope.doc.requirements.hybrid.interpretation.langs[identifier]
+                        }
+
+                        $scope.getUnselectedLang= function(){
+                            const listToFilter = [...Object.keys($scope.doc.requirements.hybrid.interpretation.langs), ...defaultLangs]
+
+                            return $scope.options.langs.filter((l) => !listToFilter.includes(l.identifier))
+                        }
                     } //link
             }; //return
         }
