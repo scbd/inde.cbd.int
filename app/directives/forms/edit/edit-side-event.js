@@ -490,7 +490,6 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.selectMeeting = function(docObj) {
                             $timeout(function() {
-                                console.log('select meeting', docObj)
                                 _.each($scope.options.meetingsFiltered, function(meeting) {
                                     meeting.selected = false;
                                     if(docObj._id === meeting._id){
