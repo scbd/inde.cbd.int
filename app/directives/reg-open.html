@@ -5,7 +5,7 @@
       <div class="panel-heading  text-center text-nowrap">
         <h4 class="hidden-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h4>
         <h5 class="visible-xs" style="color:inherit;">{{meeting.titleShort || meeting.EVT_CD}}</h5>
-        <div ng-if="!meeting.hideDates" class="text-center">{{meeting.EVT_FROM_DT | date:'dd/MM/yyyy': 'UTC' }}
+        <div ng-if="!meeting.hideDates" class="text-center">{{meeting.EVT_FROM_DT | date:'yyyy-MM-dd': 'UTC' }}
           <span> to </span> {{meeting.EVT_TO_DT | date:'yyyy-MM-dd':'UTC' }}
         </div>
       </div>
