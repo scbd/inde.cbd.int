@@ -79,7 +79,7 @@ function findOpenRegsQuery(){
                   'schedule.sideEvents.start': { $lt: { $date: moment.utc() } },
                   'schedule.sideEvents.end'  : { $gt: { $date: moment.utc() } },
                 },
-            f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1},
+            f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1, 'schedule.sideEvents.excludedMeetings': 1 },
             s: { 'schedule.sideEvents.start': 1 }
           }
 }
@@ -103,10 +103,13 @@ function getMeetingIds(conferences){
 
   if(!conferences || !Array.isArray(conferences) || !conferences.length) return meetingIds
 
-  for (var i = 0; i < conferences.length; i++) 
-    for (var j = 0; j < conferences[i].MajorEventIDs.length; j++) 
-      meetingIds.push({'$oid': conferences[i].MajorEventIDs[j]})
-    
+  for (var i = 0; i < conferences.length; i++) {
+    const { excludedMeetings = [] } = conferences[i]?.schedule?.sideEvents || {}
+
+    for (var j = 0; j < conferences[i].MajorEventIDs.length; j++)
+      if(!excludedMeetings.includes(conferences[i].MajorEventIDs[j]))
+        meetingIds.push({'$oid': conferences[i].MajorEventIDs[j]})
+  }
   return meetingIds
 }
 
