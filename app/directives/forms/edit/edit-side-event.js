@@ -27,87 +27,24 @@ define(['app', 'lodash',
                 transclude: false,
                 scope: {},
                 link: function($scope) {
-                        var numHostOrgs =0;
-                        $scope.status = "";
-                        $scope._id = $route.current.params.id;
-                        $scope.meetingId = $location.search().meetingId;
-                        $scope.hasMeetingIdQueryParam = !!$scope.meetingId
-                        $scope.loading = true;
-                        $scope.schema = "inde-side-events";
-                        $scope.showOrgForm = 0;
-                        $scope.isNew = true;
-                        $scope.registerAlert = true;
-                        $scope.doc = {};
-                        $scope.doc.hostOrgs = [];
-                        $scope.updateProfile = 'No';
-                        $scope.ignoreDirtyCheck = false;
-
-                        $scope.document = {};
-
-                        $scope.errorMap={
-                          title:{tab:'general',label:'Title'},
-                          subjects:{tab:'general',label:'Subjects'},
-                          description:{tab:'general',label:'Description'},
-                          expNumPart:{tab:'logistics',label:'Expected Number of Participants'},
-                          prefDateOne:{tab:'logistics',label:'First Date Preference'},
-                          prefDateTwo:{tab:'logistics',label:'Second Date Preference'},
-                          prefDateThree:{tab:'logistics',label:'Third Date Preference'},
-                          prefTimeOne:{tab:'logistics',label:'First Time Preference'},
-                          prefTimeTwo:{tab:'logistics',label:'Second Time Preference'},
-                          prefTimeThree:{tab:'logistics',label:'Third Time Preference'},
-                          firstName:{tab:'contact',label:'Contact Person First Name'},
-                          lastName:{tab:'contact',label:'Contact Person Last Name'},
-                          phone:{tab:'contact',label:'Contact Person Phone'},
-                          city:{tab:'contact',label:'Contact Person City'},
-                          emaill:{tab:'contact',label:'Contact Person Email'},
-                          country:{tab:'contact',label:'Contact Person Country'},
-                          responsibleLastName:{tab:'contact',label:'Responsible Person Last Name'},
-                          responsibleEmail:{tab:'contact',label:'Responsible Person Email'},
-                        };
-
-                        $scope.editorOptions = {
-                            language: 'en',
-                            uiColor: '#069554'
-                        };
-                        $scope.patterns = {
-                            facebook: /^http[s]?:\/\/(www.)?facebook.com\/.+/i,
-                            twitter: /^http[s]?:\/\/twitter.com\/.+/i,
-                            youtube: /^http[s]?:\/\/(www.)?youtube.com\/user\/.+/i,
-                            phone: /^\+\d+(\d|\s|-|ext|#|\*)+$/i,
-                            time: /^([0-1][0-9]|2[0-3]|[0-9]):[0-5][0-9]$/,
-                            email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
-                        };
-
-
-                        $scope.options = {};
-
-
-
-                        $scope.tab = 'general';
-                        $('#general-tab').tab('show');
+                        var numHostOrgs = 0
                         var meetingInit = false
+
+                        initScope($scope, $route, $location)
                         init();
 
-                        //============================================================
-                        //
-                        //============================================================
+
                         var killWatch = $scope.$watch('doc.conference', function() {
-                            if ($scope.doc.conference){
-                                    generateDates();
-                                    killWatch();
-                            }
+                            if (!$scope.doc.conference) return 
 
+                            generateDates();
+                            killWatch();
                         });
+
                         $scope.$watch('doc.meetings', function() {
-
-                            if ($scope.doc.meetings)
-                              generateDates();
-
+                            if ($scope.doc.meetings) generateDates();
                         });
 
-                        //============================================================
-                        //
-                        //============================================================
                         $scope.$watch('doc.hostOrgs', function() {
                             if ($scope.doc.hostOrgs && $scope.doc.hostOrgs.length > 0) {
                                 $(document.getElementById('editForm.hostOrgs')).css('border-color', '#cccccc');
@@ -228,6 +165,7 @@ define(['app', 'lodash',
                             return $http.get('/api/v2016/conferences', { 'params': findOpenRegsQuery() }).then(function(res) {
 
                                 $scope.options.conferences=res.data.sort(compareDates);
+
                                 return $scope.options.conferences
                             })
                             .then(loadMeetingsData)
@@ -239,12 +177,23 @@ define(['app', 'lodash',
                             var conferences = $scope.options.conferences
                             for (var j =0; j< meetings.length; j++)
                                 for (var i = 0; i<conferences.length; i++) {
+                                    const { excludedMeetings = [] } = conferences[i]?.schedule?.sideEvents || {}
+
                                     if(!conferences[i].meetings) conferences[i].meetings = []
                                     if(_.includes(conferences[i].MajorEventIDs,meetings[j]._id )){
-                                      meetings[j].selected = false
-                                      conferences[i].meetings.push(meetings[j])
+                                        meetings[j].selected = false
+
+                                        if(!excludedMeetings.includes(meetings[j]._id))
+                                            conferences[i].meetings.push(meetings[j])
                                     }
                                 }
+
+                            $scope.options.conferenceObj = conferences[0]
+
+                            const { excludedMeetings = [] } = $scope?.options?.conferenceObj?.schedule?.sideEvents || {}
+
+                            $scope.options.meetingsFiltered = $scope.options.conferenceObj.meetings.filter(({_id}) => !(excludedMeetings || [] ) .includes(_id));
+
                         }
 
                         function loadMeetingsData(conferences){
@@ -541,6 +490,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.selectMeeting = function(docObj) {
                             $timeout(function() {
+                                console.log('select meeting', docObj)
                                 _.each($scope.options.meetingsFiltered, function(meeting) {
                                     meeting.selected = false;
                                     if(docObj._id === meeting._id){
@@ -593,6 +543,7 @@ define(['app', 'lodash',
 
                             $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets(), loadLangs()]).then(function() {
                                 showProgress();
+                                
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
 
                                     if (($scope._id.search('^[0-9A-Fa-f]{24}$') < 0))
@@ -601,8 +552,10 @@ define(['app', 'lodash',
                                         mongoStorage.loadDoc($scope.schema, $scope._id).then(function(document) {
 
                                             $scope.loading = true;
-                                            //$scope._id = document._id;
                                             $scope.doc = document;
+                                            $scope.options.conferenceObj = _.find($scope.options.conferences, {
+                                                _id: $scope.doc.conference
+                                            });
                                             $scope.isNew = false;
                                             if (!$scope.doc.hostOrgs)
                                                 $scope.doc.hostOrgs = [];
@@ -649,6 +602,9 @@ define(['app', 'lodash',
 
                                                 }
                                               );
+
+                                              initSelectedDates();
+
                                         }).catch(onError);
                                 } else {
                                     $scope.loading = true;
@@ -683,59 +639,78 @@ define(['app', 'lodash',
 
                                     $scope.preFill=false;
                                     $scope.loading=false;
+                                    $scope.options.conferenceObj = _.find($scope.options.conferences, {
+                                        _id: $scope.doc.conference
+                                    });
                                     
+                                    initSelectedDates()
                                 }
+
+
+
+
                             }).catch(onError); // load orgs
                         } // init
 
 
-                        //============================================================
-                        //
-                        //============================================================
-                        function prevPublished() {
-                            return $scope.prevPublished;
+                        function initSelectedDates(){
+                            for (const aMeeting of $scope.options.meetingsFiltered) {
+                                const isSelectedMeeting = ([...($scope.doc.meetings || []), $scope.meetingId].includes(aMeeting._id))
+
+                                if(isSelectedMeeting) {
+                                    const selectedMeeting = aMeeting
+
+                                    selectedMeeting.selected = true
+
+                                    $timeout(()=>$scope.selectMeeting(selectedMeeting), 2000)
+                                }
+                            }
                         }
                         //============================================================
                         //
                         //============================================================
-                        function checkMeeting(index) {
-                            var meeting;
-                            var meetings =$scope.options.conferenceObj.meetings;
+                        // function prevPublished() {
+                        //     return $scope.prevPublished;
+                        // }
+                        //============================================================
+                        //
+                        //============================================================
+                        // function checkMeeting(index) {
+                        //     var meeting;
+                        //     var meetings =$scope.options.conferenceObj.meetings;
 
-                            if(index)
-                                meeting = meetings[index];
-                            else
-                                for (var i=0; i<meetings.length; i++)
-                                    if(meetings[i]._id === $scope.meetingId && !meetingInit){
-                                      meetingInit = true
-                                      meeting = meetings[i];
-                                      meeting.selected=false
-                                    }
+                        //     if(index)
+                        //         meeting = meetings[index];
+                        //     else
+                        //         for (var i=0; i<meetings.length; i++)
+                        //             if(meetings[i]._id === $scope.meetingId && !meetingInit){
+                        //               meetingInit = true
+                        //               meeting = meetings[i];
+                        //               meeting.selected=false
+                        //             }
 
 
-                            if(meeting){
-                                meeting.selected = !meeting.selected;
-                                if (!$scope.doc.meetings) $scope.doc.meetings = [];
-                                if (meeting.selected)
-                                    $scope.doc.meetings.push(meeting._id);
-                                else
-                                    $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
-                            }
+                        //     if(meeting){
+                        //         meeting.selected = !meeting.selected;
+                        //         if (!$scope.doc.meetings) $scope.doc.meetings = [];
+                        //         if (meeting.selected)
+                        //             $scope.doc.meetings.push(meeting._id);
+                        //         else
+                        //             $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
+                        //     }
 
-                        } //
-                        $scope.checkMeeting = checkMeeting;
+                        // } //
+                        // $scope.checkMeeting = checkMeeting;
 
 
                         //============================================================
                         //
                         //============================================================
                         function generateDates() {
-
+                    
                             if(!$scope.options.conferences) return;
 
-                            var confr = $scope.options.conferenceObj = _.find($scope.options.conferences, {
-                                _id: $scope.doc.conference
-                            });
+                            var confr = $scope.options.conferenceObj 
 
                             $scope.options.dates = [];
 
@@ -757,27 +732,20 @@ define(['app', 'lodash',
                                 startDate = startDate.add(1, 'day');
                             }
 
+
+
+                            if(!$scope.doc.meetings )    $scope.doc.meetings = [];
+
+
                             _.each($scope.options.conferences, function(conf) {
                                 if (conf._id === $scope.doc.conference || $scope.options.conferences.length===1)
                                     conf.selected = true;
-                                //load selected meetings
-                                if($location.search().hasMeetingIdQueryParam)
-                                    _.each(conf.meetings, function(meet) {
-                                        if ($scope.doc.meetings && $scope.doc.meetings.indexOf(meet._id) >= 0)
-                                            meet.selected = true;
-                                    });
                             });
-                            checkMeeting();
+
+
+
                             $scope.options.requirements = $scope.options.conferenceObj.schedule.sideEvents.requirements || {}
 
-                            const { excludedMeetings } = $scope.options.conferenceObj.schedule.sideEvents
-
-                            $scope.options.meetingsFiltered = $scope.options.conferenceObj.meetings.filter(({_id}) => !(excludedMeetings || [] ) .includes(_id));
-
-                            for (const meeting of $scope.options.meetingsFiltered ) {
-                                if(!$scope.doc.meetings.includes(meeting._id)) continue
-                                meeting.selected = true
-                            }
 
                             if(!$scope.doc?.requirements?.hybrid?.platform)
                                 $scope.doc.requirements.hybrid.platform = $scope.options.requirements.selectedHybridPlatform
@@ -786,7 +754,7 @@ define(['app', 'lodash',
                         function isExcludedDay(day){
                             if(!$scope.options?.conferenceObj?.schedule?.sideEvents?.excludedDayTier) return false
 
-                            const { excludedDayTier } = $scope.options.conferenceObj.schedule.sideEvents
+                            const { excludedDayTier = [] } = $scope?.options?.conferenceObj?.schedule?.sideEvents || []
 
                             const days = excludedDayTier.filter(({tier}) => !tier).map(({day}) => moment(day).utc().startOf('day'))
 
@@ -1596,3 +1564,63 @@ define(['app', 'lodash',
         }
     ]);
 });
+
+
+function initScope($scope, $route, $location){
+    $scope.status = ''
+    $scope._id = $route.current.params.id
+    $scope.meetingId = $location.search().meetingId
+    $scope.loading = true;
+    $scope.schema = 'inde-side-events'
+    $scope.showOrgForm = 0
+    $scope.isNew = true
+    $scope.registerAlert = true
+    $scope.doc = {}
+    $scope.doc.hostOrgs = []
+    $scope.updateProfile = 'No'
+    $scope.ignoreDirtyCheck = false
+    $scope.doc.meetings = []
+    $scope.document = {}
+
+    $scope.errorMap={
+      title:{tab:'general',label:'Title'},
+      subjects:{tab:'general',label:'Subjects'},
+      description:{tab:'general',label:'Description'},
+      expNumPart:{tab:'logistics',label:'Expected Number of Participants'},
+      prefDateOne:{tab:'logistics',label:'First Date Preference'},
+      prefDateTwo:{tab:'logistics',label:'Second Date Preference'},
+      prefDateThree:{tab:'logistics',label:'Third Date Preference'},
+      prefTimeOne:{tab:'logistics',label:'First Time Preference'},
+      prefTimeTwo:{tab:'logistics',label:'Second Time Preference'},
+      prefTimeThree:{tab:'logistics',label:'Third Time Preference'},
+      firstName:{tab:'contact',label:'Contact Person First Name'},
+      lastName:{tab:'contact',label:'Contact Person Last Name'},
+      phone:{tab:'contact',label:'Contact Person Phone'},
+      city:{tab:'contact',label:'Contact Person City'},
+      emaill:{tab:'contact',label:'Contact Person Email'},
+      country:{tab:'contact',label:'Contact Person Country'},
+      responsibleLastName:{tab:'contact',label:'Responsible Person Last Name'},
+      responsibleEmail:{tab:'contact',label:'Responsible Person Email'},
+    };
+
+    $scope.editorOptions = {
+        language: 'en',
+        uiColor: '#069554'
+    };
+    $scope.patterns = {
+        facebook: /^http[s]?:\/\/(www.)?facebook.com\/.+/i,
+        twitter: /^http[s]?:\/\/twitter.com\/.+/i,
+        youtube: /^http[s]?:\/\/(www.)?youtube.com\/user\/.+/i,
+        phone: /^\+\d+(\d|\s|-|ext|#|\*)+$/i,
+        time: /^([0-1][0-9]|2[0-3]|[0-9]):[0-5][0-9]$/,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
+    };
+
+
+    $scope.options = {};
+
+
+
+    $scope.tab = 'general';
+    $('#general-tab').tab('show');
+}
