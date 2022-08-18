@@ -1178,7 +1178,6 @@ define(['app', 'lodash',
                                     $scope.tab = 'logistics';
                                     showTab('logistics')
                                 });
-                                }, 100);
                                 $scope.saveDoc();
                                 formData.$setPristine()
                             }
