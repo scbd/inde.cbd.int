@@ -84,17 +84,19 @@ border-top-color: transparent !important;
     <i class="fa fa-spinner fa-spin fa-3x"></i> <span style="font-size:18px;">Loading...</span>
   </div>
 
-  <form name="editForm" style="margin-top:10px" ng-submit="submitForm(editForm)" novalidate>
+  <form name="editForm" style="margin-top:10px"  novalidate>
     <legend class="container-subheader">
       <h2>
         <span ng-if="doc.id">Side Event ID: {{doc.id}}</span>
         <span class="pull-right text-nowrap">Status: <span ng-class="{'red-status':(doc.meta.status!=='request' && doc.meta.status!=='published')}"><span ng-if="doc.meta.status!=='request'">{{doc.meta.status.toUpperCase()}}</span> <span ng-if="doc.meta.status==='request'" style="color:black;">Request Submitted</span> <span ng-if="!doc.meta.status">NOT SAVED</span></span></span>
       </h2>
     </legend>
+
     <div ng-show="registerAlert" class="col-xs-12 alert alert-danger alert-dismissable" ng-if="resubmitWarning()">
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
       WARNING: the changes you have made require you to re-validate and re-submit your request, otherwise it will not be considered for scheduling.
     </div>
+
     <div ng-if="editForm.$invalid  && editForm.$submitted" class="col-xs-12 alert alert-danger alert-dismissable" >
                   <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
       WARNING: You have critical errors or missing information in your form preventing your side event form being submitted.
@@ -106,48 +108,46 @@ border-top-color: transparent !important;
           <a ng-click="goToError('orgs','hostOrgs')">Host Organizations</a>
       </div>
     </div>
+
     <div></div>
 
     <div class="row" ng-show="isEditable()">
 
       <div class="col-lg-6   col-xs-12 text-nowrap">
-
         <div ng-if="showProg">
           <bs-progress-bar id="form-progress"  steps="doc.validTabs"  class="" data-total="5" data-complete-label="   Steps Completed" data-complete="numStepsCompleted()" data-label="Steps Completed" title="Tech Hours Progress" data-toggle="tooltip"></bs-progress-bar>
-
         </div>
       </div>
 
       <div class="col-lg-6  hidden-sm  hidden-xs text-right text-nowrap" style="padding-top:15px;padding-bottom:15px;">
-
-<!-- ng-class="{'btn-danger':(numStepsCompleted()>=5),'btn-default':!(numStepsCompleted()>=5)} -->
         <button ng-show="!showEdit() && (doc.meta.status!= 'published') " class="btn btn-default" type="button"  ng-click="saveDoc()" >
           <span >Save Draft</span>
-          <!-- <span ng-show="numStepsCompleted()>=5 ">Cancel Request</span> -->
         </button>
-        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
-        Save & Validate Step</button>
+        <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" ng-click="submitForm(editForm)" type="submit"  >
+          Save & Validate Step
+        </button>
 
         <button   ng-show="!showEdit() && isTabsValid()" ng-click="publishRequestDial()" class="btn btn-success" type="button">
           <span ng-show="(doc.meta.status=== 'draft')">Register Request</span><span ng-show="numStepsCompleted()>=5 && (doc.meta.status=== 'request')">Edit Request</span>
             <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
-          </button>
+        </button>
       </div>
 
       <div class="col-md-12 col-sm-12 col-xs-12 hidden-lg  hidden-md     text-right text-nowrap" style="padding-bottom:15px;">
 
         <button ng-show="!showEdit()" class="btn btn-block" type="button"  ng-click="saveDoc()" ng-class="{'btn-danger':(numStepsCompleted()>=5 && !prevPublished),'btn-default':!(numStepsCompleted()>=5)}">
           <span >Save Draft</span>
-          <!-- <span ng-show="numStepsCompleted()>=5">Cancel Request</span> -->
         </button>
 
-        <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
+        <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" ng-click="submitForm(editForm)" type="submit"  >  Save & Validate Step</button>
         <button  ng-show="!showEdit() && isTabsValid()" ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
           <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
             <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
           </button>
       </div>
-  </div>
+    </div>
+
+
 
     <div class="row">
       <div ng-show="false" class="alert alert-success alert-dismissable">
@@ -171,12 +171,12 @@ border-top-color: transparent !important;
     </div>
 
 
-      <div fade-in-tab id="general" class="tab-pane   active text-left" ng-show="tab==='general'">
+      <div fade-in-tab id="general" class="tab-pane active text-left" ng-show="tab==='general'">
 
         <div ng-show="registerAlert" class="col-xs-12 alert alert-success alert-dismissable">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
             <strong>Please note that by registering your request for a side-event you are not registering for entrance into the meetings.
-      For meeting registration information please see: <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/>.  It is also required that any speakers or guests attending your side-event will need to be registered for the meetings through your delegation. </strong>
+            For meeting registration information please see: <a href="https://www.cbd.int/meetings/">https://www.cbd.int/meetings/<a/>.  It is also required that any speakers or guests attending your side-event will need to be registered for the meetings through your delegation. </strong>
         </div>
 
         <div class="container" style="width:100%;">
@@ -297,11 +297,11 @@ border-top-color: transparent !important;
         </div>
       </div>
 
+			<div  id="logistics"  class="tab-pane active text-left" ng-show="tab==='logistics'" >
+            <legend class="container-subheader">
+              <h2>Conference and Associated Meetings </h2>
+            </legend>
 
-			<div fade-in-tab id="logistics"  class="tab-pane   active text-left" ng-show="tab==='logistics'" >
-        <legend class="container-subheader">
-          <h2>Conference and Associated Meetings </h2>
-        </legend>
             <div class="row" >
               <div class="col-xs-12 col-lg-4">
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
@@ -315,8 +315,9 @@ border-top-color: transparent !important;
               <div class="col-xs-12 col-lg-4">
                 <div>
                   <label>Associated Meeting(s)</label>
-                  <div class="panel panel-default">
-                    <div class="panel-body">
+                  <div class="panel panel-default" ng-class="{'has-error': ((doc.meetings.length === 0 || editForm.meetings.$invalid) && editForm.$submitted)}">
+                    <div class="panel-body" >
+                      <input id="editForm.meetings" type="hidden" ng-model="doc.meetings" name="meetings" required/>
                       <div ng-repeat="meeting in options.meetingsFiltered"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
                         <i class="fa fa-check-square-o" ng-show="options.meetingsFiltered[$index].selected" ></i>
                         <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.EVT_CD}}
@@ -324,6 +325,7 @@ border-top-color: transparent !important;
                     </div>
 
                   </div>
+                  <p ng-show="(editForm.meetings.$invalid || doc.meetings.length === 0)&& (editForm.meetings.$touched || editForm.$submitted)" class="help-block error red-status">Meeting is required.</p>
                 </div>
               </div>
               <div class="col-xs-12 col-lg-4">
@@ -340,6 +342,7 @@ border-top-color: transparent !important;
             <legend class="container-subheader">
               <h2>Preferred Date and Time {{prefDate}}</h2>
             </legend>
+
             <div class="row">
               <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="margin-bottom:15px;">
                 <div id="ssdf" ng-class="{'has-error': (editForm.prefDateOne.$invalid && editForm.$submitted)|| (editForm.prefTimeOne.$invalid && editForm.$submitted) }">
@@ -385,7 +388,7 @@ border-top-color: transparent !important;
                   <select ng-show="doc.prefDate.three" id="editForm.prefTimeThree" class="form-control" name="prefTimeThree" ng-model="doc.prefDateTime.three" ng-disabled="!options.dates || (!isAdmin() && !isNeww())" required>
                     <option value="" selected>Select a Time</option>
                     <option ng-show="!isExcludedTier('three', 'lunch')"  value="lunch">Lunch: 13:15 - 14:45</option>
-                    <option ng-show="!isExcludedTier('three', 'evening')" value="{{date}}" value="evening">Evening: 18:15 - 19:45</option>
+                    <option ng-show="!isExcludedTier('three', 'evening')" value="evening">Evening: 18:15 - 19:45</option>
                   </select>
                   <p ng-show="editForm.prefTimeThree.$error.required && doc.prefDate.three && (editForm.prefTimeThree.$touched || editForm.$submitted)" class="help-block error red-status">Third choice time required.</p>
                 </div>
@@ -397,12 +400,13 @@ border-top-color: transparent !important;
             </legend>
 
             <div class="row">
-              <div ng-if="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+              <div ng-show="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
               <div ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 <span ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
               </div>
+              
               <div ng-show="doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                 Platform: <span class="muted small">(at your own expense)</span>
 
@@ -424,16 +428,17 @@ border-top-color: transparent !important;
                       <i class="fa fa-check-square-o" ng-show="isLangSelected(lang)" ></i> 
                       <i class="fa fa-square-o" ng-show="!isLangSelected(lang)" ></i> {{languageNameEnglish(lang)}}
                     </div>
-                    <form class="form-inline"> &nbsp; </form>
-                  <form class="form-inline">
-                    <div class="form-group">
-                      <select  ng-model="options.requirements.selectedLang" class="form-control"  name="lang" >
-                        <option  value="" ng-selected="true" >Other Language</option>
-                        <option ng-repeat="lang in getUnselectedLang()" ng-value="lang.identifier" >{{lang.title.en}}</option>
-                      </select>
+                    <div class="col-xs-12">
+                      <div class="form-inline">
+                        <div class="form-group">
+                          <select  ng-model="options.requirements.selectedLang" class="form-control"  name="lang" >
+                            <option  value="" ng-selected="true" >Other Language</option>
+                            <option ng-repeat="lang in getUnselectedLang()" ng-value="lang.identifier" >{{lang.title.en}}</option>
+                          </select>
+                        </div>
+                        <button class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
+                      </div>
                     </div>
-                    <button class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
-                  </form>
                   </div>
                 </div>
               </div>
@@ -467,10 +472,6 @@ border-top-color: transparent !important;
 
             </div>
 
-
-
-
-
             <div  class="row" style="margin-bottom:10px;">
               <div class="col-xs-12">
                 <br>
@@ -482,30 +483,29 @@ border-top-color: transparent !important;
             </div>
       </div>
 
-
-              <div fade-in-tab id="orgs" class="tab-pane   active text-left" ng-show="tab==='orgs'">
-
-
-                  <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted),'has-error-div': (!doc.hostOrgs.length && editForm.$submitted)}" ng-click="orgsFocused=true;">
-                    <legend class="container-subheader">
-                      <h2>Host Organization(s)</h2>
-                    </legend>
-
-                    <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && (editForm.$submitted || orgsFocused)" style="color:#a94442">At least one organization is required.</p>
-
-                    <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
+      <div fade-in-tab id="orgs" class="tab-pane active text-left" ng-show="tab==='orgs'">
 
 
-                        <!-- <div name="hostOrgs" caption="" style="margin-right:20px;"> -->
+          <div id="hostOrg-error" ng-class="{'has-error': (!doc.hostOrgs.length && editForm.$submitted),'has-error-div': (!doc.hostOrgs.length && editForm.$submitted)}" ng-click="orgsFocused=true;">
+            <legend class="container-subheader">
+              <h2>Host Organization(s)</h2>
+            </legend>
+
+            <p id="hostOrgMsg" ng-show="!doc.hostOrgs.length && (editForm.$submitted || orgsFocused)" style="color:#a94442">At least one organization is required.</p>
+
+            <scbd-select-list ng-modal="doc.hostOrgs" show-org-form="showOrgForm" doc="doc"></scbd-select-list>
 
 
-                        <!-- </div> -->
-                      </div>
+                <!-- <div name="hostOrgs" caption="" style="margin-right:20px;"> -->
 
 
+                <!-- </div> -->
               </div>
 
-        			<div  fade-in-tab id="contact"  class="tab-pane   active text-left" ng-show="tab==='contact'">
+
+      </div>
+
+        			<div  fade-in-tab id="contact"  class="tab-pane active text-left" ng-show="tab==='contact'">
                       <legend class="container-subheader" >
                         <h2>Contact Person </h2>
                       </legend>
@@ -515,11 +515,7 @@ border-top-color: transparent !important;
                           <strong>This should be the main contact for Conference Services to communicate with on site during the meetings to address any last minute concerns that may arise.   </strong>
                       </div>
 
-
-
-
-
-                          <div class="row" style="margin-bottom:15px;">
+                        <div class="row" style="margin-bottom:15px;">
                             <div class="col-xs-12">
                               <div   class="text-nowrap">
                                                 <span ng-click="preFill=!preFill;initProfile(preFill)"><i class="fa fa-check-square-o" ng-show="preFill"></i><i class="fa fa-square-o" ng-show="!preFill"></i> I will be the contact.</span>
@@ -536,7 +532,7 @@ border-top-color: transparent !important;
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div   ng-class="{'has-error': editForm.firstName.$invalid && editForm.$submitted}">
                               <label>First Name</label>
-                              <input id="editForm.firstName" class="form-control" type="text" name="firstName" ng-model="doc.contact.firstName" placeholder=" "/ required>
+                              <input id="editForm.firstName" class="form-control" type="text" name="firstName" ng-model="doc.contact.firstName" placeholder=" " required>
                               <p ng-show="editForm.firstName.$invalid && (editForm.firstName.$touched || editForm.$submitted)" class="help-block error red-status">First name is required.</p>
                             </div>
                           </div>
@@ -544,7 +540,7 @@ border-top-color: transparent !important;
                           <div class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
                             <div   ng-class="{'has-error': editForm.lastName.$invalid && editForm.$submitted}">
                               <label>Last Name</label>
-                              <input id="editForm.lastName" class="form-control" name="lastName" type="text" ng-model="doc.contact.lastName" placeholder=" "required/>
+                              <input id="editForm.lastName" class="form-control" name="lastName" type="text" ng-model="doc.contact.lastName" placeholder=" " required/>
                               <p ng-show="editForm.lastName.$invalid && (editForm.lastName.$touched || editForm.$submitted)" class="help-block error red-status">Last name is required.</p>
                             </div>
                           </div>
@@ -631,7 +627,6 @@ border-top-color: transparent !important;
                             <ui-select  required id="editForm.country"  name="country"  ng-model="doc.contact.country" close-on-select="true"  append-to-body="true" title="Choose a Country" ng-click="editForm.country.$touched=true;">
                                 <ui-select-match  placeholder="Select a Country by typing name" ><span style="vertical-align:bottom;"><i  class="flag-icon flag-icon-{{$select.selected._id}}" style="width:25px;height:15px;"></i> {{$select.selected.title}} </span></ui-select-match>
                                 <ui-select-choices style="width:100%;" position="down" repeat="country._id as country in options.countries | propsFilter: {title: $select.search, acronym: $select.search}">
-                                  <!--  -->
                                   <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px; overflow:auto;">
                                       <hr style="margin: 0 0 0 0;">
 
@@ -639,9 +634,7 @@ border-top-color: transparent !important;
                                               <span  >
                                                 <i  class="flag-icon flag-icon-{{country._id}}" style="width:30px;height:20px;margin-bottom:5px;"></i>
                                               </span>
-                                              <!-- <span ng-if="org._id.length>2" style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym}}] </span> -->
                                               <span  style="padding:0px 0px 0px 1px; vertical-align:middle;line-height:40px;"> {{country.title }} <span ng-if="country._id!==' '">[{{country._id}}]</span></span>
-                                              <!-- <span ng-bind-html="org.title| highlight: $select.search | rawHtml"></span> -->
                                             </span>
 
                                  </div>
@@ -653,7 +646,6 @@ border-top-color: transparent !important;
                         </div>
 
                     <div class="row">
-
                       <div class="col-xs-12">
                         <div ng-class="{'has-error': editForm.emaill.$invalid && editForm.emaill.$submitted,'has-div': editForm.emaill.$invalid && editForm.emaill.$submitted}">
                           <label>Email</label>
@@ -666,93 +658,90 @@ border-top-color: transparent !important;
                           </div>
                         </div>
                       </div>
-
-
-
                     </div>
 
 
 
-<div style="width:100%;">
-  <legend class="container-subheader" style="margin-top:15px;">
-    <h2>Responsible Person </h2>
-  </legend>
-    </div>
-    <div class="row">
-                  <div class="col-xs-12">
-                    <div class="panel panel-default">
+                  <div style="width:100%;">
+                    <legend class="container-subheader" style="margin-top:15px;">
+                      <h2>Responsible Person </h2>
+                    </legend>
+                  </div>
+                  <div class="row">
+                                <div class="col-xs-12">
+                                  <div class="panel panel-default">
 
-                      <div class="table-responsive">
-                        <table class="table table-striped">
-                          <thead>
-                            <tr>
-                              <th>Responsibility</th>
-                              <th>Same As</th>
-                              <th>Salutation</th>
-                              <th>First Name</th>
-                              <th>Last Name</th>
-                              <th>Email</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td class="text-nowrap">Prinicipal for Side Event
-                                <!-- <i class="fa fa-info-circle" aria-hidden="true"></i> -->
-                              </td>
-                              <td>
-                                <select ng-model="doc.responsible.sameAs" ng-change="sameAs(doc.responsible.sameAs,'responsible')">
-                                  <option value="" selected>Select a Person</option>
-                                  <option value="contact">Contact</option>
-                                  <option value="me">Me</option>
-                                </select>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm.responsiblePersonalTitle.$invalid && editForm.$submitted}">
+                                    <div class="table-responsive">
+                                      <table class="table table-striped">
+                                        <thead>
+                                          <tr>
+                                            <th>Responsibility</th>
+                                            <th>Same As</th>
+                                            <th>Salutation</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td class="text-nowrap">Prinicipal for Side Event
+                                      
+                                            </td>
+                                            <td>
+                                              <select ng-model="doc.responsible.sameAs" ng-change="sameAs(doc.responsible.sameAs,'responsible')">
+                                                <option value="" selected>Select a Person</option>
+                                                <option value="contact">Contact</option>
+                                                <option value="me">Me</option>
+                                              </select>
+                                            </td>
+                                            <td>
+                                              <div ng-class="{'has-error': editForm.responsiblePersonalTitle.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" />
-                                  <p ng-show="editForm.responsiblePersonalTitle.$invalid " class="help-block error red-status">Salutation is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm.responsibleFirstName.$invalid && editForm.$submitted}">
+                                                <input id="editForm.responsiblePersonalTitle" class="form-control" type="text" name="responsiblePersonalTitle" ng-model="doc.responsible.personalTitle" />
+                                                <p ng-show="editForm.responsiblePersonalTitle.$invalid " class="help-block error red-status">Salutation is required.</p>
+                                              </div>
+                                            </td>
+                                            <td>
+                                              <div ng-class="{'has-error': editForm.responsibleFirstName.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" />
-                                  <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block error red-status">First name is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm.responsibleLastName.$invalid && editForm.$submitted}">
+                                                <input id="editForm.responsibleFirstName" class="form-control" type="text" name="responsibleFirstName" ng-model="doc.responsible.firstName" />
+                                                <p ng-show="editForm.responsibleFirstName.$invalid && editForm.$submitted" class="help-block error red-status">First name is required.</p>
+                                              </div>
+                                            </td>
+                                            <td>
+                                              <div ng-class="{'has-error': editForm.responsibleLastName.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsibleLastName" class="form-control" type="text" name="responsibleLastName" ng-model="doc.responsible.lastName" required/>
-                                  <p ng-show="editForm.responsibleLastName.$invalid && (editForm.$submitted || editForm.responsibleLastName.$touched)" class="help-block error red-status">Last name is required.</p>
-                                </div>
-                              </td>
-                              <td>
-                                <div ng-class="{'has-error': editForm.responsibleEmail.$invalid && editForm.$submitted}">
+                                                <input id="editForm.responsibleLastName" class="form-control" type="text" name="responsibleLastName" ng-model="doc.responsible.lastName" required/>
+                                                <p ng-show="editForm.responsibleLastName.$invalid && (editForm.$submitted || editForm.responsibleLastName.$touched)" class="help-block error red-status">Last name is required.</p>
+                                              </div>
+                                            </td>
+                                            <td>
+                                              <div ng-class="{'has-error': editForm.responsibleEmail.$invalid && editForm.$submitted}">
 
-                                  <input id="editForm.responsibleEmail" class="form-control" name="responsibleEmail" ng-model="doc.responsible.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder=" " required/>
+                                                <input id="editForm.responsibleEmail" class="form-control" name="responsibleEmail" ng-model="doc.responsible.email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" placeholder=" " required/>
 
-                                  <div ng-show="(editForm.$submitted || editForm.responsibleEmail.$touched)">
-                                      <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.required">This field is mandatory</p>
-                                      <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.pattern || editForm.responsibleEmail.$error.email">This is not a valid email</p>
+                                                <div ng-show="(editForm.$submitted || editForm.responsibleEmail.$touched)">
+                                                    <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.required">This field is mandatory</p>
+                                                    <p class="help-block error red-status" ng-show="editForm.responsibleEmail.$error.pattern || editForm.responsibleEmail.$error.email">This is not a valid email</p>
 
+                                                </div>
+                                              </div>
+                                            </td>
+                                          </tr>
+
+
+                                        </tbody>
+                                      </table>
+                                    </div>
                                   </div>
                                 </div>
-                              </td>
-                            </tr>
-
-
-
-                        </table>
-                      </div>
-                    </div>
                   </div>
-</div>
               </div>
 
 
 
-              <div fade-in-tab id="documents"  class="tab-pane   active text-left" ng-show="tab==='documents'">
+              <div  id="documents"  class="tab-pane active text-left" ng-show="tab==='documents'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-book" index="editIndex" name="publications" document="doc" links="doc.publications" save="saveDoc()"></link-list>
                 </div>
@@ -760,7 +749,7 @@ border-top-color: transparent !important;
                   <edit-link ng-show="showEdit()" has-file-upload="true" file-types="application/*" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="publication" document="doc" links="doc.publications" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div  fade-in-tab  id="links" class="tab-pane    active text-left" ng-show="tab==='links'">
+              <div  fade-in-tab  id="links" class="tab-pane active text-left" ng-show="tab==='links'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-link" index="editIndex" name="links" document="doc" links="doc.links" save="saveDoc()"></link-list>
                 </div>
@@ -768,7 +757,7 @@ border-top-color: transparent !important;
                   <edit-link ng-show="showEdit()" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="links" document="doc" links="doc.links" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div  fade-in-tab  id="images" class="tab-pane    active text-left" ng-show="tab==='images'">
+              <div  fade-in-tab  id="images" class="tab-pane active text-left" ng-show="tab==='images'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-image" index="editIndex" name="images" document="doc" links="doc.images" save="saveDoc()"></link-list>
                 </div>
@@ -776,7 +765,7 @@ border-top-color: transparent !important;
                   <edit-link ng-show="showEdit()" has-file-upload="true" file-types="image/*" on-error="onError(res)"  index="editIndex" schema="inde-side-events" name="images" document="doc" links="doc.images" save="saveDoc()"></edit-link>
                 </div>
               </div>
-              <div fade-in-tab  id="videos" class="tab-pane    active text-left" ng-show="tab==='videos'">
+              <div fade-in-tab  id="videos" class="tab-pane active text-left" ng-show="tab==='videos'">
                 <div>
                   <link-list ng-show="!showEdit()" fa-class="fa-video-camera" index="editIndex" name="videos" document="doc" links="doc.videos" save="saveDoc()"></link-list>
                 </div>
@@ -813,6 +802,7 @@ border-top-color: transparent !important;
                 <div ng-if="editForm.$invalid  && editForm.$submitted" class="col-xs-12 alert alert-danger alert-dismissable" >
                               <button type="button" class="close" data-dismiss="alert" aria-hidden="true" ng-click="registerAlert=''">&times;</button>
                   WARNING: You have critical errors or missing information in your form preventing your side event form being submitted.
+
                   <div ng-repeat="err in editForm.$error.required" ng-if="err.$name!=='editLinkForm'">
                       <a ng-click="goToError(errorMap[err.$name].tab,err.$name)" style="cursor:pointer;">{{errorMap[err.$name].label}}</a>
 
@@ -844,7 +834,7 @@ border-top-color: transparent !important;
                     <span >Save Draft</span>
                     <!-- <span ng-show="numStepsCompleted()>=5 ">Cancel Request</span> -->
                   </button>
-                  <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" type="submit">
+                  <button ng-show="!showEdit() && !isTabsValid()" class="btn btn-warning" ng-click="submitForm(editForm)" type="submit"  >
                   Save & Validate Step</button>
 
                   <button ng-show="!showEdit() && isTabsValid()" ng-click="publishRequestDial()" class="btn btn-success" type="button">
@@ -859,7 +849,7 @@ border-top-color: transparent !important;
                     <!-- <span ng-show="numStepsCompleted()>=5">Cancel Request</span> -->
                   </button>
 
-                  <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" type="submit">  Save & Validate Step</button>
+                  <button ng-show="doc.meta.status &&  !showEdit() && !prevPublished" class="btn btn-warning btn-block" ng-click="submitForm(editForm)" type="submit"  >  Save & Validate Step</button>
                   <button ng-show="!showEdit() && isTabsValid()" ng-click="publishRequestDial()"   class="btn btn-success btn-block" type="button">
                     <span ng-show=" (doc.meta.status=== 'draft')">Register Request</span><span ng-show="(doc.meta.status=== 'request')">Edit Request</span>
                       <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>

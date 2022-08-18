@@ -653,7 +653,7 @@ define(['app', 'lodash',
 
 
                         function initSelectedDates(){
-                            for (const aMeeting of $scope.options.meetingsFiltered) {
+                            for (const aMeeting of ($scope.options.meetingsFiltered || [])) {
                                 const isSelectedMeeting = ([...($scope.doc.meetings || []), $scope.meetingId].includes(aMeeting._id))
 
                                 if(isSelectedMeeting) {
@@ -1033,6 +1033,7 @@ define(['app', 'lodash',
                         //=======================================================================
                         $scope.submitForm = function(formData) {
                             $scope.submitted = true;
+                            formData.$setSubmitted()
                             switch ($scope.tab) {
                                 case 'general':
                                     submitGeneral(formData);
@@ -1173,10 +1174,13 @@ define(['app', 'lodash',
                                 $scope.doc.validTabs.general = true;
                                 $scope.tab = 'logistics';
                                 $timeout(function() {
+                                    formData.$setPristine();
                                     $scope.tab = 'logistics';
-                                    $('#logistics-tab').tab('show');
+                                    showTab('logistics')
                                 });
+                                }, 100);
                                 $scope.saveDoc();
+                                formData.$setPristine()
                             }
                         } //submitGeneral
 
@@ -1231,7 +1235,9 @@ define(['app', 'lodash',
                                 $scope.doc.validTabs.logistics = true;
                                 $timeout(function() {
                                     $scope.tab = 'orgs';
-                                    $('#orgs-tab').tab('show');
+                                    formData.$setPristine();
+                                    showTab('orgs')
+
                                 });
                             }
                         } //submitGeneral
@@ -1267,7 +1273,8 @@ define(['app', 'lodash',
                                 $scope.doc.validTabs.orgs = true;
                                 $timeout(function() {
                                     $scope.tab = 'contact';
-                                    $('#contact-tab').tab('show');
+                                    formData.$setPristine();
+                                    showTab('contact')
                                 });
 
                                 $scope.saveDoc();
@@ -1354,10 +1361,12 @@ define(['app', 'lodash',
                             ) {
 
                                 resetForm(formData, ctrls);
+                              
                                 $scope.doc.validTabs.contact = true;
                                 $timeout(function() {
                                     $scope.tab = 'documents';
-                                    $('#documents-tab').tab('show');
+                                    formData.$setPristine();
+                                    showTab('documents');
                                 });
                                 $scope.saveDoc();
 
