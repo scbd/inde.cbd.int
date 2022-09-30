@@ -1,6 +1,6 @@
 define(['app', 'lodash',
     'text!./delete-dialog.html',
-    'moment',
+    'moment', 'angular',
     './menu',
     'services/mongo-storage',
     'services/filters',
@@ -15,7 +15,7 @@ define(['app', 'lodash',
     'directives/pagination',
     'ui.select',
     'directives/cvs-exporter'
-], function(app, _, deleteDialog, moment) {
+], function(app, _, deleteDialog, moment, angular) {
 
     app.controller("adminEvents", ['$scope', 'adminMenu', '$q', '$http', 'mongoStorage', '$location', '$element', '$timeout', 'authentication', 'history', 'ngDialog','$filter',
         function($scope, dashMenu, $q, $http, mongoStorage, $location, $element, $timeout, authentication, history, ngDialog,$filter) {
@@ -743,16 +743,35 @@ define(['app', 'lodash',
                       $scope.users.push(doc.meta.modifiedBy);
                 });
                 $scope.users=_.uniq($scope.users);
-                if(!_.isEmpty($scope.users))
-                return $http.get('/api/v2013/userinfos?query='+JSON.stringify({userIDs:$scope.users})).then(function(res){
-                    _.each(docs, function(doc) {
-                         if(!_.find(res.data,{userID:doc.meta.createdBy})) throw 'User not found : '+doc.meta.createdBy;
-                         doc.meta.createdByObj=_.find(res.data,{userID:doc.meta.createdBy});
 
-                         if(!_.find(res.data,{userID:doc.meta.modifiedBy})) throw 'User not found : '+doc.meta.modifiedBy;
-                         doc.meta.modifiedByObj=_.find(res.data,{userID:doc.meta.modifiedBy});
-                   });
-               });
+               function userQuery(userIds){
+                  return $http.get('/api/v2013/userinfos?query='+encodeURIComponent (JSON.stringify({userIDs:userIds})))
+                }
+                if(!_.isEmpty($scope.users)){
+
+                  var userCopy = angular.copy($scope.users)
+                  var userPromises = []
+
+                  while (userCopy.length > 0) {
+                    var userToQuery = _.take(userCopy, 300);
+                    userPromises.push(userQuery(userToQuery))
+                    userCopy = _.drop(userCopy, 300)
+                  }
+
+                  return $q.all(userPromises).then(function(res){
+                    return _(res).map('data').flatten().value();
+                  })
+                  .then(function(res){
+                    _.each(docs, function(doc) {
+                        if(!_.find(res,{userID:doc.meta.createdBy})) throw 'User not found : '+doc.meta.createdBy;
+                        doc.meta.createdByObj=_.find(res,{userID:doc.meta.createdBy});
+
+                        if(!_.find(res,{userID:doc.meta.modifiedBy})) throw 'User not found : '+doc.meta.modifiedBy;
+                        doc.meta.modifiedByObj=_.find(res,{userID:doc.meta.modifiedBy});
+                  });
+                });;
+                  
+                }
               }
             } //importUserData
 
