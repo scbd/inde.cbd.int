@@ -753,9 +753,9 @@ define(['app', 'lodash',
                   var userPromises = []
 
                   while (userCopy.length > 0) {
-                    var userToQuery = _.take(userCopy, 300);
+                    var userToQuery = _.take(userCopy, 100);
                     userPromises.push(userQuery(userToQuery))
-                    userCopy = _.drop(userCopy, 300)
+                    userCopy = _.drop(userCopy, 100)
                   }
 
                   return $q.all(userPromises).then(function(res){
