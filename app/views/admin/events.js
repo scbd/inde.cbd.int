@@ -745,7 +745,7 @@ define(['app', 'lodash',
                 $scope.users=_.uniq($scope.users);
 
                function userQuery(userIds){
-                  return $http.get('/api/v2013/userinfos?query='+JSON.stringify({userIDs:userIds}))
+                  return $http.get('/api/v2013/userinfos?query='+encodeURIComponent (JSON.stringify({userIDs:userIds})))
                 }
                 if(!_.isEmpty($scope.users)){
 
