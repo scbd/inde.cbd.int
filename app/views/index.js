@@ -93,6 +93,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //
         //==============================
         function load() {
+          console.log('load')
             $("head > title").text("CBD Side-events ");
             $templateCache.put("bootstrap/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control\" ng-class=\"{open: $select.open}\"><div><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" class=\"ui-select-search input-xs\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" ng-model=\"$select.search\" ng-model=\"$select.search\" ng-model-options=\"{debounce: 1000}\" role=\"combobox\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
 
@@ -250,7 +251,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                       _ctrl.itemsPerPage=50;
                     }
                     else
-                      _ctrl.selectedTime=moment.tz(Date.now(),_ctrl.confObj.timezone)
+                      _ctrl.selectedTime=_ctrl.sideEventTimes[1].value //moment.tz(Date.now(),_ctrl.confObj.timezone)
                 }
                 loadList(0);
             });
@@ -361,6 +362,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //
         //=======================================================================
         function loadList  (pageIndex) {
+          console.log('loadlist')
           if(inProgress)return $q.defer();
             inProgress = true;
             _ctrl.loading = true;
@@ -447,6 +449,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                     if (!_.find(_ctrl.allOrgs, {
                             _id: orgId
                         })) {
+                          console.log('loadorgs')
                         allPromises.push(mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
                           if (!_.find(_ctrl.allOrgs, {
                                   _id: orgId
@@ -488,35 +491,77 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
               loadRooms();
             }
-            var numDays =0
-            if(_ctrl.confObj.schedule && _ctrl.confObj.schedule.sideEvents)
-              numDays = moment.tz(_ctrl.confObj.EndDate,_ctrl.confObj.timezone).diff(_ctrl.confObj.schedule.sideEvents.search.start,'days');
 
-            _ctrl.sideEventTimes=[{title:'All Days',value:'all', selected:true}];
+            generateDays()
 
-            const { search, seTiers }           = _ctrl.confObj.schedule.sideEvents
-            const { timezone, timezoneLink   } = _ctrl.confObj
-
-            if(timezoneLink) moment.tz.link(`${timezoneLink}|${timezone}`)
-
-            const tz = timezoneLink || timezone
-
-
-            for(var i=0; i<numDays; i++)
-            {
-              for (const tier of seTiers) {
-                const aDateTime = moment.tz(search.start,tz).add(i,'days').startOf().add(tier.seconds,'seconds').subtract(2,'hours')
-
-                const isM27 = aDateTime.format().includes('-03-27')
-
-                if(isM27) aDateTime.subtract(1,'hours')
-
-                _ctrl.sideEventTimes.push({title: aDateTime.format('dddd MMM Do  HH:mm'),value:aDateTime.format()});
-
-              }
-            }
+            _ctrl.sideEventTimes = getSideEventTimeIntervals( _ctrl.confObj.timeObjects)
         }
 
+        function generateDays() {
+          const { StartDate, EndDate, timezone, timezoneLink } = _ctrl.confObj
+
+          const tz = timezoneLink || timezone
+
+          if(timezoneLink) moment.tz.link(`${timezone}|${timezoneLink}`)
+
+          const startDate = moment.utc(moment.tz(StartDate,tz)).startOf();
+          const endDate   = moment.utc(moment.tz(EndDate,tz))  .startOf();
+
+          const totalDays = moment(endDate).diff(startDate,'days')
+
+          const days        = []
+          const timeObjects = { days, totalDays, endDate, startDate, tz }
+
+          for (let i = 0; i < totalDays; i++) {
+
+            const date = moment.utc(moment.tz(startDate,tz)).add(i,'days');
+
+            if(!isExcludedDay(date))
+              days.push(date);
+          }
+
+          _ctrl.confObj.timeObjects = timeObjects
+
+          timeObjects.sideEventTimeIntervals = getSideEventTimeIntervals(timeObjects)
+
+        }
+
+        function isExcludedDay(date){
+          const {  timezone, timezoneLink, schedule } = _ctrl.confObj
+
+          const tz = timezoneLink || timezone
+
+          const excludedDays = (schedule?.sideEvents?.excludedDayTier || []).filter(({ tier })=> !tier)
+
+          for (const { day } of excludedDays) {
+            const theDay = moment.utc(moment.tz(day,tz)).startOf();
+
+            if(theDay.isSame(date, 'day')) return true
+          }
+          
+          return false
+        }
+
+        function getSideEventTimeIntervals({ tz, days }){
+          const { seTiers }              = _ctrl.confObj.schedule.sideEvents
+          const   sideEventTimeIntervals = [{ title:'All Days', value:'all', selected:true }]
+
+          for (const day of days)
+            for (const tier of seTiers) {
+              const now      = moment().tz(tz).subtract(90,'minutes')
+              const interval = moment.tz(day, tz).startOf('day').add(tier.seconds,'seconds')
+              const isM27    = moment.tz(day, tz).startOf('day').isSame('2022-03-27T00:00:00+01:00')
+
+              console.log(now.format())
+              if(isM27) interval.subtract(1, 'hour')
+
+              if(now.isBefore(interval))
+                sideEventTimeIntervals.push({title: interval.format('dddd MMM Do  HH:mm'),value:interval.format()})
+              
+            }
+            
+          return sideEventTimeIntervals
+        }
         //=======================================================================
         //
         //=======================================================================
