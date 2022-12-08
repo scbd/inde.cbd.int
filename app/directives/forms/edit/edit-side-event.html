@@ -401,10 +401,10 @@ border-top-color: transparent !important;
 
             <div class="row">
               <div ng-show="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.catering=!doc.requirements.catering;"><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
-              <div ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
+              <div  ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
               </div>
               
               <div ng-show="doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
@@ -416,7 +416,7 @@ border-top-color: transparent !important;
               </div>
 
               <div ng-if="options.requirements.translationHybrid && doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ng-click="doc.requirements.hybrid.interpretation.required=!doc.requirements.hybrid.interpretation.required;"><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.interpretation.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.interpretation.required"></i> Hybrid Interpretation  <span class="small muted">(at your own expense)</span></span>
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.interpretation.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.interpretation.required"></i> Hybrid Interpretation  <span class="small muted">(at your own expense)</span></span>
                 <span ng-if="options.requirements.hybridTranslationLanguageLimit && doc.requirements.hybrid.interpretation.required" class="small muted"> <br>(The maximum languages permitted is {{options.requirements.hybridTranslationLanguageLimit}})</span>
               </div>
 
@@ -424,7 +424,7 @@ border-top-color: transparent !important;
                 Languages:
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <div ng-repeat="lang in getSelectedOtherLangs() track by $index" ng-click="toggleLang(lang)" class="pointer col-xl-4 col-lg-4 col-md-12 col-xs-12" >
+                    <div ng-repeat="lang in getSelectedOtherLangs() track by $index"  class="pointer col-xl-4 col-lg-4 col-md-12 col-xs-12" >
                       <i class="fa fa-check-square-o" ng-show="isLangSelected(lang)" ></i> 
                       <i class="fa fa-square-o" ng-show="!isLangSelected(lang)" ></i> {{languageNameEnglish(lang)}}
                     </div>
@@ -436,7 +436,7 @@ border-top-color: transparent !important;
                             <option ng-repeat="lang in getUnselectedLang()" ng-value="lang.identifier" >{{lang.title.en}}</option>
                           </select>
                         </div>
-                        <button class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
+                        <button ng-disabled="true" class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
                       </div>
                     </div>
                   </div>
