@@ -24,8 +24,9 @@ define(['app','angular', 'jquery',
             $("head > title").text(current.$$route.label || "Side Event Registration");
 
           $scope.routeLoaded=true;
-          $window.ga('set',  'page', basePath+$location.path());
-          $window.ga('send', 'pageview');
+          $window.gtag('event', 'page_view', {
+            'page_location' : basePath+$location.path()
+          });
         });
 
         $rootScope.$on('event:auth-emailVerification', function(evt, data) {
