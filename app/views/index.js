@@ -93,7 +93,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //
         //==============================
         function load() {
-          console.log('load')
             $("head > title").text("CBD Side-events ");
             $templateCache.put("bootstrap/select-multiple.tpl.html","<div class=\"ui-select-container ui-select-multiple ui-select-bootstrap dropdown form-control\" ng-class=\"{open: $select.open}\"><div><div class=\"ui-select-match\"></div><input type=\"search\" autocomplete=\"off\" autocorrect=\"off\" autocapitalize=\"off\" spellcheck=\"false\" class=\"ui-select-search input-xs\" placeholder=\"{{$selectMultiple.getPlaceholder()}}\" ng-disabled=\"$select.disabled\" ng-click=\"$select.activate()\" ng-model=\"$select.search\" ng-model=\"$select.search\" ng-model-options=\"{debounce: 1000}\" role=\"combobox\" aria-label=\"{{ $select.baseTitle }}\" ondrop=\"return false;\"></div><div class=\"ui-select-choices\"></div><div class=\"ui-select-no-choice\"></div></div>");
 
@@ -234,7 +233,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                   delete(_ctrl.rooms);
                   delete(_ctrl.venueObj);
-                  loadRooms();
+                  // loadRooms();
                   loadVenue();
                 }
             });
@@ -242,7 +241,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                 var selectedT=null;
 
                 if(typeof _ctrl.selectedTime ==="undefined" ){
-
+                  if(!_ctrl.confObj) return
                     var sideEvents = _ctrl.confObj.schedule.sideEvents
 
                     if(sideEvents && moment(moment.utc()).isBefore(moment.tz(sideEvents.search.start,_ctrl.confObj.timezone))){
@@ -251,7 +250,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                       _ctrl.itemsPerPage=50;
                     }
                     else
-                      _ctrl.selectedTime=_ctrl.sideEventTimes[1].value //moment.tz(Date.now(),_ctrl.confObj.timezone)
+                      _ctrl.selectedTime=_ctrl.sideEventTimes[1]?.value //moment.tz(Date.now(),_ctrl.confObj.timezone)
                 }
                 loadList(0);
             });
@@ -362,7 +361,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //
         //=======================================================================
         function loadList  (pageIndex) {
-          console.log('loadlist')
           if(inProgress)return $q.defer();
             inProgress = true;
             _ctrl.loading = true;
@@ -408,7 +406,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                   var foundOrg;
                   loadHostOrgs(doc).then(function() {
-
+                    if(doc.sideEvent)
                       _.each(doc.sideEvent.hostOrgs, function(org) {
                           foundOrg = _.find(_ctrl.allOrgs, {
                               _id: org
@@ -449,7 +447,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                     if (!_.find(_ctrl.allOrgs, {
                             _id: orgId
                         })) {
-                          console.log('loadorgs')
                         allPromises.push(mongoStorage.loadDoc('inde-orgs', orgId).then(function(responce) {
                           if (!_.find(_ctrl.allOrgs, {
                                   _id: orgId
@@ -469,11 +466,16 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             if(!_ctrl.conferences || _.isEmpty(_ctrl.conferences))
               return mongoStorage.loadConferences(1).then(function(o) {
-                  _ctrl.conferences=o.sort(compareDates);
+                
+                  _ctrl.conferences = o;
+
                   if(!_ctrl.conference){
-                    _ctrl.conference=_ctrl.conferences[0]._id;
-                    var conf = _ctrl.conferences[0];
-                    conf.selected=true;
+
+                    _ctrl.conference = _ctrl.conferences[0]._id;
+                    _ctrl.confObj = _ctrl.conferences[0];
+
+                    _ctrl.confObj.selected=true;
+
                   }
 
               }).then(loadDates).catch(onError);
@@ -489,7 +491,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
 
-              loadRooms();
+              // loadRooms();
             }
 
             generateDays()
@@ -543,7 +545,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         }
 
         function getSideEventTimeIntervals({ tz, days }){
-          const { seTiers }              = _ctrl.confObj.schedule.sideEvents
+          const { seTiers }              = _ctrl.confObj?.schedule?.sideEvents || {}
           const   sideEventTimeIntervals = [{ title:'All Days', value:'all', selected:true }]
 
           for (const day of days)
@@ -552,7 +554,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
               const interval = moment.tz(day, tz).startOf('day').add(tier.seconds,'seconds')
               const isM27    = moment.tz(day, tz).startOf('day').isSame('2022-03-27T00:00:00+01:00')
 
-              console.log(now.format())
               if(isM27) interval.subtract(1, 'hour')
 
               if(now.isBefore(interval))
