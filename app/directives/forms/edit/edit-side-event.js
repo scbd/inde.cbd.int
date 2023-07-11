@@ -107,7 +107,20 @@ define(['app', 'lodash',
 
                             }).catch(onError);
                         }
-//
+
+                        //============================================================
+                        //
+                        //============================================================
+                        function loadGbfTargets()
+                        {
+                            return $http.get("/api/v2013/thesaurus/domains/GBF-TARGETS/terms", {
+                                cache: true
+                            }).then(function(o) {
+                                $scope.options.gbfTargets = o.data;
+
+                            }).catch(onError);
+                        }
+
                         function loadLangs(){
                             return $http.get("/api/v2013/thesaurus/domains/ISO639-2/terms", {
                                 cache: true
@@ -226,7 +239,7 @@ define(['app', 'lodash',
                                     q:  {
                                             '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
                                             schedule                   : { $exists: true },
-                                            EndDate                  : { $gt: { $date: new Date().toISOString() } }
+                                            EndDate                  : { $gt: { $date: moment.utc() } }
                                         },
                                     s: { 'schedule.sideEvents.start': 1 }
                                     }
@@ -540,7 +553,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets(), loadLangs()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets(),loadGbfTargets(), loadLangs()]).then(function() {
                                 showProgress();
                                 
                                 if ($scope._id !== '0' && $scope._id !== 'new') {

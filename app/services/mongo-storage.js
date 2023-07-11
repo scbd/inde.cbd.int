@@ -126,14 +126,15 @@ define(['app', 'lodash',  'services/locale'], function(app, _ ){
                     modified = (!localStorage.getItem('allConferences') || isModified || force);
                     var params = {};
                     if (modified) {
-                        params = { q: { 
-                          $and: [
-                            {$or: [ {institution:'CBD'}, {institution:'cbd'} ]},
-                            {$or: [
-                              { seTiers: { $exists: true } },
-                              { ['schedule.sideEvents.seTiers']: { $exists: true } }
-                            ]}
-                          ]
+                        params = { 
+                            s: { StartDate: -1 },
+                            q: { 
+                                    $and: [
+                                        {$or: [ {institution:'CBD'}, {institution:'cbd'} ]},
+                                        {$or: [
+                                        { ['schedule.sideEvents.seTiers']: { $exists: true } }
+                                        ]}
+                                    ]
                         } };
 
                         numPromises++;
