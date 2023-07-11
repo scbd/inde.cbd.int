@@ -98,19 +98,6 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
-                        function loadTargets()
-                        {
-                            return $http.get("/api/v2013/thesaurus/domains/AICHI-TARGETS/terms", {
-                                cache: true
-                            }).then(function(o) {
-                              $scope.options.targets = o.data;
-
-                            }).catch(onError);
-                        }
-
-                        //============================================================
-                        //
-                        //============================================================
                         function loadGbfTargets()
                         {
                             return $http.get("/api/v2013/thesaurus/domains/GBF-TARGETS/terms", {
@@ -553,7 +540,7 @@ define(['app', 'lodash',
 
                             $scope.editIndex = false;
 
-                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadTargets(),loadGbfTargets(), loadLangs()]).then(function() {
+                            $q.all([loadUser(), loadCountries(), loadOrgs(),loadConferences(),loadSubjects(),loadGbfTargets(), loadLangs()]).then(function() {
                                 showProgress();
                                 
                                 if ($scope._id !== '0' && $scope._id !== 'new') {
