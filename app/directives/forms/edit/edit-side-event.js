@@ -100,7 +100,7 @@ define(['app', 'lodash',
                         //============================================================
                         function loadGbfTargets()
                         {
-                            return $http.get("/api/v2013/thesaurus/domains/GBF-TARGETS/terms", {
+                            return $http.get("/api/v2013/thesaurus/domains/GBF-GOALS-TARGETS/terms", {
                                 cache: true
                             }).then(function(o) {
                                 $scope.options.gbfTargets = o.data;
