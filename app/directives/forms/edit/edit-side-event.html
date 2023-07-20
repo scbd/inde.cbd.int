@@ -212,7 +212,7 @@ border-top-color: transparent !important;
                                 </style>
                                 <!-- <div km-select required multiple name="subjects" ng-model="doc.subjects" items="options.subjects" binding-type="term[]" touched="editForm.subjects.$touched"></div> -->
                                 <ui-select multiple  first-item-active="false" required id="editForm.subjects"  name="subjects"  ng-model="doc.subjects" close-on-select="false"  append-to-body="true" title="Choose subjects" ng-click="editForm.subjects.$touched=true;">
-                                    <ui-select-match  placeholder="Select a subject by typeing the title or browse the drop down" >{{$item.name}}</ui-select-match>
+                                    <ui-select-match  placeholder="Select a subject by typing the title or browse the drop down" >{{$item.name}}</ui-select-match>
                                     <ui-select-choices first-item-active="false" style="width:100%;" position="down" repeat="subject.identifier as subject in options.subjects | propsFilter: {name: $select.search}">
                                       <!--  -->
                                       <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px; overflow:auto;">
@@ -235,7 +235,7 @@ border-top-color: transparent !important;
 
                         <div class="col-md-12 col-xs-12" style="padding-bottom:10px;" >
                             <div id="editForm.gbfTargets" ng-class="{'has-error-div': editForm.gbfTargets.$invalid && editForm.$submitted,'has-error': editForm.gbfTargets.$invalid && editForm.$submitted}" class="km-control-group" required name="gbfTargets" caption="Related GBF Target(s)">
-                                <label>Global Biodiversity Framework Target(s) </label>
+                                <label>Global Biodiversity Framework Goal(s) and Target(s) </label>
                                 <br>
                                 <style>
                                   .group-select-row{
@@ -253,9 +253,9 @@ border-top-color: transparent !important;
                                       }
                                 </style>
 
-                                <!-- <div km-select required multiple name="subjects" ng-model="doc.subjects" items="options.subjects" binding-type="term[]" touched="editForm.subjects.$touched"></div> -->
+
                                 <ui-select multiple  first-item-active="false"  id="editForm.gbfTargets" required name="gbfTargets"  ng-model="doc.gbfTargets" close-on-select="false"  append-to-body="true" title="Global Biodiversity Framework  Target" ng-click="editForm.gbfTargets.$touched=true;">
-                                    <ui-select-match  placeholder="Select a target by typeing the title or browse the drop down" > {{$item.title.en | truncate:50:' ...'}} </ui-select-match>
+                                    <ui-select-match  placeholder="Select a target by typing the title or browse the drop down" > {{$item.title.en | truncate:50:' ...'}} </ui-select-match>
                                     <ui-select-choices first-item-active="false" style="width:100%;" position="down" repeat="target.identifier as target in options.gbfTargets | propsFilter: {name: $select.search}">
                                       <!--  -->
                                       <div ng-class="{'bg-eee':!!($index%2),'bg-white':!!!($index%2)}" style="padding: 0 0 0 10px; overflow:auto;">
