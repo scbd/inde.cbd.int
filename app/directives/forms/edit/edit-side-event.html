@@ -399,10 +399,10 @@ border-top-color: transparent !important;
             </legend>
 
             <div class="row">
-              <div ng-show="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+              <div ng-click="doc.requirements.catering=!doc.requirements.catering;" ng-show="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="cursor: pointer;">
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
-              <div  ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+              <div ng-click="doc.requirements.hybrid=!doc.requirements.hybrid;"  ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="cursor: pointer;"">
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
               </div>
               
