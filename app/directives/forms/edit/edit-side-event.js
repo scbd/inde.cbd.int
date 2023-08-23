@@ -27,10 +27,12 @@ define(['app', 'lodash',
                 transclude: false,
                 scope: {},
                 link: function($scope) {
-                        var numHostOrgs = 0
-                        var meetingInit = false
+                        var numHostOrgs = 0;
+                        var meetingInit = false;
 
-                        initScope($scope, $route, $location)
+                        $scope.onConferenceChange = onConferenceChange;
+
+                        initScope($scope, $route, $location);
                         init();
 
 
@@ -163,8 +165,10 @@ define(['app', 'lodash',
                         //============================================================
                         function loadConferences() {
                             return $http.get('/api/v2016/conferences', { 'params': findOpenRegsQuery() }).then(function(res) {
+                                const conferences = res.data.sort(compareDates).reverse();
+                                const { meetingId } = $route.current.params || {};
 
-                                $scope.options.conferences=res.data.sort(compareDates);
+                                $scope.options.conferences = isNeww() && meetingId? [_.find(conferences, { MajorEventIDs: [ meetingId ] })] : res.data.sort(compareDates).reverse();
 
                                 return $scope.options.conferences
                             })
@@ -190,10 +194,66 @@ define(['app', 'lodash',
 
                             $scope.options.conferenceObj = conferences[0]
 
+                            setMeetingsFilteredOption();
+
+                        }
+
+                        function onConferenceChange(_id){
+                            allMeetingsNotSelected ();
+                            $scope.options.conferenceObj.selected = false;
+                            $scope.options.conferenceObj = getSelectedConference(_id);
+                            setSelectedConference($scope.options.conferenceObj)
+                            $scope.doc.meetings = [];
+                            generateDates();
+                            setMeetingsFilteredOption();
+                            
+                        }
+
+                        function allMeetingsNotSelected (){
+                            const { conferences = [] } = $scope.options;
+
+                            for (const aConference of conferences){
+                                for (const aMeeting of aConference.meetings){
+                                    aMeeting.selected = false;
+                                }
+                            }
+                        }
+
+
+                        function setMeetingsFilteredOption(){
                             const { excludedMeetings = [] } = $scope?.options?.conferenceObj?.schedule?.sideEvents || {}
 
                             $scope.options.meetingsFiltered = $scope.options.conferenceObj.meetings.filter(({_id}) => !(excludedMeetings || [] ) .includes(_id));
+                        }
 
+                        function getSelectedConference(_id){
+                            const { conferences = [] } = $scope.options;
+                            const { meetingId } = $route.current.params || {};
+
+                            if(conferences.length === 1) return conferences[0];
+
+                            if(_id) return _.find(conferences, { _id });
+                            if(!isNeww() && $scope.doc.conference)
+                            return _.find(conferences, { _id: $scope.doc.conference });
+
+                            if(conferences.find(({ selected }) => selected)) return conferences.find(({ selected }) => selected);
+
+
+                            if(isNeww() && meetingId)
+                                return _.find(conferences, { MajorEventIDs: [meetingId] });
+
+                            if(conferences[0])
+                                return conferences[0];
+
+                            throw new Error('No conference found')
+                        }
+
+                        function setSelectedConference(confObj){
+                            confObj.selected = true;
+                            $scope.options.conferenceObj = confObj;
+                            $scope.doc.conference = confObj._id;
+
+                            return confObj
                         }
 
                         function loadMeetingsData(conferences){
@@ -222,14 +282,11 @@ define(['app', 'lodash',
                         }
 
                         function findOpenRegsQuery(){
-                            return {
-                                    q:  {
-                                            '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
-                                            schedule                   : { $exists: true },
-                                            EndDate                  : { $gt: { $date: moment.utc() } }
-                                        },
-                                    s: { 'schedule.sideEvents.start': 1 }
-                                    }
+
+                            const q = isNeww()? { '$or' : [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule : { $exists: true }, 'schedule.sideEvents.start'  : { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end'    : { $gt: { $date: moment.utc() } } } :
+                                                        { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, EndDate: { $gt: { $date: moment.utc() } } }
+
+                            return { q, s: { 'schedule.sideEvents.start': 1 } }
                         }
 
                         //============================================================
@@ -552,9 +609,8 @@ define(['app', 'lodash',
 
                                             $scope.loading = true;
                                             $scope.doc = document;
-                                            $scope.options.conferenceObj = _.find($scope.options.conferences, {
-                                                _id: $scope.doc.conference
-                                            });
+                                            $scope.options.conferenceObj = getSelectedConference();
+                                            setSelectedConference($scope.options.conferenceObj)
                                             $scope.isNew = false;
                                             if (!$scope.doc.hostOrgs)
                                                 $scope.doc.hostOrgs = [];
@@ -565,7 +621,7 @@ define(['app', 'lodash',
                                                     'orgs': false,
                                                     'contact': false
                                                 };
-                                              showTab($scope.doc.validTabs);
+                                            showTab($scope.doc.validTabs);
                                             if (!$scope.doc.publications) $scope.doc.publications = [];
                                             if (!$scope.doc.images) $scope.doc.images = [];
                                             if (!$scope.doc.links) $scope.doc.links = [];
@@ -633,16 +689,13 @@ define(['app', 'lodash',
                                     if(!$scope.doc.requirements) $scope.doc.requirements={}
                                     if(!$scope.doc.requirements.hybrid) $scope.doc.requirements.hybrid={}
 
-                                    $scope.doc.conference=$scope.options.conferences[0]._id;
-                                    $scope.options.conferences[0].selected=true;
+                                    $scope.options.conferenceObj = getSelectedConference();
+                                    setSelectedConference($scope.options.conferenceObj);
 
                                     $scope.preFill=false;
                                     $scope.loading=false;
-                                    $scope.options.conferenceObj = _.find($scope.options.conferences, {
-                                        _id: $scope.doc.conference
-                                    });
-                                    
-                                    initSelectedDates()
+
+                                    initSelectedDates();
                                 }
 
 
@@ -665,41 +718,8 @@ define(['app', 'lodash',
                                 }
                             }
                         }
-                        //============================================================
-                        //
-                        //============================================================
-                        // function prevPublished() {
-                        //     return $scope.prevPublished;
-                        // }
-                        //============================================================
-                        //
-                        //============================================================
-                        // function checkMeeting(index) {
-                        //     var meeting;
-                        //     var meetings =$scope.options.conferenceObj.meetings;
-
-                        //     if(index)
-                        //         meeting = meetings[index];
-                        //     else
-                        //         for (var i=0; i<meetings.length; i++)
-                        //             if(meetings[i]._id === $scope.meetingId && !meetingInit){
-                        //               meetingInit = true
-                        //               meeting = meetings[i];
-                        //               meeting.selected=false
-                        //             }
 
 
-                        //     if(meeting){
-                        //         meeting.selected = !meeting.selected;
-                        //         if (!$scope.doc.meetings) $scope.doc.meetings = [];
-                        //         if (meeting.selected)
-                        //             $scope.doc.meetings.push(meeting._id);
-                        //         else
-                        //             $scope.doc.meetings.splice($scope.doc.meetings.indexOf(meeting._id), 1);
-                        //     }
-
-                        // } //
-                        // $scope.checkMeeting = checkMeeting;
 
 
                         //============================================================
@@ -1378,28 +1398,6 @@ define(['app', 'lodash',
                         } //submitGeneral
 
 
-                        //=======================================================================
-                        //
-                        //=======================================================================
-                        function duplicateResponsibleOrgs (formData,email, key){
-                            var duplicateFound = false;
-                            _.each($scope.doc.hostOrgs, function(resOrg, k) {
-
-                                if($scope.doc.responsibleOrgs[k] && $scope.doc.responsibleOrgs[k].email===email && k!=key)
-                                {
-                                      formData['email_' + key].$error.duplicate=true;
-                                      formData['email_' + key].$invalid=true;
-                                      formData.$invalid=true;
-                                      findScrollFocus('email_' + key);
-                                      duplicateFound = true;
-                                }else{
-                                  formData['email_' + key].$error.duplicate=false;
-                                  formData['email_' + key].$invalid=false;
-                                  formData.$invalid=false;
-                                }
-                            });
-                            return duplicateFound;
-                        }
 
                         //=======================================================================
                         //

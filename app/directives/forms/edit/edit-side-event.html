@@ -305,7 +305,7 @@ border-top-color: transparent !important;
               <div class="col-xs-12 col-lg-4">
                 <div ng-class="{'has-error': editForm.conference.$invalid  && editForm.$submitted}">
                   <label>Conference</label>
-                  <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" required>
+                  <select id="editForm.conference" class="form-control" ng-model="doc.conference" name="conference" ng-change="onConferenceChange(doc.conference)" required>
                     <option ng-repeat="docObj in options.conferences | futureConferences:doc.conference" value="{{docObj._id}}"  ng-selected="docObj.selected">{{docObj.Title.en}} </option>
                   </select>
                   <p ng-show="editForm.conference.$invalid " class="help-block error red-status">A conference is required.</p>
@@ -854,6 +854,7 @@ border-top-color: transparent !important;
                       <span ng-show="(doc.meta.status=== 'published' || doc.meta.status=== 'scheduled')">Edit Your Live Side-event</span>
                     </button>
                 </div>
+<pre>{{doc|json}}</pre>
             </div>
   </form>
 </div>
