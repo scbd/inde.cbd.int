@@ -168,7 +168,7 @@ define(['app', 'lodash',
                                 const conferences = res.data.sort(compareDates).reverse();
                                 const { meetingId } = $route.current.params || {};
 
-                                $scope.options.conferences = isNeww() && meetingId? [_.find(conferences, { MajorEventIDs: [ meetingId ] })] : res.data.sort(compareDates).reverse();
+                                $scope.options.conferences = isNew() && meetingId? [_.find(conferences, { MajorEventIDs: [ meetingId ] })] : res.data.sort(compareDates).reverse();
 
                                 return $scope.options.conferences
                             })
@@ -233,13 +233,13 @@ define(['app', 'lodash',
                             if(conferences.length === 1) return conferences[0];
 
                             if(_id) return _.find(conferences, { _id });
-                            if(!isNeww() && $scope.doc.conference)
+                            if(!isNew() && $scope.doc.conference)
                             return _.find(conferences, { _id: $scope.doc.conference });
 
                             if(conferences.find(({ selected }) => selected)) return conferences.find(({ selected }) => selected);
 
 
-                            if(isNeww() && meetingId)
+                            if(isNew() && meetingId)
                                 return _.find(conferences, { MajorEventIDs: [meetingId] });
 
                             if(conferences[0])
@@ -283,7 +283,7 @@ define(['app', 'lodash',
 
                         function findOpenRegsQuery(){
 
-                            const q = isNeww()? { '$or' : [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule : { $exists: true }, 'schedule.sideEvents.start'  : { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end'    : { $gt: { $date: moment.utc() } } } :
+                            const q = isNew()? { '$or' : [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule : { $exists: true }, 'schedule.sideEvents.start'  : { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end'    : { $gt: { $date: moment.utc() } } } :
                                                         { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, EndDate: { $gt: { $date: moment.utc() } } }
 
                             return { q, s: { 'schedule.sideEvents.start': 1 } }
@@ -1311,10 +1311,10 @@ define(['app', 'lodash',
                         //=======================================================================
                         //
                         //=======================================================================
-                        function isNeww(){
+                        function isNew(){
                            return (((!$scope._id ||  $scope._id==='new' ) || Number($scope.doc.id) > 2300) );
                         }
-                        $scope.isNeww=isNeww;
+                        $scope.isNew=isNew;
 
                         //=======================================================================
                         //
