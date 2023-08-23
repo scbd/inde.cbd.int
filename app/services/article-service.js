@@ -6,7 +6,7 @@
                 httpCache = CacheFactory.createCache('articlesHttpCache', {
                     deleteOnExpire: 'aggressive',
                     recycleFreq   : 10000,
-                    maxAge        : 5 * 60 * 1000,
+                    maxAge        : 60 * 1000,
                     storageMode   : 'localStorage',
                     storagePrefix : 'httpCache_'
                 });
