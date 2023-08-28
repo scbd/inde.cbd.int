@@ -611,7 +611,7 @@ define(['app', 'lodash',
                                             $scope.doc = document;
                                             $scope.options.conferenceObj = getSelectedConference();
                                             setSelectedConference($scope.options.conferenceObj)
-                                            $scope.isNew = false;
+                                          
                                             if (!$scope.doc.hostOrgs)
                                                 $scope.doc.hostOrgs = [];
                                             if (!document.validTabs)
@@ -676,7 +676,6 @@ define(['app', 'lodash',
                                         'orgs': false,
                                         'contact': false
                                     };
-                                    $scope.isNew = true;
 
                                     if (!$scope.doc.hostOrgs) $scope.doc.hostOrgs = [];
                                     if (!$scope.doc.contact) $scope.doc.contact = {};
@@ -1578,7 +1577,6 @@ function initScope($scope, $route, $location){
     $scope.loading = true;
     $scope.schema = 'inde-side-events'
     $scope.showOrgForm = 0
-    $scope.isNew = true
     $scope.registerAlert = true
     $scope.doc = {}
     $scope.doc.hostOrgs = []
