@@ -292,10 +292,11 @@ define(['app', 'lodash',
                         }
 
                         function findOpenRegsQuery(){
-
+                            const institution = { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ] };
+                            const schedule    = { schedule: { $exists: true } };
                             const q = { $or: [
-                                                { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, 'schedule.sideEvents.start': { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end': { $gt: { $date: moment.utc() } } },
-                                                { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, EndDate: { $gt: { $date: moment.utc() } } }
+                                                { 'schedule.sideEvents.start': { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end': { $gt: { $date: moment.utc() } }, ...institution, ...schedule },// open side event reg
+                                                { EndDate: { $gt: { $date: moment.utc() } }, ...institution, ...schedule } // future conference
                                             ] };
 
                             return { q, s: { 'schedule.sideEvents.start': 1 } }
