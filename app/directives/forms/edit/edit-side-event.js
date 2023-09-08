@@ -163,14 +163,22 @@ define(['app', 'lodash',
                         //============================================================
                         //
                         //============================================================
-                        function loadConferences() {
+                        function loadConferences(selectedConference) {
                             return $http.get('/api/v2016/conferences', { 'params': findOpenRegsQuery() }).then(function(res) {
+                                
                                 const conferences = res.data.sort(compareDates).reverse();
                                 const { meetingId } = $route.current.params || {};
 
                                 $scope.options.conferences = isNew() && meetingId? [_.find(conferences, { MajorEventIDs: [ meetingId ] })] : res.data.sort(compareDates).reverse();
 
+                                if(! selectedConference)
+                                    return $scope.options.conferences
+                            
+                                $scope.options.conferences = $scope.options.conferences.filter(({ _id }) => _id === selectedConference);
+                                setSelectedConference($scope.options.conferences[0])
+
                                 return $scope.options.conferences
+                                
                             })
                             .then(loadMeetingsData)
                             .catch(onError);
@@ -192,9 +200,11 @@ define(['app', 'lodash',
                                     }
                                 }
 
-                            $scope.options.conferenceObj = conferences[0]
+                            if(conferences.length === 1)
+                                $scope.options.conferenceObj = conferences[0]
 
-                            setMeetingsFilteredOption();
+                            if($scope.options.conferenceObj)
+                                setMeetingsFilteredOption();
 
                         }
 
@@ -283,8 +293,8 @@ define(['app', 'lodash',
 
                         function findOpenRegsQuery(){
 
-                            const q = isNew()? { '$or' : [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule : { $exists: true }, 'schedule.sideEvents.start'  : { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end'    : { $gt: { $date: moment.utc() } } } :
-                                                        { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, EndDate: { $gt: { $date: moment.utc() } } }
+                            const q = { $or: [{ '$or' : [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule : { $exists: true }, 'schedule.sideEvents.start'  : { $lte: { $date: moment.utc() } }, 'schedule.sideEvents.end'    : { $gt: { $date: moment.utc() } } },
+                                                        { '$or': [ { institution: 'CBD' }, { institution: 'cbd' } ], schedule: { $exists: true }, EndDate: { $gt: { $date: moment.utc() } } }] }
 
                             return { q, s: { 'schedule.sideEvents.start': 1 } }
                         }
@@ -550,8 +560,8 @@ define(['app', 'lodash',
                                 _.each($scope.options.meetingsFiltered, function(meeting) {
                                     meeting.selected = false;
                                     if(docObj._id === meeting._id){
-                                      meeting.selected = true;
-                                      $scope.doc.meetings = [docObj._id]
+                                        meeting.selected = true;
+                                        $scope.doc.meetings = [docObj._id]
                                     }
                                 });
                             });
@@ -609,9 +619,19 @@ define(['app', 'lodash',
 
                                             $scope.loading = true;
                                             $scope.doc = document;
-                                            $scope.options.conferenceObj = getSelectedConference();
+
+                                            if($scope.doc.conference)
+                                                loadConferences($scope.doc.conference)
+
+                                            
+                                            
+                                            $scope.options.conferenceObj = getSelectedConference($scope.doc.conference);
                                             setSelectedConference($scope.options.conferenceObj)
-                                          
+
+                                            setMeetingsFilteredOption();
+
+                                            $timeout(()=>initSelectedDates(), 1000);
+
                                             if (!$scope.doc.hostOrgs)
                                                 $scope.doc.hostOrgs = [];
                                             if (!document.validTabs)
@@ -658,7 +678,8 @@ define(['app', 'lodash',
                                                 }
                                               );
 
-                                              initSelectedDates();
+                                              $timeout(()=>initSelectedDates(), 500);
+                                              
 
                                         }).catch(onError);
                                 } else {
@@ -695,6 +716,8 @@ define(['app', 'lodash',
                                     $scope.loading=false;
 
                                     initSelectedDates();
+
+                                    setMeetingsFilteredOption();
                                 }
 
 
@@ -705,16 +728,13 @@ define(['app', 'lodash',
 
 
                         function initSelectedDates(){
+                            
                             for (const aMeeting of ($scope.options.meetingsFiltered || [])) {
                                 const isSelectedMeeting = ([...($scope.doc.meetings || []), $scope.meetingId].includes(aMeeting._id))
 
-                                if(isSelectedMeeting) {
-                                    const selectedMeeting = aMeeting
+                                if(isSelectedMeeting)
+                                    aMeeting.selected = true
 
-                                    selectedMeeting.selected = true
-
-                                    $timeout(()=>$scope.selectMeeting(selectedMeeting), 2000)
-                                }
                             }
                         }
 
@@ -1311,7 +1331,7 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         function isNew(){
-                           return (((!$scope._id ||  $scope._id==='new' ) || Number($scope.doc.id) > 2300) );
+                           return ((!$scope._id ||  $scope._id==='new' )  );
                         }
                         $scope.isNew=isNew;
 
