@@ -471,8 +471,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                   if(!_ctrl.conference){
 
-                    _ctrl.conference = _ctrl.conferences[0]._id;
-                    _ctrl.confObj = _ctrl.conferences[0];
+                    _ctrl.conference = _ctrl.conferences[1]._id;
+                    _ctrl.confObj = _ctrl.conferences[1];
 
                     _ctrl.confObj.selected=true;
 
