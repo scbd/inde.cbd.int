@@ -331,7 +331,7 @@ border-top-color: transparent !important;
               <div class="col-xs-12 col-lg-4">
                 <div name="expNumPart" ng-class="{'has-error': (editForm.expNumPart.$invalid && editForm.$submitted) || editForm.expNumPart.$error.number}">
                   <label>Expected Number of Participants</label>
-                  <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" ng-disabled="(!isAdmin() && !isNew() && doc.expNumPart)" placeholder=" " required/>
+                  <input id="editForm.expNumPart" class="form-control" type="number" name="expNumPart" ng-model="doc.expNumPart" ng-disabled="(!isAdmin() && !isNew() && doc.validTabs.logistics)" placeholder=" " required/>
                   <p ng-show="editForm.expNumPart.$invalid && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status">Number of participants is required.</p>
                   <p ng-show="editForm.expNumPart.$error.number  && (editForm.expNumPart.$touched || editForm.$submitted)" class="help-block error red-status"> Not valid number!</p>
                 </div>
