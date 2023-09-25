@@ -846,7 +846,7 @@ define(['app', 'lodash',
                                 }
 
                             if($scope.meetingObj)
-                                return day.isBetween(moment.utc($scope.meetingObj.EVT_FROM_DT).subtract(1, 'days'), moment.utc($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                                return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
                             else if($scope.options.conferenceObj)
                                 return day.isBetween(moment.utc($scope.options.conferenceObj.StartDate).subtract(1, 'days'), moment.utc($scope.options.conferenceObj.EndDate).add(1, 'days'));
                             else false
