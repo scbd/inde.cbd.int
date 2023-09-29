@@ -235,6 +235,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
                   delete(_ctrl.venueObj);
 
                   loadVenue();
+                  loadRooms();
                 }
             });
             $scope.$watch('indexCtrl.selectedTime', function(prev) {
@@ -490,7 +491,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
               _ctrl.confObj = aConference;
               _ctrl.confObj.selected = true;
 
-              loadRooms();
+              
 
               break;
           }
@@ -523,6 +524,8 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             generateDays()
 
             _ctrl.sideEventTimes = getSideEventTimeIntervals( _ctrl.confObj.timeObjects);
+
+            
         }
 
         function generateDays() {
@@ -552,6 +555,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
           timeObjects.sideEventTimeIntervals = getSideEventTimeIntervals(timeObjects)
 
+          
         }
 
         function isExcludedDay(date){
