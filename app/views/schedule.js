@@ -12,7 +12,6 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
     'ouical',
     'directives/ouical',
     'ngDialog',
-    'directives/reg-open',
 ], function(app, _, moment,ouicalDialog) {
 
     return ['$scope','mongoStorage', '$route', '$http', '$timeout','$q','$location','$templateCache','ngDialog',function($scope,mongoStorage, $route, $http,$timeout,$q,$location,$templateCache,ngDialog) {
@@ -40,7 +39,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         _ctrl.calDialog=calDialog;
         _ctrl.isChromeIOS = isChromeIOS;
         _ctrl.goTo=goTo;
-        _ctrl.isRegistrationOpen=isRegistrationOpen
+
         load();
         return this;
 
@@ -122,27 +121,15 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
               }
         }
 
-        //==============================
-        //
-        //==============================
-        function isRegistrationOpen(){
-          var sideEvents
+        function loadRooms() {
 
-          if(_ctrl.confObj && _ctrl.confObj.schedule && _ctrl.confObj.schedule.sideEvents)
-            sideEvents = _ctrl.confObj.schedule.sideEvents
-          else
-            return false
-
-
-          var isAfter  = moment(Date.now()).isAfter(moment.tz(sideEvents.start,_ctrl.confObj.timezone))
-          var isBefore = moment(Date.now()).isBefore(moment.tz(sideEvents.end,_ctrl.confObj.timezone))
-
-          if( isAfter && isBefore )
-            return true
-          else
-            return false
-
-        }
+            if(!_ctrl.rooms)
+              return $http.get("/api/v2016/conferences/"+_ctrl.confObj._id+"/rooms", {
+                  cache: true
+              }).then(function(res){_ctrl.rooms = res.data; });
+            else
+              return $q.resolve(_ctrl.rooms);
+          }
 
         //============================================================
         //
@@ -188,56 +175,29 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
             return $q.resolve(_ctrl.subjects);
         }
 
-        //==============================
-        //
-        //==============================
-        function loadRooms() {
 
-          if(!_ctrl.rooms)
-            return $http.get("/api/v2016/conferences/"+_ctrl.confObj._id+"/rooms", {
-                cache: true
-            }).then(function(res){_ctrl.rooms = res.data; });
-          else
-            return $q.resolve(_ctrl.rooms);
-        }
-
-        //==============================
-        //
-        //==============================
-        function loadVenue() {
-          if(!_ctrl.venueObj)
-            return $http.get("/api/v2016/venues/"+_ctrl.confObj.venueId, {
-                cache: true
-            }).then(function(res){_ctrl.venueObj = res.data; });
-            else
-              return $q.resolve(_ctrl.venueObj);
-        }
 
         //============================================================
         //
         //============================================================
         function initWatches() {
-            $scope.$watch('indexCtrl.hostOrgsSelected', function() {
+            $scope.$watch('scheduleCtrl.hostOrgsSelected', function() {
 
                 if((typeof _ctrl.hostOrgsSelected !== "undefined") )
                   loadList(0);
             });
-            $scope.$watch('indexCtrl.search', function() {
+            $scope.$watch('scheduleCtrl.search', function() {
                 if((typeof _ctrl.search !== "undefined" ))
                   loadList(0);
             });
-            $scope.$watch('indexCtrl.conference', function() {
+            $scope.$watch('scheduleCtrl.conference', function() {
 
                 if((typeof _ctrl.conference !== "undefined") ){
                   _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
 
-                  delete(_ctrl.rooms);
-                  delete(_ctrl.venueObj);
-                  // loadRooms();
-                  loadVenue();
                 }
             });
-            $scope.$watch('indexCtrl.selectedTime', function(prev) {
+            $scope.$watch('scheduleCtrl.selectedTime', function(prev) {
                 var selectedT=null;
 
                 if(typeof _ctrl.selectedTime ==="undefined" ){
@@ -468,9 +428,16 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
               return mongoStorage.loadConferences(1).then(function(o) {
                 
                   _ctrl.conferences = o;
-                  loadMultipleSideEventsPublished();
 
                   if(!_ctrl.conference)selectConference();
+                //   {
+
+                //     _ctrl.conference = _ctrl.conferences[1]._id;
+                //     _ctrl.confObj = _ctrl.conferences[1];
+
+                //     _ctrl.confObj.selected=true;
+
+                //   }
 
               }).then(loadDates).catch(onError);
 
@@ -478,39 +445,21 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         }
 
         function selectConference() {
+            const conferenceCode = $route.current.params.id;
 
-          const force = _ctrl.multipleSideEventsPublished;
+            for (const aConference of _ctrl.conferences) {
+                const { sideEventsPublished } = aConference?.schedule?.sideEvents || {};
 
-          for (const aConference of _ctrl.conferences) {
-              const { sideEventsPublished } = aConference?.schedule?.sideEvents || {};
+                if(aConference.code !== conferenceCode) continue;
+                if(!sideEventsPublished) continue;
 
-              if(!sideEventsPublished && !force) continue;
-              
-              _ctrl.conference = aConference._id;
-              _ctrl.confObj = aConference;
-              _ctrl.confObj.selected = true;
+                _ctrl.conference = aConference._id;
+                _ctrl.confObj = aConference;
+                _ctrl.confObj.selected = true;
 
-              loadRooms();
-
-              break;
-          }
-      }
-        function loadMultipleSideEventsPublished(){
-          _ctrl.conferencesSideEventsPublished = _ctrl.conferencesSideEventsPublished || []
-
-          for (const aConference of _ctrl.conferences) {
-            const { sideEventsPublished } = aConference?.schedule?.sideEvents || {};
-
-            if(!sideEventsPublished) continue;
-
-            _ctrl.conferencesSideEventsPublished.push(aConference)
-          }
-
-          _ctrl.conferencesSideEventsPublished.reverse();
-          _ctrl.multipleSideEventsPublished = (_ctrl.conferencesSideEventsPublished?.length || 0) > 1;
-
+                loadRooms();
+            }
         }
-
         //============================================================
         //
         //============================================================
@@ -524,8 +473,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             generateDays()
 
-            _ctrl.sideEventTimes = getSideEventTimeIntervals( _ctrl.confObj.timeObjects);
-            loadRooms();
+            _ctrl.sideEventTimes = getSideEventTimeIntervals( _ctrl.confObj.timeObjects)
         }
 
         function generateDays() {

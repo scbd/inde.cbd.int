@@ -39,8 +39,20 @@
 
 
 <reg-open></reg-open>
+<div class="row" ng-if="indexCtrl.multipleSideEventsPublished">
+    <div class="col-xs-12 text-center">
+        <h4 style="background-color:#fff;">Available Schedules</h4>
+        <hr>
+    </div>
+    <div class="col-xs-12 text-center">
+        <span ng-repeat="conf in indexCtrl.conferencesSideEventsPublished track by $index">
+            <a href="/schedule/{{conf.code}}">{{conf.Title.en}}</a><br/>
+            <hr/>
+        </span>
+    </div>
+</div>
 <!-- side event schedule -->
-<div class="row" ng-if="indexCtrl.confObj.schedule.sideEvents.sideEventsPublished">
+<div class="row" ng-if="indexCtrl.confObj.schedule.sideEvents.sideEventsPublished && !indexCtrl.multipleSideEventsPublished">
     <div ng-if="true">
 
 
@@ -57,7 +69,7 @@
         <div class="row hidden-print" style="padding: 0 10px 0 10px;">
             <div class="col-xs-12 text-center">
                 <hr>
-                <h3 style="background-color:#fff;"> {{indexCtrl.confObj.title.en}} </h3>
+                <h3 style="background-color:#fff;"> {{indexCtrl.confObj.Title.en}} </h3>
                 <h5 style="background-color:#fff;">(Timezone: {{indexCtrl.confObj.timezone}})</h5>
                 <hr>
 
@@ -96,23 +108,23 @@
                 &nbsp;
 
             </div> -->
-            <div class="col-xs-12 hidden-print">
-                <ui-select multiple ng-model="indexCtrl.hostOrgsSelected" close-on-select="true" append-to-body="true" title=" " spinner-enabled="true">
-                    <ui-select-match placeholder="Host Party or Org. Search">{{$item.acronym || $item.title}}</ui-select-match>
-                    <ui-select-choices minimum-input-length="3" style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
-                        <div>
-                            <hr style="margin: 0 0 0 0;">
-                            <small>
-                          <span class="text-nowrap">
-                              <span  style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym || org.code}}] {{org.title || org.name}} </span>
-                            </span>
-                      </small>
-                        </div>
-                    </ui-select-choices>
-                </ui-select>
+        <div class="col-xs-12 hidden-print">
+            <ui-select multiple ng-model="indexCtrl.hostOrgsSelected" close-on-select="true" append-to-body="true" title=" " spinner-enabled="true">
+                <ui-select-match placeholder="Host Party or Org. Search">{{$item.acronym || $item.title}}</ui-select-match>
+                <ui-select-choices minimum-input-length="3" style="width:100%;" position="down" repeat="org._id as org in indexCtrl.allOrgs | propsFilter: {title: $select.search, acronym: $select.search}">
+                    <div>
+                        <hr style="margin: 0 0 0 0;">
+                        <small>
+                        <span class="text-nowrap">
+                            <span  style="padding:0px 0px 0px 1px; vertical-align:middle;"> [{{org.acronym || org.code}}] {{org.title || org.name}} </span>
+                        </span>
+                    </small>
+                    </div>
+                </ui-select-choices>
+            </ui-select>
 
 
-            </div>
+        </div>
 
         </div>
         <hr class="hidden-print">
