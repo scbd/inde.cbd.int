@@ -233,7 +233,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
                   delete(_ctrl.rooms);
                   delete(_ctrl.venueObj);
-                  // loadRooms();
+
                   loadVenue();
                 }
             });
@@ -518,14 +518,11 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
 
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
-
-              // loadRooms();
             }
 
             generateDays()
 
             _ctrl.sideEventTimes = getSideEventTimeIntervals( _ctrl.confObj.timeObjects);
-            loadRooms();
         }
 
         function generateDays() {
