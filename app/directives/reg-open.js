@@ -71,14 +71,13 @@ function setScopeProps (props){
 }
 
 function findOpenRegsQuery(){
-
   return {
             q:  {
                   '$or'                      : [ { institution: 'CBD' }, { institution: 'cbd' }],
                   schedule                   : { $exists: true },
-                  StartDate                  : { $gt: { $date: moment() } },
-                  'schedule.sideEvents.start': { $lt: { $date: moment() } },
-                  'schedule.sideEvents.end'  : { $gt: { $date: moment() } },
+                  StartDate                  : { $gt: { $date: moment.utc() } },
+                  'schedule.sideEvents.start': { $lt: { $date: moment.utc() } },
+                  'schedule.sideEvents.end'  : { $gt: { $date: moment.utc() } },
                 },
             f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1, 'schedule.sideEvents.excludedMeetings': 1 },
             s: { 'schedule.sideEvents.start': 1 }

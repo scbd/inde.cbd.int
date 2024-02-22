@@ -483,15 +483,20 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
           const force = _ctrl.multipleSideEventsPublished;
 
           for (const aConference of _ctrl.conferences) {
-              const { sideEventsPublished } = aConference?.schedule?.sideEvents || {};
+              const { sideEvents } = aConference?.schedule || {};
 
-              if(!sideEventsPublished && !force) continue;
-              
+              if(force){
+                _ctrl.conference = aConference._id;
+                _ctrl.confObj = aConference;
+                _ctrl.confObj.selected = true;
+                break;
+              }
+
+              if(!sideEvents || !aConference.active ) continue;
+
               _ctrl.conference = aConference._id;
               _ctrl.confObj = aConference;
               _ctrl.confObj.selected = true;
-
-              
 
               break;
           }
@@ -518,6 +523,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         function loadDates() {
 
             if(!_ctrl.confObj){
+              console.log(_ctrl.conference,_ctrl.conferences)
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
             }
 
@@ -529,6 +535,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         }
 
         function generateDays() {
+          if(!_ctrl.confObj) throw new Error('Conference not found', _ctrl.conference);
           const { StartDate, EndDate, timezone, timezoneLink } = _ctrl.confObj
 
           const tz = timezoneLink || timezone
