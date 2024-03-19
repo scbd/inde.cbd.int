@@ -690,6 +690,8 @@ define(['app', 'lodash',
                                     $scope.doc = {};
                                     $scope.doc.meta={status:'draft'};
                                     $scope.doc.tempFile={};
+                                    $scope.meetingId = $location.search().meetingId;
+                                    $scope.doc.meetings = $scope.meetingId? [$scope.meetingId] : [];
                                     delete($scope._id);
                                     $scope.doc.logo = $scope.doc.logo = 'app/images/ic_event_black_48px.svg';
                                     //initProfile(true);
@@ -1605,7 +1607,7 @@ function initScope($scope, $route, $location){
     $scope.doc.hostOrgs = []
     $scope.updateProfile = 'No'
     $scope.ignoreDirtyCheck = false
-    $scope.doc.meetings = []
+    $scope.doc.meetings = $scope.meetingId? [$scope.meetingId] : [];
     $scope.document = {}
 
     $scope.errorMap={
