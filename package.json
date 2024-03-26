@@ -34,7 +34,7 @@
     "@bower_components/scroll-animate-directive": "caioiglesias/scroll-animate-directive#0.1.2",
     "angular-cache": "^4.6.0",
     "ejs": "2.6.1",
-    "express": "4.16.3",
+    "express": "4.19.2",
     "http-proxy": "1.17"
   },
   "repository": {
