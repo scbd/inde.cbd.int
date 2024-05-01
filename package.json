@@ -33,7 +33,7 @@
     "@bower_components/requirejs-text": "requirejs/text#2.0.15",
     "@bower_components/scroll-animate-directive": "caioiglesias/scroll-animate-directive#0.1.2",
     "angular-cache": "^4.6.0",
-    "ejs": "2.6.1",
+    "ejs": "3.1.10",
     "express": "4.16.3",
     "http-proxy": "1.17"
   },
