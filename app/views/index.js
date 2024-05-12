@@ -529,14 +529,15 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         }
 
         function generateDays() {
+          if(!_ctrl.confObj) throw new Error('Conference not found', _ctrl.conference);
           const { StartDate, EndDate, timezone, timezoneLink } = _ctrl.confObj
 
           const tz = timezoneLink || timezone
 
           if(timezoneLink) moment.tz.link(`${timezone}|${timezoneLink}`)
 
-          const startDate = moment.utc(moment.tz(StartDate,tz)).startOf();
-          const endDate   = moment.utc(moment.tz(EndDate,tz))  .startOf();
+          const startDate = moment.utc(moment.tz(StartDate,tz)).startOf('day');
+          const endDate   = moment.utc(moment.tz(EndDate,tz))  .startOf('day');
 
           const totalDays = moment(endDate).diff(startDate,'days')
 
@@ -566,7 +567,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
           const excludedDays = (schedule?.sideEvents?.excludedDayTier || []).filter(({ tier })=> !tier)
 
           for (const { day } of excludedDays) {
-            const theDay = moment.utc(moment.tz(day,tz)).startOf();
+            const theDay = moment.utc(moment.tz(day,tz)).startOf('day');
 
             if(theDay.isSame(date, 'day')) return true
           }
