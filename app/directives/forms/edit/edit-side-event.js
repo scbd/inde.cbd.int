@@ -759,7 +759,7 @@ define(['app', 'lodash',
 
                             var diff = Number(moment(confr.EndDate).format('X')) - Number(moment(confr.StartDate).format('X'));
 
-                            var numDays = Math.ceil(diff / 86400) + 1;
+                            var numDays = Math.ceil(diff / 86400) + 2;
 
                             var startDate = moment(confr.schedule.startMain).utc();
                             if (!$scope.options) $scope.options = {};

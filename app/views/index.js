@@ -539,7 +539,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
           const startDate = moment.utc(moment.tz(StartDate,tz)).startOf('day');
           const endDate   = moment.utc(moment.tz(EndDate,tz))  .startOf('day');
 
-          const totalDays = moment(endDate).diff(startDate,'days')
+          const totalDays = moment(endDate).diff(startDate,'days') + 1;
 
           const days        = []
           const timeObjects = { days, totalDays, endDate, startDate, tz }
