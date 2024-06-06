@@ -37,6 +37,7 @@ define(['app', 'lodash',
 
 
                         var killWatch = $scope.$watch('doc.conference', function() {
+                            console.log('doc.conference watch',$scope.doc.meetings)
                             if (!$scope.doc.conference) return 
 
                             generateDates();
@@ -44,6 +45,7 @@ define(['app', 'lodash',
                         });
 
                         $scope.$watch('doc.meetings', function() {
+                            console.log('doc.meetings watch',$scope.doc.meetings)
                             if ($scope.doc.meetings) generateDates();
                         });
 
@@ -744,31 +746,52 @@ define(['app', 'lodash',
                         }
 
 
+                        function getStartEndDates(){
+                            if(!$scope.options.conferenceObj || !$scope.options.conferenceObj.meetings) throw new Error('getStartEndDates: No conference or meetings found');
 
+
+                            let start = moment($scope.options.conferenceObj.StartDate);
+                            let end   = moment($scope.options.conferenceObj.EndDate);
+
+                            for (const aMeeting of $scope.options.conferenceObj.meetings) {
+                                const meetingStart = moment(aMeeting.EVT_FROM_DT);
+                                const meetingEnd   = moment(aMeeting.EVT_TO_DT);
+
+                                if(meetingStart.isBefore(start)) start = meetingStart;
+                                if(meetingEnd.isAfter(end)) end = meetingEnd;
+                            }
+
+                            return { start, end };
+                        }
 
                         //============================================================
                         //
                         //============================================================
                         function generateDates() {
-                    
+
                             if(!$scope.options.conferences) return;
 
-                            var confr = $scope.options.conferenceObj 
+                            if (!$scope.options)       $scope.options = {};
+                            if (!$scope.options.dates) $scope.options.dates = [];
 
                             $scope.options.dates = [];
 
-                            var diff = Number(moment(confr.EndDate).format('X')) - Number(moment(confr.StartDate).format('X'));
+                            const { start, end } = getStartEndDates();
 
-                            var numDays = Math.ceil(diff / 86400) + 2;
+                            const diff = Number(moment(end).format('X')) - Number(moment(start).format('X'));
 
-                            var startDate = moment(confr.schedule.startMain).utc();
-                            if (!$scope.options) $scope.options = {};
-                            if (!$scope.options.dates) $scope.options.dates = [];
+                            const numDays = Math.ceil(diff / 86400) + 2;
+
+                            let startDate = start;
+
+                            
                             const { sideEventVisibleDays } = $scope.options.conferenceObj.schedule.sideEvents;
+
 
                             for (var i = 0; i < numDays; i++) {
 
-                                if(~sideEventVisibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
+                                if(sideEventVisibleDays.includes(startDate.day()) && isMeetingDay(startDate))
+                                    
                                     if(!isExcludedDay(startDate))
                                         $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
@@ -846,7 +869,10 @@ define(['app', 'lodash',
                                   });
                                   if($scope.meetingObj) break;
                                 }
-
+// console.log('isMeetingDay', $scope.meetingObj.EVT_FROM_DT)
+// console.log('isMeetingDay', $scope.meetingObj.EVT_TO_DT)
+// console.log(day.format())
+// console.log(day.isBetween(moment($scope.meetingObj.EVT_FROM_DT), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days')))
                             if($scope.meetingObj)
                                 return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
                             else if($scope.options.conferenceObj)
