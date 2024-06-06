@@ -5,13 +5,13 @@ function loadGlobalModules(app, template, _, moment) {
   this.template = template
   this._        = _
   this.moment   = moment
-	app.directive('regOpen', ['$http', directive.bind(this) ]);
+	app.directive('regOpen', ['$http','$location', directive.bind(this) ]);
 }
 
 // angularJS directive definition
-function directive($http) {
+function directive($http, $location) {
   this.$http = $http
-
+  this.$location = $location;
   return  {
             restrict: 'E',
             template: this.template,
@@ -124,7 +124,13 @@ function setMeetings(res){
 
   for (var i = meetings.length-1; i >=0; i--) {
     var parentConference = getConference(meetings[i]._id)
-    meetings[i] = this._.assign(meetings[i],{start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end, hideDates: parentConference.schedule.sideEvents.hideDates})
+
+    const isProd = this.$location.host().includes('cbd.int') && this.$location.path().startsWith('/side-events')
+    const base = isProd? '/side-events' : ''
+    const href = `${base}/manage/events/new?meetingId=${meetings[i]._id}`
+
+
+    meetings[i] = this._.assign(meetings[i],{href,start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end, hideDates: parentConference.schedule.sideEvents.hideDates})
   }
   this.$scope.meetings = meetings
 }

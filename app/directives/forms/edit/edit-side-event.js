@@ -744,41 +744,55 @@ define(['app', 'lodash',
                         }
 
 
+                        function getStartEndDates(){
+                            if(!$scope.options.conferenceObj || !$scope.options.conferenceObj.meetings) throw new Error('getStartEndDates: No conference or meetings found');
 
+
+                            let start = moment($scope.options.conferenceObj.StartDate);
+                            let end   = moment($scope.options.conferenceObj.EndDate);
+
+                            for (const aMeeting of $scope.options.conferenceObj.meetings) {
+                                const meetingStart = moment(aMeeting.EVT_FROM_DT);
+                                const meetingEnd   = moment(aMeeting.EVT_TO_DT);
+
+                                if(meetingStart.isBefore(start)) start = meetingStart;
+                                if(meetingEnd.isAfter(end)) end = meetingEnd;
+                            }
+
+                            return { start, end };
+                        }
 
                         //============================================================
                         //
                         //============================================================
                         function generateDates() {
-                    
+
                             if(!$scope.options.conferences) return;
 
-                            var confr = $scope.options.conferenceObj 
+                            if (!$scope.options)       $scope.options = {};
+                            if (!$scope.options.dates) $scope.options.dates = [];
 
                             $scope.options.dates = [];
 
-                            var diff = Number(moment(confr.EndDate).format('X')) - Number(moment(confr.StartDate).format('X'));
+                            const { start, end } = getStartEndDates();
+                            const diff           = Number(moment(end).format('X')) - Number(moment(start).format('X'));
+                            const numDays        = Math.ceil(diff / 86400) + 2;
 
-                            var numDays = Math.ceil(diff / 86400) + 2;
+                            let startDate = start;
 
-                            var startDate = moment(confr.schedule.startMain).utc();
-                            if (!$scope.options) $scope.options = {};
-                            if (!$scope.options.dates) $scope.options.dates = [];
+                            
                             const { sideEventVisibleDays } = $scope.options.conferenceObj.schedule.sideEvents;
 
-                            for (var i = 0; i < numDays; i++) {
 
-                                if(~sideEventVisibleDays.indexOf(startDate.day()) && isMeetingDay(startDate) && !startDate.isSame(moment('2018-11-24T00:00:00-05:00')))
+                            for (var i = 0; i < numDays; i++) {
+                                if(sideEventVisibleDays.includes(startDate.day()) && isMeetingDay(startDate))
                                     if(!isExcludedDay(startDate))
                                         $scope.options.dates.push(startDate.format("(dddd) YYYY/MM/DD"));
 
                                 startDate = startDate.add(1, 'day');
                             }
 
-
-
                             if(!$scope.doc.meetings )    $scope.doc.meetings = [];
-
 
                             _.each($scope.options.conferences, function(conf) {
                                 if (conf._id === $scope.doc.conference || $scope.options.conferences.length===1)
@@ -788,10 +802,6 @@ define(['app', 'lodash',
 
 
                             $scope.options.requirements = $scope.options.conferenceObj.schedule.sideEvents.requirements || {}
-
-
-                            if(!$scope.doc?.requirements?.hybrid?.platform)
-                                $scope.doc.requirements.hybrid.platform = $scope.options.requirements.selectedHybridPlatform
                         } // init
 
                         function isExcludedDay(day){
@@ -1547,9 +1557,9 @@ define(['app', 'lodash',
                         }
                         $scope.getSelectedOtherLangs= function(g) {
                             
-                            if(!$scope.doc?.requirements?.hybrid?.interpretation?.langs) $scope.doc.requirements.hybrid.interpretation.langs = {}
+                            if(!$scope.doc?.requirements?.interpretationLangs) $scope.doc.requirements.interpretationLangs = {}
 
-                            const langs = Object.keys($scope.doc.requirements.hybrid.interpretation.langs)
+                            const langs = Object.keys($scope.doc.requirements.interpretationLangs)
 
                             return Array.from(new Set([...langs, ...defaultLangs].sort(sortByName)))
                         }

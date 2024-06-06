@@ -517,6 +517,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //============================================================
         function loadDates() {
 
+            if(!_ctrl.conference && !_ctrl.confObj) return;
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
             }
