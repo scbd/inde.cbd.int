@@ -319,7 +319,7 @@ border-top-color: transparent !important;
                       <input id="editForm.meetings" type="hidden" ng-model="doc.meetings" name="meetings" required/>
                       <div ng-repeat="meeting in options.meetingsFiltered"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
                         <i class="fa fa-check-square-o" ng-show="options.meetingsFiltered[$index].selected" ></i>
-                        <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.EVT_CD}}
+                        <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.titleShort || meeting.EVT_CD}}
                       </div>
                     </div>
 
@@ -403,11 +403,24 @@ border-top-color: transparent !important;
               <div ng-click="doc.requirements.catering=!doc.requirements.catering;" ng-show="options.requirements.catering" class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="cursor: pointer;">
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
-              <div ng-click="doc.requirements.hybrid=!doc.requirements.hybrid;"  ng-show="options.requirements.hybrid" class="col-xl-4 col-lg-4 col-md-12 col-xs-12" style="cursor: pointer;"">
-                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
+
+              <div ng-click="doc.requirements.streaming=!doc.requirements.streaming;" ng-show="options.requirements.streaming" class="col-md-12 col-xs-12" style="cursor: pointer;">
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.streaming"></i><i class="fa fa-square-o" ng-show="!doc.requirements.streaming"></i> Streaming</span> 
+                <div ng-if="options.requirements.streaming && doc.requirements.streaming && (options.requirements.streamingWarningTitle || options.requirements.streamingWarningBody)" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+                  <strong>{{options.requirements.streamingWarningTitle}}</strong>
+                  <div>{{options.requirements.streamingWarningBody}}</div>
+                </div>
               </div>
-              
-              <div ng-show="doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
+
+              <div ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"  ng-show="options.requirements.hybrid" class="col-md-12 col-xs-12" style="cursor: pointer;"">
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
+                <div ng-if="doc.requirements.hybrid.required && !options.requirements.hybridPlatforms.length" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+                  <strong>{{options.requirements.hybridWarningTitle}}</strong>
+                  <div>{{options.requirements.hybridWarningBody}}</div>
+                </div>
+              </div>
+
+              <div ng-show="doc.requirements.hybrid && options.requirements.hybridPlatforms.length" class="col-md-12 col-xs-12">
                 Platform: <span class="muted small">(at your own expense)</span>
 
                 <select  class="form-control" ng-model="doc.requirements.hybrid.platform" name="platform" ng-disabled="options.requirements.hybridPlatforms.length===1">
@@ -415,56 +428,58 @@ border-top-color: transparent !important;
                 </select>
               </div>
 
-              <div ng-if="options.requirements.translationHybrid && doc.requirements.hybrid.required" class="col-xl-4 col-lg-4 col-md-12 col-xs-12">
-                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.interpretation.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.interpretation.required"></i> Hybrid Interpretation  <span class="small muted">(at your own expense)</span></span>
-                <span ng-if="options.requirements.hybridTranslationLanguageLimit && doc.requirements.hybrid.interpretation.required" class="small muted"> <br>(The maximum languages permitted is {{options.requirements.hybridTranslationLanguageLimit}})</span>
+              <div ng-click="doc.requirements.interpretation=!doc.requirements.interpretation;"  ng-show="options.requirements.interpretation" class="col-md-12 col-xs-12" style="cursor: pointer;">
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation <span class="muted small"></span></span>
               </div>
 
-              <div ng-if="options.requirements.translationHybrid && doc.requirements.hybrid.interpretation.required" class="col-xl-8 col-lg-8 col-md-12 col-xs-12">
-                Languages:
-                <div class="panel panel-default">
-                  <div class="panel-body">
-                    <div ng-repeat="lang in getSelectedOtherLangs() track by $index"  class="pointer col-xl-4 col-lg-4 col-md-12 col-xs-12" >
-                      <i class="fa fa-check-square-o" ng-show="isLangSelected(lang)" ></i> 
-                      <i class="fa fa-square-o" ng-show="!isLangSelected(lang)" ></i> {{languageNameEnglish(lang)}}
-                    </div>
-                    <div class="col-xs-12">
-                      <div class="form-inline">
-                        <div class="form-group">
-                          <select  ng-model="options.requirements.selectedLang" class="form-control"  name="lang" >
-                            <option  value="" ng-selected="true" >Other Language</option>
-                            <option ng-repeat="lang in getUnselectedLang()" ng-value="lang.identifier" >{{lang.title.en}}</option>
-                          </select>
-                        </div>
-                        <button ng-disabled="true" class="btn btn-default" ng-click="addSelectedLang(options.requirements.selectedLang, $event)"><i class="fa fa-plus" ></i></button>
-                      </div>
-                    </div>
-                  </div>
+              <div ng-if="doc.requirements.interpretation" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+                <strong>{{options.requirements.interpretationWarningTitle}}</strong>
+                <div>{{options.requirements.interpretationWarningBody}}</div>
+              </div>
+              
+              <div  ng-show="doc.requirements.interpretation" class="col-xs-offset-1 col-xs-11" style="cursor: pointer;">
+                <div>Preferred method of interpretation:</div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" ng-model="doc.requirements.interpretationType" name="online" id="online" value="online" checked>
+                    Online
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" ng-model="doc.requirements.interpretationType" name="onsite" id="onsite" value="onsite">
+                    On Site
+                  </label>
                 </div>
               </div>
 
-              <div ng-if="options.requirements.translationInPerson" class="col-xl-9 col-lg-9 col-md-12 col-xs-12">
+              <div ng-if="doc.requirements.interpretationType" class="col-xs-offset-1 col-xs-4">
+                <div>Languages:</div>
                 <div class="panel panel-default">
                   <div class="panel-body">
-                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.ar = !doc.requirements.interpretation.langs.ar">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.ar" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.ar" ></i> Arabic
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.ar = !doc.requirements.interpretationLangs.ar">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.ar" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.ar" ></i> Arabic
                     </div>
-                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.es =!doc.requirements.interpretation.langs.es">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.es" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.es" ></i> Spanish
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.es =!doc.requirements.interpretationLangs.es">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.es" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.es" ></i> Spanish
                     </div>
-                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.fr =!doc.requirements.interpretation.langs.fr">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.fr" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.fr" ></i> French
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.fr =!doc.requirements.interpretationLangs.fr">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.fr" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.fr" ></i> French
                     </div>
-                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.ru =!doc.requirements.interpretation.langs.ru">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.ru" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.ru" ></i> Russian
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.ru =!doc.requirements.interpretationLangs.ru">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.ru" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.ru" ></i> Russian
                     </div>
-                    <div class="pointer" ng-click="doc.requirements.interpretation.langs.zh =!doc.requirements.interpretation.langs.zh">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation.langs.zh" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretation.langs.zh" ></i> Chinese
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.zh =!doc.requirements.interpretationLangs.zh">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.zh" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.zh" ></i> Chinese
+                    </div>
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.en =!doc.requirements.interpretationLangs.en">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.en" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.en" ></i> English
                     </div>
                   </div>
                 </div>
