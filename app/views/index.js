@@ -483,6 +483,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
           const force = _ctrl.multipleSideEventsPublished;
 
           for (const aConference of _ctrl.conferences) {
+  
               const { sideEventsPublished } = aConference?.schedule?.sideEvents || {};
 
               if(!sideEventsPublished && !force) continue;
@@ -517,6 +518,7 @@ define(['app', 'lodash', 'moment','text!./ouical-dialog.html', 'directives/mobi-
         //============================================================
         function loadDates() {
 
+            if(!_ctrl.conference && !_ctrl.confObj) return;
             if(!_ctrl.confObj){
               _ctrl.confObj = _.find(_ctrl.conferences,{'_id':_ctrl.conference});
             }

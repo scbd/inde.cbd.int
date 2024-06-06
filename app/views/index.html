@@ -32,10 +32,7 @@
             <div class="clearfix"></div>
         </div>
     </div>
-    <!-- <cbd-article query="articleNoticeQuery" ng-if="articleNoticeQuery" on-load="onArticleLoad(article)" hide-cover-image="true"></cbd-article> -->
     <cbd-article query="articleQuery" ng-if="articleQuery"  hide-cover-image=""></cbd-article>
-
-
 
 
 <reg-open></reg-open>
@@ -98,16 +95,7 @@
         </div>
         <div class="row hidden-print" ng-hide="!indexCtrl.advanced" style="padding: 0 10px 0 10px;">
             <br>
-            <!-- <div class="col-lg-3 col-md-3 col-xs-12">
-                <select class="form-control" ng-model="indexCtrl.conference" name="conference" ng-change="onPage(0)">
-                    <option ng-repeat="docObj in indexCtrl.conferences" value="{{docObj._id}}" ng-if="indexCtrl.isPastConfrence(docObj._id)" ng-selected="docObj.selected">{{docObj.Title.en}} </option>
-                </select>
-            </div>
-            <div class="col-lg-4 col-md-4 col-xs-12 hidden-print">
 
-                &nbsp;
-
-            </div> -->
         <div class="col-xs-12 hidden-print">
             <ui-select multiple ng-model="indexCtrl.hostOrgsSelected" close-on-select="true" append-to-body="true" title=" " spinner-enabled="true">
                 <ui-select-match placeholder="Host Party or Org. Search">{{$item.acronym || $item.title}}</ui-select-match>
@@ -130,14 +118,7 @@
         <hr class="hidden-print">
 
         <div style="margin-top:6px;">
-            <!-- <div class="col-xs-12 col-lg-6">
-          <span style="padding-left:17px;">Showing
-            <span class="badge">{{filtered.length}}</span> Side Events</span>
-        </div> -->
-            <!-- <div class="col-xs-12  col-md-6 col-lg-6" style="padding-right:17px;">
-          <span class="text-right" style="padding-right:17px;">
-            <span class="badge">{{filtered.length}}</span> Side Events in Total</span>
-        </div> -->
+
             <pagination class="hidden-print" pages="indexCtrl.pages" page-count="5" current-page="indexCtrl.currentPage" items-per-page="indexCtrl.itemsPerPage" filtered="filtered" search="indexCtrl.search" pages="indexCtrl.pages" on-page="indexCtrl.onPage(pageIndex)"
                 count="indexCtrl.count">
             </pagination>
@@ -168,9 +149,7 @@
                         <hr style="margin: 5px 0 5px 0;" class="hidden-print">
                         <share doc="doc.sideEvent" class="hidden-print"></share>
                     </td>
-                    <!-- <td style="cursor:pointer;" nowrap>
-              <strong>{{doc.room.title}}</strong>
-              <br>{{doc.room.location}}</td>-->
+
                     <td>
                         <span><a href="{{doc.sideEvent.id}}">{{doc.sideEvent.title || doc.title}}</a></span>
                         <br>
@@ -205,9 +184,6 @@
                                 <span ng-repeat="subj in doc.sideEvent.targets" >
                                   <a ng-href="{{indexCtrl.aichiLink(subj)}}"><img ng-src="{{indexCtrl.aichiImgLink(subj)}}" style="height:20px"></img></a>
                                 </span>
-                                <!-- <span class="pull-right" ng-if="!doc.sideEvent.targets.length" style="color:red;">No Aichi Biodiversity Targets Linked</span> -->
-
-
 
 
                             </div>
@@ -222,12 +198,4 @@
         </div>
     </div>
 </div>
-<!-- side event rooms -->
-<div class="row hidden-print" id="rooms" ng-if="indexCtrl.confObj.schedule.sideEvents.showRooms">
-    <div class="col-xs-12 text-center">
-        <h3 style="background-color:#fff;">Rooms</h3>
-        <h5 style="background-color:#fff;">({{indexCtrl.venueObj.title}})</h5>
-        <hr>
-    </div>
-    <room-table class="hidden-print" conf-obj="indexCtrl.confObj" ng-if="false"> </room-table>
-</div>
+
