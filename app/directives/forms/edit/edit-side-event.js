@@ -712,7 +712,7 @@ define(['app', 'lodash',
                                     if (!$scope.doc.prefDateTime)$scope.doc.prefDateTime={};
                                     if (!$scope.doc.prefDate)$scope.doc.prefDate={};
                                     if(!$scope.doc.requirements) $scope.doc.requirements={}
-                                    if(!$scope.doc.requirements.hybrid) $scope.doc.requirements.hybrid={}
+                                    if(!$scope.doc.requirements.hybrid) $scope.doc.requirements.hybrid={};
 
                                     $scope.options.conferenceObj = getSelectedConference();
                                     setSelectedConference($scope.options.conferenceObj);
@@ -790,8 +790,8 @@ define(['app', 'lodash',
                             $scope.options.requirements = $scope.options.conferenceObj.schedule.sideEvents.requirements || {}
 
 
-                            if(!$scope.doc?.requirements?.hybrid?.platform)
-                                $scope.doc.requirements.hybrid.platform = $scope.options.requirements.selectedHybridPlatform
+                            // if(!$scope.doc?.requirements?.hybrid?.platform)
+                            //     $scope.doc.requirements.hybrid.platform = $scope.options.requirements.selectedHybridPlatform
                         } // init
 
                         function isExcludedDay(day){
@@ -1547,9 +1547,9 @@ define(['app', 'lodash',
                         }
                         $scope.getSelectedOtherLangs= function(g) {
                             
-                            if(!$scope.doc?.requirements?.hybrid?.interpretation?.langs) $scope.doc.requirements.hybrid.interpretation.langs = {}
+                            if(!$scope.doc?.requirements?.interpretationLangs) $scope.doc.requirements.interpretationLangs = {}
 
-                            const langs = Object.keys($scope.doc.requirements.hybrid.interpretation.langs)
+                            const langs = Object.keys($scope.doc.requirements.interpretationLangs)
 
                             return Array.from(new Set([...langs, ...defaultLangs].sort(sortByName)))
                         }
