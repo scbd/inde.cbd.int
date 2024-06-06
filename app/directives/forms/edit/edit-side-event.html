@@ -319,7 +319,7 @@ border-top-color: transparent !important;
                       <input id="editForm.meetings" type="hidden" ng-model="doc.meetings" name="meetings" required/>
                       <div ng-repeat="meeting in options.meetingsFiltered"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
                         <i class="fa fa-check-square-o" ng-show="options.meetingsFiltered[$index].selected" ></i>
-                        <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.EVT_CD}}
+                        <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.titleShort || meeting.EVT_CD}}
                       </div>
                     </div>
 
@@ -404,12 +404,19 @@ border-top-color: transparent !important;
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.catering"></i><i class="fa fa-square-o" ng-show="!doc.requirements.catering"></i> Catering </span> <span class="muted small">(at your own expense)</span>
               </div>
 
+              <div ng-click="doc.requirements.streaming=!doc.requirements.streaming;" ng-show="options.requirements.streaming" class="col-md-12 col-xs-12" style="cursor: pointer;">
+                <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.streaming"></i><i class="fa fa-square-o" ng-show="!doc.requirements.streaming"></i> Streaming</span> 
+                <div ng-if="options.requirements.streaming && doc.requirements.streaming && (options.requirements.streamingWarningTitle || options.requirements.streamingWarningBody)" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+                  <strong>{{options.requirements.streamingWarningTitle}}</strong>
+                  <div>{{options.requirements.streamingWarningBody}}</div>
+                </div>
+              </div>
+
               <div ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"  ng-show="options.requirements.hybrid" class="col-md-12 col-xs-12" style="cursor: pointer;"">
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
                 <div ng-if="doc.requirements.hybrid.required && !options.requirements.hybridPlatforms.length" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
-                  <strong>Platform Not Provided</strong>
-                  <div>Platforms will not be provided for hybrid. You will be responsible for the online services.</div>
-                  <div>A link to your service must be provided 2 weeks prior to your scheduled side-event.   By choosing this option you agree to provide the service and the link in advance.</div>
+                  <strong>{{options.requirements.hybridWarningTitle}}</strong>
+                  <div>{{options.requirements.hybridWarningBody}}</div>
                 </div>
               </div>
 
@@ -426,8 +433,8 @@ border-top-color: transparent !important;
               </div>
 
               <div ng-if="doc.requirements.interpretation" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
-                <strong>$100 dollar fee required</strong>
-                <div>By requesting interpretation you agree to pay the fee on demand upon scheduling of your requested side-event.</div>
+                <strong>{{options.requirements.interpretationWarningTitle}}</strong>
+                <div>{{options.requirements.interpretationWarningBody}}</div>
               </div>
               
               <div  ng-show="doc.requirements.interpretation" class="col-xs-offset-1 col-xs-11" style="cursor: pointer;">
@@ -469,6 +476,10 @@ border-top-color: transparent !important;
                     <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.zh =!doc.requirements.interpretationLangs.zh">
                       <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.zh" ></i>
                       <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.zh" ></i> Chinese
+                    </div>
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.en =!doc.requirements.interpretationLangs.en">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.en" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.en" ></i> English
                     </div>
                   </div>
                 </div>
