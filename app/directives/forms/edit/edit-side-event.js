@@ -44,7 +44,9 @@ define(['app', 'lodash',
                         });
 
                         $scope.$watch('doc.meetings', function() {
-                            if ($scope.doc.meetings) generateDates();
+                            if ($scope.doc.meetings && $scope.doc.conference) {
+                                $timeout(()=>generateDates(), 500);
+                            }
                         });
 
                         $scope.$watch('doc.hostOrgs', function() {
@@ -559,13 +561,20 @@ define(['app', 'lodash',
                         //
                         //=======================================================================
                         $scope.selectMeeting = function(docObj) {
+                            if(!$scope.isAdmin)return
+                            
+                            
                             $timeout(function() {
+                                $timeout(()=>initSelectedDates(), 100);
+
                                 _.each($scope.options.meetingsFiltered, function(meeting) {
                                     meeting.selected = false;
                                     if(docObj._id === meeting._id){
                                         meeting.selected = true;
                                         $scope.doc.meetings = [docObj._id]
+                                        $scope.meetingId = docObj._id;
                                     }
+
                                 });
                             });
                         }; // archiveOrg
@@ -630,10 +639,14 @@ define(['app', 'lodash',
                                             
                                             $scope.options.conferenceObj = getSelectedConference($scope.doc.conference);
                                             setSelectedConference($scope.options.conferenceObj)
+                                            $timeout(()=>initSelectedDates(), 500);
 
                                             setMeetingsFilteredOption();
 
-                                            $timeout(()=>initSelectedDates(), 1000);
+                                            if($scope?.doc?.meetings?.length)
+                                            $scope.selectMeeting({_id: $scope.doc.meetings[0]});
+
+                                            // $timeout(()=>initSelectedDates(), 1500);
 
                                             if (!$scope.doc.hostOrgs)
                                                 $scope.doc.hostOrgs = [];
@@ -681,8 +694,8 @@ define(['app', 'lodash',
                                                 }
                                               );
 
-                                              $timeout(()=>initSelectedDates(), 500);
-                                              
+                                            //    $timeout(()=>generateDates(), 1500);
+                                            //   setMeetingsFilteredOption();
 
                                         }).catch(onError);
                                 } else {
@@ -720,7 +733,7 @@ define(['app', 'lodash',
                                     $scope.preFill=false;
                                     $scope.loading=false;
 
-                                    initSelectedDates();
+                                    $timeout(()=>initSelectedDates(), 500);
 
                                     setMeetingsFilteredOption();
                                 }
@@ -748,15 +761,16 @@ define(['app', 'lodash',
                             if(!$scope.options.conferenceObj || !$scope.options.conferenceObj.meetings) throw new Error('getStartEndDates: No conference or meetings found');
 
 
-                            let start = moment($scope.options.conferenceObj.StartDate);
+                            let start = moment($scope.options.conferenceObj.StartDate).utc();
                             let end   = moment($scope.options.conferenceObj.EndDate);
 
                             for (const aMeeting of $scope.options.conferenceObj.meetings) {
-                                const meetingStart = moment(aMeeting.EVT_FROM_DT);
+                                const meetingStart = moment(aMeeting.EVT_FROM_DT).utc();
                                 const meetingEnd   = moment(aMeeting.EVT_TO_DT);
 
                                 if(meetingStart.isBefore(start)) start = meetingStart;
                                 if(meetingEnd.isAfter(end)) end = meetingEnd;
+
                             }
 
                             return { start, end };
@@ -772,17 +786,20 @@ define(['app', 'lodash',
                             if (!$scope.options)       $scope.options = {};
                             if (!$scope.options.dates) $scope.options.dates = [];
 
+                            //$scope.selectMeeting($scope.doc);
+
+                          
                             $scope.options.dates = [];
 
                             const { start, end } = getStartEndDates();
-                            const diff           = Number(moment(end).format('X')) - Number(moment(start).format('X'));
-                            const numDays        = Math.ceil(diff / 86400) + 2;
+
+                            const duration       = moment.duration(end.diff(start));
+                            const numDays        = Math.ceil(duration.asDays());
 
                             let startDate = start;
 
                             
                             const { sideEventVisibleDays } = $scope.options.conferenceObj.schedule.sideEvents;
-
 
                             for (var i = 0; i < numDays; i++) {
                                 if(sideEventVisibleDays.includes(startDate.day()) && isMeetingDay(startDate))
@@ -801,7 +818,7 @@ define(['app', 'lodash',
 
 
 
-                            $scope.options.requirements = $scope.options.conferenceObj.schedule.sideEvents.requirements || {}
+                            $scope.options.requirements = $scope?.options?.conferenceObj?.schedule?.sideEvents?.requirements || {}
                         } // init
 
                         function isExcludedDay(day){
@@ -838,32 +855,34 @@ define(['app', 'lodash',
                         //============================================================
                         function isMeetingDay(day) {
 
-                            if(!$scope.options.conferenceObj)
-                              $scope.options.conferenceObj = _.find($scope.options.conferences, {
-                                  _id: $scope.doc.conference
-                              });
+                            const conferenceObject = getConferenceObject();
 
-                            if(!$scope.meetingObj)
-                              if($scope.meetingId)
-                                $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
-                                   _id: $scope.meetingId
-                                });
-                              else
-                              if($scope.doc.meetings && $scope.doc.meetings.length && !isAdmin())
-                                for (var i = 0; i < $scope.doc.meetings.length; i++) {
-                                  $scope.meetingObj =_.find($scope.options.conferenceObj.meetings, {
-                                     _id: $scope.doc.meetings[i]
-                                  });
-                                  if($scope.meetingObj) break;
-                                }
+                            if($scope.meetingId)
+                                $scope.meetingObj = _.find($scope.options.conferenceObj.meetings, { _id: $scope.meetingId });
 
                             if($scope.meetingObj)
-                                return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
+                                return day.isBetween(moment($scope.meetingObj.EVT_FROM_DT).subtract(1, 'day'), moment($scope.meetingObj.EVT_TO_DT).add(1, 'days'));
                             else if($scope.options.conferenceObj)
-                                return day.isBetween(moment.utc($scope.options.conferenceObj.StartDate).subtract(1, 'days'), moment.utc($scope.options.conferenceObj.EndDate).add(1, 'days'));
+                                return day.isBetween(moment($scope.options.conferenceObj.StartDate).subtract(1, 'day'), moment($scope.options.conferenceObj.EndDate).utc());
                             else false
                         } // init
 
+                        function getConferenceObject(){
+                            if(!$scope.doc.conference) throw new Error('No conference selected');
+
+                            const conferenceObj = _.find($scope.options.conferences, { _id: $scope.doc.conference });
+
+                            if(!conferenceObj) throw new Error('No conference found');
+
+            
+                            $scope.options.conferenceObj = conferenceObj;
+
+                            return conferenceObj
+                        }
+
+                        function getMeetingObject(){
+
+                        }
                         //============================================================
                         //
                         //============================================================
