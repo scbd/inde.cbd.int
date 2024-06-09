@@ -6,7 +6,9 @@
       border-color: #a94442;
       padding-left: 10px;
     }
-
+.not-allowed{
+  cursor:not-allowed
+}
     .label {
       padding-top: 5px;
     }
@@ -317,7 +319,7 @@ border-top-color: transparent !important;
                   <div class="panel panel-default" ng-class="{'has-error': ((doc.meetings.length === 0 || editForm.meetings.$invalid) && editForm.$submitted)}">
                     <div class="panel-body" >
                       <input id="editForm.meetings" type="hidden" ng-model="doc.meetings" name="meetings" required/>
-                      <div ng-repeat="meeting in options.meetingsFiltered"  class="pointer" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
+                      <div ng-repeat="meeting in options.meetingsFiltered"  ng-class="{pointer:isAdmin(), 'not-allowed': !isAdmin()}" ng-click="selectMeeting(meeting)" ng-show="options.meetingsFiltered[$index].selected || !hasMeetingIdQueryParam">
                         <i class="fa fa-check-square-o" ng-show="options.meetingsFiltered[$index].selected" ></i>
                         <i class="fa fa-square-o" ng-show="!options.meetingsFiltered[$index].selected" ></i> {{meeting.titleShort || meeting.EVT_CD}}
                       </div>
@@ -461,9 +463,13 @@ border-top-color: transparent !important;
                       <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.ar" ></i>
                       <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.ar" ></i> Arabic
                     </div>
-                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.es =!doc.requirements.interpretationLangs.es">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.es" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.es" ></i> Spanish
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.zh =!doc.requirements.interpretationLangs.zh">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.zh" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.zh" ></i> Chinese
+                    </div>
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.en =!doc.requirements.interpretationLangs.en">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.en" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.en" ></i> English
                     </div>
                     <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.fr =!doc.requirements.interpretationLangs.fr">
                       <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.fr" ></i>
@@ -473,13 +479,9 @@ border-top-color: transparent !important;
                       <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.ru" ></i>
                       <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.ru" ></i> Russian
                     </div>
-                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.zh =!doc.requirements.interpretationLangs.zh">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.zh" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.zh" ></i> Chinese
-                    </div>
-                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.en =!doc.requirements.interpretationLangs.en">
-                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.en" ></i>
-                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.en" ></i> English
+                    <div class="pointer col-xs-4" ng-click="doc.requirements.interpretationLangs.es =!doc.requirements.interpretationLangs.es">
+                      <i class="fa fa-check-square-o" ng-show="doc.requirements.interpretationLangs.es" ></i>
+                      <i class="fa fa-square-o" ng-show="!doc.requirements.interpretationLangs.es" ></i> Spanish
                     </div>
                   </div>
                 </div>
