@@ -124,9 +124,11 @@ function setMeetings(res){
 
   for (var i = meetings.length-1; i >=0; i--) {
     var parentConference = getConference(meetings[i]._id)
+console.log('this.$location.host()', this.$location.host())
+console.log('this.$location.host()', this.$location.path())
 
     const isProd = this.$location.host().includes('cbd.int') && this.$location.path().startsWith('/side-events')
-    const base = isProd? '/side-events' : ''
+    const base = !isProd? '/side-events' : ''
     const href = `${base}/manage/events/new?meetingId=${meetings[i]._id}`
 
 
