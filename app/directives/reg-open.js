@@ -1,10 +1,11 @@
-define(['app', 'text!./reg-open.html','lodash', 'moment',], loadGlobalModules)
+define(['app', 'angular','text!./reg-open.html','lodash', 'moment',], loadGlobalModules)
 
 // requirejs global modules
-function loadGlobalModules(app, template, _, moment) {
+function loadGlobalModules(app,ng, template, _, moment) {
   this.template = template
   this._        = _
   this.moment   = moment
+  this.ng = ng;
 	app.directive('regOpen', ['$http','$location', directive.bind(this) ]);
 }
 
@@ -124,11 +125,11 @@ function setMeetings(res){
 
   for (var i = meetings.length-1; i >=0; i--) {
     var parentConference = getConference(meetings[i]._id)
-console.log('this.$location.host()', this.$location.host())
-console.log('this.$location.host()', this.$location.path())
 
-    const isProd = this.$location.host().includes('cbd.int') && this.$location.path().startsWith('/side-events')
-    const base = !isProd? '/side-events' : ''
+    const basePath = (ng.element('base').attr('href')||'').replace(/\/+$/g, '');
+
+    const isProd = this.$location.host().includes('cbd.int') && basePath.startsWith('/side-events')
+    const base = isProd? '/side-events' : ''
     const href = `${base}/manage/events/new?meetingId=${meetings[i]._id}`
 
 

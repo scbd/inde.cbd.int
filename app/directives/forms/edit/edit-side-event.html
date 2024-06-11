@@ -416,12 +416,17 @@ border-top-color: transparent !important;
 
               <div ng-click="doc.requirements.hybrid.required=!doc.requirements.hybrid.required;"  ng-show="options.requirements.hybrid" class="col-md-12 col-xs-12" style="cursor: pointer;"">
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.hybrid.required"></i><i class="fa fa-square-o" ng-show="!doc.requirements.hybrid.required"></i> Hybrid <span class="muted small">(in-person and online)</span></span>
-                <div ng-if="doc.requirements.hybrid.required && !options.requirements.hybridPlatforms.length" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+                <div ng-if="doc.requirements.hybrid.required && !options.requirements.hybridPlatforms.length && (options.requirements.hybridWarningTitle || options.requirements.hybridWarningBody)" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
                   <strong>{{options.requirements.hybridWarningTitle}}</strong>
                   <div>{{options.requirements.hybridWarningBody}}</div>
                 </div>
-              </div>
 
+              </div>
+              <div  ng-if="doc.requirements.hybrid.required" class="col-xs-offset-1 col-xs-11">
+                <div>Please indicate which service platform you will use:
+                </div>
+                <input class="form-control" type="text" ng-model="doc.requirements.userSpecifiedPlatform"/>
+              </div>
               <div ng-show="doc.requirements.hybrid && options.requirements.hybridPlatforms.length" class="col-md-12 col-xs-12">
                 Platform: <span class="muted small">(at your own expense)</span>
 
@@ -434,7 +439,7 @@ border-top-color: transparent !important;
                 <span ><i class="fa fa-check-square-o" ng-show="doc.requirements.interpretation"></i><i class="fa fa-square-o" ng-show="!doc.requirements.interpretation"></i> Interpretation <span class="muted small"></span></span>
               </div>
 
-              <div ng-if="doc.requirements.interpretation" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
+              <div ng-if="doc.requirements.interpretation && (options.requirements.interpretationWarningTitle || interpretationWarningBody)" class="col-xs-offset-1 col-xs-11 alert alert-warning" >
                 <strong>{{options.requirements.interpretationWarningTitle}}</strong>
                 <div>{{options.requirements.interpretationWarningBody}}</div>
               </div>
@@ -455,7 +460,7 @@ border-top-color: transparent !important;
                 </div>
               </div>
 
-              <div ng-if="doc.requirements.interpretationType" class="col-xs-offset-1 col-xs-4">
+              <div ng-if="doc.requirements.interpretationType && doc.requirements.interpretation" class="col-xs-offset-1 col-xs-4">
                 <div>Languages:</div>
                 <div class="panel panel-default">
                   <div class="panel-body">
