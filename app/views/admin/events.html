@@ -476,7 +476,15 @@
                 <br> {{doc.prefDate.three}} {{doc.prefDateTime.one}}
                 <br>
                 <hr ng-if="doc.prefDate.one && doc.prefDateTime.one">
-                <span ng-repeat="(key,value) in doc.requirements">{{key}}<span ng-show="!$last">, </span></span>
+                <span ng-repeat="(key,value) in doc.requirements" ng-if="!['other','hybrid','interpretation', 'interpretationType', 'interpretationLangs'].includes(key)">{{key}}<span ng-show="!$last">, </span></span>
+                <div>
+                  <p ng-if="doc.requirements.other"> 
+                    Other: {{doc.requirements.other}}
+                  </p>
+                  <span class="badge" ng-if="doc.requirements.hybrid.required"> Hybrid</span>
+                  <span class="badge" ng-if="doc.requirements.interpretationType"> Interpretation Type: {{doc.requirements.interpretationType}}</span>
+                  <span class="badge" ng-if="doc.requirements.interpretationLangs"> Languages: {{displayLang(doc.requirements.interpretationLangs)}}</span>
+                </div>
             </div>
             <div class="col-lg-2 col-md-2">
 

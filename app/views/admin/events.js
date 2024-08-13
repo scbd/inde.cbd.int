@@ -497,18 +497,70 @@ define(['app', 'lodash',
               if(!row.prefDate || !row.prefDateTime || _.isEmpty(row.prefDate) ||_.isEmpty(row.prefDateTime)) return;
               return row.prefDate.three+' ['+row.prefDateTime.three+']';
             }
+            
+            function requirementsInterpretationCVS(requirements) {
+
+              let returnString ='';
+              if(!requirements || _.isEmpty(requirements)) return '';
+
+              for (const prop in requirements) { 
+                
+                if(prop!=='interpretationType') continue;
+
+                returnString+= `${requirements[prop]}`;
+              }
+
+            return returnString;
+          }
+
+          function requirementsI18nCVS(requirements) {
+
+            let returnString ='';
+            if(!requirements || _.isEmpty(requirements)) return '';
+
+            for (const prop in requirements)
+              if(prop === 'interpretationLangs') 
+                returnString+= `${Object.keys(requirements[prop]).join(',')}`;
+            
+
+          return returnString;
+        }
+
+            function requirementsHybridCVS(requirements) {
+             
+              let returnString ='';
+              if(!requirements || _.isEmpty(requirements)) return '';
+
+              for (const prop in requirements) {
+                
+                if(prop!=='hybrid') continue;
+                if(!requirements[prop]?.required)continue
+
+                returnString+= `true`;
+              }
+
+            return returnString;
+          }
+
             //=======================================================================
             //
             //=======================================================================
-            function requirementsCVS(reqs) {
-                var returnString ='';
-                if(!reqs || _.isEmpty(reqs)) return '';
+            function requirementsCVS(requirements) {
 
-                _.each(reqs,function(req,index){
-                  if(req)
-                    returnString += index+', ';
-                });
-              returnString=returnString.slice(0, -2);
+                let returnString ='';
+                if(!requirements || _.isEmpty(requirements)) return '';
+
+                for (const prop in requirements) { //|| prop==='interpretation'
+
+                  if(prop==='interpretation' || prop==='hybrid' || prop==="interpretationType" ||prop==='interpretationLangs' ) continue;
+
+                  if(prop==='other' )
+                    returnString+= `${prop}=${requirements[prop]},`;
+                  else 
+                    returnString+= `${prop}=true,`;
+                }
+
+              returnString=returnString.slice(0, -1);
               return returnString;
             }
 
@@ -630,6 +682,10 @@ define(['app', 'lodash',
               cvsRow.push(cleanCell(preferredDate3CVS(row)));
 
               cvsRow.push(cleanCell(requirementsCVS(row.requirements)));
+              cvsRow.push(cleanCell(requirementsHybridCVS(row.requirements)));
+              cvsRow.push(cleanCell(requirementsInterpretationCVS(row.requirements)));
+              cvsRow.push(cleanCell(requirementsI18nCVS(row.requirements)));
+
               cvsRow.push(cleanCell(hostOrgsCVS(row.hostOrgs)));
               cvsRow.push(cleanCell(contactCVS(row.contact)));
               cvsRow.push(cleanCell(resPersonCVS(row.responsible)));
@@ -675,7 +731,7 @@ define(['app', 'lodash',
               return mongoStorage.loadDocs($scope.schema,q, 0,1000000,1,$scope.sort,fields,true).then(
                 function(responce){
                     var cvsRowHeader = ['ID','Status','Title','Description','Subjects','Meetings','# Participants',
-                                        'Preferred Date 1','Preferred Date 2','Preferred Date 3','Requirements','Host Organizations','Contact','Responsible Person',
+                                        'Preferred Date 1','Preferred Date 2','Preferred Date 3','Requirements','Hybrid','Interpretation','Languages','Host Organizations','Contact','Responsible Person',
                                         'Org Contacts','Created','Modified','History','Notes'];
                     $scope.cvsDataRaw=responce.data;
                     $scope.cvsData=[];
@@ -1010,6 +1066,11 @@ define(['app', 'lodash',
                 }).catch(onError);
             }
 
+            $scope.displayLang = (langObject)=>{
+              if(!langObject || !_.isPlainObject(langObject)) return;
+
+              return Object.keys(langObject).join(', ').toUpperCase();
+            }
             //=======================================================================
             //
             //=======================================================================
