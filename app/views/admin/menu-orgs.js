@@ -122,7 +122,7 @@ app.factory("adminOrgMenu", ['scbdMenuService', function(scbdMenuService) {
               roles:['Administrator','IndeAdministrator'],
             },
             {
-              name: 'Rejected',
+              name: 'Waiting List',
               type: 'link',
               path: '',
               mdIcon: 'view_module',

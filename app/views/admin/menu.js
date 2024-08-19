@@ -71,7 +71,7 @@ define(['app', 'lodash', 'directives/side-menu/scbd-side-menu'], function(app, _
                     mdIcon: 'thumbs_up_down',
 
                 }, {
-                    name: 'Rejected',
+                    name: 'Waiting List',
                     type: 'link',
                     path: '',
                     mdIcon: 'view_module',
