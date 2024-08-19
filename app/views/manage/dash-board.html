@@ -81,9 +81,9 @@ background-color: #f5f5f5;
                 <span class="title">Archived</span >
                 <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facets.archived}}</span>
               </div>
-              <div ng-if="facets.rejected" class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/manage/events','chip=rejected',facets.rejected)">
-                <span class="title">Rejected</span>
-                <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
+              <div ng-if="facets.rejected" class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facets.rejected}" ng-click="goTo('/manage/events','chip=rejected',facets.rejected)">
+                <span class="title">Waiting List</span>
+                <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facets.rejected}}</span>
               </div>
 
             </div>
@@ -131,9 +131,9 @@ background-color: #f5f5f5;
                   <span class="title">Archived</span>
                   <span class="label label-pill label-info pull-right middle" style="margin-top:3px;">{{facetsO.archived}}</span>
                 </div>
-                <div ng-if="facetsO.rejected" class="bs-callout bs-callout-danger" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/manage/organizations','chip=rejected',facetsO.rejected)">
-                  <span class="title">Rejected</span>
-                  <span class="label label-pill label-danger pull-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
+                <div ng-if="facetsO.rejected" class="bs-callout bs-callout-success" ng-class="{'bs-callout-btn':facetsO.rejected}" ng-click="goTo('/manage/organizations','chip=rejected',facetsO.rejected)">
+                  <span class="title">Waiting List</span>
+                  <span class="label label-pill label-success pull-right middle" style="margin-top:3px;">{{facetsO.rejected}}</span>
                 </div>
             </div>
             <div class="panel-footer text-right">

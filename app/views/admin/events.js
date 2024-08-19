@@ -186,7 +186,7 @@ define(['app', 'lodash',
                 dashMenu.setPathOfLink($scope.menu, 'Canceled', function() {
                     selectChip('canceled');
                 });
-                dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
+                dashMenu.setPathOfLink($scope.menu, 'Waiting List', function() {
                     selectChip('rejected');
                 });
             }
@@ -317,7 +317,7 @@ define(['app', 'lodash',
                 mongoStorage.rejectDoc($scope.schema, cleanDoc(docObj), docObj._id)
                     .then(function() {
                       loadList($scope.currentPage);
-                        $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now Rejected');
+                        $scope.$emit('showSuccess', 'Side Event #' + docObj.id + ' is now on Waiting List');
                     }).catch(onError);
             }; // archiveOrg
 

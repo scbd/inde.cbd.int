@@ -66,7 +66,7 @@ define(['app', 'lodash',
                 dashMenu.setPathOfLink($scope.menu, 'Canceled', function() {
                     selectChip('canceled');
                 });
-                dashMenu.setPathOfLink($scope.menu, 'Rejected', function() {
+                dashMenu.setPathOfLink($scope.menu, 'Waiting List', function() {
                     selectChip('rejected');
                 });
             }
