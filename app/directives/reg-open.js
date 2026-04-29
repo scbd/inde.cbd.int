@@ -90,7 +90,7 @@ function meetingsQuery(meetingIds){
             q:  {
                   '_id': { '$in': meetingIds }
                 },
-            f: { titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1, EVT_THM_CD:1 },
+            f: { titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1, EVT_THM_CD:1, 'agenda.prefix':1 },
             s: { EVT_FROM_DT: 1 }
           }
 }
@@ -124,8 +124,13 @@ function setMeetings(res){
 
   for (var i = meetings.length-1; i >=0; i--) {
     var parentConference = getConference(meetings[i]._id)
-console.log('this.$location.host()', this.$location.host())
-console.log('this.$location.host()', this.$location.path())
+
+    var prefix = meetings[i].agenda && meetings[i].agenda.prefix
+    var classKey = prefix && prefix.toUpperCase()
+    var panelMap = { CBD:'panel-cbd', CP:'panel-cp', NP:'panel-np', SBI:'panel-sbi', SBSTTA:'panel-sbstta' }
+    var btnMap   = { CBD:'btn-cbd',   CP:'btn-cp',   NP:'btn-np',   SBI:'btn-sbi',   SBSTTA:'btn-sbstta' }
+    meetings[i].panelClass = panelMap[classKey] || 'panel-info'
+    meetings[i].btnClass   = btnMap[classKey]   || 'btn-info'
 
     const isProd = this.$location.host().includes('cbd.int') && this.$location.path().startsWith('/side-events')
     const base = !isProd? '/side-events' : ''

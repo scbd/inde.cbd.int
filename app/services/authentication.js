@@ -36,7 +36,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
                 }
 
                 if (pToken !== undefined) {
-                    return $q.when(pToken || null);
+                    return $q.when(pToken || null).then(checkTokenExpiration);
                 }
 
                 pToken = null;
@@ -56,7 +56,11 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
                     var message = JSON.parse(event.data);
 
                     if (message.type == 'authenticationToken') {
-                        defer.resolve(message.authenticationToken || null);
+                        if (message.authenticationToken) {
+                            defer.resolve({ token: message.authenticationToken, expiration: message.expiration });
+                        } else {
+                            defer.resolve(null);
+                        }
 
                         if (message.authenticationEmail)
                             $rootScope.lastLoginEmail = message.authenticationEmail;
@@ -99,18 +103,26 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
         //
         //
         //============================================================
-        function setToken(token, email) { // remoteUpdate:=true
+        function setToken(token, email, expiration) { // remoteUpdate:=true
 
             return $q.when(authenticationFrameQ).then(function(authenticationFrame) {
 
-                pToken = token || undefined;
+                if (token) {
+                    pToken = {
+                        token: token,
+                        expiration: expiration
+                    };
+                } else {
+                    pToken = undefined;
+                }
 
                 if (authenticationFrame) {
 
                     var msg = {
                         type: 'setAuthenticationToken',
                         authenticationToken: token,
-                        authenticationEmail: email
+                        authenticationEmail: email,
+                        expiration: expiration
                     };
 
                     authenticationFrame.contentWindow.postMessage(JSON.stringify(msg), devRouter.ACCOUNTS_URI);
@@ -120,6 +132,19 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
                     $rootScope.lastLoginEmail = email;
                 }
             });
+        }
+
+        function checkTokenExpiration(authenticationToken) {
+
+            if (authenticationToken && authenticationToken.expiration) {
+                if (new Date(authenticationToken.expiration).getTime() < new Date().getTime()) {
+                    pToken = null;
+                    $rootScope.$broadcast('event:auth-sessionExpired');
+                    throw new Error('session token expired');
+                }
+            }
+
+            return authenticationToken;
         }
 
         return {
@@ -160,16 +185,16 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
             if (currentUser)
                 return $q.when(currentUser);
 
-            return $q.when(apiToken.get()).then(function(token) {
+            return $q.when(apiToken.get()).then(function(authenticationToken) {
 
-                if (!token)
+                if (!authenticationToken)
                     return anonymous();
 
                 if (!inProgress) {
 
                     inProgress = $http.get('/api/v2013/authentication/user', {
                         headers: {
-                            Authorization: "Ticket " + token
+                            Authorization: "Ticket " + authenticationToken.token
                         }
                     }).then(function(r) {
 
@@ -220,7 +245,7 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
 
                 email = (email || "").toLowerCase();
 
-                apiToken.set(token.authenticationToken, email);
+                apiToken.set(token.authenticationToken, email, token.expiration);
                 setUser(user);
 
                 $rootScope.$broadcast('signIn', user);
@@ -324,6 +349,12 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
             $window.location.href = 'https://accounts.' + devRouter.DOMAIN + '/profile?returnUrl='+  encodedReturnUrl();
         }
 
+        $rootScope.$on('event:auth-sessionExpired', function() {
+            apiToken.set(null);
+            setUser(null);
+            goToSignIn();
+        });
+
         function isInRole(user, roles) {
 
     			if(!user)  return false;
@@ -363,11 +394,11 @@ define(['app', 'angular', 'jquery'], function(app, ng, $) {
 
                 //Add token to http headers
 
-                return $q.when(apiToken.get()).then(function(token) {
+                return $q.when(apiToken.get()).then(function(authenticationToken) {
 
-                    if (token) {
+                    if (authenticationToken) {
                         config.headers = ng.extend(config.headers || {}, {
-                            Authorization: "Ticket " + token
+                            Authorization: "Ticket " + authenticationToken.token
                         });
                     }
 
