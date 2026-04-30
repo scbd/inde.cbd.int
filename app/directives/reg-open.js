@@ -80,7 +80,7 @@ function findOpenRegsQuery(){
                   'schedule.sideEvents.start': { $lt: { $date: moment() } },
                   'schedule.sideEvents.end'  : { $gt: { $date: moment() } },
                 },
-            f:  { MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1, 'schedule.sideEvents.excludedMeetings': 1 },
+            f:  { 'Title.en':1, MajorEventIDs: 1, 'schedule.sideEvents.start': 1, 'schedule.sideEvents.end': 1 , 'schedule.sideEvents.hideDates': 1, 'schedule.sideEvents.excludedMeetings': 1 },
             s: { 'schedule.sideEvents.start': 1 }
           }
 }
@@ -90,7 +90,7 @@ function meetingsQuery(meetingIds){
             q:  {
                   '_id': { '$in': meetingIds }
                 },
-            f: { titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1, EVT_THM_CD:1 },
+            f: { titleShort:1, EVT_CD:1, EVT_TO_DT:1, EVT_FROM_DT:1, EVT_THM_CD:1, 'agenda.prefix':1 },
             s: { EVT_FROM_DT: 1 }
           }
 }
@@ -120,28 +120,48 @@ function loadMeetingsData(conferences){
 }
 
 function setMeetings(res){
-  var meetings = res.data
+  const meetings = res.data
 
-  for (var i = meetings.length-1; i >=0; i--) {
-    var parentConference = getConference(meetings[i]._id)
-console.log('this.$location.host()', this.$location.host())
-console.log('this.$location.host()', this.$location.path())
+  for (let i = meetings.length-1; i >=0; i--) {
+    const parentConference = getConference(meetings[i]._id)
+
+    const prefix   = meetings[i].agenda && meetings[i].agenda.prefix
+    const classKey = prefix && prefix.toUpperCase()
+    const panelMap = { CBD:'panel-cbd', CP:'panel-cp', NP:'panel-np', SBI:'panel-sbi', SBSTTA:'panel-sbstta' }
+    const btnMap   = { CBD:'btn-cbd',   CP:'btn-cp',   NP:'btn-np',   SBI:'btn-sbi',   SBSTTA:'btn-sbstta' }
+    
+    meetings[i].panelClass = panelMap[classKey] || 'panel-info'
+    meetings[i].btnClass   = btnMap[classKey]   || 'btn-info'
 
     const isProd = this.$location.host().includes('cbd.int') && this.$location.path().startsWith('/side-events')
     const base = !isProd? '/side-events' : ''
     const href = `${base}/manage/events/new?meetingId=${meetings[i]._id}`
 
 
-    meetings[i] = this._.assign(meetings[i],{href,start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end, hideDates: parentConference.schedule.sideEvents.hideDates})
+    meetings[i] = this._.assign(meetings[i],{href,conferenceId:parentConference._id,start:parentConference.schedule.sideEvents.start,end:parentConference.schedule.sideEvents.end, hideDates: parentConference.schedule.sideEvents.hideDates})
   }
   this.$scope.meetings = meetings
+  this.$scope.conferenceGroups = buildConferenceGroups.call(this, meetings)
+}
+
+function buildConferenceGroups(meetings){
+  const groups = []
+
+  for (var i = 0; i < this.$scope.conferences.length; i++) {
+    const conference = this.$scope.conferences[i]
+    const groupMeetings = this._.filter(meetings, { conferenceId: conference._id })
+
+    if(groupMeetings.length) groups.push({ conference: conference, meetings: groupMeetings })
+  }
+
+  return groups
 }
 
 function getConference(meetingId) {
 
   return this._.findLast(this.$scope.conferences,function(c){
 
-      var ids =c.MajorEventIDs 
+      const ids =c.MajorEventIDs 
       for (let i = 0; i < ids.length; i++) 
         if(meetingId === ids[i])
           return true
