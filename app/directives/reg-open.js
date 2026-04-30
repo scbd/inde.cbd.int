@@ -120,15 +120,16 @@ function loadMeetingsData(conferences){
 }
 
 function setMeetings(res){
-  var meetings = res.data
+  const meetings = res.data
 
-  for (var i = meetings.length-1; i >=0; i--) {
-    var parentConference = getConference(meetings[i]._id)
+  for (let i = meetings.length-1; i >=0; i--) {
+    const parentConference = getConference(meetings[i]._id)
 
-    var prefix = meetings[i].agenda && meetings[i].agenda.prefix
-    var classKey = prefix && prefix.toUpperCase()
-    var panelMap = { CBD:'panel-cbd', CP:'panel-cp', NP:'panel-np', SBI:'panel-sbi', SBSTTA:'panel-sbstta' }
-    var btnMap   = { CBD:'btn-cbd',   CP:'btn-cp',   NP:'btn-np',   SBI:'btn-sbi',   SBSTTA:'btn-sbstta' }
+    const prefix   = meetings[i].agenda && meetings[i].agenda.prefix
+    const classKey = prefix && prefix.toUpperCase()
+    const panelMap = { CBD:'panel-cbd', CP:'panel-cp', NP:'panel-np', SBI:'panel-sbi', SBSTTA:'panel-sbstta' }
+    const btnMap   = { CBD:'btn-cbd',   CP:'btn-cp',   NP:'btn-np',   SBI:'btn-sbi',   SBSTTA:'btn-sbstta' }
+    
     meetings[i].panelClass = panelMap[classKey] || 'panel-info'
     meetings[i].btnClass   = btnMap[classKey]   || 'btn-info'
 
@@ -144,11 +145,11 @@ function setMeetings(res){
 }
 
 function buildConferenceGroups(meetings){
-  var groups = []
+  const groups = []
 
   for (var i = 0; i < this.$scope.conferences.length; i++) {
-    var conference = this.$scope.conferences[i]
-    var groupMeetings = this._.filter(meetings, { conferenceId: conference._id })
+    const conference = this.$scope.conferences[i]
+    const groupMeetings = this._.filter(meetings, { conferenceId: conference._id })
 
     if(groupMeetings.length) groups.push({ conference: conference, meetings: groupMeetings })
   }
@@ -160,7 +161,7 @@ function getConference(meetingId) {
 
   return this._.findLast(this.$scope.conferences,function(c){
 
-      var ids =c.MajorEventIDs 
+      const ids =c.MajorEventIDs 
       for (let i = 0; i < ids.length; i++) 
         if(meetingId === ids[i])
           return true
