@@ -533,3 +533,141 @@ line-height: 16px;
 .pointer{
   cursor:pointer;
 }
+
+
+
+.CBD {
+  color: #fff;
+  background: #009B48;
+}
+
+.CP {
+  color: #fff;
+  background: #A05800;
+}
+
+.NP {
+  color: #fff;
+  background: #0086B7;
+}
+
+.SBI{
+  color: #fff;
+  background: #5C6BC0;
+}
+.SBSTTA{
+  color: #fff;
+  background: #00838F;
+}
+
+/* Panel variants by agenda prefix */
+.panel-cbd {
+  border-color: #009B48;
+}
+.panel-cbd > .panel-heading {
+  color: #fff;
+  background-color: #009B48;
+  border-color: #008a40;
+}
+.panel-cbd > .panel-footer {
+  border-color: #009B48;
+}
+
+.panel-cp {
+  border-color: #A05800;
+}
+.panel-cp > .panel-heading {
+  color: #fff;
+  background-color: #A05800;
+  border-color: #8a4c00;
+}
+.panel-cp > .panel-footer {
+  border-color: #A05800;
+}
+
+.panel-np {
+  border-color: #0086B7;
+}
+.panel-np > .panel-heading {
+  color: #fff;
+  background-color: #0086B7;
+  border-color: #0074a0;
+}
+.panel-np > .panel-footer {
+  border-color: #0086B7;
+}
+
+.panel-sbi {
+  border-color: #5C6BC0;
+}
+.panel-sbi > .panel-heading {
+  color: #fff;
+  background-color: #5C6BC0;
+  border-color: #4a5ab0;
+}
+.panel-sbi > .panel-footer {
+  border-color: #5C6BC0;
+}
+
+.panel-sbstta {
+  border-color: #00838F;
+}
+.panel-sbstta > .panel-heading {
+  color: #fff;
+  background-color: #00838F;
+  border-color: #00727c;
+}
+.panel-sbstta > .panel-footer {
+  border-color: #00838F;
+}
+
+/* Button variants by agenda prefix */
+.btn-cbd {
+  color: #fff;
+  background-color: #009B48;
+  border-color: #008a40;
+}
+.btn-cbd:hover, .btn-cbd:focus {
+  background-color: #008a40;
+  border-color: #007838;
+}
+
+.btn-cp {
+  color: #fff;
+  background-color: #A05800;
+  border-color: #8a4c00;
+}
+.btn-cp:hover, .btn-cp:focus {
+  background-color: #8a4c00;
+  border-color: #744000;
+}
+
+.btn-np {
+  color: #fff;
+  background-color: #0086B7;
+  border-color: #0074a0;
+}
+.btn-np:hover, .btn-np:focus {
+  background-color: #0074a0;
+  border-color: #006288;
+}
+
+.btn-sbi {
+  color: #fff;
+  background-color: #5C6BC0;
+  border-color: #4a5ab0;
+}
+.btn-sbi:hover, .btn-sbi:focus {
+  background-color: #4a5ab0;
+  border-color: #3e4e9a;
+}
+
+.btn-sbstta {
+  color: #fff;
+  background-color: #00838F;
+  border-color: #00727c;
+}
+.btn-sbstta:hover, .btn-sbstta:focus {
+  background-color: #00727c;
+  border-color: #006169;
+}
