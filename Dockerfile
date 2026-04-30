@@ -4,10 +4,10 @@ RUN apk add --no-cache git curl
 
 WORKDIR /usr/src/app
 
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 COPY vendor ./vendor
 
-RUN yarn install --production --network-timeout 600000
+RUN yarn install --network-timeout 600000
 
 ENV PORT=8000
 
