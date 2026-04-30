@@ -24,7 +24,7 @@ require.config({
         'lodash'                   : 'libs/lodash/lodash',
         'moment'                   : cdnHost + '/npm/moment@2.29.1/moment',
         'moment-timezone'          : cdnHost + '/npm/moment-timezone@0.5.34/builds/moment-timezone-with-data.min',
-        'ngFileUpload'             : 'libs/ng-file-upload/ng-file-upload',
+        'ngFileUpload'             : 'libs/ng-file-upload/dist/ng-file-upload',
         'ngDialog'                 : 'libs/ng-dialog/js/ngDialog.min',
         'ngRoute'                  : 'libs/angular-route/angular-route.min',
         'ngSmoothScroll'           : 'libs/ngSmoothScroll/lib/angular-smooth-scroll',
@@ -62,7 +62,6 @@ require.config({
     urlArgs: 'v=' + gitVersion
 
 });
-define("_slaask", window._slaask);
 // BOOT
 
 require(['angular', 'app', 'text', 'routes', 'template','bootstrap'], function(ng, app) {

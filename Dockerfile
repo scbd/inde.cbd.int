@@ -1,21 +1,21 @@
-FROM node:10.6.0-alpine
+FROM node:22-alpine
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache git curl yarn
+RUN apk add --no-cache git curl
 
 WORKDIR /usr/src/app
 
-COPY package.json .npmrc ./
+COPY package.json yarn.lock ./
+COPY vendor ./vendor
 
-RUN yarn install  --production
+RUN yarn install --production --network-timeout 600000
 
-ENV PORT 8000
+ENV PORT=8000
 
 EXPOSE 8000
 
 COPY . ./
 
 ARG COMMIT
-ENV COMMIT $COMMIT
+ENV COMMIT=$COMMIT
 
 CMD [ "node", "server" ]

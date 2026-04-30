@@ -40,25 +40,7 @@ define(['app','angular', 'jquery',
 
               $scope.user = user;
 
-              require(["https://cdn.slaask.com/chat.js"], function(_slaask = window._slaask) {
 
-                  if (user.isAuthenticated) {
-                      _slaask.identify(user.name, {
-                          'user-id' : user.userID,
-                          'name' : user.name,
-                          'email' : user.email,
-                      });
-
-                      if(_slaask.initialized) {
-                          _slaask.slaaskSendUserInfos();
-                      }
-                  }
-
-                  if(!_slaask.initialized) {
-                      _slaask.init('ae83e21f01860758210a799872e12ac4');
-              
-                  }
-              });
           });
         $templateCache.put("directives/toast/toast.html", toastTemplate);
 

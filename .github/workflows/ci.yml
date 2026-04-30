@@ -1,0 +1,155 @@
+# Secrets required (configured at the org or repo level in GitHub Settings → Secrets → Actions):
+#
+# Registry (org-level):
+#   DOCKERHUB_USERNAME  - Docker Hub username
+#   DOCKERHUB_TOKEN     - Docker Hub access token
+#   # TODO: switch to ECR — replace the two DockerHub secrets above with:
+#   #   AWS_ROLE_ARN  - arn:aws:iam::<dev-account-id>:role/GitHubActions-ECR-Push
+#   #   ECR_REGISTRY  - <dev-account-id>.dkr.ecr.ca-central-1.amazonaws.com
+#
+# Deployment webhooks (repo-level, optional — omit for branches with no deploy target):
+#   WEBHOOK_URL_DEV     - Portainer service webhook URL for dev redeploy
+#   WEBHOOK_URL_STG     - Portainer service webhook URL for stg redeploy
+
+name: CI
+
+on:
+  push:
+    branches: ['**']
+    # Semver tags: v1.2.3 or 1.2.3 (also matches v1, v1.2 to mirror the legacy CircleCI filter)
+    tags:
+      - 'v[0-9]*'
+      - '[0-9]*'
+  pull_request:
+    branches: [master, main, dev, stg]
+
+permissions:
+  contents: read
+
+env:
+  IMAGE_NAME: scbd/inde.cbd.int
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Logic mirrors the legacy CircleCI workflow:
+      #   semver tag       → tags=<tag-no-v> + latest, push=true
+      #   master/main/dev/stg → tags=<branch>,         push=true
+      #   release/<suffix> → tags=release-<suffix>,    push=true
+      #   feature branch   → tags=build-<sha>,         push=false
+      - name: Resolve image tags
+        id: meta
+        run: |
+          SHORT_SHA="${GITHUB_SHA::7}"
+          IMAGE="${{ env.IMAGE_NAME }}"
+
+          if [[ "${GITHUB_REF}" =~ ^refs/tags/v?[0-9]+(\.[0-9]+)*$ ]]; then
+            RAW="${GITHUB_REF#refs/tags/}"
+            VERSION="${RAW#v}"
+            {
+              echo "tags<<EOF"
+              echo "${IMAGE}:${VERSION}"
+              echo "${IMAGE}:latest"
+              echo "EOF"
+              echo "push=true"
+              echo "branch="
+            } >> "$GITHUB_OUTPUT"
+
+          elif [[ "${GITHUB_REF}" =~ ^refs/heads/(master|main|dev|stg)$ ]]; then
+            BRANCH="${GITHUB_REF#refs/heads/}"
+            {
+              echo "tags=${IMAGE}:${BRANCH}"
+              echo "push=true"
+              echo "branch=${BRANCH}"
+            } >> "$GITHUB_OUTPUT"
+
+          elif [[ "${GITHUB_REF}" =~ ^refs/heads/release/(.+)$ ]]; then
+            SUFFIX="${BASH_REMATCH[1]}"
+            {
+              echo "tags=${IMAGE}:release-${SUFFIX}"
+              echo "push=true"
+              echo "branch=release/${SUFFIX}"
+            } >> "$GITHUB_OUTPUT"
+
+          else
+            {
+              echo "tags=${IMAGE}:build-${SHORT_SHA}"
+              echo "push=false"
+              echo "branch="
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      # TODO: replace DockerHub login with OIDC + ECR login:
+      #   - name: Configure AWS credentials (OIDC)
+      #     uses: aws-actions/configure-aws-credentials@v4
+      #     with:
+      #       role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+      #       aws-region: ca-central-1
+      #   - name: Log in to ECR
+      #     uses: aws-actions/amazon-ecr-login@v2
+      - name: Log in to Docker Hub
+        if: steps.meta.outputs.push == 'true'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build once into the local docker daemon so the smoke test can run against it.
+      - name: Build image (load locally)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          platforms: linux/amd64
+          tags: ${{ env.IMAGE_NAME }}:ci-smoke
+          build-args: |
+            COMMIT=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Mirrors the legacy CircleCI in-container curl: fail the build if the server doesn't answer.
+      - name: Smoke-test image
+        run: |
+          docker run --name inde -d -p 8000:8000 ${{ env.IMAGE_NAME }}:ci-smoke
+          sleep 10
+          docker exec inde curl --retry 10 --retry-delay 5 -fsS -o /dev/null http://localhost:8000/
+          docker rm -f inde
+
+      # Push uses the same buildx cache populated above — no rebuild, just an export to the registry.
+      - name: Push image
+        if: steps.meta.outputs.push == 'true'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          platforms: linux/amd64
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            COMMIT=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Portainer webhooks — non-critical, a failed redeploy never blocks CI.
+      # Add one step per Portainer service. Steps with an unset secret are skipped automatically.
+
+      - name: Deploy to Portainer (dev)
+        if: steps.meta.outputs.branch == 'dev'
+        continue-on-error: true
+        uses: newarifrh/portainer-service-webhook@v1
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL_DEV }}
+
+      - name: Deploy to Portainer (stg)
+        if: steps.meta.outputs.branch == 'stg'
+        continue-on-error: true
+        uses: newarifrh/portainer-service-webhook@v1
+        with:
+          webhook_url: ${{ secrets.WEBHOOK_URL_STG }}
